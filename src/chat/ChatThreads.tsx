@@ -1,29 +1,21 @@
-import { useState } from 'react';
+import type { ReactNode } from 'react';
 import { LoaderCircle, Plus, RefreshCw, Search } from 'lucide-react';
-import type { ChatController, ChatState } from './types';
+import type { ChatController, ChatProject, ChatState } from './types';
 import { threadPresentation } from '../../../../shared/remote-chat/sidebar';
 import { useThreadGroups } from '../../../../shared/remote-chat/client/useThreadGroups';
 
 interface Props {
-  state: ChatState; controller: ChatController; newChat: () => void; onClose: () => void;
-  chooseDevice: () => void; deviceName: string;
+  state: ChatState; controller: ChatController; newChat: (project?: ChatProject) => void; onClose: () => void;
+  openSearch: () => void; profile: ReactNode;
 }
 
-export function ChatThreads({ state, controller, newChat, onClose, chooseDevice, deviceName }: Props) {
-  const [search, setSearch] = useState(state.search);
+export function ChatThreads({ state, controller, newChat, onClose, openSearch, profile }: Props) {
   const { groups, toggle } = useThreadGroups(state);
   const ready = state.ready;
   return <>
     <div className="chat-padded chat-thread-controls">
-      <button className="chat-button" type="button" disabled={state.sending} onClick={newChat}>
-        <Plus size={16} />新聊天</button>
-      <form className="chat-search chat-row" onSubmit={(event) => {
-        event.preventDefault(); void controller.list({ search });
-      }}>
-        <input aria-label="搜索聊天" placeholder="搜索聊天" value={search}
-          onChange={(event) => setSearch(event.target.value)} />
-        <button type="submit" className="chat-back" aria-label="搜索" disabled={!ready}><Search size={18} /></button>
-      </form>
+      <button type="button" className="chat-search-trigger" aria-label="搜索聊天" onClick={openSearch}>
+        <Search size={18} />搜索聊天</button>
       <div className="chat-row">
         <button className="chat-button chat-grow" type="button" disabled={!ready || state.loading}
           onClick={() => { void controller.list({ archived: !state.archived }); }}>
@@ -35,7 +27,11 @@ export function ChatThreads({ state, controller, newChat, onClose, chooseDevice,
     <div className="chat-scroll chat-thread-list" aria-busy={state.loading}>
       {groups.map((group) =>
         <section className="chat-project-group" aria-label={group.label} key={group.cwd}>
-          <h3>{group.label}</h3>
+          <div className="chat-project-heading">
+            <h3 className="chat-grow chat-ellipsis">{group.label}</h3>
+            {group.cwd && <button type="button" className="chat-back" aria-label={`在 ${group.label} 中新建对话`}
+              disabled={state.sending} onClick={() => newChat(group)}><Plus size={18} aria-hidden="true" /></button>}
+          </div>
           {group.data.map((thread) => {
             const view = threadPresentation(thread, state.sidebar);
             return <button type="button" className="chat-thread" key={thread.id} aria-label={view.title}
@@ -56,7 +52,7 @@ export function ChatThreads({ state, controller, newChat, onClose, chooseDevice,
       {state.cursor && <button type="button" className="chat-button" disabled={!ready || state.loading}
         onClick={() => { void controller.list({ more: true }); }}>加载更多</button>}
     </div>
-    <button type="button" className="chat-device-switch chat-muted" aria-label="切换电脑" onClick={chooseDevice}>
-      {deviceName} ›</button>
+    <div className="chat-drawer-footer"><button className="chat-new-button" type="button"
+      disabled={state.sending} onClick={() => newChat()}><Plus size={20} />新聊天</button>{profile}</div>
   </>;
 }
