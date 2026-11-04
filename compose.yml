@@ -2,8 +2,8 @@ services:
   web:
     image: ${CODEX_WEB_IMAGE:-codex-switch/web:local}
     build:
-      context: ../..
-      dockerfile: apps/web/Dockerfile
+      context: .
+      dockerfile: Dockerfile
       args:
         VITE_WEB_BASE_PATH: ${VITE_WEB_BASE_PATH:-/web/}
     restart: unless-stopped

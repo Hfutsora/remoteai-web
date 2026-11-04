@@ -1,0 +1,12 @@
+.git
+**/.git
+node_modules
+.workspace
+.codex-tmp
+dist
+test-results
+playwright-report
+.env
+.env.*.local
+compose.override.yml
+*.log

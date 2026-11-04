@@ -20,7 +20,7 @@ export function AboutPage({ onBack }: { onBack: () => void }) {
       <SettingsRow label={t("client.settings.license")} value="Apache-2.0" icon={FileText} tone="orange" />
     </section>
     <section className="settings-group"><a className="settings-link"
-      href="https://github.com/piperhex/remoteai/releases"
+      href="https://github.com/piperhex/remoteai-web"
       target="_blank" rel="noreferrer"><Github size={21} /><span>{t("client.settings.sourceCodeAndReleases")}</span></a></section>
     <p className="settings-hint">{t("client.settings.theWebAppUpdatesAutomaticallyNoDownloadNeeded")}</p>
   </div>;

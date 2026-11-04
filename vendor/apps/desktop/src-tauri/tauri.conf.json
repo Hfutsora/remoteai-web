@@ -1,0 +1,114 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "Remote AI",
+  "version": "2.2.0",
+  "identifier": "dev.codex.switch",
+  "build": {
+    "beforeDevCommand": "node ../../scripts/prepare-x-server.mjs && npm run dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "npm run build",
+    "beforeBundleCommand": "node ../../scripts/prepare-desktop-bundle.mjs",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "macOSPrivateApi": true,
+    "windows": [
+      {
+        "title": "Remote AI",
+        "width": 1370,
+        "height": 760,
+        "minWidth": 1200,
+        "minHeight": 680,
+        "center": true,
+        "backgroundThrottling": "disabled",
+        "additionalBrowserArgs": "--disable-background-timer-throttling --disable-renderer-backgrounding --disable-backgrounding-occluded-windows",
+        "resizable": true,
+        "fullscreen": false
+      }
+    ],
+    "security": {
+      "csp": {
+        "default-src": "'self'",
+        "script-src": "'self' 'wasm-unsafe-eval'",
+        "img-src": "'self' data: blob: http: https:",
+        "style-src": "'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "font-src": "'self' https://fonts.gstatic.com",
+        "frame-src": "'self' http://127.0.0.1:*",
+        "object-src": "http://127.0.0.1:*",
+        "media-src": "'self' blob: http://127.0.0.1:*",
+        "worker-src": "'self' blob:",
+        "connect-src": "'self' ipc: http://ipc.localhost https://api.github.com ws: wss:"
+      }
+    }
+  },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": [
+          "cswitch"
+        ]
+      }
+    },
+    "updater": {
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEZDNzM5NjczQzMxNTBBQjcKUldTM0NoWERjNVp6L0ZxQ0k3ZzhJUGV4U1FVajBQdkZCclV6K1lkU3U5VXA2MDh6ZE5sK3Z4UXIK",
+      "endpoints": [
+        "https://github.com/piperhex/remoteai/releases/latest/download/latest.json"
+      ]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "createUpdaterArtifacts": true,
+    "targets": "all",
+    "resources": [
+      "resources/dream-skin/assets/**/*",
+      "resources/dream-skin/LICENSE",
+      "resources/dream-skin/NOTICE.md",
+      "resources/pet-dock/LICENSE",
+      "resources/pet-dock/NOTICE.md",
+      "resources/remote-desktop/**/*",
+      "resources/desktop-service/**/*",
+      "resources/chat-connectivity/*",
+      "resources/x-server/**/*"
+    ],
+    "icon": [
+      "icons/32x32.png",
+      "icons/128x128.png",
+      "icons/128x128@2x.png",
+      "icons/icon.icns",
+      "icons/icon.ico"
+    ],
+    "category": "DeveloperTool",
+    "shortDescription": "Manage and switch multiple Codex accounts",
+    "longDescription": "A local-first manager for Codex auth.json files and account usage windows.",
+    "windows": {
+      "wix": {
+        "upgradeCode": "f65516b1-807b-5d58-952e-3cd240f3fbad",
+        "version": "2.2.0",
+        "fragmentPaths": [
+          "windows/installer-lifecycle.wxs"
+        ],
+        "featureRefs": [
+          "CswInstallerLifecycle"
+        ]
+      },
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "uninstallerIcon": "icons/icon.ico",
+        "installerHooks": "windows/installer-hooks.nsh"
+      }
+    },
+    "macOS": {
+      "entitlements": "Entitlements.plist",
+      "files": {
+        "Resources/en.lproj/InfoPlist.strings": "locales/en.lproj/InfoPlist.strings",
+        "Resources/ru.lproj/InfoPlist.strings": "locales/ru.lproj/InfoPlist.strings",
+        "Resources/ja.lproj/InfoPlist.strings": "locales/ja.lproj/InfoPlist.strings",
+        "Resources/zh-Hans.lproj/InfoPlist.strings": "locales/zh-Hans.lproj/InfoPlist.strings",
+        "Resources/zh-Hant.lproj/InfoPlist.strings": "locales/zh-Hant.lproj/InfoPlist.strings"
+      },
+      "minimumSystemVersion": "10.13",
+      "signingIdentity": "-"
+    }
+  }
+}

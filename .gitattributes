@@ -1,0 +1,4 @@
+* text=auto
+*.sh text eol=lf
+vendor/shared/coze/signature-fixture.txt text eol=lf
+vendor/shared/coze/signature-fixture.txt.sig text eol=lf

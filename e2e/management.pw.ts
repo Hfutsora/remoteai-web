@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { navigate } from './chat-helpers';
+import { testText } from '../../../scripts/i18n-fixture.mjs';
 
 async function closeSheet(page: Page) {
   const back = page.getByRole('button', { name: '返回上一层', exact: true });
@@ -97,7 +98,7 @@ test('2FA search, sorting, eight digits, editing and failed clipboard', async ({
   const navigation = page.locator(info.project.name === 'desktop' ? '.desktop-sidebar nav' : '.mobile-tabbar');
   await expect(navigation.getByText('设备', { exact: true })).toHaveCount(0);
   await expect(navigation.getByText('2FA', { exact: true })).toHaveCount(0);
-  await expect(page.locator('.discovery-row')).toHaveCount(4);
+  await expect(page.locator('.discovery-row')).toHaveCount(6);
   await noOverflow(page);
   await page.screenshot({ path: info.outputPath('discover.png') });
   await page.locator('.discovery-list').getByRole('button', { name: '设备', exact: true }).click();
@@ -138,6 +139,8 @@ test('2FA search, sorting, eight digits, editing and failed clipboard', async ({
 });
 
 test('grouped settings, persisted interval, shared sync and about', async ({ page }, info) => {
+  const totpLabel = testText(info.project.name === 'desktop'
+    ? 'client.app.2faKeys' : 'client.settings.twoFactorKeyCloudSync');
   await navigate(page, '设置');
   await page.screenshot({ path: info.outputPath('settings.png') });
   await page.getByRole('button', { name: /自动刷新用量/ }).click();
@@ -147,12 +150,15 @@ test('grouped settings, persisted interval, shared sync and about', async ({ pag
   await page.getByRole('textbox', { name: '刷新间隔（分钟）' }).fill('15');
   await page.getByRole('button', { name: '保存', exact: true }).click();
   await expect(page.getByRole('button', { name: /自动刷新用量/ })).toContainText('15 分钟');
-  await page.getByRole('button', { name: /2FA 密钥 未开启/ }).click();
+  await page.getByRole('button', { name: `${totpLabel} ${testText('client.settings.off')}`, exact: true }).click();
   await page.getByRole('switch', { name: '云端同步' }).click();
   await closeSheet(page);
-  await expect(page.getByRole('button', { name: /2FA 密钥 已开启/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: `${totpLabel} ${testText('client.settings.on')}`, exact: true }))
+    .toBeVisible();
   await page.getByRole('button', { name: /关于 Remote AI/ }).click();
   await expect(page.getByText('Web 浏览器')).toBeVisible();
+  await expect(page.locator('.settings-link')).toHaveAttribute('href', 'https://github.com/piperhex/remoteai-web');
+  await expect(page.locator('.adm-toast-main')).toBeHidden();
   await noOverflow(page);
   await page.screenshot({ path: info.outputPath('about.png') });
   await page.getByRole('button', { name: '返回设置' }).click();

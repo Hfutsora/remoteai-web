@@ -1,0 +1,6 @@
+{
+  "ownership": {
+    "include": ["src"],
+    "exclude": []
+  }
+}

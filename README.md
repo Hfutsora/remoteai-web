@@ -3,6 +3,26 @@
 面向手机浏览器的 Remote AI Web 客户端，同时提供宽屏桌面布局。移动交互使用
 Ant Design Mobile，桌面增强使用 Ant Design，应用状态由 Redux Toolkit 管理。
 
+## 独立构建与依赖更新
+
+```bash
+npm run check
+npm test
+npm run build
+docker build -t codex-switch/web:local .
+```
+
+生产文件输出到 `dist/`，版本由本仓库的 `package.json` 管理。CI 在 Linux 和 Windows 上检查，
+并在 Linux 上运行手机、窄屏和桌面浏览器回归。浏览器截图和报告保存在 `test-results/`。
+
+`vendor/source-lock.json` 记录共享代码和桌面适配代码的来源提交及文件哈希。
+依赖快照由 Remote AI 主仓库的 `npm run export:web` 生成，翻译直接使用固定版本的
+`@remoteai/i18n` 发布包。不要手动编辑 `vendor/`。
+
+桌面端也复用本仓库的部分组件，因此源码保留原有相对路径。独立命令会根据本仓库源码和
+依赖快照生成 `.workspace/`，无需外部源码目录；开发时修改原始 `src/`，更新会自动同步。
+`.workspace/` 是生成目录，不应直接编辑或提交；请勿同时运行多个生成该目录的命令。
+
 ## 在线使用
 
 访问 [Codex Web](https://codex.onepiper.cloud/web/)。
@@ -16,7 +36,8 @@ Ant Design Mobile，桌面增强使用 Ant Design，应用状态由 Redux Toolki
 先启动后端，再从仓库根目录运行：
 
 ```bash
-npm run dev:web
+npm ci
+npm run dev
 ```
 
 开发服务器会把认证、同步、设备和 WebSocket 请求代理到 `http://127.0.0.1:8080`。
@@ -33,12 +54,11 @@ Web 和 Android 共用聊天状态、历史同步、加密及重连逻辑。浏�
 聊天正文只保留在当前页面内存中。手机软键盘弹出时输入区随可视区域调整；Enter 换行，
 Ctrl/Cmd + Enter 发送，中文输入法选词不会触发发送。
 
-PC 与 admin 需更新到支持聊天的版本；部署方式与限制见 [手机连接 PC 聊天](../../docs/mobile-chat.md)。
+PC 与 admin 需更新到支持聊天的版本；部署方式与限制见 [手机连接 PC 聊天](https://github.com/piperhex/remoteai/blob/master/docs/mobile-chat.md)。
 生产环境使用 HTTPS，以支持安全的浏览器连接与账号登录。
 
 ```bash
-npm run build:backend
-npm run test:chat:e2e -w @codex-switch/web
+npm run test:chat:e2e
 ```
 
 ## 账号与设置页面回归
@@ -51,20 +71,20 @@ npm run test:chat:e2e -w @codex-switch/web
 仅对该版本生效。“立即更新”会刷新网页加载新版。构建会生成 `version.json`，部署时需与其他静态资源一同发布。
 
 ```bash
-npm run test:management:e2e -w @codex-switch/web
+npm run test:management:e2e
 ```
 
 测试使用本机样例账号和设备，不连接真实云端账号。覆盖 320px、390px 和桌面宽度，
 检查详情返回、重置卡确认、验证码复制与排序、设置保存，以及请求未完成时的页面操作。
-报告与截图保存在 `.codex-tmp/web-management-report` 和 `.codex-tmp/web-management-playwright`。
+报告与截图保存在 `test-results/web-management-report` 和 `test-results/web-management-playwright`。
 
 ## 浏览器与 Android 聊天验证
 
 浏览器回归在手机尺寸和桌面尺寸下操作实际 H5 页面，连接本机 PC/admin 测试端，
 覆盖直连、加密中转、聊天操作及重连；不请求真实模型。默认使用 Playwright 自带的 Chromium，
 首次运行前执行 `npx playwright install chromium`。Windows 上禁止通过环境变量切换到系统 Edge 或 Chrome，
-避免反复创建浏览器配置时触发账户锁定；详见[浏览器测试说明](../../docs/browser-tests.md)。
-报告与截图保存在 `.codex-tmp/h5-chat-report` 和 `.codex-tmp/h5-chat-playwright`。
+避免反复创建浏览器配置时触发账户锁定；详见[浏览器测试说明](https://github.com/piperhex/remoteai/blob/master/docs/browser-tests.md)。
+报告与截图保存在 `test-results/h5-chat-report` 和 `test-results/h5-chat-playwright`。
 
 Android Chrome 实测使用可丢弃的 Android 15 模拟器。首次在该模拟器的 Chrome 中完成欢迎页，
 选择不登录账号。测试通过 ADB 连接模拟器内的 Chrome，保留实际手机视口与软键盘。
@@ -73,17 +93,17 @@ Android Chrome 实测使用可丢弃的 Android 15 模拟器。首次在该模�
 $env:ANDROID_SERIAL = 'emulator-5580'
 $env:ANDROID_CHAT_DISPOSABLE = '1'
 adb -s emulator-5580 reverse tcp:1422 tcp:1422
-npm run test:chat:android -w @codex-switch/web
+npm run test:chat:android
 ```
 
 该流程执行完整 H5 聊天回归，并检查实际软键盘、进入后台后的连接清理及返回前台后的恢复。
-完整设备截图和环境记录位于 `.codex-tmp/h5-android-playwright`，报告位于 `.codex-tmp/h5-android-report`。
+完整设备截图和环境记录位于 `test-results/h5-android-playwright`，报告位于 `test-results/h5-android-report`。
 
 ## 容器与 Kong
 
-生产构建默认使用 `/web/` 作为静态资源前缀。`apps/web/compose.yml` 将独立 `web` 容器加入
+生产构建默认使用 `/web/` 作为静态资源前缀。`compose.yml` 将独立 `web` 容器加入
 `ADMIN_GO_KONG_NETWORK` 指定的现有网络，Kong 通过 `codex-switch-web:80` 提供 `/web` 路由。
-云端 API 由 admin-go 提供，构建上传与更新步骤见 [生产部署](../admin-go/DEPLOYMENT.md)。
+云端 API 由 admin-go 提供，构建上传与更新步骤见 [生产部署](https://github.com/piperhex/remoteai-admin/blob/main/DEPLOYMENT.md)。
 
 完成镜像构建、上传和回滚镜像保留后，在部署服务器的仓库根目录运行：
 

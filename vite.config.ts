@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react(), imageEditorPlugin(), webVersionPlugin()],
     css: { postcss: { plugins: [fontSizePlugin()] } },
     clearScreen: false,
+    resolve: { dedupe: ['react', 'react-dom', 'antd', 'antd-mobile', '@ant-design/cssinjs', '@remoteai/i18n'] },
     optimizeDeps: { include: ['pdfjs-dist/legacy/build/pdf.mjs'] },
     root: currentDir,
     base: env.VITE_WEB_BASE_PATH || "/web/",

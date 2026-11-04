@@ -2,9 +2,10 @@ import { expect, test, type APIRequestContext } from '@playwright/test';
 import { navigate } from './chat-helpers';
 
 const fixture = 'http://127.0.0.1:1491';
+const FIXTURE_READ_RETRIES = 2;
 type Operation = { deviceId: string; accountId: string; action: string };
 const operations = async (request: APIRequestContext): Promise<Operation[]> =>
-  (await request.get(`${fixture}/test/usage`)).json();
+  (await request.get(`${fixture}/test/usage`, { maxRetries: FIXTURE_READ_RETRIES })).json();
 
 test.beforeEach(async ({ page, request }) => {
   await request.post(`${fixture}/test/reset`);

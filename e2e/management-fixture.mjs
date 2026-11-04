@@ -1,8 +1,6 @@
 // Local sample data only; never forwards requests to a real account or device.
 import http from 'node:http';
-import { createRequire } from 'node:module';
-const require = createRequire(new URL('../../admin/package.json', import.meta.url));
-const { WebSocketServer } = require('ws');
+import { WebSocketServer } from 'ws';
 
 const now = new Date().toISOString();
 const usageRequests = [];
