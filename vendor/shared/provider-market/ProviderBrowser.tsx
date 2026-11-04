@@ -18,6 +18,7 @@ export interface BrowserWindowProps {
   title?: string;
   open: boolean; tabs: BrowserTab[]; activeId: string; language: Language;
   onSelect: (id: string) => void; onCloseTab: (id: string) => void; onNewTab: () => void; onClose: () => void;
+  onCloseTabs: (ids: string[]) => void;
   onNavigate: (id: string, url: string) => void; onAction: (id: string, action: BrowserAction) => void;
   onPopup: (id: string, url: string) => void;
   commands: Record<string, BrowserSurfaceProps['command']>; Surface: ComponentType<BrowserSurfaceProps>;
@@ -71,10 +72,10 @@ export function BrowserContents(props: BrowserWindowProps & {
   return <>
     <div className="pm-browser-titlebar">{props.history}
     <BrowserTabs tabs={tabs} activeId={activeId} visible={open} t={t}
-      select={props.onSelect} close={props.onCloseTab} menuChanged={setMenuOpen} />
+      select={props.onSelect} close={props.onCloseTab} closeTabs={props.onCloseTabs} menuChanged={setMenuOpen} />
     <button aria-label={t('market.browserNewTab')} title={t('market.browserNewTab')}
       onClick={props.onNewTab}><Plus size={17} /></button>
-    {!props.embedded && <button aria-label={t('market.close')} title={t('market.close')}
+    {!props.embedded && <button className="pm-browser-close" aria-label={t('market.close')} title={t('market.close')}
       onClick={props.onClose}><X size={19} /></button>}</div>
     <BrowserToolbar tab={tab} fullscreen={props.fullscreen} toggleFullscreen={props.toggleFullscreen}
       navigate={(url) => { if (tab) props.onNavigate(tab.id, url); }}

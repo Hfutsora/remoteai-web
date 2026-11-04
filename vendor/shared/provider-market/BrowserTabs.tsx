@@ -4,48 +4,49 @@ import { Ellipsis, Globe, X } from 'lucide-react';
 import { useTabOverflow } from '../project-browser/useTabOverflow';
 import type { BrowserTab } from './browserState';
 import type { MarketText } from './i18n';
+import { BrowserTabItem } from './BrowserTabItem';
 
 interface Props {
   tabs: BrowserTab[]; activeId: string; visible: boolean; t: MarketText;
   select: (id: string) => void; close: (id: string) => void; menuChanged: (open: boolean) => void;
+  closeTabs: (ids: string[]) => void;
 }
 
 /** Match project and workspace tabs: reveal the selection, fade the clipped left edge and list hidden tabs. */
-export function BrowserTabs({ tabs, activeId, visible, t, select, close, menuChanged }: Props) {
+export function BrowserTabs({ tabs, activeId, visible, t, select, close, closeTabs, menuChanged }: Props) {
   const overflow = useTabOverflow(tabs.map(tab => ({ path: tab.id })), activeId);
   const hidden = tabs.filter(tab => overflow.hiddenPaths.includes(tab.id));
   const [open, setOpen] = useState(false);
+  const [contextId, setContextId] = useState<string | null>(null);
   const name = (tab: BrowserTab) => tab.title || t('market.browserNewTab');
   const focusSelected = () => overflow.viewport.current?.querySelector<HTMLButtonElement>('[aria-selected="true"]')
     ?.focus({ preventScroll: true });
   const choose = (id: string) => {
-    overflow.reveal(id); select(id); setOpen(false); requestAnimationFrame(focusSelected);
+    overflow.reveal(id); select(id); setOpen(false); setContextId(null); requestAnimationFrame(focusSelected);
   };
   const closeTab = (id: string) => { close(id); setOpen(false); requestAnimationFrame(focusSelected); };
+  const closeMany = (ids: string[]) => { closeTabs(ids); setContextId(null); requestAnimationFrame(focusSelected); };
+  const contextOpen = visible && tabs.some(tab => tab.id === contextId);
+  useEffect(() => { if (!visible) setContextId(null); }, [visible]);
   useEffect(() => { if (!visible || !hidden.length) setOpen(false); }, [visible, hidden.length]);
-  useEffect(() => { menuChanged(open); }, [open, menuChanged]);
+  useEffect(() => { menuChanged(open || contextOpen); }, [open, contextOpen, menuChanged]);
   return <div ref={overflow.bar} className="pm-browser-tabs-bar" data-clipped-left={overflow.clippedLeft}
     onKeyDown={event => {
-      if (!open || event.key !== 'Escape') return;
+      if (event.key !== 'Escape') return;
+      if (contextOpen) {
+        event.preventDefault(); event.stopPropagation(); setContextId(null); focusSelected(); return;
+      }
+      if (!open) return;
       event.preventDefault(); event.stopPropagation(); setOpen(false);
       event.currentTarget.querySelector<HTMLButtonElement>('.pm-browser-tabs-more')?.focus();
     }}>
     <div ref={overflow.viewport} className="pm-browser-tabs" role="tablist" aria-label={t('market.browserTabs')}>
-      {tabs.map((tab, index) => <div className={`pm-browser-tab${tab.id === activeId ? ' active' : ''}`} key={tab.id}
-        data-overflow-tab data-path={tab.id} data-active={tab.id === activeId}>
-        <button type="button" role="tab" aria-selected={tab.id === activeId} tabIndex={tab.id === activeId ? 0 : -1}
-          aria-controls={`page-${tab.id}`} onClick={() => choose(tab.id)} title={name(tab)}
-          onKeyDown={event => {
-            const offsets: Record<string, number> = { ArrowLeft: -1, ArrowRight: 1,
-              Home: -index, End: tabs.length - index - 1 };
-            if (!(event.key in offsets)) return;
-            event.preventDefault(); choose(tabs[(index + offsets[event.key] + tabs.length) % tabs.length].id);
-          }}><Globe size={14} /><span>{name(tab)}</span></button>
-        <button type="button" aria-label={t('market.browserCloseTab', { name: name(tab) })}
-          onClick={() => closeTab(tab.id)}><X size={14} /></button>
-      </div>)}
+      {tabs.map(tab => <BrowserTabItem key={tab.id} tab={tab} tabs={tabs} active={tab.id === activeId}
+        t={t} select={choose} close={closeTab} closeTabs={closeMany} menuOpen={contextOpen && contextId === tab.id}
+        setMenuOpen={value => { setContextId(value ? tab.id : null); if (value) setOpen(false); }} />)}
     </div>
-    {overflow.overflowing && <Dropdown trigger={['click']} open={open} onOpenChange={setOpen} autoFocus
+    {overflow.overflowing && <Dropdown trigger={['click']} open={open}
+      onOpenChange={value => { setOpen(value); if (value) setContextId(null); }} autoFocus
       placement="bottomRight" getPopupContainer={trigger => trigger.parentElement ?? trigger}
       overlayClassName="pm-browser-tabs-menu" menu={{ 'aria-label': t('market.browserHiddenTabs'),
         items: hidden.map(tab => ({ key: tab.id, label: <div className="pm-browser-tabs-menu-item">

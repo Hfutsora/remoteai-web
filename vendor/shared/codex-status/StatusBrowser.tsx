@@ -16,5 +16,8 @@ export function StatusBrowser({ active, onClose }: { active: boolean; onClose: (
     onClose={onClose} onCloseTab={id => {
       browser.onCloseTab(id);
       if (browser.tabs.length === 1) onClose();
+    }} onCloseTabs={ids => {
+      browser.onCloseTabs(ids);
+      if (browser.tabs.every(tab => ids.includes(tab.id))) onClose();
     }} />;
 }

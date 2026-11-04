@@ -10,6 +10,7 @@ import { uiText } from '../../localization/uiText';
 import type { ManagedBrowserTab } from '../../browser/automation';
 import { BrowserClientContext } from './browserClient';
 import { useBrowserResources, type BrowserResource } from './browserResources';
+import { remainingBrowserTabs } from '../../provider-market/browserTabCommands';
 
 interface BrowserState {
   tabs: BrowserTab[]; activeId: string; commands: Record<string, BrowserSurfaceProps['command']>;
@@ -99,21 +100,22 @@ export function useWebsiteTabs() {
     resources.set(tab.id, resource);
     setState(current => ({ ...current, tabs: [...current.tabs, tab], activeId: tab.id }));
   }, [resources, selectResource]);
-  const remove = useCallback((id: string) => {
-    resources.get(id)?.release?.(); resources.delete(id);
-    requests.current.delete(id);
-    sources.current.forEach((value, key) => { if (value === id) sources.current.delete(key); });
+  const removeTabs = useCallback((ids: string[]) => {
+    const closed = new Set(ids);
+    closed.forEach(id => {
+      resources.get(id)?.release?.(); resources.delete(id); requests.current.delete(id);
+    });
+    sources.current.forEach((value, key) => { if (closed.has(value)) sources.current.delete(key); });
     setState(current => {
-      const index = current.tabs.findIndex(tab => tab.id === id);
-      const tabs = current.tabs.filter(tab => tab.id !== id);
-      const commands = { ...current.commands }; delete commands[id];
-      const activeId = current.activeId === id ? (tabs[Math.max(0, index - 1)]?.id ?? '') : current.activeId;
-      return { tabs, activeId, commands };
+      const commands = { ...current.commands }; closed.forEach(id => { delete commands[id]; });
+      return { ...remainingBrowserTabs(current.tabs, current.activeId, ids), commands };
     });
   }, [resources]);
-  const close = useCallback((id: string) => {
-    managedCommand(id, { action: 'close' }); remove(id);
-  }, [managedCommand, remove]);
+  const remove = useCallback((id: string) => removeTabs([id]), [removeTabs]);
+  const closeTabs = useCallback((ids: string[]) => {
+    new Set(ids).forEach(id => managedCommand(id, { action: 'close' })); removeTabs(ids);
+  }, [managedCommand, removeTabs]);
+  const close = useCallback((id: string) => closeTabs([id]), [closeTabs]);
   const action = useCallback((id: string, action: BrowserAction) => {
     if (managedCommand(id, { action })) return;
     if ((!isTauri() || resources.has(id)) && action !== 'reload') {
@@ -134,7 +136,7 @@ export function useWebsiteTabs() {
         title: pageTitle(tab.url), automationThread: tab.threadId }] }));
   }, []);
   return { ...state, open, reset, adopt, remove, resources, openResource, selectResource,
-    onCloseTab: close, onNewTab: () => add(),
+    onCloseTab: close, onCloseTabs: closeTabs, onNewTab: () => add(),
     onSelect: (activeId: string) => setState(current => ({ ...current, activeId })),
     onNavigate: (id: string, url: string) => { void navigate(id, url); }, onPageNavigate: pageNavigate,
     onPopup: (_id: string, url: string) => { if (pageUrl(url)) add(url, true); }, onAction: action };

@@ -31,6 +31,9 @@ export function WebsitePreview(props: {
       Surface={ResourceBrowserSurface} fullscreen={props.expanded} toggleFullscreen={props.toggleExpanded}
       onClose={props.onClose} onCloseTab={id => {
         browser.onCloseTab(id); if (browser.tabs.length === 1) props.onClose();
+      }} onCloseTabs={ids => {
+        browser.onCloseTabs(ids);
+        if (browser.tabs.every(tab => ids.includes(tab.id))) props.onClose();
       }} history={props.navigation && (props.navigation.canGoBack || props.navigation.canGoForward)
         ? <PreviewNavigation navigation={props.navigation} /> : undefined}
       actions={<><CopyButton text={url} label={uiText('client.mobile.copyLink')} />
