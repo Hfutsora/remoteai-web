@@ -31,7 +31,7 @@ function LocalMessageImage({ src, alt, title }: MessageImageProps) {
   const description = alt?.trim() || uiText("client.chat.image");
   const file = src && (isTauri() || isHostedWebApp) ? parseFileReference(src) : undefined;
   const menu = useFileMenu(file ?? { path: '' });
-  const open = () => {
+  const openBrowser = () => {
     if (!panel?.openResource || !src) { setPreview(true); return; }
     if (file && menu.canPreview) { void menu.preview(); return; }
     panel.openResource(imageBrowserResource({ key: JSON.stringify([threadId, src]), title: description,
@@ -41,7 +41,7 @@ function LocalMessageImage({ src, alt, title }: MessageImageProps) {
   return <>
     <ImageThumbnail url={image.url} description={description} title={title} failed={failed} translate={uiText}
       retry={() => { setFailedSource(undefined); image.retry(); }} onError={() => setFailedSource(image.url)}
-      onPreview={open} fallback={file
+      onPreview={() => setPreview(true)} openBrowser={panel?.openResource && src ? openBrowser : undefined} fallback={file
         ? <FileMenu {...file} preview>{uiText('client.composer.previewFile')}</FileMenu> : undefined} />
     {preview && image.url && <ImagePreview key={src} thumbnail={image.url} description={description}
       load={image.original} close={() => setPreview(false)} />}

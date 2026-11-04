@@ -11,6 +11,7 @@ import { remoteImageBytes } from './remoteImageBytes';
 import { useDesktopLayout } from '../../layout/useDesktopLayout';
 import thumbnailStyles from '../../chat/toolImageThumbnail.module.css';
 import { ImageThumbnail } from '../../chat/ImageThumbnail';
+import { ImageOpenMenu } from '../../chat/ImageOpenMenu';
 import { DetailsContext } from '../../conversation/detailsContext';
 import { ChatFileContext } from './ChatFileLink';
 import { parseFileReference } from '../../chat/fileReference';
@@ -41,8 +42,8 @@ function VisibleChatImage({ source, description = t("client.chat.image"), compac
   const files = useContext(ChatFileContext);
   const file = source ? parseFileReference(source) : undefined;
   const menu = useFileMenu(file ?? { path: '' });
-  const open = () => {
-    if (!fixedImage || !panel?.openResource || !source) { setPreview(true); return; }
+  const openBrowser = () => {
+    if (!panel?.openResource || !source) return;
     if (file && environment) { void menu.preview(); return; }
     if (file && files) { panel.openResource(chatBrowserResource(file.path, files)); return; }
     panel.openResource(imageBrowserResource({ key: JSON.stringify([files?.threadId, source]),
@@ -56,12 +57,14 @@ function VisibleChatImage({ source, description = t("client.chat.image"), compac
   }
   return <>
     {fixedImage ? <ImageThumbnail key={image.key} url={image.url} description={description} failed={image.failed}
-      translate={t} retry={image.retry} onError={image.fail} onPreview={open} className="chat-image" />
-      : <button type="button" className={`chat-image${compact ? ` ${thumbnailStyles.thumbnail}` : ''}`}
-      aria-label={t("client.chat.enlarge", { value1: description })} onClick={open}>
+      translate={t} retry={image.retry} onError={image.fail} onPreview={() => setPreview(true)}
+      openBrowser={panel?.openResource && source ? openBrowser : undefined} className="chat-image" />
+      : <ImageOpenMenu translate={t} openBrowser={panel?.openResource && source ? openBrowser : undefined}>
+      <button type="button" className={`chat-image${compact ? ` ${thumbnailStyles.thumbnail}` : ''}`}
+      aria-label={t("client.chat.enlarge", { value1: description })} onClick={() => setPreview(true)}>
       <img key={image.key} src={image.url} alt={description} loading="lazy" decoding="async"
         referrerPolicy="no-referrer" onError={image.fail} />
-    </button>}
+    </button></ImageOpenMenu>}
     {preview && image.url && (environment ? <ImagePreview key={image.key} thumbnail={image.url} description={description}
       load={image.original} prepare={remoteImageBytes} download={image.save ?? downloadChatImage}
       close={() => setPreview(false)} /> : <ImageViewer key={image.key} thumbnail={image.url} description={description}

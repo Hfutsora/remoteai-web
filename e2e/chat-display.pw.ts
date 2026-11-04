@@ -194,6 +194,44 @@ test('places image thumbnails above the bubble and keeps image-only messages fre
     await screenshot(page, info, 'desktop-sent-images');
   });
 
+test('opens reply images fullscreen and offers the built-in browser on right-click and long-press', async ({ page }, info) => {
+  page.setDefaultNavigationTimeout(90_000);
+  await page.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//, route => route.abort());
+  const image = readFileSync('../desktop/src-tauri/icons/128x128.png');
+  await page.route('https://image.test/reply.png', route => route.fulfill({ contentType: 'image/png', body: image }));
+  await open(page, fixture([{ ...reply, text: '![回复图片](https://image.test/reply.png)' }]));
+  const thumbnail = page.getByRole('button', { name: '放大查看：回复图片' });
+  const viewer = page.locator('dialog.cs-image-viewer');
+  const browser = page.locator('.website-preview-browser');
+  await thumbnail.click();
+  await expect(viewer).toBeVisible();
+  await expect(browser).toHaveCount(0);
+  await screenshot(page, info, 'web-desktop-light-reply-image-fullscreen');
+  await viewer.getByRole('button', { name: '关闭图片', exact: true }).click();
+  await thumbnail.click({ button: 'right' });
+  const action = page.getByRole('menuitem', { name: '在内置浏览器中打开', exact: true });
+  await expect(action).toBeVisible();
+  await expect(page.locator('.ant-dropdown:visible')).not.toHaveClass(/-(?:appear|enter)(?:-|\s|$)/);
+  await screenshot(page, info, 'web-desktop-light-reply-image-context-menu');
+  await action.click();
+  await expect(action).toBeHidden();
+  await expect(browser.getByRole('img', { name: '回复图片', exact: true })).toBeVisible();
+  await thumbnail.dispatchEvent('pointerdown', { pointerId: 1, pointerType: 'touch', isPrimary: true,
+    button: 0, clientX: 80, clientY: 180 });
+  await expect(action).toBeVisible();
+  await expect(page.locator('.ant-dropdown:visible')).not.toHaveClass(/-(?:appear|enter)(?:-|\s|$)/);
+  await thumbnail.dispatchEvent('pointerup', { pointerId: 1, pointerType: 'touch' });
+  await thumbnail.dispatchEvent('click');
+  await expect(viewer).toHaveCount(0);
+  await screenshot(page, info, 'web-desktop-light-reply-image-long-press');
+  await action.click();
+  await expect(browser.getByRole('tab')).toHaveCount(1);
+  await thumbnail.click();
+  await expect(viewer).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(viewer).toHaveCount(0);
+});
+
 test('collapses completed work automatically but preserves an inspected command and its output', async ({ page }) => {
   const value = fixture([command], true);
   await open(page, value);

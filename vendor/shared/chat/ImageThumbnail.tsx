@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Image as ImageIcon, ImageOff } from 'lucide-react';
 import { displayText, type MessageTranslator } from '../localization/messages';
 import styles from './imageThumbnail.module.css';
+import { ImageOpenMenu } from './ImageOpenMenu';
 
 export function ImagePlaceholder({ failed = false, children, translate = displayText }: {
   failed?: boolean; children?: ReactNode; translate?: MessageTranslator;
@@ -16,10 +17,10 @@ export function ImagePlaceholder({ failed = false, children, translate = display
 
 /** The viewport owns the size; decoding and failure only replace content inside that slot. */
 export function ImageThumbnail({ url, description, title, failed, retry, onError, onPreview,
-  fallback, className = '', translate = displayText }: {
+  fallback, className = '', translate = displayText, openBrowser }: {
   url?: string; description: string; title?: string; failed?: boolean; retry?: () => void;
   onError: () => void; onPreview: () => void; fallback?: ReactNode;
-  className?: string; translate?: MessageTranslator;
+  className?: string; translate?: MessageTranslator; openBrowser?: () => void;
 }) {
   const [loadedSource, setLoadedSource] = useState<string>();
   if (failed) return <span className={styles.frame}>
@@ -32,12 +33,13 @@ export function ImageThumbnail({ url, description, title, failed, retry, onError
   </span>;
   if (!url) return <span className={styles.frame}><ImagePlaceholder translate={translate} /></span>;
   const loaded = loadedSource === url;
-  return <button type="button" className={`${styles.frame} ${styles.preview} ${className}`}
+  return <ImageOpenMenu openBrowser={openBrowser} translate={translate}>
+    <button type="button" className={`${styles.frame} ${styles.preview} ${className}`}
     aria-label={translate('client.chat.enlarge', { value1: description })} aria-busy={!loaded}
     title={title} onClick={onPreview}>
     {!loaded && <ImagePlaceholder translate={translate} />}
     <img src={url} alt={description} loading="lazy" decoding="async" referrerPolicy="no-referrer"
       className={loaded ? styles.loaded : styles.pending}
       onLoad={() => setLoadedSource(url)} onError={() => { setLoadedSource(undefined); onError(); }} />
-  </button>;
+  </button></ImageOpenMenu>;
 }
