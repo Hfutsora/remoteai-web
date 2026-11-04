@@ -3,7 +3,7 @@
   "revision": "d488e382223393e04403531e7be2fa16c8349001",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "7f73dcc0d4fb7129b3fb22bffb19fc3656938400"
+    "revision": "47fc10696c024a9b62fa1cb5f6714e01e4477618"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -317,7 +317,7 @@
     "shared/remote-chat/views/ChatSelectionQuote.tsx": "43d23260e22428e912c3dc77c0fe958f2cb8a10a5d0282d01295677af389c572",
     "shared/remote-chat/client/useProcessingStatus.ts": "8a23a702dc093685d55f76bc953089f6fcb7bd4e368a833f7a63a06dd1f99d9b",
     "shared/chat/replyQuotes.ts": "8bc8f7fdd8da0acce749ab03a223f9b13cb7c1813d6d53e1ee6f9ef42cd5e4f4",
-    "shared/conversation/types.ts": "eda12288d7e3b6d1735dd34ac0a88edea46a5d034f048dc506a22fca23923093",
+    "shared/conversation/types.ts": "0fe20594f780897b10754012c23c64ff5dad7bbb4d21bd725a96719c2207f074",
     "shared/conversation/useTurnChangedFiles.ts": "fe72250e43032bbfdb168a1de9abbf76535512289317b307115960b2540844bc",
     "shared/conversation/detailsContext.ts": "53a487b448b5460b7d7500c7c6edceb4161f6e8fed1d4c841af42f59008b1a14",
     "shared/chat/acknowledgedMessages.ts": "644b11c4a3731646bdcaa0e7c335abc42f1d8820db470af7c1d9f6a7b4d93005",
@@ -1401,8 +1401,8 @@
     "shared/project-explorer/ExplorerToolbar.tsx": "55ccad44b56011aa6733dcdd3fc67740b532408120fa5040845432bb03362522",
     "shared/project-explorer/projectExplorer.css": "2251b72be173c427c0e5a1e8311be9a1ce42b914d23591e13d95c12f9e69041c",
     "shared/chat/groups/GroupEditor.tsx": "d5af8d67c11179495ed2aabd21ba3b07596a6920f2c38548d3f95de974973bcf",
-    "shared/chat/groups/GroupMembers.tsx": "a487eb55a5ced048a96f8bd78065842e1b7bb7132585986a02699aa641634f0a",
-    "shared/chat/groups/PagedGroupMembers.tsx": "0e979aa063ecb8858ad1836b72265dc6466a28646574c986b1cc61abeb831618",
+    "shared/chat/groups/GroupMembers.tsx": "d6d2e3a456442144fbba532142d857bf0f31ec280d67129e4fb67cd766c670ce",
+    "shared/chat/groups/PagedGroupMembers.tsx": "da588135ab0b523295b950fca41e3124a8e294c67937c919e1bb8a86dd39dc27",
     "shared/chat/groups/GroupCards.tsx": "3714b4c6f052bfc45d2aaefdabfd49ec1f50356dc641e0be514ebd3cf1c118eb",
     "shared/chat/groups/GroupTable.tsx": "47813365b90d771e4d5ff826b8077621aa0eea273f3ede4fba28bb6046ec2704",
     "shared/chat/groups/GroupDeleteDialog.tsx": "daeda74b30d7af585a08895a60b124d660bb6fb158e0bcef70b93e0339aeafda",

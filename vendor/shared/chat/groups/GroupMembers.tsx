@@ -27,7 +27,8 @@ export function GroupMembers({ model }: { model: GroupingUI }) {
       <Select className="chat-group-destination" value={destination} onChange={setDestination}
         aria-label={t('client.groups.move')} disabled={model.busy}
         options={[{ value: '', label: <Space style={{ color: token.colorError }}>
-          <CircleMinus size={16} />{t('client.groups.remove')}</Space> }, ...groupOptions(model.grouping.groups)]} />
+          <CircleMinus size={16} style={{ display: 'block' }} />{t('client.groups.remove')}</Space> },
+          ...groupOptions(model.grouping.groups)]} />
       <Button type="primary" disabled={!selected.length || !model.ready || model.loading}
         loading={model.busy} onClick={() => void assign()}>{t('client.groups.apply')}</Button>
       <Button loading={model.loading} onClick={() => void model.reload()}>{t('client.workspaceActions.refreshConversations')}</Button>
