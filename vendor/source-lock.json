@@ -1258,7 +1258,7 @@
     "shared/provider-market/pageLink.ts": "cef18ddf701dd9befaceda9e05ee1c91b89e0c341cfa4c6660bda68bd95be03c",
     "shared/provider-market/browserState.ts": "41d8349ce6da8fc7d844bda44003c7914c2b2effd90eb3e690d7ebfb241ea339",
     "shared/provider-market/BrowserTabs.tsx": "05e4c64b6c7a58a26244ca5c524d44ca79076a2cf05b8cececb57164fb71c542",
-    "shared/provider-market/providerBrowser.css": "54f924e80799d7283c59f3a86f96938efdbf9492292cc1b91d2c770c615a8519",
+    "shared/provider-market/providerBrowser.css": "b9aa6b489dadf766af18beb1c8810e29fac3d4ebe14cfa93eacb0661746c767d",
     "shared/browser/managed/ProviderBrowserSurface.tsx": "b2b0c417a6f449e8b0fb5f428f736550e56afa3bc3fc71f4d4be7a6d26faa60b",
     "shared/browser/managed/browserOverlays.ts": "7049ab695b456b6b81304be6a4d09ee9f789c3e20e5762799c86a3f56c507a4f",
     "shared/file-preview/workspace/nativeBrowserPlacement.ts": "1c92017b8a513a44853dc406d12c1213895a66842db6a3c82259dc8d81336967",

@@ -13,7 +13,7 @@
   color: inherit; cursor: pointer; }
 .pm-browser button:hover { background: var(--hover-bg, #e8edf4); }
 .pm-browser button:disabled { opacity: .4; cursor: default; }
-.pm-browser button:focus-visible, .pm-browser input:focus-visible { outline: 2px solid var(--accent, #6175db); }
+.pm-browser button:focus-visible { outline: 2px solid var(--accent, #6175db); }
 .pm-browser-titlebar { display: flex; align-items: center; gap: 6px; padding: 8px 10px 0;
   background: var(--surface-secondary, #eef1f6); }
 .pm-browser .pm-browser-tabs-bar { display: flex; flex: 0 1 auto; min-width: 0;
@@ -42,8 +42,10 @@
   border-bottom: 1px solid var(--border, #dce1e8); }
 .pm-browser-toolbar form { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0;
   border: 1px solid var(--border, #dce1e8); background: var(--input-bg, #f5f7fa); padding: 0 8px; border-radius: 8px; }
+.pm-browser-toolbar form:focus-within { border-color: var(--accent, #6175db); }
 .pm-browser-toolbar input { min-width: 0; flex: 1; border: 0; background: transparent; color: inherit;
   font: inherit; height: 34px; }
+.pm-browser-toolbar input:focus, .pm-browser-toolbar input:focus-visible { outline: none; }
 .pm-browser-address-error { position: absolute; top: 100%; right: 50px; max-width: 400px; padding: 8px 12px;
   border-radius: 8px; background: var(--panel-bg, #fff); color: #d43838; z-index: 1; }
 .pm-browser-pages, .pm-browser-page, .pm-browser-surface { position: relative; flex: 1; min-height: 0; min-width: 0; }
