@@ -2,7 +2,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { Globe } from 'lucide-react';
 import type { BrowserReply } from '../browser/automation';
 import type { BrowserSurfaceProps } from '../provider-market/ProviderBrowser';
-import { BrowserClientContext } from '../../apps/desktop/src/pages/codexGui/filePreview/browserClient';
+import { BrowserClientContext } from '../file-preview/workspace/browserClient';
 import { remoteStatusPage } from './remoteStatusPage';
 
 const PREVIEW_REFRESH_MS = 2_000;

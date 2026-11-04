@@ -1,7 +1,7 @@
-import { displayError } from '../i18n/index';
-import { getLocale, t, useLanguage } from '../i18n';
+import { displayError } from '../../../../shared/localization/browserClient';
+import { getLocale, t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useEffect, useState } from 'react';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 import { useTokenSummary } from '../../../../shared/remote-chat/client/useTokenSummary';
 import { useWindowVisible } from '../../../../shared/token-usage/useWindowVisible';
 import type { ReadTokenSummary, TokenSummary, UsageRanking } from '../../../../shared/remote-chat/tokenSummary';

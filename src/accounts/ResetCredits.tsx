@@ -1,9 +1,9 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useRef, useState } from 'react';
 import { Button, Dialog, Empty, SpinLoading, Toast } from 'antd-mobile';
 import { RefreshCw } from 'lucide-react';
 import { consumeResetCredit } from '../api';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 import type { AccountSummary } from '../types';
 import { displayFullDate, maskEmail } from './formatters';
 import type { ResetCreditsState } from './useResetCredits';

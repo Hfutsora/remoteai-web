@@ -1,5 +1,5 @@
 import { ChevronLeft, RefreshCw } from 'lucide-react';
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 
 export function DeviceMobileHeader({ onBack, onRefresh, refreshing }: {
   onBack: () => void;

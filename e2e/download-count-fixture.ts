@@ -1,5 +1,5 @@
 import { getActiveSession } from '../src/api';
-import { downloadManager, downloadOwner } from '../src/downloads/manager';
+import { downloadManager, downloadOwner } from '../../../shared/downloads/manager';
 import type { DownloadClient } from '../../../shared/remote-chat/downloads';
 
 let delay = 1000;

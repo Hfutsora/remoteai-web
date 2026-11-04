@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 import { adjacentPage, type PrimaryPage, type SwipeProgress } from '../../../../shared/navigation/pageSwipe';
-import { useDesktopLayout } from '../useDesktopLayout';
-import { swipeSurface } from './swipeSurface';
-import { useHorizontalSwipe } from './useHorizontalSwipe';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
+import { swipeSurface } from '../../../../shared/navigation/swipeSurface';
+import { useHorizontalSwipe } from '../../../../shared/navigation/useHorizontalSwipe';
 
 const surface = (target: EventTarget | null) => swipeSurface(target, '.main-content', true);
 

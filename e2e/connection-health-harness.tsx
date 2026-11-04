@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ChatConnectionHealth } from '../src/chat/ChatConnectionHealth';
+import { ChatConnectionHealth } from '../../../shared/remote-chat/views/ChatConnectionHealth';
 import { initialChatState, type ChatState } from '../../../shared/remote-chat/client/types';
 import '../src/styles.css';
 

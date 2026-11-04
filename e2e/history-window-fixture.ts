@@ -1,5 +1,5 @@
 import { expect, type Page } from '@playwright/test';
-import type { Thread, Turn } from '../src/chat/types';
+import type { Thread, Turn } from '../../../shared/remote-chat/views/types';
 
 export const PAGE_SIZE = 60;
 export function historyTurn(index: number): Turn {

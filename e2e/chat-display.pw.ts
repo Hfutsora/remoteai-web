@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { expect, test, type Page } from '@playwright/test';
-import type { Item, Thread } from '../src/chat/types';
+import type { Item, Thread } from '../../../shared/remote-chat/views/types';
 import { screenshot } from './chat-helpers';
 
 const CONTINUE_MESSAGE = '请继续完成刚才中断的任务。';

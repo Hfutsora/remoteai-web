@@ -1,4 +1,4 @@
-import { displayText } from '../i18n/index';
+import { displayText } from '../../../../shared/localization/browserClient';
 import { useContext, useEffect, useState, type ReactNode } from 'react';
 import { WorkspaceDrawerContext, workspaceTabId } from '../../../../shared/chat/workspaceDrawer';
 import { Popover } from 'antd';
@@ -6,12 +6,12 @@ import { FolderSearch, GitBranch, Monitor, SquareTerminal, Wrench } from 'lucide
 import type { GuiToolsClient } from '../../../../shared/remote-chat/guiTools';
 import { useDesktopLauncher } from '../../../../shared/remote-desktop/useDesktopLauncher';
 import { ChatTerminal, type ChatTerminalPanel } from './ChatTerminal';
-import { ChatGit } from './git/ChatGit';
-import { RemoteDesktop } from './desktop/RemoteDesktop';
-import { t } from '../i18n';
-import './git/git.css';
-import { ProjectBrowserDrawer } from './projectBrowser/ProjectBrowserDrawer';
-import { useDesktopLayout } from '../useDesktopLayout';
+import { ChatGit } from '../../../../shared/git/views/ChatGit';
+import { RemoteDesktop } from '../../../../shared/remote-desktop/views/RemoteDesktop';
+import { t } from '../../../../shared/localization/browserClient';
+import '../../../../shared/git/views/git.css';
+import { ProjectBrowserDrawer } from '../../../../shared/project-browser/views/ProjectBrowserDrawer';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
 import { useProjectBrowsers } from '../../../../shared/project-browser/useProjectBrowsers';
 
 interface Props {

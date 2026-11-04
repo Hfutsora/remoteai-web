@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import type { Thread, Turn } from '../src/chat/types';
+import type { Thread, Turn } from '../../../shared/remote-chat/views/types';
 
 test.beforeEach(({}, info) => test.skip(info.project.name !== 'desktop', 'Mouse wheel interaction'));
 

@@ -1,19 +1,19 @@
 import { createRoot } from 'react-dom/client';
 import { WebLocaleProvider } from '../src/i18n/WebLocaleProvider';
 import { initializeTheme } from '../src/theme/preference';
-import { ChatFilePreview, type FilePreviewContext } from '../src/chat/ChatFilePreview';
-import { ChatFileContext } from '../src/chat/ChatFileLink';
-import { ChatDetailsWorkspace } from '../src/chat/ChatDetailsWorkspace';
-import { ChatMarkdown } from '../src/chat/ChatMarkdown';
+import { ChatFilePreview, type FilePreviewContext } from '../../../shared/remote-chat/views/ChatFilePreview';
+import { ChatFileContext } from '../../../shared/remote-chat/views/ChatFileLink';
+import { ChatDetailsWorkspace } from '../../../shared/remote-chat/views/ChatDetailsWorkspace';
+import { ChatMarkdown } from '../../../shared/remote-chat/views/ChatMarkdown';
 import { PcFilePreviewFixture } from './pc-file-preview-fixture';
 import { externalCodePath, longMarkdown, markdown, sourceCode } from './file-preview-fixture';
 import { HTML_FIXTURE_ASSETS, HTML_FIXTURE_DOCUMENT, HTML_FIXTURE_PATH } from '../../../shared/file-preview/htmlPreviewFixture';
 import 'antd/dist/reset.css';
 import 'antd-mobile/es/global';
 import '../src/styles.css';
-import '../src/chat/chat.css';
-import '../src/chat/messages.css';
-import '../src/chat/desktopMessages.css';
+import '../../../shared/remote-chat/views/chat.css';
+import '../../../shared/remote-chat/views/messages.css';
+import '../../../shared/remote-chat/views/desktopMessages.css';
 
 initializeTheme();
 const params = new URLSearchParams(location.search);

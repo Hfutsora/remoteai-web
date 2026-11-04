@@ -1,4 +1,4 @@
-import { displayText } from './index';
+import { displayText } from '../../../../shared/localization/browserClient';
 
 
 export function profileRole(profile?: { role: string; roleName?: string | null } | null) {

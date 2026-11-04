@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import type { Thread } from '../src/chat/types';
+import type { Thread } from '../../../shared/remote-chat/views/types';
 
 async function open(page: Page) {
   const thread: Thread = { id: 'scroll-bottom', cwd: '', preview: '', updatedAt: 1, turns: [{

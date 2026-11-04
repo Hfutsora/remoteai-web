@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { TimerReset } from 'lucide-react';
 import { quotaWindowSyncText } from '@remoteai/i18n/copy/quotaWindowSync';
-import { getLanguage } from '../i18n';
-import { useDesktopLayout } from '../useDesktopLayout';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
+import { getLanguage } from '../../../../shared/localization/browserClient';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 import { SettingsRow } from './SettingsRow';
 
 export function QuotaWindowSyncGuidance() {

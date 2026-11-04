@@ -1,4 +1,4 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useMemo, useRef, useState } from 'react';
 import { Dropdown } from 'antd';
 import { Button, Dialog, Empty, Input, PullToRefresh, SpinLoading, Toast } from 'antd-mobile';

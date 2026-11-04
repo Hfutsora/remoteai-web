@@ -1,4 +1,4 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { Tooltip } from 'antd';
 import { ChartNoAxesColumn, CircleHelp, Clock3, RefreshCw } from 'lucide-react';
 import type { UsageSummary, UsageWindow } from '../types';

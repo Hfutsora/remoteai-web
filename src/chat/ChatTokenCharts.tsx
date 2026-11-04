@@ -1,10 +1,10 @@
-import { displayError } from '../i18n/index';
-import { getLocale, t, useLanguage } from '../i18n';
+import { displayError } from '../../../../shared/localization/browserClient';
+import { getLocale, t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useMemo, useState } from 'react';
 import type { TokenSummary } from '../../../../shared/remote-chat/tokenSummary';
 import { buildQuotaChartData, type QuotaInterval, type QuotaView }
-  from '../../../desktop/src/components/TokenUsageDashboard/quotaHistoryData';
-import { quotaChartLabels } from '../../../desktop/src/components/TokenUsageDashboard/quotaChartLabels';
+  from '../../../../shared/token-usage/quotaHistoryData';
+import { quotaChartLabels } from '../../../../shared/token-usage/quotaChartLabels';
 import { formatTokens } from '../../../../shared/remote-chat/usage';
 
 interface Point { label: string; values: Array<number | null> }

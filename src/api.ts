@@ -1,5 +1,5 @@
 import { remoteProviderCommand, type RemoteModelTarget } from '../../../shared/remote-chat/modelTarget';
-import { t } from './i18n';
+import { t } from '../../../shared/localization/browserClient';
 import {
   fetchBufferedResponse, SESSION_REFRESH_TIMEOUT_MS, throwIfAborted, waitWithSignal, withRequestDeadline,
   type DeadlineRequestInit,

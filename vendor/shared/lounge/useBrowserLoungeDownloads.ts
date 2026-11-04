@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { downloadManager } from '../../apps/web/src/downloads/manager';
+import { downloadManager } from '../downloads/manager';
 import { displayText as t } from '../localization/messages';
 import type { LoungeController } from './controller';
 import { loungeDownloadClient, LOUNGE_DOWNLOAD_DEVICE } from './downloadClient';

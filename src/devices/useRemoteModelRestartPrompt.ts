@@ -1,4 +1,4 @@
-import { t } from '../i18n';
+import { t } from '../../../../shared/localization/browserClient';
 import { useCallback } from "react";
 import { Dialog, Toast } from "antd-mobile";
 import { useAppDispatch, useAppSelector } from "../hooks";

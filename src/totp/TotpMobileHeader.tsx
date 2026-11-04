@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Dropdown } from 'antd';
 import { ChevronLeft, Plus, QrCode, SquarePen } from 'lucide-react';
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 
 // Match the native header's 6px bottom padding plus the menu's 6px gap.
 const MENU_OFFSET = 12;

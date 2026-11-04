@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ChatController } from '../../../shared/remote-chat/client/controller';
-import { ChatImage, ChatImageContext } from '../src/chat/ChatImage';
-import { downloadManager } from '../src/downloads/manager';
+import { ChatImage, ChatImageContext } from '../../../shared/remote-chat/views/ChatImage';
+import { downloadManager } from '../../../shared/downloads/manager';
 import { createPreviewDownloads } from '../src/downloads/previews';
 import { fixtureBulkClient } from './bulk-download-fixture';
 import { sha256 } from '@noble/hashes/sha256';
 import { bytesToHex } from '@noble/hashes/utils';
-import { ChatFilePreview } from '../src/chat/ChatFilePreview';
+import { ChatFilePreview } from '../../../shared/remote-chat/views/ChatFilePreview';
 import '../src/styles.css';
-import '../src/chat/messages.css';
+import '../../../shared/remote-chat/views/messages.css';
 
 const THREAD = '33333333-3333-4333-8333-333333333333';
 const IMAGE = '44444444-4444-4444-8444-444444444444';

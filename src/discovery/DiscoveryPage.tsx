@@ -1,7 +1,7 @@
 import { BarChart3, ChevronLeft, ChevronRight, Coffee, Download, Server, ShieldCheck, Terminal } from 'lucide-react';
 import { discoveryEntries, type DiscoveryPage as DiscoveryDestination } from '../../../../shared/navigation/discovery';
-import { t, useLanguage } from '../i18n';
-import { DownloadCountIcon } from '../downloads/DownloadCountIcon';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
+import { DownloadCountIcon } from '../../../../shared/downloads/DownloadCountIcon';
 import { LoungeIcon } from '../../../../shared/lounge/LoungeIcon';
 import './styles.css';
 

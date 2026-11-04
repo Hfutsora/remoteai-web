@@ -1,10 +1,10 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, SpinLoading, Toast } from 'antd-mobile';
 import { Eye, EyeOff, Save } from 'lucide-react';
 import { fetchAccountDetails, updateAccountDetails } from '../api';
 import type { AccountPrivateDetails, AccountSummary } from '../types';
-import { AdaptiveSheet } from './AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 
 interface AccountDetailsSheetProps {
   account: AccountSummary | null;

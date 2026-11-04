@@ -1,11 +1,11 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useEffect, useState } from 'react';
 import { Button, SpinLoading, Toast } from 'antd-mobile';
 import { RefreshCw } from 'lucide-react';
 import { fetchAccountDetails } from '../api';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { refreshOneAccount } from '../store';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 import { AccountDetailsSheet } from '../components/AccountDetailsSheet';
 import type { AccountSummary, RemoteDevice } from '../types';
 import { AccountInfo } from './AccountInfo';

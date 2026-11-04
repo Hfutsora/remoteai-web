@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
-import { FileEnvironmentContext, type FileEnvironment } from '../../desktop/src/pages/codexGui/fileEnvironment';
-import { FileThreadContext } from '../../desktop/src/pages/codexGui/fileApi';
-import { ChatDetailsWorkspace } from '../src/chat/ChatDetailsWorkspace';
-import { ChatMarkdown } from '../src/chat/ChatMarkdown';
-import { ChatFileContext } from '../src/chat/ChatFileLink';
-import { ChatImageContext } from '../src/chat/ChatImage';
+import { FileEnvironmentContext, type FileEnvironment } from '../../../shared/conversation/fileEnvironment';
+import { FileThreadContext } from '../../../shared/conversation/fileApi';
+import { ChatDetailsWorkspace } from '../../../shared/remote-chat/views/ChatDetailsWorkspace';
+import { ChatMarkdown } from '../../../shared/remote-chat/views/ChatMarkdown';
+import { ChatFileContext } from '../../../shared/remote-chat/views/ChatFileLink';
+import { ChatImageContext } from '../../../shared/remote-chat/views/ChatImage';
 
 const documents: Record<string, string> = {
   'guide.md': '# 远程文档\n\n| 名称 | 内容 |\n|---|---|\n| 电脑 | 远程 PC |\n\n'

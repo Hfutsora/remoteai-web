@@ -1,4 +1,4 @@
-import { getLocale, t, useLanguage } from '../i18n';
+import { getLocale, t, useLanguage } from '../../../../shared/localization/browserClient';
 import { Dropdown } from 'antd';
 import { Clock, ExternalLink, KeyRound, Laptop, Monitor, MoreVertical, Server, Sun, Trash2, UserRound } from 'lucide-react';
 import { supportsScreenControl } from '../../../../shared/remote-desktop/screenControl';

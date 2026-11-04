@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ChatComposer } from '../src/chat/ChatComposer';
-import type { ComposerProps } from '../src/chat/composerProps';
+import { ChatComposer } from '../../../shared/remote-chat/views/ChatComposer';
+import type { ComposerProps } from '../../../shared/remote-chat/views/composerProps';
 import { initialChatState, type GuiEvent } from '../../../shared/remote-chat/client/types';
 import { ChatController } from '../../../shared/remote-chat/client/controller';
 import { GUI_ACCOUNT_SELECTION_EVENT } from '../../../shared/remote-chat/guiAccounts';
-import { setLanguage } from '../src/i18n';
-import { testModels } from '../../desktop/src/pages/codexGui/testModels';
+import { setLanguage } from '../../../shared/localization/browserClient';
+import { testModels } from '../../../shared/conversation/testing/models';
 import { setThemeMode } from '../src/theme/preference';
 import 'antd-mobile/es/global';
 import '../src/styles.css';

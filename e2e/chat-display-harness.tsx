@@ -1,18 +1,18 @@
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ChatMessages } from '../src/chat/ChatMessages';
-import { ChatSidebar } from '../src/chat/ChatSidebar';
-import { ChatProcessing } from '../src/chat/ChatProcessing';
-import { ChatQuotesProvider } from '../src/chat/ChatQuotes';
-import { ChatDetailsWorkspace } from '../src/chat/ChatDetailsWorkspace';
-import { ConversationChangesButton } from '../../desktop/src/pages/codexGui/ConversationChangesButton';
-import { useDesktopLayout } from '../src/useDesktopLayout';
-import type { Thread } from '../src/chat/types';
+import { ChatMessages } from '../../../shared/remote-chat/views/ChatMessages';
+import { ChatSidebar } from '../../../shared/remote-chat/views/ChatSidebar';
+import { ChatProcessing } from '../../../shared/remote-chat/views/ChatProcessing';
+import { ChatQuotesProvider } from '../../../shared/remote-chat/views/ChatQuotes';
+import { ChatDetailsWorkspace } from '../../../shared/remote-chat/views/ChatDetailsWorkspace';
+import { ConversationChangesButton } from '../../../shared/conversation/ConversationChangesButton';
+import { useDesktopLayout } from '../../../shared/layout/useDesktopLayout';
+import type { Thread } from '../../../shared/remote-chat/views/types';
 import { mergeHistory } from '../../../shared/remote-chat/client/history';
 import { historyLoadResult, type HistoryLoadResult } from '../../../shared/remote-chat/client/historyLoad';
 import { currentRunningTurn } from '../../../shared/chat/runningTurn';
 import '../src/styles.css';
-import '../src/chat/chat.css';
+import '../../../shared/remote-chat/views/chat.css';
 
 function Harness() {
   const desktop = useDesktopLayout();

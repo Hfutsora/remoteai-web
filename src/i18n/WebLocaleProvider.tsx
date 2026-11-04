@@ -11,8 +11,8 @@ import zhCNMobile from 'antd-mobile/es/locales/zh-CN';
 import enUSMobile from 'antd-mobile/es/locales/en-US';
 import ruRUMobile from 'antd-mobile/es/locales/ru-RU';
 import jaJPMobile from 'antd-mobile/es/locales/ja-JP';
-import { getLocale, useLanguage } from './language';
-import { t } from './index';
+import { getLocale, useLanguage } from '../../../../shared/localization/browserLanguage';
+import { t } from '../../../../shared/localization/browserClient';
 
 export function WebLocaleProvider({ children }: { children: ReactNode }) {
   const language = useLanguage();

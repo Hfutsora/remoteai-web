@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { DownloadManagerPage } from '../src/downloads/DownloadManagerPage';
-import { downloadManager } from '../src/downloads/manager';
-import { ChatFilePreview } from '../src/chat/ChatFilePreview';
+import { downloadManager } from '../../../shared/downloads/manager';
+import { ChatFilePreview } from '../../../shared/remote-chat/views/ChatFilePreview';
 import type { DownloadClient } from '../../../shared/remote-chat/downloads';
 import type { FileClient } from '../../../shared/remote-chat/fileDownload';
 import type { ConnectionMode } from '../../../shared/remote-chat/protocol';
 import { DEFAULT_CHAT_POLICY, setChatConnectionMode, setChatPolicy } from '../../../shared/remote-chat/policy';
 import '../src/styles.css';
-import '../src/chat/chat.css';
-import '../src/chat/messages.css';
+import '../../../shared/remote-chat/views/chat.css';
+import '../../../shared/remote-chat/views/messages.css';
 import { fixtureBulkClient } from './bulk-download-fixture';
 import { resumeFixture } from './download-resume-fixture';
 import { openPreparedDownload, type ArchiveProgress } from '../../../shared/remote-chat/archiveDownload';
-import { setLanguage } from '../src/i18n';
+import { setLanguage } from '../../../shared/localization/browserClient';
 
 Object.defineProperty(window, 'showSaveFilePicker', { value: undefined, configurable: true });
 

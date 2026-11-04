@@ -1,8 +1,8 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { Dropdown } from 'antd';
 import { Copy, Github, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import type { TotpEntry } from '../types';
-import { copyText } from '../components/copyText';
+import { copyText } from '../../../../shared/clipboardFeedback';
 
 export function TotpCodeCard({ entry, code, now, onEdit, onDelete }: {
   entry: TotpEntry; code: string; now: number; onEdit: () => void; onDelete: () => void;

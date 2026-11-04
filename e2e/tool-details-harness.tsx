@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import reported from '../../../shared/chat/toolDetailsFixture.json';
-import { ChatToolDetails } from '../src/chat/ChatToolDetails';
+import { ChatToolDetails } from '../../../shared/remote-chat/views/ChatToolDetails';
 import { TOOL_OUTPUT_PAGE_CHARACTERS } from '../../../shared/chat/toolOutput';
 import { ApplicationTypography } from '../../../shared/appearance/ApplicationTypography';
 import { WebLocaleProvider } from '../src/i18n/WebLocaleProvider';
@@ -9,8 +9,8 @@ import { saveGlobalFontSize } from '../../../shared/appearance/fontSize';
 import { setThemeMode } from '../src/theme/preference';
 import { setInterfaceLanguage } from '../../../shared/localization/interfaceLanguage';
 import '../src/styles.css';
-import '../src/chat/chat.css';
-import '../src/chat/messages.css';
+import '../../../shared/remote-chat/views/chat.css';
+import '../../../shared/remote-chat/views/messages.css';
 
 const outputLine = 'Tool output line.\n';
 const longText = outputLine.repeat(Math.ceil(TOOL_OUTPUT_PAGE_CHARACTERS / outputLine.length)) + '\nOUTPUT_END';

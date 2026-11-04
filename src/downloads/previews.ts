@@ -1,8 +1,8 @@
 import { PreviewDownloads } from '../../../../shared/remote-chat/previewDownloads';
-import { downloadManager } from './manager';
-import { downloadContent } from './storage';
-import { verifySnapshot } from './saveDownload';
-import type { DownloadTask } from './types';
+import { downloadManager } from '../../../../shared/downloads/manager';
+import { downloadContent } from '../../../../shared/downloads/storage';
+import { verifySnapshot } from '../../../../shared/downloads/saveDownload';
+import type { DownloadTask } from '../../../../shared/downloads/types';
 
 export function createPreviewDownloads(identity: { owner: string; deviceId: string }) {
   const urls = new Map<string, Promise<string>>();

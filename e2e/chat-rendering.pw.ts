@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import type { Thread } from '../src/chat/types';
+import type { Thread } from '../../../shared/remote-chat/views/types';
 
 test('keeps streamed text, math, code and historical tool actions correct', async ({ page }, info) => {
   let thread: Thread = { id: 'rendering', cwd: '', preview: '', updatedAt: 1, turns: [

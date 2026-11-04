@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 import { fileURLToPath } from 'node:url';
-import type { Thread } from '../src/chat/types';
+import type { Thread } from '../../../shared/remote-chat/views/types';
 import { screenshot } from './chat-helpers';
 
 const historyModule = '/web/@fs/'

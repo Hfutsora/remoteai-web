@@ -1,13 +1,13 @@
 import { createRoot } from 'react-dom/client';
 import { useState } from 'react';
 import { ChatTools } from '../src/chat/ChatTools';
-import { GuiToolbox } from '../../desktop/src/pages/codexGui/GuiToolbox';
-import { GuiRemoteDesktop } from '../../desktop/src/pages/codexGui/GuiRemoteDesktop';
+import { GuiToolbox } from '../../../shared/conversation/GuiToolbox';
+import { GuiRemoteDesktop } from '../../../shared/conversation/GuiRemoteDesktop';
 import { client, desktopTest } from './remote-desktop-fixture';
 import { RemoteDesktopComputersHarness } from './remote-desktop-computers-harness';
 import { DeviceScreenHarness } from './remote-desktop-device-screen-harness';
 import '../src/styles.css';
-import '../src/chat/chat.css';
+import '../../../shared/remote-chat/views/chat.css';
 import '../../desktop/src/pages/codexGui/remote/remoteGui.less';
 
 // Let a desktop browser inspect the mobile controls without changing production pointer detection.

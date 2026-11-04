@@ -1,10 +1,10 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useCallback, useState } from 'react';
 import { Empty, PullToRefresh, SpinLoading, Toast } from 'antd-mobile';
 import { ChevronRight, Laptop } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { refreshAll, switchDeviceAccount } from '../store';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 import { AddAccountSheet } from '../components/AddAccountSheet';
 import { useRemoteModelRestartPrompt } from '../devices/useRemoteModelRestartPrompt';
 import { AccountCard } from './AccountCard';

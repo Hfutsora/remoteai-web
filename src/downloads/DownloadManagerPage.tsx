@@ -1,17 +1,17 @@
-import { displayText, displayError } from '../i18n/index';
+import { displayText, displayError } from '../../../../shared/localization/browserClient';
 import { useState } from 'react';
 import { ArrowLeft, Download, Folder, Monitor } from 'lucide-react';
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { downloadConnectionLabel } from '../../../../shared/remote-chat/downloadConnection';
 import { DownloadBrowser } from './DownloadBrowser';
-import { DownloadCard } from './DownloadCard';
-import { useDownloadTasks } from './useDownloadTasks';
+import { DownloadCard } from '../../../../shared/downloads/DownloadCard';
+import { useDownloadTasks } from '../../../../shared/downloads/useDownloadTasks';
 import { useDownloadSelection } from '../../../../shared/downloads/useDownloadSelection';
-import { DownloadBatchActions } from './DownloadBatchActions';
-import { DownloadWorkspace } from './desktop/DownloadWorkspace';
-import { useDesktopLayout } from '../useDesktopLayout';
-import './styles.css';
-import { downloadManager } from './manager';
+import { DownloadBatchActions } from '../../../../shared/downloads/DownloadBatchActions';
+import { DownloadWorkspace } from '../../../../shared/downloads/desktop/DownloadWorkspace';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
+import '../../../../shared/downloads/styles.css';
+import { downloadManager } from '../../../../shared/downloads/manager';
 
 export function DownloadManagerPage({ owner, onBack }: { owner: string; onBack: () => void }) {
   useLanguage();

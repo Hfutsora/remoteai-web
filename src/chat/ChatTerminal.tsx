@@ -1,20 +1,20 @@
-import { displayText } from '../i18n/index';
-import { displayError } from '../i18n/index';
+import { displayText } from '../../../../shared/localization/browserClient';
+import { displayError } from '../../../../shared/localization/browserClient';
 import { lazy, Suspense, useContext, useMemo, useSyncExternalStore } from 'react';
 import { createPortal } from 'react-dom';
-import { ChatTerminalHostContext } from './ChatTerminalLayout';
+import { ChatTerminalHostContext } from '../../../../shared/remote-chat/views/ChatTerminalLayout';
 import { Drawer, Spin } from 'antd';
 import { PanelToggleButton } from '../../../../shared/chat/PanelToggleButton';
 import { PanelBottom, SquareTerminal } from 'lucide-react';
 import type { GuiToolsClient } from '../../../../shared/remote-chat/guiTools';
 import { useRemoteTerminalLauncher } from '../../../../shared/remote-chat/useRemoteTerminalLauncher';
 import { remoteTerminalApi } from '../../../../shared/remote-chat/terminalApi';
-import { useDesktopLayout } from '../useDesktopLayout';
-import { t, useLanguage } from '../i18n';
-import './terminal.css';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
+import '../../../../shared/remote-chat/views/terminal.css';
 import { useToolLaunch } from '../../../../shared/remote-chat/useToolLaunch';
 
-const TerminalPanel = lazy(() => import('../../../desktop/src/pages/codexGui/terminal/TerminalPanel'));
+const TerminalPanel = lazy(() => import('../../../../shared/terminal/views/TerminalPanel'));
 const PHONE_LANDSCAPE = '(pointer: coarse) and (orientation: landscape) and (max-height: 500px)';
 const subscribeLandscape = (notify: () => void) => {
   const query = window.matchMedia(PHONE_LANDSCAPE);

@@ -2,7 +2,7 @@ import { expect, type APIRequestContext, type Page, type TestInfo } from '@playw
 import { connect, operationCount, screenshot, state, fixtureUrl } from './chat-helpers';
 import { closeChatSettings } from './chat-settings';
 
-export async function composerLayout(page: Page) {
+export async function composerLayout(page: Page, info: TestInfo) {
   await connect(page);
   const input = page.getByRole('textbox', { name: '聊天消息' });
   const send = page.getByRole('button', { name: '发送消息' });
@@ -16,9 +16,9 @@ export async function composerLayout(page: Page) {
     await expect(page.locator('.chat-composer-hint')).toContainText('Codex');
     await expect(page.locator('.chat-conversation-metrics .cs-usage-today')).toContainText('USD');
   } else await expect(page.locator('.chat-composer')).toHaveClass(/is-compact/);
-  await expect(send).toHaveCSS('border-radius', '50%');
   for (const text of ['一行消息', '第一行\n第二行\n第三行', '多行消息\n'.repeat(60)]) {
     await input.fill(text);
+    await expect(send).toHaveCSS('border-radius', '50%');
     const content = (await page.locator('.chat-composer-content').boundingBox())!;
     const left = (await add.boundingBox())!;
     const right = (await send.boundingBox())!;
@@ -30,7 +30,8 @@ export async function composerLayout(page: Page) {
     await expect(settings).toBeVisible();
   }
   await input.fill('');
-  await expect(send).toBeDisabled();
+  if (desktop) await expect(send).toBeDisabled();
+  else await expect(page.getByRole('button', { name: '语音输入', exact: true })).toBeVisible();
   if (!desktop) await expect(page.locator('.chat-composer')).toHaveClass(/is-compact/);
   await page.evaluate(() => {
     if (!window.visualViewport) throw new Error('Visual viewport is required');
@@ -52,6 +53,7 @@ export async function composerLayout(page: Page) {
   });
   await input.blur();
   await expect(settings).toBeVisible();
+  await screenshot(page, info, 'composer-layout');
   await page.setViewportSize({ width: 320, height: 640 });
   await input.fill('窄屏长消息\n'.repeat(40));
   await expect(send).toBeInViewport();
@@ -59,6 +61,7 @@ export async function composerLayout(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await input.fill('');
   await expect(page.locator('.chat-composer')).toHaveClass(/is-compact/);
+  await screenshot(page, info, 'composer-narrow');
 }
 
 export async function desktopComposer(page: Page, request: APIRequestContext, info: TestInfo) {

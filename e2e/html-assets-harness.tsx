@@ -1,12 +1,12 @@
 import { createRoot } from 'react-dom/client';
-import { ChatFilePreviewContent } from '../src/chat/ChatFilePreview';
-import { ChatFileContext } from '../src/chat/ChatFileLink';
-import { ChatDetailsWorkspace } from '../src/chat/ChatDetailsWorkspace';
-import { ChatMarkdown } from '../src/chat/ChatMarkdown';
-import { setLanguage } from '../src/i18n';
+import { ChatFilePreviewContent } from '../../../shared/remote-chat/views/ChatFilePreview';
+import { ChatFileContext } from '../../../shared/remote-chat/views/ChatFileLink';
+import { ChatDetailsWorkspace } from '../../../shared/remote-chat/views/ChatDetailsWorkspace';
+import { ChatMarkdown } from '../../../shared/remote-chat/views/ChatMarkdown';
+import { setLanguage } from '../../../shared/localization/browserClient';
 import type { FileClient } from '../../../shared/remote-chat/fileDownload';
 import '../src/styles.css';
-import '../src/chat/chat.css';
+import '../../../shared/remote-chat/views/chat.css';
 
 interface Fixture {
   path: string; text: string; assets: Record<string, { data: string; mime: string }>; stalledPath?: string;

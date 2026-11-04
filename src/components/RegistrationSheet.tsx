@@ -1,7 +1,7 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { Button } from "antd-mobile";
 import { Download } from "lucide-react";
-import { AdaptiveSheet } from "./AdaptiveSheet";
+import { AdaptiveSheet } from "../../../../shared/layout/AdaptiveSheet";
 
 const DESKTOP_DOWNLOAD_URL = "https://github.com/piperhex/remoteai/releases/latest";
 

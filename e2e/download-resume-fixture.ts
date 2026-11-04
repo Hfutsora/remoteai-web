@@ -1,6 +1,6 @@
-import { coalesceStoredRange, readStoredRange } from '../src/downloads/chunkRanges';
-import { listDownloads, storeChunk, storeDownload } from '../src/downloads/storage';
-import type { DownloadTask } from '../src/downloads/types';
+import { coalesceStoredRange, readStoredRange } from '../../../shared/downloads/chunkRanges';
+import { listDownloads, storeChunk, storeDownload } from '../../../shared/downloads/storage';
+import type { DownloadTask } from '../../../shared/downloads/types';
 
 const BLOCK_BYTES = 1024 * 1024;
 

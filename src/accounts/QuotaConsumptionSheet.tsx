@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Button, Toast } from 'antd-mobile';
 import { Checkbox } from 'antd';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 import { useAppDispatch, useAppSelector } from '../hooks';
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { consumeQuota } from '../store';
 import type { AccountSummary } from '../types';
 import { maskEmail, remainingPercent, resetLabel } from './formatters';

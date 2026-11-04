@@ -30,6 +30,8 @@ test('standalone preparation reconstructs host paths and uses the Web repository
   assert.equal(fs.readFileSync(path.join(f.application, 'src/screen.ts'), 'utf8'), 'export const value = 1;');
   assert.equal(fs.readFileSync(path.join(f.workspace, 'shared/example.ts'), 'utf8'), 'export const shared = true;');
   assert.equal(JSON.parse(fs.readFileSync(path.join(f.workspace, 'package.json'), 'utf8')).version, '9.8.7');
+  f.write('.workspace/apps/desktop/e2e/probe.js', 'export const fixture = true;');
+  assert.equal((await import(pathToFileURL(path.join(f.workspace, 'apps/desktop/e2e/probe.js')))).fixture, true);
   assert.ok(fs.existsSync(path.join(f.application, 'playwright.startup-update.config.ts')));
   f.write('src/screen.ts', 'export const value = 2;');
   f.copySourceChange(path.join(f.root, 'src/screen.ts'));

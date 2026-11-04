@@ -1,9 +1,9 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useState } from 'react';
 import { isRemoteAggregateId, remoteModelOptions, type RemoteModelTarget } from '../../../../shared/remote-chat/modelTarget';
 import { ChevronRight } from "lucide-react";
 import type { AccountSummary, RemoteDevice, RemoteProviderSummary } from "../types";
-import { AdaptiveSheet } from "./AdaptiveSheet";
+import { AdaptiveSheet } from "../../../../shared/layout/AdaptiveSheet";
 
 interface RemoteModelSwitchSheetProps {
   device: RemoteDevice | null;

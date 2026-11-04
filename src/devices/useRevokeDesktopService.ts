@@ -1,4 +1,4 @@
-import { t } from '../i18n';
+import { t } from '../../../../shared/localization/browserClient';
 import { useRef } from 'react';
 import { Dialog, Toast } from 'antd-mobile';
 import { apiJson } from '../api';

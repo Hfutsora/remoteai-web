@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ChatProfileMenu } from '../src/chat/ChatProfileMenu';
+import { ChatProfileMenu } from '../../../shared/remote-chat/views/ChatProfileMenu';
 import { createGuiToolsClient } from '../../../shared/remote-chat/guiTools';
 import type { GuiAccountsClient } from '../../../shared/remote-chat/guiAccounts';
 import '../src/styles.css';
-import '../src/chat/chat.css';
+import '../../../shared/remote-chat/views/chat.css';
 
 const UPDATE_CHECK_DELAY_MS = 250;
 

@@ -1,4 +1,4 @@
-import { t } from './i18n';
+import { t } from '../../../shared/localization/browserClient';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Toast } from 'antd-mobile';
 import { fetchTotpVault, putTotpVault } from './api';

@@ -3,8 +3,8 @@
 - Keep these instructions in English. This repository owns the Remote AI Web client.
 - Install and check independently with `npm ci`, `npm run check`, and `npm test`.
   Build output belongs in `dist/`; development uses `npm run dev`.
-- Application source files retain their established host-relative imports because the desktop application
-  also consumes Web components. Standalone commands prepare `.workspace/` from this repository and the
+- Application source files consume shared domain modules; neither Web nor desktop may import the other's
+  application internals. Standalone commands prepare `.workspace/` from this repository and the
   generated dependencies in `vendor/`. Edit original sources, never the generated workspace or snapshots.
 - Refresh dependencies using `scripts/export-web-dependencies.mjs` in `piperhex/remoteai`. Review the
   repository revisions, file hashes and npm lockfile. Shared source ownership remains in `remoteai-shared`.

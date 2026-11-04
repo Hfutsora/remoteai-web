@@ -9,7 +9,7 @@ import { browserLoungeSync } from '../../../../shared/lounge/browserSync';
 import { apiJson, getActiveSession } from '../api';
 import type { AuthSession } from '../types';
 import { useBrowserLoungeDownloads } from '../../../../shared/lounge/useBrowserLoungeDownloads';
-import { downloadOwner } from '../downloads/manager';
+import { downloadOwner } from '../../../../shared/downloads/manager';
 
 export function useWebLounge(session: AuthSession | null) {
   const baseUrl = session?.baseUrl;

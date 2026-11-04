@@ -1,8 +1,8 @@
-import { displayError } from '../i18n/index';
-import { t, useLanguage } from '../i18n';
+import { displayError } from '../../../../shared/localization/browserClient';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useState } from 'react';
 import { Button, Form, Input, Toast } from 'antd-mobile';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 import { MAX_REFRESH_MINUTES, MIN_REFRESH_MINUTES, saveRefreshMinutes } from './refreshInterval';
 
 export function RefreshIntervalSheet({ minutes, onClose, onSaved }: {

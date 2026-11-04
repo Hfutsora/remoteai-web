@@ -1,27 +1,27 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useEffect, useState } from 'react';
 import { usePagePreview } from '../../../../shared/navigation/PageSwipeContext';
 import { useAppDispatch } from '../hooks';
 import { chatDeviceSelected } from '../store';
 import type { AuthSession, RemoteDevice } from '../types';
-import { ConnectedChat } from './ConnectedChat';
+import { ConnectedChat } from '../../../../shared/remote-chat/views/ConnectedChat';
 import { ChatTokenSummary } from './ChatTokenSummary';
 import { SshPage } from '../discovery/SshPage';
 import { ChatTools } from './ChatTools';
 import { useChat } from './useChat';
 import { useChatViewport } from './useChatViewport';
 import { loadLastConnectedDevice, saveLastConnectedDevice } from './lastConnectedDevice';
-import { useDownloadConnection } from '../downloads/useDownloadConnection';
+import { useDownloadConnection } from '../../../../shared/downloads/useDownloadConnection';
 import { useRetainedChatDevices } from '../../../../shared/remote-chat/useRetainedChatDevices';
 import type { ComputerListRefresh } from '../../../../shared/remote-chat/ComputerSearchBar';
 import { useComputerListRefresh } from './useComputerListRefresh';
-import { useDesktopLayout } from '../useDesktopLayout';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
 import { useRemoteCliInstaller } from '../../../../shared/remote-chat/useRemoteCliInstaller';
 import { useRemoteTerminalLauncher } from '../../../../shared/remote-chat/useRemoteTerminalLauncher';
 import { TerminalWorkspaceProvider } from '../../../../shared/terminal/TerminalWorkspaceProvider';
-import { GuiRemoteDesktop } from '../../../desktop/src/pages/codexGui/GuiRemoteDesktop';
-import { RemoteGuiTools } from '../../../desktop/src/pages/codexGui/remote/RemoteGuiTools';
-import { RemoteGuiProject } from '../../../desktop/src/pages/codexGui/remote/RemoteGuiProject';
+import { GuiRemoteDesktop } from '../../../../shared/conversation/GuiRemoteDesktop';
+import { RemoteGuiTools } from '../../../../shared/conversation/remote/RemoteGuiTools';
+import { RemoteGuiProject } from '../../../../shared/conversation/remote/RemoteGuiProject';
 import './desktopTools.css';
 
 interface Props {

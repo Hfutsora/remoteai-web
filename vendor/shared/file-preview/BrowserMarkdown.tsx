@@ -4,11 +4,11 @@ import remarkBreaks from 'remark-breaks';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { mathOptions, normalizeMathDelimiters } from '../chat/mathMarkdown';
-import { CodeBlock } from '../../apps/desktop/src/pages/codexGui/CodeBlock';
-import { MarkdownTable } from '../../apps/desktop/src/pages/codexGui/MarkdownTable';
-import styles from '../../apps/desktop/src/pages/codexGui/styles.module.less';
+import { CodeBlock } from '../conversation/CodeBlock';
+import { MarkdownTable } from '../conversation/MarkdownTable';
+import styles from '../conversation/styles.module.less';
 import 'katex/dist/katex.min.css';
-import { previewReference } from '../../apps/desktop/src/pages/codexGui/filePreview/references';
+import { previewReference } from './workspace/references';
 import { BrowserPreviewImage } from './BrowserPreviewImage';
 import type { PreviewLoader } from './kinds';
 

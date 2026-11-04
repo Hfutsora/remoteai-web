@@ -1,4 +1,4 @@
-import { useLanguage } from '../i18n';
+import { useLanguage } from '../../../../shared/localization/browserClient';
 import type { TokenSummary } from '../../../../shared/remote-chat/tokenSummary';
 import { officialUsageLabels } from '@remoteai/i18n/copy/client/officialUsageLabels';
 import { formatTokens } from '../../../../shared/remote-chat/usage';

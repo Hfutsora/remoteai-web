@@ -98,7 +98,7 @@ test('translations keep placeholders intact and leave unknown content unchanged'
   await page.goto('./');
   const rendered = await page.evaluate(async () => {
     const module = '/web/src/i18n/index.ts';
-    const { displayText, setLanguage, t }: typeof import('../src/i18n') = await import(module);
+    const { displayText, setLanguage, t }: typeof import('../../../shared/localization/browserClient') = await import(module);
     setLanguage('en');
     const message = t('client.app.willReappearWhenItSignsInToTheDesktopApp', { value1: '我的电脑 {value1}' });
     const title = displayText('A user-supplied title');

@@ -1,0 +1,68 @@
+import type { ReactNode } from 'react';
+import type { PromptSuggestionSource } from '../../chat/nextPromptSuggestion';
+import type { Model, SendInput, ThreadTokenUsage } from './types';
+import type { ChatConnectionProps } from './ChatProfileMenu';
+import type { ComposerSettings } from '../composer';
+import type { ReadUsage } from '../usage';
+import type { ReadConversationMetrics } from '../conversationMetrics';
+import type { ContextSettingsApi } from '../contextSettings';
+import type { QueueProps } from '../client/queueProps';
+import type { UploadProgress } from '../uploadProgress';
+import type { RemoteGoals } from '../client/goals';
+import type { ThreadGoal } from '../../conversation/goalTypes';
+import type { SkillCatalogState } from '../../chat/skillCatalog';
+import type { RemoteComposerCatalog } from '../composerCatalog';
+import type { ProjectFilesRequest, ProjectFilesResponse } from '../projectFiles';
+import type { ConversationSearch } from '../../chat/useConversationCandidates';
+import type { SubscribeFileDrop } from '../../chat/useFileDrop';
+
+export interface NativeFileDrop {
+  subscribe: SubscribeFileDrop;
+  readFiles: (paths: string[]) => Promise<File[]>;
+}
+
+export interface ComposerProps {
+  dictation?: import('../../chat/dictation/client').DictationClient;
+  recoveredEdit?: import('../queue').QueueDraft;
+  consumeRecoveredEdit?: () => void;
+  projectPicker?: ReactNode;
+  connectionInfo?: ReactNode;
+  cliVersion?: string | null;
+  readServiceStatus?: import('../../codex-status/status').ReadCodexServiceStatus;
+  serviceStatusConnected?: boolean;
+  suggestions?: PromptSuggestionSource;
+  connection: ChatConnectionProps;
+  readClipboardImages?: () => Promise<File[]>;
+  nativeFileDrop?: NativeFileDrop;
+  uploadProgress?: UploadProgress;
+  queue?: QueueProps;
+  tokenUsage?: ThreadTokenUsage;
+  readUsage: ReadUsage;
+  readConversationMetrics: ReadConversationMetrics;
+  contextSettings: ContextSettingsApi;
+  models: Model[];
+  selection: ComposerSettings;
+  settingsBusy: boolean;
+  settingsError: string;
+  updateSettings: (settings: Partial<ComposerSettings>) => Promise<void>;
+  refreshModels: () => Promise<void>;
+  threadId: string | null;
+  active: boolean;
+  ready: boolean;
+  sending: boolean;
+  running: boolean;
+  interrupted?: boolean;
+  send: (input: SendInput) => Promise<boolean>;
+  interrupt: () => Promise<void>;
+  goals: Pick<RemoteGoals, 'load' | 'clear'>;
+  goal?: ThreadGoal | null;
+  goalBusy: boolean;
+  catalog: SkillCatalogState & { refresh: () => void };
+  cwd: string;
+  compactReason: string | null;
+  compacting: boolean;
+  compact: () => Promise<boolean>;
+  loadCatalog: (cwd: string) => Promise<RemoteComposerCatalog>;
+  loadFiles: (options: ProjectFilesRequest) => Promise<ProjectFilesResponse>;
+  loadConversations: ConversationSearch;
+}

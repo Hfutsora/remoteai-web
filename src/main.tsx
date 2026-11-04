@@ -7,7 +7,7 @@ import { WebLocaleProvider } from './i18n/WebLocaleProvider';
 import App from "./App";
 import { ApplicationTypography } from '../../../shared/appearance/ApplicationTypography';
 import { installBrowserDefaultsGuard } from '../../../shared/browser/installBrowserDefaultsGuard';
-import { DESKTOP_QUERY } from './useDesktopLayout';
+import { DESKTOP_QUERY } from '../../../shared/layout/useDesktopLayout';
 import { StartupUpdatePrompt } from './update/StartupUpdatePrompt';
 import { store } from "./store";
 import "antd/dist/reset.css";

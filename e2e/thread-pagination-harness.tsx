@@ -2,11 +2,11 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ChatController } from '../../../shared/remote-chat/client/controller';
 import type { GuiEvent } from '../../../shared/remote-chat/client/types';
-import { ChatThreads } from '../src/chat/ChatThreads';
-import { ChatSidebar } from '../src/chat/ChatSidebar';
-import { ChatThreadFilter } from '../src/chat/ChatThreadFilter';
+import { ChatThreads } from '../../../shared/remote-chat/views/ChatThreads';
+import { ChatSidebar } from '../../../shared/remote-chat/views/ChatSidebar';
+import { ChatThreadFilter } from '../../../shared/remote-chat/views/ChatThreadFilter';
 import '../src/styles.css';
-import '../src/chat/chat.css';
+import '../../../shared/remote-chat/views/chat.css';
 
 function createController() {
   return new ChatController(events => {

@@ -1,5 +1,5 @@
 import { expect, test, type Page } from '@playwright/test';
-import type { Thread } from '../src/chat/types';
+import type { Thread } from '../../../shared/remote-chat/views/types';
 
 function threads(start: number, count: number, grouped = false): Thread[] {
   return Array.from({ length: count }, (_, index) => ({ id: `chat-${start + index}`,

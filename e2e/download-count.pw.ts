@@ -48,7 +48,7 @@ test('discovery and download icons share live counts across navigation and langu
   ] as const) {
     await page.evaluate(async language => {
       const url = '/web/src/i18n/index.ts';
-      const { setLanguage } = await import(/* @vite-ignore */ url) as typeof import('../src/i18n');
+      const { setLanguage } = await import(/* @vite-ignore */ url) as typeof import('../../../shared/localization/browserClient');
       setLanguage(language);
     }, language);
     await expect(navCount).toHaveAttribute('aria-label', label);

@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Contrast } from 'lucide-react';
 import { ThemeModeTabs } from '../../../../shared/theme/ThemeModeTabs';
 import { THEME_LABELS } from '../../../../shared/theme/mode';
-import { t } from '../i18n';
+import { t } from '../../../../shared/localization/browserClient';
 import { setThemeMode, useThemeMode, useThemePreference } from '../theme/preference';
-import { useDesktopLayout } from '../useDesktopLayout';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
 import { SettingsRow } from './SettingsRow';
 
 export function ThemeSettingsRow({ onOpen }: { onOpen: () => void }) {

@@ -1,4 +1,4 @@
-import { t } from './i18n';
+import { t } from '../../../shared/localization/browserClient';
 import type { TotpAlgorithm, TotpEntry, TotpTombstone, TotpVault } from './types';
 
 const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';

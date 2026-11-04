@@ -1,4 +1,4 @@
-import { t } from './i18n';
+import { t } from '../../../shared/localization/browserClient';
 import { assertUsageOwner, preserveLatestUsage, runRemoteUsage, usageOwner, usageUpdatedAt } from './accounts/remoteUsage';
 import { mergeRemoteModelState, remoteModelPath, type RemoteModelTarget } from '../../../shared/remote-chat/modelTarget';
 import { configureStore, createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";

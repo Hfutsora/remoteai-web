@@ -1,6 +1,6 @@
-import { displayError } from '../i18n/index';
+import { displayError } from '../../../../shared/localization/browserClient';
 import { apiJson, deviceStatusWebSocketUrl, getActiveSession } from '../api';
-import { t } from '../i18n';
+import { t } from '../../../../shared/localization/browserClient';
 import type { AccountSummary, AuthSession, RemoteDevice, UsageSummary } from '../types';
 
 const CONNECT_TIMEOUT_MS = 15_000;

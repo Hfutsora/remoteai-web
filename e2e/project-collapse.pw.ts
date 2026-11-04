@@ -1,5 +1,5 @@
 import { expect, test, type Locator } from '@playwright/test';
-import type { Thread } from '../src/chat/types';
+import type { Thread } from '../../../shared/remote-chat/views/types';
 import type { SidebarSnapshot } from '../../../shared/remote-chat/sidebar';
 
 const threads = (count: number): Thread[] => [

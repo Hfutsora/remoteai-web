@@ -7,7 +7,7 @@ import { ChatController } from '../../../../shared/remote-chat/client/controller
 import { RtcPeer } from '../../../../shared/remote-chat/rtcPeer';
 import { browserTrustStore, trustedHost, trustScope } from '../../../../shared/remote-chat/trustedHost';
 import { createPreviewDownloads } from '../downloads/previews';
-import { downloadOwner } from '../downloads/manager';
+import { downloadOwner } from '../../../../shared/downloads/manager';
 import { useActiveChatPolicy } from '../../../../shared/remote-chat/useActiveChatPolicy';
 import { createWebSshProfiles } from '../sshProfiles';
 

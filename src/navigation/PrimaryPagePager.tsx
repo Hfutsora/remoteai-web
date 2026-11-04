@@ -3,7 +3,7 @@ import { PRIMARY_PAGES, SWIPE_SETTLE_MS, type PrimaryPage } from '../../../../sh
 import { PagePreviewContext, PageSwipeContext } from '../../../../shared/navigation/PageSwipeContext';
 import { usePageTransition, type PageAnimation } from '../../../../shared/navigation/usePageTransition';
 import { usePrimaryPageSwipe } from './usePrimaryPageSwipe';
-import { useDesktopLayout } from '../useDesktopLayout';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
 import './pagePager.css';
 import { RetainedView } from '../../../../shared/RetainedView';
 

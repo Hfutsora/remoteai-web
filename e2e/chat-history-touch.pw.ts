@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import type { Thread, Turn } from '../src/chat/types';
+import type { Thread, Turn } from '../../../shared/remote-chat/views/types';
 
 function turn(id: string, text = '一条聊天消息。'): Turn {
   return { id, status: 'completed', items: [{ id, type: 'agentMessage', phase: 'final_answer', text }] };

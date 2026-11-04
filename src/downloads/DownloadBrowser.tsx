@@ -1,12 +1,12 @@
-import { displayError } from '../i18n/index';
+import { displayError } from '../../../../shared/localization/browserClient';
 import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { ArrowLeft, ChevronRight, Download, Folder } from 'lucide-react';
 import type { DownloadBrowse } from '../../../../shared/remote-chat/downloads';
 import type { ProjectFile, ProjectFilesResponse } from '../../../../shared/remote-chat/projectFiles';
-import { t } from '../i18n';
-import { downloadManager } from './manager';
-import type { DownloadConnection } from './types';
-import { animateDownloadToNavigation, downloadOrigin } from './downloadFeedback';
+import { t } from '../../../../shared/localization/browserClient';
+import { downloadManager } from '../../../../shared/downloads/manager';
+import type { DownloadConnection } from '../../../../shared/downloads/types';
+import { animateDownloadToNavigation, downloadOrigin } from '../../../../shared/downloads/downloadFeedback';
 
 export function DownloadBrowser({ connection, scope, back }: {
   connection: DownloadConnection; scope: DownloadBrowse['scope']; back: () => void;

@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, type APIRequestContext, type TestInfo } from '@playwright/test';
-import type { Thread } from '../src/chat/types';
+import type { Thread } from '../../../shared/remote-chat/views/types';
 import { testText } from '../../../scripts/i18n-fixture.mjs';
 
 interface FixtureState {

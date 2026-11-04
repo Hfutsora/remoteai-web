@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ChatTokenSummary } from '../src/chat/ChatTokenSummary';
 import type { TokenSummary } from '../../../shared/remote-chat/tokenSummary';
 import '../src/styles.css';
-import '../src/chat/chat.css';
+import '../../../shared/remote-chat/views/chat.css';
 
 const read = async (weeks = 2): Promise<TokenSummary> => {
   const response = await fetch(`/web/token-summary-fixture.json?weeks=${weeks}`);

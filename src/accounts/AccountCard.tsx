@@ -1,4 +1,4 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { Button } from 'antd-mobile';
 import { Clock3, RefreshCw } from 'lucide-react';
 import type { AccountSummary } from '../types';

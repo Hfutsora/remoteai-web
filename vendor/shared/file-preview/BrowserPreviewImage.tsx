@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { previewReference } from '../../apps/desktop/src/pages/codexGui/filePreview/references';
+import { previewReference } from './workspace/references';
 import type { PreviewLoader } from './kinds';
 
 export function BrowserPreviewImage({ src, alt, path, load }: {

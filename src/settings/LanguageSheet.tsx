@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
-import { LANGUAGE_OPTIONS, setLanguage, t, useLanguage } from '../i18n';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
+import { LANGUAGE_OPTIONS, setLanguage, t, useLanguage } from '../../../../shared/localization/browserClient';
 
 export function LanguageSheet({ onClose }: { onClose: () => void }) {
   const language = useLanguage();

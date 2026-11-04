@@ -1,5 +1,5 @@
 import { expect, test, type Locator } from '@playwright/test';
-import type { Thread } from '../src/chat/types';
+import type { Thread } from '../../../shared/remote-chat/views/types';
 
 function commandThread(output: string): Thread {
   return { id: 'virtual-output', cwd: '', preview: '', updatedAt: 1,

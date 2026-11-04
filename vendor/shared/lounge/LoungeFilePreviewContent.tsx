@@ -3,7 +3,7 @@ import { BrowserImagePreview } from '../file-preview/BrowserImagePreview';
 import { BrowserMarkdown } from '../file-preview/BrowserMarkdown';
 import { HtmlPreviewFrame } from '../file-preview/HtmlPreviewFrame';
 import type { PreviewLoader } from '../file-preview/kinds';
-import { PreviewContent } from '../../apps/desktop/src/pages/codexGui/filePreview/PreviewContent';
+import { PreviewContent } from '../file-preview/workspace/PreviewContent';
 import { displayText as t } from '../localization/messages';
 import type { LoungeAttachment } from './attachments';
 import { decodeAttachmentText, loungePreviewKind } from './filePresentation';

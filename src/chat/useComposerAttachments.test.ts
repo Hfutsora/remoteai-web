@@ -1,7 +1,7 @@
 import { afterEach, expect, it } from 'vitest';
 import { translateMessage } from "../../../../shared/localization/messages";
-import { setLanguage } from '../i18n';
-import { AttachmentRejection, attachmentErrorMessage } from './useComposerAttachments';
+import { setLanguage } from '../../../../shared/localization/browserClient';
+import { AttachmentRejection, attachmentErrorMessage } from '../../../../shared/remote-chat/views/useComposerAttachments';
 
 afterEach(() => setLanguage('zh'));
 

@@ -1,9 +1,9 @@
-import { displayError } from '../i18n/index';
-import { t, useLanguage } from '../i18n';
+import { displayError } from '../../../../shared/localization/browserClient';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useState } from 'react';
 import { Button, Form, Input, Toast } from 'antd-mobile';
 import { apiJson } from '../api';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 
 export function PasswordSheet({ onClose }: { onClose: () => void }) {
   useLanguage();

@@ -1,6 +1,6 @@
 import { DeviceStatusConnection } from '../../../shared/realtime/deviceStatusConnection';
-import { displayError } from './i18n/index';
-import { getLocale, t, useLanguage } from './i18n';
+import { displayError } from '../../../shared/localization/browserClient';
+import { getLocale, t, useLanguage } from '../../../shared/localization/browserClient';
 import type { RemoteModelTarget } from '../../../shared/remote-chat/modelTarget';
 import { profileRole } from './i18n/profile';
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -14,7 +14,7 @@ import { bootstrapApp, clearAuthError, clearDataError, deviceSocketMessage, page
   removeDevice, setDeviceOpenAiAuthAccount, signIn, signOut, switchDeviceAccount,
   switchDeviceProvider, switchDeviceProviderGroup } from "./store";
 import type { AppPage, RemoteDevice } from "./types";
-import { AdaptiveSheet } from "./components/AdaptiveSheet";
+import { AdaptiveSheet } from "../../../shared/layout/AdaptiveSheet";
 import { BrandMark } from "./components/BrandMark";
 import { RegistrationSheet } from "./components/RegistrationSheet";
 import { DeviceManagementList } from "./devices/DeviceManagementList";
@@ -24,7 +24,7 @@ import { useRemoteModelRestartPrompt } from "./devices/useRemoteModelRestartProm
 import { RemoteModelSwitchSheet } from "./components/RemoteModelSwitchSheet";
 import { TotpPage } from "./components/TotpPage";
 import { TotpSyncSwitch } from '../../../shared/totp/TotpSyncSwitch';
-import { DownloadCountIcon } from './downloads/DownloadCountIcon';
+import { DownloadCountIcon } from '../../../shared/downloads/DownloadCountIcon';
 import { DiscoveryBackButton, DiscoveryPage } from './discovery/DiscoveryPage';
 import { DiscoveryIcon } from './discovery/DiscoveryIcon';
 import { isDiscoveryPage, primaryNavigationPage } from '../../../shared/navigation/discovery';
@@ -36,13 +36,13 @@ import { LoungeIcon } from '../../../shared/lounge/LoungeIcon';
 import { useWebLounge } from './lounge/useWebLounge';
 import { LoungeAvatar } from '../../../shared/lounge/LoungeAvatar';
 import { accountLabel } from '../../../shared/lounge/accountLabel';
-import { downloadOwner } from './downloads/manager';
+import { downloadOwner } from '../../../shared/downloads/manager';
 import { loadRefreshMinutes, REFRESH_INTERVAL_EVENT } from "./settings/refreshInterval";
 import { useTotpVault } from "./useTotpVault";
 import { ChatPage } from "./chat/ChatPage";
 import { PrimaryPagePager } from './navigation/PrimaryPagePager';
 import type { PrimaryPage } from '../../../shared/navigation/pageSwipe';
-import { useDesktopLayout, usePanelVisibility } from "./useDesktopLayout";
+import { useDesktopLayout, usePanelVisibility } from "../../../shared/layout/useDesktopLayout";
 import { useChatViewport } from './chat/useChatViewport';
 import { AgreementConsent } from '../../../shared/legal/AgreementConsent';
 import { useAgreementConsent } from '../../../shared/legal/useAgreementConsent';

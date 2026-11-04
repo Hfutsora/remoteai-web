@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ChatProfileMenu } from '../src/chat/ChatProfileMenu';
-import { ChatDesktopAccountPicker } from '../src/chat/ChatDesktopAccountPicker';
-import { RemoteAccountPicker } from '../../desktop/src/pages/codexGui/remote/RemoteAccountPicker';
-import { ChatSidebar } from '../src/chat/ChatSidebar';
-import { useDesktopLayout } from '../src/useDesktopLayout';
+import { ChatProfileMenu } from '../../../shared/remote-chat/views/ChatProfileMenu';
+import { ChatDesktopAccountPicker } from '../../../shared/remote-chat/views/ChatDesktopAccountPicker';
+import { RemoteAccountPicker } from '../../../shared/conversation/remote/RemoteAccountPicker';
+import { ChatSidebar } from '../../../shared/remote-chat/views/ChatSidebar';
+import { useDesktopLayout } from '../../../shared/layout/useDesktopLayout';
 import type { GuiAccountsClient } from '../../../shared/remote-chat/guiAccounts';
 import { createGuiToolsClient } from '../../../shared/remote-chat/guiTools';
 import '../src/styles.css';
-import '../src/chat/chat.css';
+import '../../../shared/remote-chat/views/chat.css';
 
 const client: GuiAccountsClient = {
   read: async () => (await fetch('/web/accounts-fixture.json')).json(),

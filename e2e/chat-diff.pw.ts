@@ -1,5 +1,5 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import type { Thread } from '../src/chat/types';
+import type { Thread } from '../../../shared/remote-chat/views/types';
 
 const paths = ['src/first/index.ts', 'src/second/index.ts', 'src/third.ts', 'src/fourth.ts', 'src/fifth.ts'];
 function fixture(): Thread {

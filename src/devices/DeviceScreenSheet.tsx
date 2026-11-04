@@ -1,5 +1,5 @@
 import { Button, Drawer } from 'antd';
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import type { RemoteDevice } from '../types';
 import './screenSheet.css';
 

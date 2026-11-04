@@ -1,10 +1,10 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { Button, Dialog, SpinLoading, Toast } from 'antd-mobile';
 import { ClipboardPaste, FileInput, KeyRound, Link2 } from 'lucide-react';
 import { importPersonalAccounts, pollAccountOAuth, startAccountOAuth } from '../api';
 import type { AccountImportResult } from '../types';
-import { AdaptiveSheet } from './AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 
 interface AddAccountSheetProps {
   open: boolean;

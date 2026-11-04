@@ -1,5 +1,5 @@
-import { displayText } from '../i18n/index';
-import { getLanguage, t, useLanguage } from '../i18n';
+import { displayText } from '../../../../shared/localization/browserClient';
+import { getLanguage, t, useLanguage } from '../../../../shared/localization/browserClient';
 import { petDockText } from '@remoteai/i18n/copy/petDock';
 import { QuotaWindowSyncGuidance } from './QuotaWindowSyncGuidance';
 import { useState } from 'react';
@@ -9,7 +9,7 @@ import { ChevronRight, Grid2X2, Info, LockKeyhole, LogOut,
 import { useAppDispatch, useAppSelector } from '../hooks';
 import { signOut } from '../store';
 import type { useTotpVault } from '../useTotpVault';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 import { version } from '../../../../package.json';
 import { SettingsRow } from './SettingsRow';
 import { DesktopVersionSheet } from './DesktopVersionSheet';
@@ -27,7 +27,7 @@ import { AutoSaveSettings } from '../../../../shared/project-browser/AutoSaveSet
 import { JsonHighlightSettings } from '../../../../shared/file-preview/JsonHighlightSettings';
 import { useBrowserPreferences } from '../../../../shared/project-browser/useBrowserPreferences';
 import { AUTO_SAVE_OPTIONS } from '../../../../shared/project-browser/preferences';
-import { useDesktopLayout } from '../useDesktopLayout';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
 import { GlobalFontSettings } from '../../../../shared/appearance/GlobalFontSettings';
 import { useGlobalFontSize } from '../../../../shared/appearance/fontSize';
 import { AccountAvatarButton } from '../../../../shared/lounge/AccountAvatarButton';

@@ -1,5 +1,5 @@
-import { displayError } from '../i18n/index';
-import { getLocale, t } from '../i18n';
+import { displayError } from '../../../../shared/localization/browserClient';
+import { getLocale, t } from '../../../../shared/localization/browserClient';
 export { maskEmail } from '../../../../shared/accounts/maskEmail';
 export { earliestExpirationDate } from '../../../../shared/accounts/expiration';
 

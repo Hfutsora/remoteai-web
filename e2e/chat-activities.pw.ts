@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import type { Thread } from '../src/chat/types';
+import type { Thread } from '../../../shared/remote-chat/views/types';
 
 test('groups adjacent tools, preserves commentary and keeps inspected output current after completion', async ({ page }, info) => {
   const value: Thread = { id: 'activities', cwd: '', preview: '', updatedAt: 1, turns: [{

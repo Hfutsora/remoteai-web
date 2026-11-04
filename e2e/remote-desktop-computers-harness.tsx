@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createGuiToolsClient } from '../../../shared/remote-chat/guiTools';
 import { RemoteDesktopHost } from '../../desktop/src/remoteDesktop/host';
-import { GuiRemoteDesktop } from '../../desktop/src/pages/codexGui/GuiRemoteDesktop';
+import { GuiRemoteDesktop } from '../../../shared/conversation/GuiRemoteDesktop';
 import { ChatTools } from '../src/chat/ChatTools';
 
 const computers = ['office', 'home'].map(id => {

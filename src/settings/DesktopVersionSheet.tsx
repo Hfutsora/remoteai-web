@@ -1,12 +1,12 @@
-import { displayError } from '../i18n/index';
+import { displayError } from '../../../../shared/localization/browserClient';
 import { useMemo, useState } from 'react';
 import { Button } from 'antd-mobile';
 import { apiJson, getActiveSession } from '../api';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
-import { t } from '../i18n';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
+import { t } from '../../../../shared/localization/browserClient';
 import { useDesktopUpdate } from '../../../../shared/desktop-update/useDesktopUpdate';
 import type { UpdateConnectionOptions } from '../../../../shared/desktop-update/connection';
-import './desktop-version.css';
+import '../../../../shared/app-update/desktop-version.css';
 
 export function DesktopVersionSheet({ onClose, connectionOptions }: {
   onClose: () => void; connectionOptions?: UpdateConnectionOptions;

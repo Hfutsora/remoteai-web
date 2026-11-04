@@ -1,6 +1,6 @@
 import { Dialog, Toast } from 'antd-mobile';
 import { useStartupUpdate } from '../../../../shared/app-update/useStartupUpdate';
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { reloadForUpdate, startupUpdateOptions } from './startupUpdate';
 import { useIdleWebUpdate } from './useIdleWebUpdate';
 

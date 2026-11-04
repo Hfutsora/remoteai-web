@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
 import { isTauri } from '@tauri-apps/api/core';
 import { ProviderBrowser } from '../provider-market/ProviderBrowser';
-import { ProviderBrowserSurface } from '../../apps/desktop/src/pages/providers/ProviderBrowserSurface';
-import { useWebsiteTabs } from '../../apps/desktop/src/pages/codexGui/filePreview/useWebsiteTabs';
+import { ProviderBrowserSurface } from '../browser/managed/ProviderBrowserSurface';
+import { useWebsiteTabs } from '../file-preview/workspace/useWebsiteTabs';
 import { getInterfaceLanguage } from '../localization/interfaceLanguage';
 import { displayText } from '../localization/messages';
 import { CODEX_STATUS_URL } from './status';

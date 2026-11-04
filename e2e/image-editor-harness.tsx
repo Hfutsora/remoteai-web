@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ChatImageEditor } from '../src/chat/ChatImageEditor';
-import { setLanguage } from '../src/i18n';
+import { ChatImageEditor } from '../../../shared/remote-chat/views/ChatImageEditor';
+import { setLanguage } from '../../../shared/localization/browserClient';
 import '../src/styles.css';
 
 const params = new URLSearchParams(location.search);

@@ -1,5 +1,5 @@
 import { Compass } from 'lucide-react';
-import { DownloadCountIcon } from '../downloads/DownloadCountIcon';
+import { DownloadCountIcon } from '../../../../shared/downloads/DownloadCountIcon';
 
 export function DiscoveryIcon({ owner, unread }: { owner?: string; unread: number }) {
   if (!unread) return <DownloadCountIcon owners={[owner]}><Compass size={21} /></DownloadCountIcon>;

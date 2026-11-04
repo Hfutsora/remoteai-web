@@ -3,7 +3,7 @@ import type { ProjectPreviewProps } from '../project-browser/preview';
 import { displayText as t } from '../localization/messages';
 import { filePreviewKind, type PreviewLoader } from './kinds';
 import { usePreviewFile } from './usePreviewFile';
-import { PreviewContent } from '../../apps/desktop/src/pages/codexGui/filePreview/PreviewContent';
+import { PreviewContent } from './workspace/PreviewContent';
 import { BrowserMarkdown } from './BrowserMarkdown';
 import { HtmlPreviewFrame } from './HtmlPreviewFrame';
 import { BrowserImagePreview } from './BrowserImagePreview';

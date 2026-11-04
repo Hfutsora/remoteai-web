@@ -1,9 +1,9 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useMemo, useState } from 'react';
 import { SpinLoading } from 'antd-mobile';
 import { ChevronRight, Copy, Eye, EyeOff, Pencil, UserRound } from 'lucide-react';
 import type { AccountSummary, TotpEntry } from '../types';
-import { copyText } from '../components/copyText';
+import { copyText } from '../../../../shared/clipboardFeedback';
 import { useTotpCodes } from '../totp/useTotpCodes';
 import { earliestExpirationDate } from './formatters';
 import type { ResetCreditsState } from './useResetCredits';

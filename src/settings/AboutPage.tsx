@@ -1,4 +1,4 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { ArrowLeft, Box, FileText, Github, Globe } from 'lucide-react';
 import { BrandMark } from '../components/BrandMark';
 import { SettingsRow } from './SettingsRow';

@@ -34,7 +34,8 @@ export function prepareWorkspace() {
     if (fs.existsSync(source)) fs.cpSync(source, path.join(application, name), { recursive: true });
   }
   const metadata = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'));
-  fs.writeFileSync(path.join(workspace, 'package.json'), JSON.stringify({ private: true, version: metadata.version }));
+  fs.writeFileSync(path.join(workspace, 'package.json'),
+    JSON.stringify({ private: true, type: 'module', version: metadata.version }));
   // Node fixtures use the package's source JSON; application code uses its public exports.
   const language = path.join(root, 'node_modules/@remoteai/i18n');
   fs.cpSync(path.join(language, 'src'), path.join(workspace, 'packages/i18n/src'), { recursive: true });

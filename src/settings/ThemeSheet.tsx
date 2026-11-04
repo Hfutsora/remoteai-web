@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { Check } from 'lucide-react';
 import { THEME_PREFERENCE_OPTIONS } from '../../../../shared/theme/mode';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
-import { t } from '../i18n';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
+import { t } from '../../../../shared/localization/browserClient';
 import { setThemeMode, useThemePreference } from '../theme/preference';
 
 export function ThemeSheet({ onClose }: { onClose: () => void }) {

@@ -16,6 +16,8 @@ import { chooseSetting, closeChatSettings, isDesktop } from './chat-settings';
 import { checkModelAvailability } from '../../desktop/e2e/model-availability-checks';
 
 test.beforeEach(async ({ page, request }, info) => {
+  await page.route('https://fonts.googleapis.com/**', route => route.abort());
+  await page.route('https://fonts.gstatic.com/**', route => route.abort());
   // Login can open chat immediately; install the network fault before any peer is created.
   if (info.title.endsWith('over relay') || info.title.startsWith('falls back after direct discovery')) {
     await page.addInitScript(() => {
@@ -26,7 +28,7 @@ test.beforeEach(async ({ page, request }, info) => {
   }
   await request.post(`${fixtureUrl}/test/reset`);
   await expect.poll(async () => (await state(request)).operations.length).toBe(0);
-  await page.goto('./');
+  await page.goto('./', { waitUntil: 'domcontentloaded' });
   await page.getByPlaceholder('name@example.com').fill('mobile-test@example.test');
   await page.getByPlaceholder('输入登录密码').fill('local-test');
   await page.getByRole('button', { name: '登录并查看' }).click();
@@ -37,7 +39,7 @@ test.beforeEach(async ({ page, request }, info) => {
 });
 
 
-test('keeps composer icons below single and multiline drafts', async ({ page }) => composerLayout(page));
+test('keeps composer icons below single and multiline drafts', async ({ page }, info) => composerLayout(page, info));
 test('preserves draft and attachments when file selection is canceled and retried',
   async ({ page }) => fileCancelJourney(page));
 test('shows only task issues and connection health over relay', async ({ page, request }, info) => {

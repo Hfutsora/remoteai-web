@@ -1,7 +1,7 @@
 import { Languages } from 'lucide-react';
 import { LanguageSelect } from '../../../../shared/localization/LanguageSelect';
-import { LANGUAGE_OPTIONS, languageLabel, setLanguage, t, useLanguage } from '../i18n';
-import { useDesktopLayout } from '../useDesktopLayout';
+import { LANGUAGE_OPTIONS, languageLabel, setLanguage, t, useLanguage } from '../../../../shared/localization/browserClient';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
 import { SettingsRow } from './SettingsRow';
 
 export function LanguageSettingsRow({ onOpen }: { onOpen: () => void }) {

@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ChatConnectionInfo } from '../src/chat/ChatConnectionInfo';
-import { ComposerFooter } from '../src/chat/ComposerFooter';
-import { useDesktopLayout } from '../src/useDesktopLayout';
+import { ChatConnectionInfo } from '../../../shared/remote-chat/views/ChatConnectionInfo';
+import { ComposerFooter } from '../../../shared/remote-chat/views/ComposerFooter';
+import { useDesktopLayout } from '../../../shared/layout/useDesktopLayout';
 import { ChatController } from '../../../shared/remote-chat/client/controller';
 import { initialChatState } from '../../../shared/remote-chat/client/types';
 import { HOST_IDENTITY_CHANGED } from '../../../shared/remote-chat/trustedHost';
 import '../src/styles.css';
-import '../src/chat/chat.css';
-import '../src/chat/composer.css';
-import '../src/chat/composerDesktop.css';
-import '../src/chat/chatUsage.css';
+import '../../../shared/remote-chat/views/chat.css';
+import '../../../shared/remote-chat/views/composer.css';
+import '../../../shared/remote-chat/views/composerDesktop.css';
+import '../../../shared/remote-chat/views/chatUsage.css';
 
 function Harness() {
   const desktop = useDesktopLayout();

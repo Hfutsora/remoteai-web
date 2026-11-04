@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { ComputerListRefresh } from '../../../../shared/remote-chat/ComputerSearchBar';
 import { apiJson } from '../api';
 import { useAppDispatch } from '../hooks';
-import { t } from '../i18n';
+import { t } from '../../../../shared/localization/browserClient';
 import { deviceSocketMessage } from '../store';
 import type { RemoteDevice } from '../types';
 

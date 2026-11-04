@@ -1,7 +1,7 @@
 import { Toast } from 'antd-mobile';
 import { useDeviceScreenControl as useScreenControl } from '../../../../shared/remote-desktop/useDeviceScreenControl';
 import { apiJson } from '../api';
-import { t } from '../i18n';
+import { t } from '../../../../shared/localization/browserClient';
 import { useAppSelector } from '../hooks';
 
 export function useDeviceScreenControl() {

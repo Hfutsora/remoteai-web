@@ -1,10 +1,10 @@
-import { t, useLanguage } from '../i18n';
+import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useRef, useState, type ChangeEvent } from 'react';
 import { Button, Form, Input, Toast } from 'antd-mobile';
 import { QrCode } from 'lucide-react';
 import { normalizeTotpSecret, parseOtpAuthUri } from '../totp';
 import type { TotpEntry } from '../types';
-import { AdaptiveSheet } from '../components/AdaptiveSheet';
+import { AdaptiveSheet } from '../../../../shared/layout/AdaptiveSheet';
 
 type Draft = Omit<TotpEntry, 'id' | 'createdAt' | 'updatedAt'>;
 const EMPTY_DRAFT: Draft = { issuer: '', accountName: '', secret: '', algorithm: 'SHA1', digits: 6, period: 30 };
