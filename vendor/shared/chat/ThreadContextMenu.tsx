@@ -17,6 +17,9 @@ export function ThreadContextMenu({ children, overlayClassName = '', groupTarget
     }));
   }, { enabled: !props.disabled, nativeContextMenu: true });
   return <Dropdown autoFocus {...props} trigger={['contextMenu']}
+    // A point-anchored menu can overflow on both sides; flipping alone cannot keep it visible.
+    align={{ ...props.align, offset: [0, 0],
+      overflow: { adjustX: true, adjustY: true, shiftX: true, shiftY: true } }}
     menu={{ ...props.menu, items: [...(props.menu?.items ?? []), ...groupItems] }}
     overlayStyle={{ ...props.overlayStyle, maxWidth: 400 }}
     overlayClassName={`${styles.menu} ${overlayClassName}`}>

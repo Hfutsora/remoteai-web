@@ -96,10 +96,68 @@ async function openProjectMenuItem(page: Page, calls: unknown[], label: string, 
 }
 
 async function longPressContext(target: Locator) {
+  // Finish scrolling before pressing: scrolling intentionally cancels a long press.
+  await target.scrollIntoViewIfNeeded();
+  await target.click({ trial: true });
+  const bounds = (await target.boundingBox())!;
   await target.dispatchEvent('pointerdown', { pointerType: 'touch', isPrimary: true,
-    button: 0, clientX: 80, clientY: 200 });
+    button: 0, clientX: bounds.x + bounds.width / 2, clientY: bounds.y + bounds.height / 2 });
   await expect(target.page().getByRole('menu')).toBeVisible();
   await target.dispatchEvent('pointerup', { pointerType: 'touch', isPrimary: true });
+}
+
+async function expectMenuInsideViewport(page: Page) {
+  const menu = page.getByRole('menu');
+  await expect(menu.getByRole('menuitem').first()).toBeFocused();
+  await expect(menu.locator('..')).toHaveCSS('opacity', '1');
+  await expect(menu).toBeInViewport({ ratio: 1 });
+  const bounds = (await menu.boundingBox())!;
+  expect(bounds.x).toBeGreaterThanOrEqual(0);
+  expect(bounds.y).toBeGreaterThanOrEqual(0);
+  expect(bounds.x + bounds.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+  expect(bounds.y + bounds.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+  expect(bounds.width).toBeLessThanOrEqual(400);
+  return menu;
+}
+
+for (const mode of ['local', 'remote', 'web']) {
+  for (const appearance of [{ theme: 'light', fontSize: 14 }, { theme: 'dark', fontSize: 20 }]) {
+    test(`${mode} ${appearance.theme} font${appearance.fontSize} context menu fits short windows`,
+      async ({ page, isMobile }) => {
+        test.skip(isMobile, 'Desktop context menu positioning');
+        await page.addInitScript(({ theme, fontSize }) => {
+          localStorage.setItem('codex-switch.web.theme.v1', theme);
+          localStorage.setItem('codex-switch:global-font-size', String(fontSize));
+        }, appearance);
+        await page.setViewportSize({ width: 900, height: 360 });
+        await setup(page, mode);
+        await page.evaluate(() => document.fonts.ready.then(() => undefined));
+        const row = page.getByRole('button', { name: '项目对话', exact: true });
+        await row.click({ button: 'right' });
+        const menu = await expectMenuInsideViewport(page);
+        const items = await menu.getByRole('menuitem').allTextContents();
+        const prefix = `../../.codex-tmp/context-menu-viewport/${mode}-${appearance.theme}-font${appearance.fontSize}`;
+        await page.screenshot({ path: `${prefix}-360-right-click.png`, animations: 'disabled' });
+        await page.keyboard.press('Escape');
+        await expect(menu).toBeHidden();
+        await longPressContext(row);
+        await expectMenuInsideViewport(page);
+        await expect(menu.getByRole('menuitem')).toHaveText(items);
+        // Local navigation occupies more space than the remote and Web navigation.
+        const shortHeight = mode === 'local' ? 320 : 240;
+        await page.setViewportSize({ width: 900, height: shortHeight });
+        // The context menu intentionally closes when its window is resized.
+        await expect(menu).toBeHidden();
+        await longPressContext(row);
+        await expectMenuInsideViewport(page);
+        await menu.getByRole('menuitem').last().scrollIntoViewIfNeeded();
+        await expect(menu.getByRole('menuitem').last()).toBeInViewport({ ratio: 1 });
+        await page.screenshot({ path: `${prefix}-${shortHeight}-long-press.png`, animations: 'disabled' });
+        await menu.getByRole('menuitem', { name: '重命名', exact: true }).click();
+        await expect(page.getByRole('textbox', { name: '对话名称' })).toBeVisible();
+        await expect(page.getByTestId('selected')).toHaveText('none');
+      });
+  }
 }
 
 async function longPressProject(page: Page) {

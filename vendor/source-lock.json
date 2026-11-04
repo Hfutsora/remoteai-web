@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "d488e382223393e04403531e7be2fa16c8349001",
+  "revision": "ca4c79e7b191d5fd921a0dcb6c8bb27fb332adbd",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "47fc10696c024a9b62fa1cb5f6714e01e4477618"
+    "revision": "85b175cefc15b9f731f24625f55bf2c5059a1374"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "2553aa5d84842da23c66824d199451d023609d66"
+    "revision": "25207cc8fa24074c8b966659ef997fbd62d979a3"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.5/remoteai-i18n-0.1.5.tgz",
   "files": {
@@ -342,7 +342,7 @@
     "apps/desktop/src/pages/codexGui/Composer.tsx": "ae92287443c140d988c6906bf68089b5b2e50d0588f60956f3b2e721ec561f10",
     "shared/project-browser/views/ProjectBrowserButton.tsx": "98ba25414bb478ed8c174f63a5133486eb6ab62fab73c474ed2fb85aa5c8fbda",
     "apps/desktop/e2e/project-browser-fixture.ts": "9ebf6785204c40be839fbdf51e1a512dfcdd754c977a6830b7e7979ee2b0144a",
-    "apps/desktop/src/styles.css": "4bbd17d50e6077b874ed2020eb56aa6c53dfa30f749cb3c5ee3f6853c2270499",
+    "apps/desktop/src/styles.css": "2026ca144416156f8c769e854e3f11ef3fa11fda00d0ec6249fdcd4732f08432",
     "shared/chat/dictation/ComposerDictation.tsx": "a7d28a0ea50ee040a1a10fd3faa2652f5051984436ee7035b24f1a7c79758f68",
     "shared/chat/useComposerSuggestion.ts": "a70a5ba70ec54a2dbf67d9de99f3ea5863847291c250308788008da5e8f6ccdd",
     "shared/remote-chat/views/ComposerSuggestion.tsx": "5db5a515e5396d6a2a897fd22968ba5730474d89336add53d00616dc8153d852",
@@ -517,7 +517,7 @@
     "apps/desktop/src/pages/codexGui/GuiNavigation.module.less": "47b7451c4f9bc97510b0c5ecb06f41061b99f3d3703f3d03a7f19bcf490f01dc",
     "shared/chat/groups/context.tsx": "1dbfd8af033a7579b90e37f8bc83bcee2c88402dae48d430a189ce34f8e8d9d2",
     "shared/localization/useGuiLanguage.ts": "758cb0e9af7aabb01966ccad5f16ece554893e3e4a6ce67dc607ca8ecea2eac1",
-    "shared/chat/ThreadContextMenu.tsx": "a951c34aa96d60431b04dc312a3c983f70b9f58bee624d907c4a9524eb82aed7",
+    "shared/chat/ThreadContextMenu.tsx": "46e198e459c759aad42dbf0739c6501c809c4b947c0729d7e470b123357d087d",
     "shared/chat/threadMenuItems.tsx": "f3b9731713b5229b4f518704e8de238acf61989dc772efb5bf75a03b79b37950",
     "apps/desktop/src/pages/codexGui/ThreadGroup.tsx": "eccfd0bb04fa800a7afeb3a371b6f87fd446c2149cfec17db09d08441595e5e9",
     "apps/desktop/src/pages/codexGui/ThreadSearch.tsx": "570d948e533f0af67f1088f3a860203b0ef098594d0fac38ea1767f248e0e659",
@@ -526,7 +526,7 @@
     "apps/desktop/src/pages/codexGui/threadRunning.ts": "ba2b3a538e88079c7abed26a0e8f853b8795877bcbcf7be39fd6975377950f52",
     "apps/desktop/src/pages/codexGui/forkConversation.ts": "11af59b6582d42806567411a7b392408a9ce7f8241a28bc5bdf5a8a9326be6c8",
     "apps/desktop/src/pages/codexGui/ProjectGroupMenu.tsx": "15c34c3ec34aeabb5ae8f08f0a61a33e1cdfab75739a87c9b35e5b50619166c5",
-    "apps/desktop/src/api/backend.ts": "1403f6a68346eb3bf35072a6887e628b3ea010aa29c2f02474e18a0f346e23c2",
+    "apps/desktop/src/api/backend.ts": "305a9dc6420aaafbc3cd8323260e5366eebbb07a3dd286593360247259d362bf",
     "shared/chat/useOpenProjectFolder.ts": "34ba550826af2daceae431882480c7ca5cbbb3c8ec6050e77fad8bca6eb29f9e",
     "apps/desktop/src/pages/codexGui/GuiNavigation.tsx": "8f209dfccd3298da53d22ae7b37c986ab4670d949ae73ffc5362f09da5bdd8bd",
     "shared/chat/groups/tree.ts": "ccccfcb92e33fa6a163a1f1d2de732908e67432a0929d4c3be1b4b19df3fc094",
@@ -1011,7 +1011,7 @@
     "shared/chat/groups/SidebarDrag.tsx": "31935c04b0d36d19c3d8ad31dbb1f0f7c868c93f83ce1692715425505605f393",
     "apps/desktop/src/pages/codexGui/ThreadStatus.module.less": "bcc6fa5244201149afd1845fd78001e5633a3c0a25bb9d292b8b853db94d766b",
     "apps/desktop/src/pages/codexGui/ThreadPagination.module.less": "a8067036007562d5fb0aaef64bfa793559571020eac9c15ceda3c6691d1206d0",
-    "shared/chat/ThreadContextMenu.module.less": "6dbc4718e5b32f2e1fe66822fd4183f7d4b3fc64397187d3a62ddf83dc9e5c0d",
+    "shared/chat/ThreadContextMenu.module.less": "edcedcf042fd5daa5869b338cb02b4125a07d68aafd98532a4d41c1e4d6a193d",
     "shared/chat/groups/useGroupMenu.tsx": "1a0fe98fe6c74950057494788b610b3535949661bac8e2264c335fe9c7c1c30f",
     "apps/desktop/src/pages/codexGui/threadSearch.module.less": "be8086837ca7b8193ff4b75d366c05478d807989a433eb7a34a5b13fa292cd78",
     "shared/clipboard.ts": "429c5188ade57a898a426106c1b7f88334a1b45624ead68633f3fc64cf633118",

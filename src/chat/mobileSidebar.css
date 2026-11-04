@@ -1,0 +1,7 @@
+@media (max-width: 860px) {
+  /* Mobile sidebar actions remain available through the row's long-press menu. */
+  .chat-drawer .chat-thread-more,
+  .chat-drawer .chat-custom-group-heading:not([aria-expanded]) {
+    display: none;
+  }
+}

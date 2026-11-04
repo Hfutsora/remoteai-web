@@ -1,6 +1,9 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { App } from 'antd';
+import { App, ConfigProvider, theme } from 'antd';
+import { ApplicationTypography } from '../../../shared/appearance/ApplicationTypography';
+import { WebLocaleProvider } from '../src/i18n/WebLocaleProvider';
+import { initializeTheme, useThemeMode } from '../src/theme/preference';
 import { ChatController } from '../../../shared/remote-chat/client/controller';
 import { historyDelta } from '../../../shared/remote-chat/historySync';
 import type { Thread } from '../../../shared/remote-chat/views/types';
@@ -78,4 +81,18 @@ function LocalSidebar() {
   </main>;
 }
 
-createRoot(document.getElementById('root')!).render(<App><Harness /></App>);
+function HostTheme({ children }: { children: ReactNode }) {
+  const dark = useThemeMode() === 'dark';
+  const sidebar = new URLSearchParams(location.search).get('sidebar');
+  if (sidebar !== 'local' && sidebar !== 'remote') return <WebLocaleProvider>{children}</WebLocaleProvider>;
+  return <ConfigProvider theme={{
+    algorithm: dark ? [theme.darkAlgorithm, theme.compactAlgorithm] : theme.compactAlgorithm,
+    token: { colorPrimary: '#0b9b7c', borderRadius: 6,
+      fontFamily: '"DM Sans", "Microsoft YaHei UI", sans-serif' },
+  }}>{children}</ConfigProvider>;
+}
+
+initializeTheme();
+createRoot(document.getElementById('root')!).render(
+  <ApplicationTypography><HostTheme><App><Harness /></App></HostTheme></ApplicationTypography>,
+);

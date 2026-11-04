@@ -1,6 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 
-async function setup(page: Page) {
+async function setup(page: Page, { grouped = false }: { grouped?: boolean } = {}) {
   const calls: { operation: string; threadId?: string; name?: string; archived?: boolean }[] = [];
   const threads = [{ id: 'one', name: '原来的对话', archived: false },
     { id: 'two', name: '另一个对话', archived: false },
@@ -13,6 +13,9 @@ async function setup(page: Page) {
       data: threads.filter(thread => thread.archived === input.archived).map(thread => ({ ...thread,
         preview: '', updatedAt: 1, cwd: '/project', status: { type: thread.id === 'running' ? 'active' : 'idle' } })),
       nextCursor: null,
+      ...(grouped ? { sidebar: { revision: 1, threads: {}, readState: {}, grouping: {
+        groups: [{ id: 'test', name: '常用', parentId: null }], projects: {}, threads: { one: 'test' },
+      } } } : {}),
     } });
     if (failNext) { failNext = false; return route.fulfill({ status: 500, json: {} }); }
     const index = threads.findIndex(thread => thread.id === input.threadId);
@@ -27,7 +30,8 @@ async function setup(page: Page) {
   return { calls, fail: () => { failNext = true; } };
 }
 
-async function longPress(page: Page, row: Locator, touch: boolean) {
+async function longPress(page: Page, row: Locator, touch: boolean, openedMenu?: Locator) {
+  await row.click({ trial: true });
   const box = (await row.boundingBox())!;
   const x = box.x + box.width / 2; const y = box.y + box.height / 2;
   if (!touch) {
@@ -38,15 +42,15 @@ async function longPress(page: Page, row: Locator, touch: boolean) {
   const session = await page.context().newCDPSession(page);
   try {
     await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
-    const menu = (page.viewportSize()?.width ?? 0) > 860 ? page.getByRole('menu')
-      : page.getByText('操作 - 原来的对话', { exact: true });
+    const menu = openedMenu ?? ((page.viewportSize()?.width ?? 0) > 860 ? page.getByRole('menu')
+      : page.locator('.chat-thread-actions'));
     await expect(menu).toBeVisible();
     await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
   } finally { await session.detach(); }
 }
 
 async function openActions(page: Page, title: string, mobile: boolean) {
-  if (mobile) await page.getByRole('button', { name: `管理对话：${title}`, exact: true }).click();
+  if (mobile) await longPress(page, page.getByRole('button', { name: title, exact: true }), true);
   else await page.getByRole('button', { name: title, exact: true }).click({ button: 'right' });
 }
 
@@ -58,6 +62,8 @@ function action(page: Page, name: string, mobile: boolean) {
 test('long press renames without selecting; archive, restore and confirmed deletion target the correct chat',
   async ({ page, isMobile }) => {
     const { calls } = await setup(page);
+    await expect(page.locator('.chat-thread-more:visible')).toHaveCount(0);
+    await page.screenshot({ path: `../../.codex-tmp/chat-sidebar-${isMobile ? 'mobile' : 'desktop'}.png` });
     await longPress(page, page.getByRole('button', { name: '原来的对话', exact: true }), isMobile);
     await expect(page.getByTestId('selected')).toHaveText('none');
     if (!isMobile) {
@@ -87,7 +93,7 @@ test('long press renames without selecting; archive, restore and confirmed delet
       await expect(heading).toHaveCSS('white-space', 'nowrap');
       expect(await heading.evaluate(element => element.scrollWidth > element.clientWidth)).toBe(true);
       const titleBox = (await heading.boundingBox())!;
-      const closeBox = (await page.getByRole('button', { name: '关闭', exact: true }).boundingBox())!;
+      const closeBox = (await page.locator('.sheet-close').boundingBox())!;
       expect(titleBox.x + titleBox.width).toBeLessThanOrEqual(closeBox.x);
     }
     await page.screenshot({ path: `../../.codex-tmp/thread-actions-long-${isMobile ? 'mobile' : 'desktop'}.png` });
@@ -133,6 +139,35 @@ test('short taps select; context menus support failures, retry and active reply 
   await expect(page.getByRole('alert')).toHaveText('请等待回复结束后再操作。');
 });
 
+for (const theme of ['light', 'dark']) {
+  test(`${theme} grouped sidebar retains long-press actions with mobile more buttons hidden`,
+    async ({ page, isMobile }) => {
+      await page.addInitScript(theme => localStorage.setItem('codex-switch.web.theme.v1', theme), theme);
+      if (isMobile) await page.setViewportSize({ width: 360, height: 800 });
+      await setup(page, { grouped: true });
+      const heading = page.locator('.chat-custom-group-heading[aria-expanded]');
+      const more = page.locator('.chat-custom-group-heading:not([aria-expanded])');
+      await expect(heading).toBeVisible();
+      if (isMobile) await expect(more).toBeHidden();
+      else await expect(more).toBeVisible();
+      await expect(page.locator('.chat-thread-more:visible')).toHaveCount(0);
+      await expect(page.getByLabel('正在回复', { exact: true })).toBeVisible();
+      const prefix = `../../.codex-tmp/context-menu-viewport/web-${isMobile ? 'mobile' : 'desktop'}-${theme}`;
+      await page.screenshot({ path: `${prefix}-grouped-list.png`, animations: 'disabled' });
+      const menu = page.getByRole('menu');
+      await longPress(page, heading, true, menu);
+      const items = await menu.getByRole('menuitem').allTextContents();
+      await expect(menu).toBeInViewport({ ratio: 1 });
+      await page.screenshot({ path: `${prefix}-group-long-press.png`, animations: 'disabled' });
+      await page.keyboard.press('Escape');
+      await expect(menu).toBeHidden();
+      await heading.click({ button: 'right' });
+      await expect(menu.getByRole('menuitem')).toHaveText(items);
+      await menu.getByRole('menuitem', { name: '管理分组', exact: true }).click();
+      await expect(page.getByRole('dialog', { name: '管理分组', exact: true })).toBeVisible();
+    });
+}
+
 test('moving the pointer cancels a long press without opening the menu', async ({ page }) => {
   await setup(page);
   const row = page.getByRole('button', { name: '原来的对话', exact: true });
@@ -157,15 +192,16 @@ test('desktop menu supports keyboard dismissal, touch and viewport edges', async
   await longPress(page, row, true);
   await expect(page.getByRole('dialog')).toHaveCount(0);
   await expect(page.getByTestId('selected')).toHaveText('none');
-  await page.getByTestId('selected').click();
+  await page.mouse.click(page.viewportSize()!.width - 16, 16);
   await expect(page.getByRole('menu')).toBeHidden();
   await page.setViewportSize({ width: 900, height: 360 });
   await row.scrollIntoViewIfNeeded();
   await row.click({ button: 'right', position: { x: 4, y: 30 } });
+  await expect(page.getByRole('menu')).toBeVisible();
+  await page.screenshot({ path: '../../.codex-tmp/thread-context-menu-edge.png', animations: 'disabled' });
   const bounds = (await page.getByRole('menu').boundingBox())!;
   expect(bounds.y).toBeGreaterThanOrEqual(0);
   expect(bounds.y + bounds.height).toBeLessThanOrEqual(360);
-  await page.screenshot({ path: '../../.codex-tmp/thread-context-menu-edge.png' });
 });
 
 test('desktop archive failures stay in the context menu and can be retried', async ({ page, isMobile }) => {
