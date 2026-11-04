@@ -3,7 +3,7 @@
   "revision": "4ecd1acfa0c906d3148e13172af8961704f168d2",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "e730dbaeac15a34ed30a11d479e4617e852126ac"
+    "revision": "1b22e7c35ccd3cee8e3cd319f8f3bb2bdda48b4f"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
