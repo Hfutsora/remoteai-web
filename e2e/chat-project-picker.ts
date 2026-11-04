@@ -42,7 +42,7 @@ export async function projectPickerJourney({ page, request, relay }: {
   await project.click();
   await expect(controls.option(/演示项目/)).toHaveAttribute(controls.checked, 'true');
   await page.getByRole('button', {
-    name: controls.desktop ? '选择其他文件夹…' : '新建项目', exact: true,
+    name: '新建项目', exact: true,
   }).click();
   await chooseNewProjectFolder(page);
   await expect(project).toHaveText(LONG_PROJECT_NAME);

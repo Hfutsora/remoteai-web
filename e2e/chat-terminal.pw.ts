@@ -251,7 +251,7 @@ test('desktop and mobile terminals are isolated by project and restored after re
   const chooseRootProject = async () => {
     const desktop = info.project.name === 'desktop';
     await page.getByRole('button', { name: desktop ? '选择远程项目' : '选择项目', exact: true }).click();
-    await page.getByRole('button', { name: desktop ? '选择其他文件夹…' : '新建项目', exact: true }).click();
+    await page.getByRole('button', { name: '新建项目', exact: true }).click();
     await page.getByRole('button', { name: '此电脑', exact: true }).click();
     await page.getByRole('button', { name: 'F:', exact: true }).click();
     await page.getByRole('button', { name: 'projects', exact: true }).click();

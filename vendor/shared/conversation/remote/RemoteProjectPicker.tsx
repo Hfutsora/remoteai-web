@@ -43,7 +43,7 @@ export function RemoteProjectPicker({ state, controller, active }: {
       loading={loading} error={error} onOpen={() => void load()}
       onBrowse={() => setPicking(true)}
       onChange={path => choose(directoryProject(path))} onAdd={() => setPicking(true)}
-      addLabel={uiText("client.workspaceActions.chooseAnotherFolder")}
+      addLabel={uiText("client.conversation.newProject")}
       onClear={state.selected ? undefined : () => { void controller.selectProject(null); }} />
     {picking && !disabled && <ChatProjectPicker cwd={cwd} load={controller.loadProjectDirectories}
       mutate={controller.guiTools.projectBrowser.mutate} projects={known}
