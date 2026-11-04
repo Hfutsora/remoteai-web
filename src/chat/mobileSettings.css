@@ -1,0 +1,9 @@
+@media (max-width: 860px) {
+  .chat-settings-sheet.mobile-popup .adaptive-sheet-content {
+    scrollbar-width: none;
+  }
+
+  .chat-settings-sheet.mobile-popup .adaptive-sheet-content::-webkit-scrollbar {
+    display: none;
+  }
+}
