@@ -100,7 +100,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
   const usageSnapshot = useVisibleChatUsage(controller.readUsage, desktop && active && foreground && ready);
   const installer = useRemoteCliInstaller(controller.guiTools,
     cliVersion === undefined && desktop && active && foreground && ready);
-  const error = visibleChatError(state.error);
+  const error = visibleChatError(state.error, state);
   const cwd = state.selected?.cwd ?? state.draftProject?.cwd ?? '';
   const catalog = useChatCatalog(controller, cwd, ready);
   const runningTurn = currentRunningTurn(state.selected?.turns);

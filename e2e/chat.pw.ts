@@ -64,6 +64,21 @@ test('connects independently over WebRTC without advertising native TCP', async 
   expect(capabilities.length).toBeGreaterThan(0);
   expect(capabilities.every(enabled => !enabled)).toBe(true);
 });
+
+test('hides initial and delayed relay failures after P2P connects', async ({ page, request }, info) => {
+  await request.post(`${fixtureUrl}/test/relay-issue`, { data: { reason: 'unavailable', initial: true } });
+  await page.reload();
+  await connect(page);
+  await expect(page.getByRole('status').filter({ hasText: 'P2P' })).toBeVisible({ timeout: 20_000 });
+  const notice = page.getByText('服务器转发暂不可用，请稍后重试或使用 P2P 直连。', { exact: true });
+  await expect(notice).toHaveCount(0);
+  await request.post(`${fixtureUrl}/test/relay-issue`, { data: { reason: 'unavailable' } });
+  await expect(notice).toHaveCount(0);
+  await screenshot(page, info, 'p2p-with-relay-unavailable');
+  await send(page, 'Verify direct chat after relay failure');
+  await settled(page);
+  await expect(notice).toHaveCount(0);
+});
 test('uses the PC model picker and keeps the mobile settings unchanged', async ({ page, request }, info) => {
   test.skip(info.project.name !== 'desktop', 'Desktop model picker interaction');
   await modelPickerJourney(page, request, info);
