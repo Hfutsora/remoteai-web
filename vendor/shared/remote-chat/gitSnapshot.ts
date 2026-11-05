@@ -13,7 +13,7 @@ export async function readGitSnapshot(client: GitClient, cwd: string) {
 
 export function refreshGitHistory(previous: GitHistory, next: GitHistory): GitHistory {
   const sameHead = next.commits.length > 0 && next.commits.every((row, index) =>
-    row.hash === previous.commits[index]?.hash);
+    row.hash === previous.commits[index]?.hash && row.repository === previous.commits[index]?.repository);
   if (!sameHead || previous.commits.length <= next.commits.length) return next;
   return { commits: [...next.commits, ...previous.commits.slice(next.commits.length)], hasMore: previous.hasMore };
 }

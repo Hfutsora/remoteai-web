@@ -20,7 +20,9 @@ const MENU_POPOVER_PROPS: PopoverProps = {
 };
 type ToolbarMenu = 'branches' | Exclude<GitAction, 'switch'>;
 
-export function GitToolbar({ panel, connected }: { panel: RemoteGit; connected: boolean }) {
+export function GitToolbar({ panel, connected, onRefresh }: {
+  panel: RemoteGit; connected: boolean; onRefresh?: () => void;
+}) {
   const [menu, setMenu] = useState<ToolbarMenu | null>(null);
   const [query, setQuery] = useState('');
   const disabled = panel.busy || !connected || !panel.changes;
@@ -64,12 +66,13 @@ export function GitToolbar({ panel, connected }: { panel: RemoteGit; connected: 
         })}
         <Tooltip title={t('client.git.rollBackSelectedFiles')} styles={{ root: { maxWidth: 400 } }}>
           <button type="button" aria-label={t('client.git.rollBackSelectedFiles')}
-            disabled={disabled || !Object.keys(panel.selected).length || panel.changes?.files.some(file => file.conflict)}
+            disabled={disabled || !Object.keys(panel.selected).length || panel.changes?.files.some(file =>
+              file.conflict || (file.submodule && panel.selected[file.path]))}
             onClick={() => { close(); panel.requestFileAction('rollback'); }}><Undo2 size={18} /></button>
         </Tooltip>
         <Tooltip title={t('client.git.refreshGit')} styles={{ root: { maxWidth: 400 } }}>
-          <button type="button" aria-label={t('client.git.refreshGit')} disabled={disabled}
-            onClick={() => { panel.setDetail(null); void panel.refresh(); }}><RefreshCw size={18} /></button>
+          <button type="button" aria-label={t('client.git.refreshGit')} disabled={panel.busy || !connected}
+            onClick={() => { panel.setDetail(null); onRefresh?.(); void panel.refresh(); }}><RefreshCw size={18} /></button>
         </Tooltip>
       </div>
     </div>

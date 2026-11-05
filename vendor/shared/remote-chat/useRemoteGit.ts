@@ -26,7 +26,7 @@ export function useRemoteGit({ client, cwd, active, connected, refreshInterval }
   const [repository, setRepository] = useState<GitRepository | null>(null);
   const [strategy, setStrategy] = useState<GitStrategy>('merge');
   const [changes, setChanges] = useState<GitChanges | null>(null);
-  const fileList = useGitFileList(changes?.files ?? []);
+  const fileList = useGitFileList(changes?.files ?? [], changes?.repositories);
   const [{ commits, hasMore }, setHistory] = useState<GitHistory>({ commits: [], hasMore: false });
   const [selected, setSelected] = useState<Record<string, string>>({});
   const [tab, setTab] = useState<'changes' | 'history'>('changes');
@@ -38,7 +38,8 @@ export function useRemoteGit({ client, cwd, active, connected, refreshInterval }
     setChanges(next); setHistory(previous => refreshGitHistory(previous, history));
     setRepository(repository);
     setSelected(previous => Object.fromEntries(next.files.filter(file =>
-      !file.conflict && previous[file.path] === file.version).map(file => [file.path, file.version])));
+      !file.conflict && (previous[file.path] === file.version
+        || next.pendingSelection?.some(pending => pending.path === file.path && pending.version === file.version))).map(file => [file.path, file.version])));
   }, [client, cwd, scope]);
   const { busy, error, notice, setNotice, run, refresh, clearActionError } = useGitRequests({
     scope, enabled: active && connected && !!cwd, load, refreshInterval,
@@ -66,6 +67,7 @@ export function useRemoteGit({ client, cwd, active, connected, refreshInterval }
   const selectAll = () => selectFiles(changes?.files ?? []);
   const requestFileAction = (action: GitFileActionPrompt['action'], target?: GitChange | GitChange[]) => {
     if (!changes || busy || !connected || changes.files.some(item => item.conflict)) return;
+    if (action !== 'commit' && changes.files.some(file => file.submodule && selected[file.path]) && !target) return;
     const targets = target ?? Object.entries(selected).map(([path, version]) => ({ path, version }));
     const files = (Array.isArray(targets) ? targets : [targets]).map(({ path, version }) => ({ path, version }));
     if (files.length) { clearActionError(); setFileAction({ action, head: changes.head, files }); }
@@ -108,7 +110,7 @@ export function useRemoteGit({ client, cwd, active, connected, refreshInterval }
     const page = await client.history(cwd, commits.length);
     if (current.current !== scope) return;
     setHistory(previous => ({ commits: [...previous.commits,
-      ...page.commits.filter(commit => !previous.commits.some(row => row.hash === commit.hash))],
+      ...page.commits.filter(commit => !previous.commits.some(row => row.hash === commit.hash && row.repository === commit.repository))],
     hasMore: page.hasMore }));
   });
   const loading = active && connected && !!cwd && !changes && !error;
