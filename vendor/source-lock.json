@@ -3,11 +3,11 @@
   "revision": "7511b856494f24d7f5673fc47b69d91c03906241",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "7fbae818e71aced199fae1b7df1764f0af982b9d"
+    "revision": "31d1d88df41a81f23c658a5173633f6f18b37b4d"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "909c16bafbdfc1e7a87e77ddbd5da4eb9fa2378e"
+    "revision": "44022924b2b17d30495a508a5cdfee4632ee733c"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.5/remoteai-i18n-0.1.5.tgz",
   "files": {
@@ -373,7 +373,7 @@
     "shared/chat/nextPromptSuggestion.ts": "ee1c040d3b9b2d3adc52e348a396153085232ffbb0154ecd713fd2aec1fb8146",
     "shared/remote-chat/client/queueProps.ts": "24c3ed7695addd9ebf55a9ef87d80ade301842d5d6e7ca10621cdc0bed815bee",
     "shared/remote-chat/uploadProgress.ts": "899df98f603e2e3f438f9bce2a1575afb54c8e54afecbe4c1217f08ba4da5a3c",
-    "shared/remote-chat/client/goals.ts": "ac740faafabdcd751657b6972cb0c6f973f3ede22f60bd631c89f532660ac566",
+    "shared/remote-chat/client/goals.ts": "7b8ec8f0e317b083f3e3950f0cd0bb82e42e37ad80e0e25ba40c7c0e2c6c92b3",
     "shared/conversation/goalTypes.ts": "3605e071acae4b4a0039fe4cf09c3d2e4b799735d8fe2349ced048158d0c6c5c",
     "shared/chat/skillCatalog.ts": "1301a0de3cf2d6936ee0529266b60fa604d71f2410c0f1713465f4910fa95942",
     "shared/remote-chat/composerCatalog.ts": "2e921b98bb9d22db9006b97b081fcf22589babbbea925fad8d9b8b7b454f8395",
