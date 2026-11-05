@@ -147,7 +147,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
       loadCatalog={controller.loadComposerCatalog} loadFiles={controller.loadProjectFiles}
       loadConversations={controller.searchThreads}
       uploadProgress={state.upload}
-      threadId={state.selected?.id ?? null} models={state.models} selection={state.settings}
+      threadId={state.selected?.id ?? null} draftScope={state.draftScope} models={state.models} selection={state.settings}
       readUsage={controller.readUsage} tokenUsage={state.selected?.tokenUsage}
       readConversationMetrics={controller.readConversationMetrics}
       settingsBusy={state.settingsBusy || !!state.workspaceBusy} settingsError={state.settingsError}
@@ -155,7 +155,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
       refreshModels={controller.refreshModels}
       active={active} ready={ready && !state.selectedArchived} sending={state.sending} running={running}
       interrupted={state.selected?.turns?.at(-1)?.status === 'interrupted'}
-      send={(input) => controller.send(input)} interrupt={() => controller.interrupt()} />
+      send={(input) => controller.enqueueMessage(input)} interrupt={() => controller.interrupt()} />
   </>;
   const profileMenu = !accountPicker && (desktop ? <ChatDesktopAccountPicker client={controller.guiAccounts}
     ready={ready} active={active && foreground && !searching} device={device} devices={devices}
@@ -178,7 +178,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
     <ChatBrowserProvider controller={controller}>
     <ChatDetailsWorkspace selected={state.selected?.id ?? null} active={active} enabled={showDesktopDiffs}>
     <ChatFileReferencesProvider>
-    <ChatQuotesProvider scope={state.selected?.id ?? null} sending={state.sending}
+    <ChatQuotesProvider scope={state.draftScope ?? state.selected?.id ?? null} sending={state.sending}
     enabled={active && !state.selectedArchived}>
     <ChatTerminalLayout>
     <header className={`chat-header${showDesktopDiffs ? ' workspace-toolbar' : ''}`}

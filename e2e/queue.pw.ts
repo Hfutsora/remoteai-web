@@ -1,6 +1,33 @@
 import { test, expect } from '@playwright/test';
 import { openChatList, connect, send, state, fixtureUrl, operationCount, login } from './chat-helpers';
 
+test('shows local messages and clears the composer while acknowledgements are delayed', async ({ page, request }, info) => {
+  await request.post(`${fixtureUrl}/test/reset`);
+  await login(page);
+  await connect(page);
+  await expect(page.getByText('欢迎回来', { exact: true })).toBeHidden();
+  await openChatList(page);
+  await page.getByRole('button', { name: '移动端聊天体验', exact: true }).click();
+  await send(page, 'slow local outbox');
+  await expect(page.getByRole('button', { name: '暂停生成' })).toBeVisible();
+  await request.post(`${fixtureUrl}/test/submission-delay`, { data: { milliseconds: 10000 } });
+  try {
+    const input = page.getByRole('textbox', { name: '聊天消息' });
+    for (const text of ['立即进入本地队列', '后台提交时继续发送']) {
+      await input.fill(text);
+      await page.getByRole('button', { name: '发送消息', exact: true }).click();
+      await expect(input).toHaveValue('', { timeout: 1000 });
+    }
+    const queue = page.getByRole('region', { name: '待发送消息', exact: true });
+    await expect(queue.getByRole('listitem')).toHaveCount(2);
+    await expect(queue.getByRole('status')).toHaveCount(2);
+    await page.screenshot({ path: info.outputPath(`web-${info.project.name}-local-pending.png`) });
+    await request.post(`${fixtureUrl}/test/submission-delay`, { data: { milliseconds: 0 } });
+    await expect(queue.getByRole('status')).toHaveCount(0, { timeout: 15000 });
+    await expect(queue.getByRole('listitem')).toHaveCount(2);
+  } finally { await request.post(`${fixtureUrl}/test/submission-delay`, { data: { milliseconds: 0 } }); }
+});
+
 test('desktop web remembers the queue setting and sends directly while a task is running', async ({ page, request }, info) => {
   test.skip(info.project.name !== 'desktop', 'The setting is in the desktop GUI settings.');
   await request.post(`${fixtureUrl}/test/reset`);

@@ -47,6 +47,7 @@ export interface ComposerProps {
   updateSettings: (settings: Partial<ComposerSettings>) => Promise<void>;
   refreshModels: () => Promise<void>;
   threadId: string | null;
+  draftScope?: string;
   active: boolean;
   ready: boolean;
   sending: boolean;

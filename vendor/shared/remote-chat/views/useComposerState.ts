@@ -23,16 +23,18 @@ export function useComposerState(props: ComposerProps) {
   const [pausing, setPausing] = useState(false);
   const [dictationBusy, setDictationBusy] = useState(false);
   const [error, setError] = useState('');
-  const attachments = useComposerAttachments({ threadId, sending });
+  const draftScope = props.draftScope ?? threadId;
+  const attachments = useComposerAttachments({ threadId: draftScope, sending });
   const dropTarget = useRef<HTMLDivElement>(null);
   const quotes = useChatQuotes();
   const disabled = !ready || settingsBusy || compacting;
-  const draft = useChatDraft({ threadId, sending, disabled: disabled || attachments.busy || dictationBusy, selection, send,
+  const draft = useChatDraft({ threadId: draftScope, sending,
+    disabled: disabled || attachments.busy || dictationBusy, selection, send,
     recovered: props.recoveredEdit, consumeRecovered: props.consumeRecoveredEdit });
   const menu = useComposerMenu({ draft, scope: `${threadId ?? ''}:${props.cwd}`, active,
     refresh: props.catalog.refresh, compact: props.compact });
   const hasContent = draft.hasContent || attachments.items.length > 0 || Boolean(quotes?.quotes.length);
-  const queueEditor = useQueueEditor({ threadId, queue: props.queue,
+  const queueEditor = useQueueEditor({ threadId: draftScope, queue: props.queue,
     disabled: !active || disabled || sending || draft.picking || attachments.busy || dictationBusy || hasContent,
     restore: message => {
       draft.restore({ ...message, attachments: [] }); attachments.restore(message.attachments ?? []);
