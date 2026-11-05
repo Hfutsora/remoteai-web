@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "2ccfc876095a218336379e6649d847bc47b724a3",
+  "revision": "de1b546b8a06bd96aef43d450098d5ad13ff32aa",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "1b3d30eed9ea5da3cc38506e0fc80cc501a847cb"
+    "revision": "933ecb5f207b0b256cb7425da9407b8a866bcfb2"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -777,7 +777,7 @@
     "shared/chat/imageEditorAsset.ts": "f56ccb341888de7484fdd5a4b230aa1f7b8aee2fee1572d72f18e5ba6d7accac",
     "shared/chat/imageEditorScript.ts": "4f3f2f66482026d000f785fb0dc5e13a59ffb5b65794ed299410671e3461202f",
     "shared/remote-chat/utf8.ts": "09b972bcd3da91c6a21bd4ed4cae46cfe05830c319cfc1622808769e29af8328",
-    "shared/remote-chat/sendQueue.ts": "b13d5eeb8243562029e70431d9ef39e81d7fb297de01c486c46672302f44d833",
+    "shared/remote-chat/sendQueue.ts": "a5f81ab5a0602740cba9abcd8819cd24c8ee2aa5b0ad1a28336e66a33f635209",
     "shared/remote-chat/linkOptions.ts": "0c1b20d526efaf254d6ac810c022bd2a5f9cab682e8461e829973adc30065506",
     "shared/remote-chat/hotLink.ts": "63266d40b81d2fe059f1586c08869ab6bb2e8366682e79d0d043a111abbd2952",
     "apps/desktop/e2e/demo-gui-tools.ts": "c1bae744b20a35df46bc2862b16d11dd326a4b1776acf2744fb7d256666cd2ad",
@@ -1243,7 +1243,7 @@
     "shared/remote-chat/attachmentUploadProgress.ts": "28c2dd8ff0b895d36f33e36593f40ab2dd405dfdfc95be13e65543219a1a7a5c",
     "shared/remote-chat/compressedPackets.ts": "43f7e4eee42374f6d9c312f1c0f70222bb8d4921fd6b1089f79ad8884199be03",
     "shared/remote-chat/delivery.ts": "a4e8087ac736d6cd215ac1e78132e6be2b935180d40db218a7441022a21876df",
-    "shared/remote-chat/linkDelivery.ts": "411c5705c157ded37a14cb0d19058e84c76b28f331dc7a7a48b1067080040a1d",
+    "shared/remote-chat/linkDelivery.ts": "ccb6ecd967b22dd62c456ab7e053e65493bc61375b749c81ab46c622c3c00d6b",
     "shared/remote-chat/hotPeer.ts": "94b9e4f2f0234c30a1984361ca9b8403ebb26386467e54d280423ca108e4b8f4",
     "shared/remote-chat/directPackets.ts": "35126c4a8ff4f3e84f5171c34536c00c3659f523c7fc9e3f0ae38c72f4e8a655",
     "shared/remote-chat/peerEndpointObservation.ts": "0ab7730f8ddbacf2fc4ca41e4757c0725a6f7d9e28118547d682b6e00c5167e0",
