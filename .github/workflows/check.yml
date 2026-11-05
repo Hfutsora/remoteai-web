@@ -30,6 +30,9 @@ jobs:
       - name: Verify startup and update behavior at mobile and desktop widths
         if: runner.os == 'Linux'
         run: npm run test:startup-update:e2e
+      - name: Verify production PDF assets and CMap rendering
+        if: runner.os == 'Linux'
+        run: npm run test:pdf-preview:e2e
       - uses: actions/upload-artifact@v4
         if: runner.os == 'Linux' && success()
         with:

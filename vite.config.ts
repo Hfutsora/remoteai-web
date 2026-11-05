@@ -4,6 +4,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { imageEditorPlugin } from '../../shared/chat/imageEditorPlugin';
 import { fontSizePlugin } from '../../shared/appearance/fontSizePlugin';
+import { pdfAssetsPlugin } from '../../shared/file-preview/pdfAssetsPlugin';
 import { webVersionPlugin } from './build/webVersionPlugin';
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
@@ -12,7 +13,7 @@ export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, currentDir, "");
   const apiTarget = env.VITE_DEV_API_URL || "http://127.0.0.1:8080";
   return {
-    plugins: [react(), imageEditorPlugin(), webVersionPlugin()],
+    plugins: [react(), imageEditorPlugin(), pdfAssetsPlugin(), webVersionPlugin()],
     css: { postcss: { plugins: [fontSizePlugin()] } },
     clearScreen: false,
     resolve: { dedupe: ['react', 'react-dom', 'antd', 'antd-mobile', '@ant-design/cssinjs', '@remoteai/i18n'] },
