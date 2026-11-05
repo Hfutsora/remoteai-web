@@ -36,6 +36,8 @@ export interface Item {
   content?: Content[] | string[];
   summary?: string[];
   command?: string;
+  commandPreview?: string;
+  detailsRef?: { threadId: string; turnId: string; itemId: string };
   commandActions?: { type: string; name?: string; path?: string | null; query?: string | null }[];
   cwd?: string;
   status?: string;
@@ -207,6 +209,7 @@ export type ApprovalReply = {
   answers?: Record<string, { answers: string[] }>;
 };
 export type Request =
+  | ({ operation: 'toolDetails' } & NonNullable<Item['detailsRef']>)
   | Exclude<import('../project-browser/protocol').ProjectBrowserRequest, { operation: 'projectFiles' }>
   | { operation: 'suggestNextPrompt'; threadId: string; sourceTurnId: string; model: string;
       effort: 'none' | 'minimal' | 'low' | 'medium' | 'high' | 'xhigh' | 'max' | 'ultra' }
@@ -245,7 +248,7 @@ export type Request =
   | { operation: "send"; threadId: string; text: string; images: string[]; access: AccessMode;
       transferMode?: 'direct' | 'relay';
       model?: string; effort?: string; cwd?: string; skills?: SkillReference[]; attachments?: AttachmentReference[] }
-  | { operation: "read"; threadId: string;
+  | { operation: "read"; threadId: string; includeToolDetails?: boolean;
       window?: import('../remote-chat/historyPage').HistoryWindow & { pageSize?: number } }
   | { operation: "archive" | "unarchive" | "compact"; threadId: string }
   | { operation: "rename"; threadId: string; name: string }

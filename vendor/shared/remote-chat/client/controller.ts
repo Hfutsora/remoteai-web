@@ -57,6 +57,8 @@ import { initialChatState, type ApprovalReply, type ChatProject, type ChatState,
 const SYNCHRONIZATION_RETRY_MS = 3000;
 
 export class ChatController {
+  /** Enable before start only when the host UI supports loading individual tool details. */
+  deferToolDetails = false;
   readonly groups = createRemoteGroups({ ready: () => this.state.ready, generation: () => this.synchronization,
     request: body => this.connection.request('request', body), apply: sidebar => this.applySidebar(sidebar) });
   readonly projectActions = new ProjectActions({ snapshot: () => this.state, update: patch => this.update(patch),
@@ -160,7 +162,9 @@ export class ChatController {
       | 'downloadsBulk' | 'setBulkSupport'>>,
     private readonly offline?: OfflineHistoryStore, versions?: HistoryVersionSource, sshProfiles?: SshProfileStore) {
     if (sshProfiles) this.guiTools.terminal.ssh.profiles = sshProfiles;
-    this.historyReader = new HistoryReader((body) => this.connection.request('request', body), versions);
+    this.historyReader = new HistoryReader((body) => this.connection.request('request', {
+      ...body, ...(this.deferToolDetails ? { deferToolDetails: true } : {}),
+    }), versions);
     if (offline) this.offlineWriter = new OfflineWriter(offline, this.cacheFailure);
     this.connection = createConnection({
       mode: (mode) => this.changeMode(mode), error: (error) => {
@@ -223,7 +227,12 @@ export class ChatController {
     }
     this.emit();
   }
-  private request<T>(body: Request) { return this.connection.request<T>('request', body); }
+  private request<T>(body: Request) {
+    return this.connection.request<T>('request', { ...body,
+      ...(body.operation === 'read' && this.deferToolDetails ? { deferToolDetails: true } : {}) });
+  }
+  toolDetails = (target: NonNullable<import('./types').Item['detailsRef']>) =>
+    this.request<{ item: import('./types').Item }>({ operation: 'toolDetails', ...target });
   private syncConversationView() {
     if (!this.conversationViewsSupported || !this.transportConnected) return Promise.resolve();
     const threadId = this.state.selected?.id ?? null;
@@ -231,7 +240,8 @@ export class ChatController {
     // Serialize changes so a slow request for A cannot replace the newer view of B.
     this.viewSync = this.viewSync.catch(() => undefined).then(() => {
       if (generation !== this.viewGeneration) return;
-      return this.connection.request('request', { operation: 'viewThread', threadId });
+      return this.connection.request('request', { operation: 'viewThread', threadId,
+        ...(this.deferToolDetails ? { deferToolDetails: true } : {}) });
     });
     return this.viewSync;
   }

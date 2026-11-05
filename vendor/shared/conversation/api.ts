@@ -27,6 +27,6 @@ export const guiApi = {
     return response.data;
   },
   respond: (reply: ApprovalReply) => invoke<void>("codex_gui_respond", { reply }),
-  subscribe: (callback: (event: GuiEvent) => void) =>
-    subscribeGuiEvent<GuiEvent>("codex-gui-event", callback),
+  subscribe: (callback: (event: GuiEvent) => void, transport = false) =>
+    subscribeGuiEvent<GuiEvent>(transport ? "codex-gui-transport-event" : "codex-gui-event", callback),
 };

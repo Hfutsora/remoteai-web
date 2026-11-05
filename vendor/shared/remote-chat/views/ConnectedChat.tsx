@@ -50,6 +50,7 @@ import { threadPresentation } from '../sidebar';
 import { useChatDrawerSwipe } from './useChatDrawerSwipe';
 import type { ChatController, ChatProject, ChatState } from './types';
 import './chat.css';
+import { ToolDetailsContext } from '../../chat/DeferredToolDetails';
 
 export interface ConnectedChatProps {
   chat: { state: ChatState; controller: ChatController; foreground: boolean };
@@ -164,7 +165,8 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
     guiTools={controller.guiTools} active={active && foreground && !searching}
     running={state.sending || running || Object.values(state.sidebar.threads).some(thread => thread.running)}
     chooseDevice={() => { drawerMotion.closeDrawer(); setPickingDevice(true); }} />);
-  return <DesktopUsageContext.Provider value={usageSnapshot}>
+  return <ToolDetailsContext.Provider value={{ load: controller.toolDetails, active: active && foreground && ready }}>
+    <DesktopUsageContext.Provider value={usageSnapshot}>
     <ImageAiContext.Provider value={{ enabled: active && ready && !state.selectedArchived
     && !state.sending && !state.settingsBusy && !state.workspaceBusy && !state.compacting,
     send: imageAiSender(controller, prepareImageEdit) }}>
@@ -238,5 +240,5 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
       refresh={deviceRefresh} choose={(id) => { chooseDevice(id); setPickingDevice(false); }} />}
   </ChatQuotesProvider></ChatFileReferencesProvider></ChatDetailsWorkspace></ChatBrowserProvider>
   </ChatFileContext.Provider></ChatAttachmentMetadata></ChatImageContext.Provider></ImageAiContext.Provider>
-  </DesktopUsageContext.Provider>;
+  </DesktopUsageContext.Provider></ToolDetailsContext.Provider>;
 }

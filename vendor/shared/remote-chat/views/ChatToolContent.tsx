@@ -19,6 +19,7 @@ import { CommandOutput } from '../../chat/CommandOutput';
 import { ChatCopyButton } from './ChatCopyButton';
 import { VirtualCommandText } from './VirtualCommandText';
 import { useDesktopLayout } from '../../layout/useDesktopLayout';
+import { DeferredToolDetails } from '../../chat/DeferredToolDetails';
 
 const FILE_CHANGE_STATUS: Record<string, string> = {
   declined: "client.chat.notApplied", failed: "client.chat.editFailed", inProgress: "client.chat.editing",
@@ -39,6 +40,10 @@ function SearchContent({ item }: { item: Item }) {
 }
 
 export function ChatToolContent({ item }: { item: Item }) {
+  return <DeferredToolDetails item={item}>{loaded => <ChatToolBody item={loaded} />}</DeferredToolDetails>;
+}
+
+function ChatToolBody({ item }: { item: Item }) {
   useLanguage();
   const desktop = useDesktopLayout();
   const text = toolText(item);

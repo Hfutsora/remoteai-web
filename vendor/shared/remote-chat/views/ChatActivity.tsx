@@ -18,7 +18,7 @@ function activityLabel(item: Item) {
     const action = item.commandActions?.find(entry => entry.type !== 'unknown');
     const labels: Record<string, string> = { read: t("client.chat.readFile"), listFiles: t("client.chat.browseFiles"), search: t("client.chat.searchCode") };
     return action ? `${labels[action.type] || t("client.chat.runCommand")} · ${action.name || action.query || action.path || ''}`
-      : [t("client.chat.runCommand"), commandPreview(item.command ?? ''), item.status === 'interrupted' ? t("client.chat.stopped") : '']
+      : [t("client.chat.runCommand"), commandPreview(item.commandPreview ?? item.command ?? ''), item.status === 'interrupted' ? t("client.chat.stopped") : '']
         .filter(Boolean).join(' · ');
   }
   if (item.type === 'reasoning') return [...item.summary ?? [], messageContent(item)]
