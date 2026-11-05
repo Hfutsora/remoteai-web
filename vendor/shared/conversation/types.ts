@@ -241,7 +241,7 @@ export type Request =
       projectOverrides: Record<string, string> } & import('../chat/groups/model').GroupMembersQuery)
   | { operation: "start"; cwd?: string; model?: string; access: AccessMode }
   | { operation: "fork"; threadId: string; turnId: string; access: AccessMode; cwd?: string }
-  | { operation: "resume"; threadId: string; access: AccessMode; cwd?: string }
+  | { operation: "resume"; threadId: string; access: AccessMode; cwd?: string; summaryOnly?: boolean }
   | { operation: "send"; threadId: string; text: string; images: string[]; access: AccessMode;
       transferMode?: 'direct' | 'relay';
       model?: string; effort?: string; cwd?: string; skills?: SkillReference[]; attachments?: AttachmentReference[] }

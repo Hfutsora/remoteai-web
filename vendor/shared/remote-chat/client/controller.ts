@@ -143,6 +143,9 @@ export class ChatController {
     update: (patch) => this.update(patch), ready: () => this.active && this.state.ready,
     request: (body) => this.connection.request('request', body) });
   private viewing = true;
+  private conversationViewsSupported = false;
+  private viewSync: Promise<unknown> = Promise.resolve();
+  private viewGeneration = 0;
   private loadedThreadId: string | null = null;
   private readonly reading = new Set<string>();
 
@@ -212,12 +215,26 @@ export class ChatController {
   private update(patch: Partial<ChatState>) {
     const previous = this.state;
     this.state = syncChatProcessing({ ...this.state, ...patch }, this.state);
+    if (previous.selected?.id !== this.state.selected?.id) {
+      void this.syncConversationView().catch(error => this.failure(error));
+    }
     if (previous.search === this.state.search && previous.archived === this.state.archived) {
       this.threadList.observe(previous.threads, this.state.threads, this.state.archived);
     }
     this.emit();
   }
   private request<T>(body: Request) { return this.connection.request<T>('request', body); }
+  private syncConversationView() {
+    if (!this.conversationViewsSupported || !this.transportConnected) return Promise.resolve();
+    const threadId = this.state.selected?.id ?? null;
+    const generation = this.viewGeneration;
+    // Serialize changes so a slow request for A cannot replace the newer view of B.
+    this.viewSync = this.viewSync.catch(() => undefined).then(() => {
+      if (generation !== this.viewGeneration) return;
+      return this.connection.request('request', { operation: 'viewThread', threadId });
+    });
+    return this.viewSync;
+  }
   private failure(error: unknown) {
     this.stream.flush();
     this.update({ error: error instanceof Error ? error.message : '操作未完成，请稍后重试。' });
@@ -234,6 +251,9 @@ export class ChatController {
       return;
     }
     this.transportConnected = mode === 'direct' || mode === 'relay';
+    this.viewGeneration++;
+    this.viewSync = Promise.resolve();
+    this.conversationViewsSupported = false;
     this.historyReader.reset();
     this.queueConnection.reset();
     if (mode === 'offline') {
@@ -368,6 +388,8 @@ export class ChatController {
   };
 
   stop() {
+    this.viewGeneration++;
+    this.viewSync = Promise.resolve();
     this.stream.flush();
     this.stopped = true;
     this.threadList.invalidate();
@@ -403,6 +425,9 @@ export class ChatController {
       const response = await this.connection.request<unknown>('connect', chatHandshake);
       if (!this.active || generation !== this.synchronization) return;
       const approvals = chatApprovals(response);
+      this.conversationViewsSupported = !!response && typeof response === 'object'
+        && 'conversationViewsV1' in response && response.conversationViewsV1 === true;
+      await this.syncConversationView();
       this.previewDownloadSupported = !!response && typeof response === 'object'
         && 'filePreviewsV1' in response && response.filePreviewsV1 === true;
       this.connection.setBulkSupport?.(response);
@@ -616,6 +641,7 @@ export class ChatController {
     if (older) this.olderStartedAt = undefined;
     this.update({ historyLoading: true, historyLoadingMore: older, ...(older && { historyLoad: undefined }) });
     try {
+      await this.viewSync;
       const result = await this.historyReader.read(selected,
         { start: this.historyPages.get(selected.id)?.start, older });
       // The response may already contain buffered deltas; reconcile them before installing the snapshot.
