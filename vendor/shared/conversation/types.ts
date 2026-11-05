@@ -152,6 +152,7 @@ export interface EventParams {
 export type AutomaticSetupStatus = "installing" | "ready" | "failed";
 export interface GuiEvent { method: string; params: EventParams; id?: string | number | null }
 export interface Conversation {
+  historyPage?: import('../remote-chat/historyPage').HistoryPage;
   processing?: ProcessingState;
   thread: Thread;
   turns: Turn[];
@@ -244,7 +245,9 @@ export type Request =
   | { operation: "send"; threadId: string; text: string; images: string[]; access: AccessMode;
       transferMode?: 'direct' | 'relay';
       model?: string; effort?: string; cwd?: string; skills?: SkillReference[]; attachments?: AttachmentReference[] }
-  | { operation: "read" | "archive" | "unarchive" | "compact"; threadId: string }
+  | { operation: "read"; threadId: string;
+      window?: import('../remote-chat/historyPage').HistoryWindow & { pageSize?: number } }
+  | { operation: "archive" | "unarchive" | "compact"; threadId: string }
   | { operation: "rename"; threadId: string; name: string }
   | { operation: "generateTitle"; threadId: string; prompt: string;
       settings: import('../chat/titleSettings').TitleSettings }

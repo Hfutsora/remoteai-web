@@ -57,6 +57,7 @@ test('loads short history on upward wheel, prevents overlap and preserves the re
   finish();
   await expect(page.locator('.chat-entry-message')).toHaveCount(49);
   await expect.poll(async () => Math.abs((await first.boundingBox())!.y - top)).toBeLessThan(3);
+  await page.screenshot({ path: '../../.codex-tmp/web-history-loaded.png' });
   await expect(page.getByRole('button', { name: '加载更早的消息' })).toHaveCount(0);
   await wheel(page, -10000);
   await expect.poll(() => viewport.evaluate(node => node.scrollTop)).toBe(0);
