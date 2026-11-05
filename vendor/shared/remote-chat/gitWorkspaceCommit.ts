@@ -1,4 +1,5 @@
-import { displayError, t } from '../localization/browserClient';
+import { remoteErrorText as displayError } from '../localization/errors';
+import { displayText as t } from '../localization/messages';
 import type { GitClient, GitCommitRequest, GitRepositoryEntry } from './gitTypes';
 import { childFirst, localPath, parentRepository, readWorkspaces, selectedByRepository } from './gitWorkspaceModel';
 

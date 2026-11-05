@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "bff631e803b741f23d563958a9642c43b40d2d59",
+  "revision": "f7cf05033b075b66984294144c8e92978923f3ad",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "4eb46efe6bbdda7bc4853f172ea616d88fc246a2"
+    "revision": "e5d6f25a5aa39ca744004671dc6968b65d137481"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "e5fa6be51648ab648b455d5e38704862756001bf"
+    "revision": "8be95c129c27d3cf28d7f4d7ccaea3115d6a9b68"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.5/remoteai-i18n-0.1.5.tgz",
   "files": {
@@ -670,7 +670,7 @@
     "shared/token-usage/dashboardLoader.ts": "501bd69bf7d174f3fe39d6d7809fb89bbc58693040a8e2fd65e4fdb2a590cef3",
     "shared/remote-chat/client/tokenSummaryCache.ts": "ba03f9cc4c583c1a3c69fddb4a06fc649f02d1afded5542af76454493caab5e2",
     "shared/token-usage/useDocumentVisible.ts": "1cb188f903a1a8f1121f649c6a9dbc237b52f8069c443edf900989a98ca1f2ef",
-    "shared/remote-chat/useRemoteGit.ts": "261cb425206e47618cbedf98f239db216d66589d8070f5b6f62d18dad3a347e8",
+    "shared/remote-chat/useRemoteGit.ts": "9d6d5fce149e65df9d9802e70b3e3afb826e74f23c80db37145fe5d7f840e13a",
     "shared/remote-chat/useGitCommitFiles.ts": "e2ffe063cca070d244ffac7e8a43839210d788f5c903ccf492bfcae3dc70d684",
     "shared/git/views/GitHistory.tsx": "d741dd3d5ad834fede58b2449ff8d765a7976b3eb6523ad3afefbd9dc2b2ff7b",
     "shared/git/views/GitChanges.tsx": "677da160461c911095350d596bbe027d3314bcdf75443cdb21b6d263c14f6f85",
@@ -1176,7 +1176,7 @@
     "shared/remote-chat/gitFiles.ts": "5a96527e1c5baf7d9bf02bdda95a944fe0a4b307593f0ae7d8dba4e614ebc19c",
     "shared/remote-chat/gitActions.ts": "9422e8b8b782a04c02528abbf697dc464651004971127b5e69f5e6f82f58805c",
     "shared/remote-chat/useGitFileList.ts": "42f671a0ace441084eb581018aa2f80e47fee0ce980cd668c7f1844365ef118a",
-    "shared/remote-chat/useGitRequests.ts": "b8639fe49d1d643d45b01866f7e0be318f98b7917261e488c1a7658df0d2f0d3",
+    "shared/remote-chat/useGitRequests.ts": "1f7640185ae537649b843bfe7f97d4aab4f2b6e6e7ee5296a2e6d2ebc440b715",
     "shared/remote-chat/gitSnapshot.ts": "2a794fe34800f56c4c1667148754d3328ab0adbb98901112f07f1414ce47d9ca",
     "shared/remote-chat/useGitRevisionActions.ts": "9c7c16996d31459dc2b82dfd9ec9fb001ce863f49debaabcf4d40ef3d83ecd5f",
     "shared/remote-chat/useGitCommit.ts": "fb33fa6d84b720d622dabdb7f2eeb7556afbde55ae0d8d2d5efa09ce70423132",
@@ -1195,7 +1195,7 @@
     "shared/remote-chat/gitCommitFiles.ts": "9ac87da150350daa598dc13ac52cc2fcf8a1a232df80444cdf7f927788680d07",
     "shared/git/views/GitToolbarMenu.tsx": "ea89590e532fb0cf5b3e7ad5467da0057cac18781a29e4047884320613b7c357",
     "shared/remote-chat/gitWorkspaceModel.ts": "63e0acad4f88838ab6d4f8b1176fbafd5a6714294b46da28d7acbad34ba0cf14",
-    "shared/remote-chat/gitWorkspaceCommit.ts": "1bb80c59a0a02f0bd975de353e7398988bac4351ef6b34410047d8753324fd76",
+    "shared/remote-chat/gitWorkspaceCommit.ts": "9be84ad54909250f87bf1f4aa5e7c1e8cb4dd4bb9b3417be18ee426a43151cb0",
     "shared/git/views/gitRevision.css": "49ffbd3db0bcf15241dadc5cca7ff91da40635040ef36b3a00ed8d3e3ca0782c",
     "shared/remote-chat/gitMenu.ts": "8e0f12e2b51ed3c5337f8c041a03d9da5e52eb3f0744c031f9616ea3c83f8231",
     "shared/remote-desktop/displaySession.ts": "a6476c3ba7ca6ed5c5c45ca9ec44a120dfc3e4054913f0dd55483b81da0e3be9",
