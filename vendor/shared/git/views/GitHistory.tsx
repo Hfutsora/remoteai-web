@@ -6,6 +6,7 @@ import { t, getLocale } from '../../localization/browserClient';
 import { useGitHistoryScroll } from './useGitHistoryScroll';
 import { GitCommitMenu } from './GitCommitMenu';
 import type { GitCommit } from '../../remote-chat/gitTypes';
+import { GitHistoryRepository } from './GitHistoryRepository';
 import './gitHistory.css';
 
 const HISTORY_STYLE = { '--git-history-compact-width': `${GIT_HISTORY_CONTENT_WIDTH}px`,
@@ -16,7 +17,8 @@ export function GitHistory({ panel, connected, onPatch }: {
 }) {
   const graph = useMemo(() => gitGraph(panel.commits), [panel.commits]);
   const pagination = useGitHistoryScroll(panel, connected);
-  return <div className="git-history" style={HISTORY_STYLE} ref={pagination.list} onScroll={pagination.onScroll}>
+  return <><GitHistoryRepository panel={panel} connected={connected} />
+    <div className="git-history" style={HISTORY_STYLE} ref={pagination.list} onScroll={pagination.onScroll}>
     {panel.changes && !panel.busy && !panel.commits.length &&
       <p className="git-notice">{t("client.git.noCommitsYet")}</p>}
     {graph.rows.map(row => <GitCommitMenu key={`${row.commit.repository ?? ''}:${row.commit.hash}`} commit={row.commit} panel={panel}
@@ -45,5 +47,5 @@ export function GitHistory({ panel, connected, onPatch }: {
       {panel.hasMore && pagination.failed && <button type="button" className="git-more"
         disabled={panel.busy || !connected} onClick={pagination.retry}>{t("client.terminal.retry")}</button>}
     </div>
-  </div>;
+  </div></>;
 }

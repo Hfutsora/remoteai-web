@@ -1,44 +1,7 @@
-import type { GitClient, GitCommit, GitHistory, GitRepositoryEntry } from './gitTypes';
+import type { GitClient, GitRepositoryEntry } from './gitTypes';
 import { childFirst, fileOwner, localPath, readWorkspaces, selectedByRepository,
   workspaceFiles, workspacePath } from './gitWorkspaceModel';
 import { commitWorkspace } from './gitWorkspaceCommit';
-
-const HISTORY_PAGE_SIZE = 80;
-
-function mergeHistory(pages: GitHistory[]): GitCommit[] {
-  const positions = pages.map(() => 0);
-  const merged: GitCommit[] = [];
-  while (true) {
-    let selected = -1;
-    pages.forEach((page, index) => {
-      const commit = page.commits[positions[index]];
-      if (commit && (selected < 0 || commit.date > pages[selected].commits[positions[selected]].date)) selected = index;
-    });
-    if (selected < 0) return merged;
-    merged.push(pages[selected].commits[positions[selected]++]);
-  }
-}
-
-async function workspaceHistory(client: GitClient, entries: GitRepositoryEntry[], skip: number): Promise<GitHistory> {
-  const results = await Promise.allSettled(entries.filter(entry => entry.available).map(async entry => {
-    let page: GitHistory = { commits: [], hasMore: true };
-    const commits: GitCommit[] = [];
-    while (page.hasMore && commits.length < skip + HISTORY_PAGE_SIZE + 1) {
-      page = await client.history(entry.root, commits.length);
-      commits.push(...page.commits.map(commit => ({ ...commit, repository: entry.root, repositoryPath: entry.path })));
-      if (!page.commits.length) break;
-    }
-    return { commits, hasMore: page.hasMore };
-  }));
-  const pages = results.map(result => {
-    if (result.status === 'rejected') throw result.reason;
-    return result.value;
-  });
-  // Merge repository logs without breaking their own topological order when commit dates are skewed.
-  const commits = mergeHistory(pages);
-  return { commits: commits.slice(skip, skip + HISTORY_PAGE_SIZE),
-    hasMore: commits.length > skip + HISTORY_PAGE_SIZE || pages.some(page => page.hasMore) };
-}
 
 /** Project-relative paths are presentation identities; each native request retains its real repository cwd. */
 export function createGitWorkspaceClient(source: GitClient, cwd: string) {
@@ -83,7 +46,14 @@ export function createGitWorkspaceClient(source: GitClient, cwd: string) {
         integration: integration ? { ...integration.changes.integration!,
           version: JSON.stringify([integration.entry.root, integration.changes.integration!.version]) } : null };
     },
-    history: async (_cwd, skip) => workspaceHistory(source, await entries(), skip),
+    history: async (root, skip) => {
+      const list = await entries();
+      // A removed or deinitialized checkout returns to the project repository on refresh.
+      const entry = list.find(entry => entry.available && entry.root === root) ?? list[0];
+      const page = await source.history(entry.root, skip);
+      return { ...page, commits: page.commits.map(commit => ({ ...commit,
+        repository: entry.root, repositoryPath: entry.path })) };
+    },
     commitFiles: (root, commit) => source.commitFiles(root, commit),
     diff: async (root, path, commit) => {
       if (commit) return source.diff(root, path, commit);
