@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "34a50b74c25f9a97ceaded1090af426852362ee1",
+  "revision": "484ecaf92e3410bb289ca1abfe8b75cb347f94c5",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "5b6e38bc1ca2ab0e8c5a9a2bca539086fab75a99"
+    "revision": "62a721d4095fd844ea88af5c023fb4baa96b02f9"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -640,7 +640,7 @@
     "shared/conversation/CliUpdateIcon.tsx": "9feaf34904db27778ea59a153e60bc07c4c1c73cfa8d2d6dc160966fa14514d3",
     "shared/conversation/remote/useRemoteCliInstaller.ts": "340acd94af293bd736d884d28bf3e74c9ec6b3b3ea6409afb24874fab3634c6b",
     "shared/conversation/remote/RemoteProjectPicker.tsx": "eb249741e318f3601a2feb1148892a71cb7da3be6cbcb74ec9569487c5658a34",
-    "shared/conversation/GuiHostPicker.tsx": "9cdef40d997abbe0a7c5575315b9e6566934d694c0dc2e311a0a9edbd6fe3637",
+    "shared/conversation/GuiHostPicker.tsx": "789251e43bac86d9cb7339884d32d58b444a0c5663939b3bf8836caf758e2c1c",
     "shared/conversation/WorkspacePicker.tsx": "4ac7b24a2b697d71cfa50902612e3c05821de72edd3dd09f57bd7d18a82c1bc9",
     "shared/conversation/ConversationWorkspaceStatus.tsx": "a1775214c703b098f7433e3aa5d9870671bbbb2de1e59763413e08ce58b0aea6",
     "shared/conversation/ProjectBar.tsx": "2dc9dda7c31ac3330a551405ef2c2548d7ead5cf2761dbba24049768d4767b0f",
