@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "7511b856494f24d7f5673fc47b69d91c03906241",
+  "revision": "bff631e803b741f23d563958a9642c43b40d2d59",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "31d1d88df41a81f23c658a5173633f6f18b37b4d"
+    "revision": "4eb46efe6bbdda7bc4853f172ea616d88fc246a2"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "44022924b2b17d30495a508a5cdfee4632ee733c"
+    "revision": "e5fa6be51648ab648b455d5e38704862756001bf"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.5/remoteai-i18n-0.1.5.tgz",
   "files": {
@@ -1173,7 +1173,7 @@
     "shared/file-preview/sshLoader.ts": "0f01c7f17b3ecf7131201bc65efd17fe0b8ca2b2a20cfe9d2817908cc269cc00",
     "shared/project-browser/useTabOverflow.ts": "d2b582201602f267162b47e58bcc65645a9a0ba8ab97fda438b8c2eb8af5c985",
     "shared/terminal/zmodemMessage.ts": "8d1a316f008f17079acfcdb7a90ab2febd7a742fb583698e9897fb9795b4ed77",
-    "shared/remote-chat/gitFiles.ts": "39fe30bcb74fb3bc7e9f099fbea8f82c455571347802935cb76b6fff6ba4b3c5",
+    "shared/remote-chat/gitFiles.ts": "5a96527e1c5baf7d9bf02bdda95a944fe0a4b307593f0ae7d8dba4e614ebc19c",
     "shared/remote-chat/gitActions.ts": "9422e8b8b782a04c02528abbf697dc464651004971127b5e69f5e6f82f58805c",
     "shared/remote-chat/useGitFileList.ts": "42f671a0ace441084eb581018aa2f80e47fee0ce980cd668c7f1844365ef118a",
     "shared/remote-chat/useGitRequests.ts": "b8639fe49d1d643d45b01866f7e0be318f98b7917261e488c1a7658df0d2f0d3",
