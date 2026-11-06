@@ -3,7 +3,7 @@
   "revision": "b420692540ec18be3119908bb21cbc53e02dfb49",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "ef5b01789c13456ba5761994c97b7e8ba160612d"
+    "revision": "a756213b160977ffb41cca06c24ac3545d3c8b43"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -868,7 +868,7 @@
     "shared/conversation/continuation.ts": "6ba4f87b80f292bf061118167cd89760637795136123f336d7ff966a6f7bebce",
     "shared/chat/turnGroups.ts": "db997f471bb8d6b3ac2c7e6ad1c205680caaabcc1163b05ab171b6501b4269a4",
     "shared/chat/processContent.ts": "108093f38c7245747fa8ce539e83cde76c8ba02e4a732df6363e70caaa9ab8f5",
-    "shared/conversation/activityGroups.ts": "87aefe4f5d55719f3adbc33d2662d15a51c83bf5afc98119e976f933b04e76f0",
+    "shared/conversation/activityGroups.ts": "4022a2f640c7dfdbe586a6d5abb527c33ed068e4c3bdedfb29483635cea4e122",
     "shared/chat/commandPreview.ts": "bf69bfed6601ff7210b2b743fedfd6ebf0bddab8ec5c7ccd7aab5857b91f844b",
     "shared/conversation/collaborationActivity.ts": "d741e2d74057a02a06b7669ea0f6b91dbcb64db34fb5e5021e3fdfb3155723b2",
     "shared/remote-chat/contextUsage.ts": "2e50a63610f8ced8d57cb1b14d3f4542ca1d0fa47739ccdd26dcb8918637d6df",
