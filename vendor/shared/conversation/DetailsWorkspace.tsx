@@ -97,6 +97,9 @@ export function DetailsWorkspace({ selected, active, children, enabled = true, c
             }} close={id => {
               const next = drawer.tabs.close(id, tabs.map(tab => tab.id));
               if (id === drawer.tabs.selected && next === 'changes') panel.showChanges();
+            }} closeTabs={ids => {
+              const next = drawer.tabs.closeMany(ids, tabs.map(tab => tab.id));
+              if (ids.includes(drawer.tabs.selected ?? '') && next === 'changes') panel.showChanges();
             }} />
           <div className={styles.controls}>
             <button aria-label={t(expanded ? "client.chat.restorePanelWidth" : "client.chat.expandDetailsPanel")}

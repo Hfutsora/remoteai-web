@@ -16,6 +16,7 @@ export interface WorkspaceTabs {
   register: (tab: WorkspaceTab) => () => void;
   open: (id: string) => void;
   close: (id: string, order: string[]) => string | null;
+  closeMany: (ids: string[], order: string[]) => string | null;
   hide: () => void;
   rememberOpener: () => void;
 }
