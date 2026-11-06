@@ -84,9 +84,11 @@ function DesktopLoungePage({ controller, onLogin, mobile = false }: {
     return () => clearInterval(timer);
   }, [muted, mutedUntil]);
   useEffect(() => {
+    controller.setGroupViewing({ thread: !historyOpen && !avatarOpen && !peopleOpen && !preview
+      && !moderating && !blocking && !newChatOpen && !profile, history: historyOpen && !preview });
     controller.setViewing(atBottom && !navigation.focus && !historyOpen && !avatarOpen && !peopleOpen
       && !preview && !moderating && !blocking && !newChatOpen && !profile);
-    return () => controller.setViewing(false);
+    return () => { controller.setViewing(false); controller.setGroupViewing({ thread: false, history: false }); };
   }, [controller, atBottom, historyOpen, avatarOpen, peopleOpen, preview, moderating, blocking,
     navigation.focus, newChatOpen, profile]);
   useLayoutEffect(() => { if (atBottom && list.current) list.current.scrollTop = list.current.scrollHeight; },

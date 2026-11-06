@@ -78,7 +78,7 @@ export function MobileLoungeThread({ model, controller, mention }: {
             <footer className="lounge-message-footer">
               <time className="lounge-message-time" dateTime={message.sentAt}>
                 {new Date(message.sentAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</time>
-              <LoungeDeliveryStatus delivery={message.delivery} />
+              <LoungeDeliveryStatus delivery={message.delivery} message={message} controller={controller} />
             </footer>
           </div>
         </article>;
