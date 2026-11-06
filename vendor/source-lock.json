@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "7d9e2817fec14c026586dd7e322b57ba1732eca5",
+  "revision": "d4c2947525c00c0b4f02063f06bf6097d1019a87",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "8945294a28c8817f643253452347cc724f3ade4a"
+    "revision": "58cb2f082ec14db0c58cc92aeebfddb2d837dba4"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "4bf0595a2fb46be8c6151e641e936883fc32b0de"
+    "revision": "27205a5adf6311677611449cab6cd5add595390c"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.5/remoteai-i18n-0.1.5.tgz",
   "files": {
@@ -624,12 +624,12 @@
     "shared/lounge/contacts.ts": "0e714ae8250c1a2fe0869e445515e39985b55209e7a21ba71d13dfa4f918f61b",
     "shared/lounge/lounge.css": "15b87212844317feb0cb791a59868480a1541106526460fe4d8971f890817590",
     "shared/lounge/people.css": "7d1821969951c34da414d28c10e8303e26a07f1f32f42b9ef4ce389f8af09fd1",
-    "shared/lounge/MobileLoungePage.tsx": "a67e24d6ee5ef72e97fbc009abf8b2779eb0b863119e1b73063e7e05cf71b9c7",
+    "shared/lounge/MobileLoungePage.tsx": "8d77fe004462322bf2ea942e304ad0ae0bbddb157144598d78c1c057b6d957bb",
     "shared/lounge/archive.ts": "e6d9049991e068bd9db3beb376eaefef54eec8e05b584f9193347bf412f5c7c8",
     "shared/lounge/useLoungeNavigation.ts": "7ede9b25183a32c96f67f5c1817a8ff7a3a566fac30570c5ded52b2e7e8459e9",
     "shared/lounge/scrollToMessage.ts": "76e41636190800e6b4356865b92f9acb3d2de905582b5ab6256fd5ed3e45b10d",
     "shared/lounge/LoungeDesktopProfile.tsx": "242aa5c09167d92e1e45be90d74e77562be8c550a432539e32d0266aadcd53ee",
-    "shared/lounge/LoungeClientVersion.tsx": "ad1cbc0dded6adef2c0ac66bc0e935dcab10ec5ab3f2256a9fa4df4e7315b004",
+    "shared/lounge/LoungeClientVersion.tsx": "6cd3fc9a39a5836245c68fe847d5635629ad7ca20bd78ce5509a08893802f85b",
     "shared/lounge/LoungeAssistance.tsx": "fe1cbc37799663b9aae7485a912a98d80f6cb2569080396a6099be3f11bc44d6",
     "shared/lounge/LoungeAvatarMenu.tsx": "0ff9d619d32bd980bbb288de0a27e717cf4f90fac92ba5a461e22a15df56a894",
     "shared/chat/useThreadLongPress.ts": "5b1b59985b4e991df0e9d5051227f5c50f9170f752797111eacf8d04f1a7bcb7",
@@ -1150,14 +1150,15 @@
     "shared/lounge/useNewLoungeChat.ts": "c847e97a7a7659497da426aa391e1773463d32b25cd5989aed084d896f04836e",
     "shared/lounge/DesktopLoungeNewChat.tsx": "896338aafa346523d3125ccac44c4da7477da81d63197ccb605eb99311224d61",
     "shared/lounge/useMobileLounge.ts": "afc5d6770b520ee1393d7de2bec40c16e3f3aa992a499e99e4d616766e6c0921",
+    "shared/lounge/clientPresence.ts": "7357d40173fefb7041ceb13495db98ba1373373b87118ecb7f0668da763e8c69",
     "shared/lounge/MobileLoungeChats.tsx": "afc89978847c2447c9a7faba9d5bc8ec77ff16e722cd7047cdbcde22d32c0c69",
     "shared/lounge/MobileLoungeThread.tsx": "c6aea4e39e83bb4808aad6e4c40d8aeb76595c5005c2699cd5cc5a45991a4bdb",
-    "shared/lounge/MobileLoungeProfile.tsx": "ca886f88c4c03f29037db2e53a64c4cebec849da3b83894b7944b7eee67f2c4b",
+    "shared/lounge/MobileLoungeProfile.tsx": "90628e8faa541a912b3e3d2f9c7353b8d42f03a796ad3fbf9dd4346e24cf6c2d",
     "shared/lounge/mobile.css": "eb5f51b693317525a8c1de486794aa963004df2df52ea4edb54d529581566854",
     "shared/lounge/LoungeNameFields.tsx": "f3621441b2bb35f8edccc84cde40183586cc0511a1ccee6e3c9f1500ed43972c",
     "shared/lounge/useLoungeNameNavigation.ts": "75d8aa2fd162bb6d5841b2bb17f8736dc3720fffb8fee28d36bdf17cbb5fe3b7",
     "shared/lounge/desktopProfile.css": "ed3e8d32ef33841340205baebfbe0530dbbc8d13a8109217edf43f89cc40c7ff",
-    "shared/lounge/clientVersion.css": "19538f1072d4cb178a551388b9720361c0139c2092a9d370e6a5153e722733af",
+    "shared/lounge/clientVersion.css": "bf92ed97a854867ed57e02758bd2f8c06c8ee28894c5c176cee72b233f4e3a29",
     "shared/lounge/assistance.css": "910713a5502e35d5a8066712ded1ea1f43183b41b6368767c6fdde47f780d17f",
     "shared/remote-chat/client/useChatUsage.ts": "95c3c7c3bfa2f4f3f402a2886f07f861bedbc2e738a00ed7ca9234816a687f11",
     "shared/remote-chat/client/useProjectSwitch.ts": "42fda402584b986bd69da4d67516aa9f2dc027f2be820568a517d176459f69f3",

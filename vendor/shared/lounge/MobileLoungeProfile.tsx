@@ -10,6 +10,7 @@ import { accountName } from './names';
 import type { LoungeController } from './controller';
 import { useLoungeNameNavigation } from './useLoungeNameNavigation';
 import { LoungeClientVersion } from './LoungeClientVersion';
+import { hasOnlineClientDevices } from './clientPresence';
 
 const PROFILE_LAYER = 1100;
 const DELETE_LAYER = 1200;
@@ -21,6 +22,7 @@ export function MobileLoungeProfile({ model, controller }: { model: MobileLounge
   const user = model.profile;
   const own = user?.id === model.state.user?.id;
   const contact = model.state.contacts.find(value => value.user.id === user?.id);
+  const devicePresence = hasOnlineClientDevices(contact, model.state.status);
   return <Drawer open={!!user} placement="right" width="100%" closable={false} zIndex={PROFILE_LAYER}
     title={t('client.lounge.profile')} rootClassName="lounge-profile-drawer" push={false}
     onClose={close} styles={{ header: { display: 'none' }, body: { padding: 0 } }}>
@@ -32,9 +34,9 @@ export function MobileLoungeProfile({ model, controller }: { model: MobileLounge
       <div className="lounge-profile-cover" aria-hidden />
       <div className="lounge-profile-details">
         <LoungeAvatar user={user} onProfile={own ? editAvatar : undefined} /><h2>{accountName(user)}</h2>
-        <LoungeClientVersion user={user} profile />
+        <LoungeClientVersion user={user} profile online={devicePresence} />
         {accountName(user) !== user.account && <p className="lounge-profile-email">{user.account}</p>}
-        {contact?.direct && <p className="lounge-profile-status">
+        {contact?.direct && !devicePresence && <p className="lounge-profile-status">
           <i className={model.state.status === 'connected' && contact.online === true ? 'is-online' : ''} />
           {t(contactStatus(contact))}</p>}
         <LoungeNameFields key={user.id} user={user} state={model.state} controller={controller}
