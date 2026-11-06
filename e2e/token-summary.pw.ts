@@ -1,5 +1,6 @@
 import { expect, test } from '@playwright/test';
 import type { TokenSummary } from '../../../shared/remote-chat/tokenSummary';
+import { officialUsageFixture } from '../../desktop/e2e/official-usage-fixture';
 
 const summary = (weeks: number, endTs: number): TokenSummary => ({ weeks, endTs, startTs: 0,
   refreshSeconds: 3600, thresholdTokens: 128000, dateKeys: ['2026-10-24'],
@@ -52,4 +53,46 @@ test('retains the latest token summary while refreshing and after an offline rel
   await expect(updated).toHaveText(latestTime);
   expect(await page.locator('.chat-token-summary').evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
   await page.screenshot({ path: info.outputPath('cached-offline-reload.png'), animations: 'disabled' });
+});
+
+test('official usage charts compare accounts and expose device details', async ({ page }, info) => {
+  const errors: string[] = [];
+  page.on('pageerror', error => errors.push(error.message));
+  await page.addInitScript(() => localStorage.setItem('codex-switch:language', 'zh'));
+  await page.route('**/token-summary-fixture.json?*', route => route.fulfill({ json: {
+    ...summary(Number(new URL(route.request().url()).searchParams.get('weeks')), 1800000000),
+    officialUsage: officialUsageFixture(),
+  } }));
+  await page.goto('e2e/token-summary-harness.html');
+  await page.getByRole('button', { name: 'Open summary' }).click();
+  const panel = page.locator('.chat-token-card').filter({ has: page.getByRole('heading', { name: '官方账户跨设备用量' }) });
+  await expect(panel.getByText('18 / 30USD', { exact: true })).toBeVisible();
+  await expect(panel.getByRole('meter').first()).toHaveAttribute('aria-valuenow', '60');
+  await expect(panel.locator('.official-usage-account').nth(2).getByRole('meter')).toHaveCount(0);
+  await panel.getByRole('heading').evaluate(node => node.scrollIntoView({ block: 'start' }));
+  await page.screenshot({ animations: 'disabled', path: info.outputPath('web-light-tokens.png') });
+  await panel.getByText('消耗金额（USD）', { exact: true }).first().click();
+  await expect(panel.locator('.official-usage-account').first()).toHaveAttribute('aria-label', 'studio@example.com');
+  await panel.getByRole('button', { name: '设备 · alex.chen@example.com' }).click();
+  await expect(panel.getByRole('cell', { name: 'Office PC', exact: true })).toBeVisible();
+  expect(await panel.evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
+  await panel.getByRole('cell', { name: 'Laptop', exact: true }).scrollIntoViewIfNeeded();
+  await page.screenshot({ animations: 'disabled', path: info.outputPath('web-light-cost-details.png') });
+  await page.evaluate(() => {
+    localStorage.setItem('codex-switch:global-font-size', '20');
+    localStorage.setItem('codex-switch.web.theme.v1', 'dark');
+  });
+  await page.reload();
+  await page.getByRole('button', { name: 'Open summary' }).click();
+  await expect(panel.getByText('18 / 30USD', { exact: true })).toBeVisible();
+  await expect(panel.locator('.official-usage-chart')).toHaveCSS('font-size', '20px');
+  await panel.getByRole('button', { name: '设备 · alex.chen@example.com' }).click();
+  expect(await panel.evaluate(node => node.scrollWidth <= node.clientWidth)).toBe(true);
+  await panel.getByRole('heading').evaluate(node => node.scrollIntoView({ block: 'start' }));
+  await page.screenshot({ animations: 'disabled', path: info.outputPath('web-dark-enlarged-chart.png') });
+  await panel.getByRole('cell', { name: 'Laptop', exact: true }).scrollIntoViewIfNeeded();
+  await page.screenshot({ animations: 'disabled', path: info.outputPath('web-dark-enlarged-details.png') });
+  await panel.getByText('unused@example.com', { exact: true }).scrollIntoViewIfNeeded();
+  await page.screenshot({ animations: 'disabled', path: info.outputPath('web-dark-enlarged-last-accounts.png') });
+  expect(errors).toEqual([]);
 });

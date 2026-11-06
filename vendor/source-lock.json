@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "24e53035f6d11361c58f18b2eb5c6c4d2803a4f3",
+  "revision": "0cf02956043f0060357f8cba8a7d4b5b296976ec",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "97be316623a62dbd85da83e36d6974bea4cf84ee"
+    "revision": "ec1061ddab8dc835f2d28f7861990e695679cb0b"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -132,6 +132,7 @@
     "shared/conversation/api.ts": "58912e76a7c2ab479bcd48be9ee4a0bffa561252954feeb663857777507d97e7",
     "shared/conversation/styles.module.less": "ef6538286b44e00f0ed4757acd88d02947e71ab90c04fee84fdb9ee884f77bfe",
     "shared/remote-chat/tokenSummary.ts": "46d28c51c9ceec13812a174885ac4bbd6deb9b1230c52077a22e8b8718e99b4b",
+    "apps/desktop/e2e/official-usage-fixture.ts": "763e5211262a337fd915d423f919b70c767e3348f49189dd217e2ae41241684f",
     "shared/chat/toolDetailsFixture.json": "bf33f450e0b9240846e3d8d0211a7eba34a7d78c566e96377afbd01c79cdd1a7",
     "shared/remote-chat/views/ChatToolDetails.tsx": "a8106b1fdd5adb4edbfe167931e82f5efa3103f12a0b51c8c8e2d9d101c76edc",
     "shared/chat/toolOutput.ts": "180c9d3b41493d058aa3d151abb308b1c9bfaba75aac5861aff55153a1076ac8",
@@ -182,6 +183,7 @@
     "shared/git/views/git.css": "eb657110a1c14477581a7d26ea49568edff9c42f440a11aac4d1e3a30a577be8",
     "shared/project-browser/views/ProjectBrowserDrawer.tsx": "b98caf9532574a244297c956d03c874f3f5de48492cb3512a575c6a799ca029d",
     "shared/project-browser/useProjectBrowsers.ts": "223bff35060248e5edf65033d362034fad1b6329119eeef51600b36fe7d203a8",
+    "shared/token-usage/OfficialUsageChart.tsx": "0427a79ebe8c207a86b17b94f3ea7e493e907761fabe6651009226888be2ba06",
     "shared/remote-chat/client/connection.ts": "1a569bdd08607384ccde65a700ef34e5f588e2ebd24e5eb83617b888ab092da0",
     "shared/remote-chat/browserPacketCompression.ts": "3464d748a0e2346b3fa42dffa9eff19c5e05218bad72c09d45a12671749bdb46",
     "shared/remote-chat/rtcPeer.ts": "bf686673e6b668297bfec94daaccab4e5f1c445d00e2793fbfd062ca29da50c6",
@@ -721,6 +723,9 @@
     "shared/project-browser/views/projectBrowserDrawer.css": "d3317a87df3808195a2115c0c326334761b457fd353bad70e8c48e32f023e617",
     "shared/file-preview/BrowserFilePreview.tsx": "7aaa6ce08da5fab15ae356bde947cf2eb17b795a73134f5e64766ea3f82c5d68",
     "shared/file-preview/projectLoader.ts": "a53f8042537b02d4455664426f1c60cafcf14ad092cad3064af67077226a7230",
+    "shared/token-usage/chartUtils.ts": "b1d12b173d5e01bd68708603c4b78239c49a9f07af45f9e001cfb5209830c4cc",
+    "shared/token-usage/officialUsageChartData.ts": "67558dc854ca5897182c6c9ecf745ed9d570756fb4f413d0e15049b35ba9d6d2",
+    "shared/token-usage/officialUsageChart.css": "27ecdac52c9add6eeacf9d096a02a97063d39d16b4b2df588c3a465f9a6cba94",
     "shared/remote-chat/packetCipher.ts": "4d01758d749f512a544880f39150dc142909e2b163dc5f7f9d18691c523ca45d",
     "shared/remote-chat/client/socket.ts": "926f30863b6a200a900038b4cbb15dffc852630c2dee43476c3cb776633bd5b2",
     "shared/remote-chat/client/clientInfo.ts": "da4767154a78cebd8f611861687230c4e58bc4fbbe4c4fb0b8656d3ccf29639a",
@@ -1252,6 +1257,7 @@
     "shared/file-preview/workspace/PreviewContent.tsx": "6d58e1378c39f60d8572ad8b07b9131363a8971482bfe5a1b63957035b46f33a",
     "shared/file-preview/BrowserMarkdown.tsx": "4fca1cc29bfa5dabf8740479e1b071720a0722ae96249d2fa7ba9c14362f01ee",
     "shared/file-preview/browserFilePreview.css": "836caefa39a6c4129121e09bf91b1c5f8d3e9510965e9cb3630cfd71ecfae024",
+    "shared/token-usage/entry.ts": "aec29c454d1a111c82d485c365bc051157ce0c39f9a28186bfe5dc3114d92306",
     "shared/remote-chat/relayWire.ts": "46528f3b0e5c674ed945e4867b6973d86dc1a855e98015d27a901c14002b460e",
     "shared/remote-chat/bulkRelayWire.ts": "f129947fec6f825dd21aa9f2f0420d663a66b3f8087250299eb8c439e7dc5f2f",
     "shared/port-mapping/streamMux.ts": "ff36a9a48d834918bd0e75b29e1dbc15495dd462df48af39f59cd49684eb25bc",
@@ -1291,7 +1297,6 @@
     "apps/desktop/src/pages/codexGui/terminal/api.ts": "cd66595c5cf7c79e42e0e0019820dbb955055e5b53271b0f371119bcce576e97",
     "apps/desktop/src/remoteChat/terminalOutput.ts": "9e6b1b0934598a7032715a56e3a81cf5bb25bb42dc5e3e03c94c8c39e8e4ef0a",
     "apps/desktop/e2e/demo-git-tools.ts": "c030f4c232662934062c9cc49a2bc10020ea734fa1865457ebea8b87075101cf",
-    "shared/token-usage/chartUtils.ts": "b1d12b173d5e01bd68708603c4b78239c49a9f07af45f9e001cfb5209830c4cc",
     "apps/desktop/e2e/fixtures/video-preview.mp4": "1851c055d3e1c151fee3d532c03525b8e7f9398ff19378460a05e9dc68d6c84d",
     "shared/conversation/CopyButton.tsx": "948ac52dc2a10d6e71cb3d0909c53c610988a384ab3d862799b919e6ad9b55b3",
     "shared/chat/diffGroups.ts": "4200c354b53dd86e0c2eb0eb0b80c1fb3eb4c8d679dc9681188e7e182d851462",
@@ -1470,7 +1475,6 @@
     "shared/chat/groups/groupManager.css": "830cba5783dc7683a8967a241f10472546e17246c5a050046c13da17db9e84f7",
     "shared/chat/groups/sidebarDragSensor.ts": "ca461f8f257d60b34fbbe6464a5db2671b4b3a6817fb908f89688dff37821da1",
     "shared/chat/groups/sidebarDrag.css": "aa5ca77b7faf7121316ccb6c1056232f03ab3285137a921bd926cb2b26b80083",
-    "shared/token-usage/entry.ts": "aec29c454d1a111c82d485c365bc051157ce0c39f9a28186bfe5dc3114d92306",
     "apps/desktop/src/api/sseIdleTimeout.ts": "001afa5256607fcd8dd6e471779fdc324f619af3f8e76ad6fd38629f1cd399ba",
     "apps/desktop/src/api/proxyTransport.ts": "bb95f3506a1006625ab737e2c6710c1f2ce8f3ec5baa19b7acf8d40241eefc02",
     "apps/desktop/src/api/responseHeaderTimeout.ts": "fced3bdbb53b5a6ba45987fb9fa698df8974babf82bc683f3e0dd120dcf93497",

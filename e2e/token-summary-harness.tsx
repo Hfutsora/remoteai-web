@@ -2,6 +2,9 @@ import { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ChatTokenSummary } from '../src/chat/ChatTokenSummary';
 import type { TokenSummary } from '../../../shared/remote-chat/tokenSummary';
+import { ApplicationTypography } from '../../../shared/appearance/ApplicationTypography';
+import { WebLocaleProvider } from '../src/i18n/WebLocaleProvider';
+import { initializeTheme } from '../src/theme/preference';
 import '../src/styles.css';
 import '../../../shared/remote-chat/views/chat.css';
 
@@ -21,4 +24,7 @@ function Harness() {
       onClose={() => setOpen(false)} />}
   </>;
 }
-createRoot(document.getElementById('root')!).render(<Harness />);
+initializeTheme();
+createRoot(document.getElementById('root')!).render(<ApplicationTypography>
+  <WebLocaleProvider><Harness /></WebLocaleProvider>
+</ApplicationTypography>);
