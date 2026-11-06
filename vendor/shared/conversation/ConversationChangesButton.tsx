@@ -6,12 +6,12 @@ import type { Conversation } from "./types";
 import { useTurnChangedFiles } from "./useTurnChangedFiles";
 import { useDetailsEntry } from "./detailsContext";
 import { useDiffText } from "../chat/diffText";
+import { completedTurnFiles } from "../chat/turnPresentation";
 
 export function ConversationChangesButton({ value }: { value?: Pick<Conversation, 'turns'> }) {
   const t = useDiffText();
   const id = useId();
-  const turn = value?.turns.slice().reverse().find((entry) => entry.diff
-    || entry.items.some((item) => item.type === "fileChange" && item.changes?.length));
+  const turn = value?.turns.slice().reverse().find((entry) => completedTurnFiles(entry).length > 0);
   const files = useTurnChangedFiles(turn);
   const title = t("client.chat.fileChanges.049e14");
   const entry = useMemo(() => ({ id, title, files }), [id, files, title]);
