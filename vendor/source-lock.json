@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "b5b6283390f35a9f4be31d49b9a957e2d4c6ed7f",
+  "revision": "40b57d6aac41c2e35217fdc0cdd02532c2524628",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "ec1061ddab8dc835f2d28f7861990e695679cb0b"
+    "revision": "677007095429680efedde3a3d88753cb8f49e721"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -1310,7 +1310,7 @@
     "shared/provider-market/i18n.ts": "99dda5e97e45baf4e6a78c6db8ecf6df1dae0d66356af9647cfe4264dd9413b2",
     "shared/provider-market/browserAddress.ts": "28602d473ca5425be305603ffe43cee27ef49a453f367043682e3ec49ce9da2f",
     "shared/provider-market/browserState.ts": "62cff28f6c0a8862cd9b965961cddb77d3a0a3c2e7563e87a2a1a9d27e9d97b8",
-    "shared/provider-market/BrowserTabs.tsx": "cca529397fc6dbb7137b1a948ebb28693bdbc63f3107ee3fd81e2a89d59fb644",
+    "shared/provider-market/BrowserTabs.tsx": "90874a196ab2aba78a9885505d326e95bf42d1334b7ac71c53be78d1c331a082",
     "shared/provider-market/ProviderWebsiteIcon.tsx": "b6bb81a2b332d3a60123a00dd36624a2e3ac728e87a992b0a7e8f41a06a3b0da",
     "shared/provider-market/providerBrowser.css": "4a6ab710911ba88307d1f377fa5fbd8c005abd5ecebc82a183f650d26d8c4ff1",
     "shared/browser/managed/ProviderBrowserSurface.tsx": "ac58581dfd7b94a8dbd09eb6a40b39f886a9b51be5804a5c08ea573c2f43365a",
@@ -1562,7 +1562,8 @@
     "shared/remote-chat/testing/gitFixture.ts": "ed48011ce762e99c65d44d6ae825b84ef19457f34adc02d012da204f61b69fd2",
     "shared/chat/useDiffPagination.ts": "6c6155bcb7edcf9ec3d811717d7581a9bb97def3c43ae867f929e08881b53c8f",
     "shared/file-preview/workspace/fileLanguages.ts": "63dd42c83cd94cc87eba1450561847acf1429641a54dbfd86252f8890cab7f2e",
-    "shared/provider-market/BrowserTabItem.tsx": "8890dbeb30db36ff15c6fb37586e7e304f46386ddafc34c1c461dc409a3a7910",
+    "shared/provider-market/BrowserTabItem.tsx": "5a250a11fe293fa254a2b8c5ecd0990f2fffcefa650b93ebf6bb144a3e4964c9",
+    "shared/provider-market/BrowserTabIcon.tsx": "45aceb99594df9d210f588fa028e77ce03699434f154c1e01b1c6b0ec453a315",
     "shared/provider-market/providerWebsiteIcon.css": "9b13173df3c427d0f6dece11252ad7cdc1f76f4017c4d4e4ac279d5f5bb3d515",
     "shared/browser/managed/providerBrowserSession.ts": "c7da873da2be38ce3830688c7b720fe7c03fbcb8cd2c13e18c76554b88e06a0e",
     "shared/browser/managed/BrowserFrame.tsx": "824aa2b31edec39bf383e383d6ccebd8600d16e6c96e392cd6dae0951c299e1c",
