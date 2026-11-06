@@ -3,7 +3,7 @@
   "revision": "ff6ed2f5c5a4c01c6719493fe3f849469bc2f57c",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "077a501d0778681b725eb28001e9442d68e120e1"
+    "revision": "b6d0e672fd85687f8d3087e82962487a387bbc51"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -101,7 +101,7 @@
     "shared/remote-chat/archiveDownload.ts": "914943659ffedf572fa92244a21c2e1e5158c6e0e6c60dd37b97e4035f4b7948",
     "shared/remote-chat/views/ChatFileLink.tsx": "aecf6abeaeafe180d799de2138187d4ec451a3ed07bbed64297aae022d117fc3",
     "shared/file-preview/htmlPreviewFixture.ts": "835af175e68e630b2a7a2da042cdbcbf032656f8a797c7b4586c706d047cf795",
-    "shared/remote-chat/views/desktopMessages.css": "b4d6ca5c74343552bf4ae3a6a36f69d23db263280e52cd04f7ba2aaa0ffd4d2e",
+    "shared/remote-chat/views/desktopMessages.css": "36ffbd1b2d01eef61b0d90a04f50df0ebb8b82456abe258f816404d87467e2d6",
     "apps/desktop/e2e/font-size-harness.tsx": "f513b82848c8791cb587517c4968a4161a7558f1f91060ad710c8f7bc9b24c30",
     "shared/remote-chat/views/ChatImageEditor.tsx": "cc502ebdb69377312e98e3e9a3ddd48e0dfa6f97456ef232fad1e42661c79f32",
     "apps/desktop/e2e/json-preview-harness.tsx": "ee7126005fa7343212c489c1abda62879d00b7c375281472e7758ed1e5adb662",
