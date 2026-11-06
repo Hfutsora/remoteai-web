@@ -118,7 +118,7 @@ export function useWebsiteTabs() {
   const close = useCallback((id: string) => closeTabs([id]), [closeTabs]);
   const action = useCallback((id: string, action: BrowserAction) => {
     if (managedCommand(id, { action })) return;
-    if ((!isTauri() || resources.has(id)) && action !== 'reload') {
+    if ((!isTauri() || resources.has(id)) && (action === 'back' || action === 'forward')) {
       setState(current => ({ ...current, tabs: current.tabs.map(tab => {
         if (tab.id !== id) return tab;
         const next = moveTab(tab, action === 'back' ? -1 : 1);
