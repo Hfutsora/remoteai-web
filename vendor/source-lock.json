@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "f75b1dc9b864de557dd9bef9c6e23b986cfea677",
+  "revision": "748140b1d9a59a14de1177759a60b8587369d652",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "b693ac3c43835d311bdf8c2dd07103ef7fac51c8"
+    "revision": "c8c90a52d01e89ccdbef25fa5347a637e008d6b5"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -113,7 +113,7 @@
     "shared/file-preview/PdfPreview.tsx": "da4e2a3f28cf64f932fc4144e0d380f40e58f70f60d00905afc2680b27fa1e2d",
     "shared/file-preview/pdfAssets.ts": "21f2085d00960f44f4cf3c320c01e524c86e6e556988dd4db49bd6b2acd82de9",
     "apps/desktop/e2e/cmap-pdf-fixture.ts": "8ccb217d9cc9b2686b4bf28ca8a87f4791c42eef36e757acad51e51e0e79bda6",
-    "apps/desktop/e2e/process-history-harness.tsx": "bf055f5462426febae075195467dd41c1e0bb5a8fff72ad1d806f96db9ccae92",
+    "apps/desktop/e2e/process-history-harness.tsx": "534e1852424652e9d90e47c712bdd359e8e0a1cec58480ff787d2d92277c38b9",
     "apps/desktop/e2e/process-history-checks.ts": "0746566c4dd99d6ccbcdbb6fc893644a8419d96c5b5ced6829aa137338c55c49",
     "shared/remote-desktop/clipboard.ts": "0752cb32445471277a6c4cd25e0d7a2d48185fc61cd8dc80d29c9988d9628c42",
     "apps/desktop/src/remoteDesktop/host.ts": "de982a1942bc30cf9a0a8f1bcf2b312f59f1a54f44706821f22fced977fcbe31",
@@ -322,7 +322,7 @@
     "shared/chat/turnPresentation.ts": "4a26076709dff4795a8fd82dfbb3329c9809696eb2a964b97c2cb57b1e1d9cf2",
     "shared/chat/activityTimeline.ts": "abddf5fffc66aa0e4ec700a8f233575d3556719f48b69e08d222efd9a198f507",
     "shared/chat/timelineSpacing.ts": "2fcf7bdbe6c83ab547ab7a3453523b2fde2be96fd122aa3d75d97f515ec0acb3",
-    "shared/remote-chat/views/ChatActivity.tsx": "c3d239c4aa47f691a57953f8e7810bafa0d5ae18d4ac72289d14a1b511efc72c",
+    "shared/remote-chat/views/ChatActivity.tsx": "50ea749f5f05d0b8c03ba0e542e708d9087ade78887130e1934d82c07e07fd6d",
     "shared/conversation/turnTiming.ts": "de8270c15839dc02c294bc320184590c05e390d63a316945cbeb82e1ac4ec034",
     "shared/remote-chat/views/formatters.ts": "08d5df888b77a41286d60632e70a4b0bc5d835a9bd611597709ff721aa0509d1",
     "shared/remote-chat/views/ChatWorkDrawer.tsx": "4697ae7e10fc0ada355e3fceefcdff5fd09037e99f804811eeca08c24e02f789",
@@ -885,6 +885,7 @@
     "shared/chat/turnGroups.ts": "db997f471bb8d6b3ac2c7e6ad1c205680caaabcc1163b05ab171b6501b4269a4",
     "shared/chat/processContent.ts": "108093f38c7245747fa8ce539e83cde76c8ba02e4a732df6363e70caaa9ab8f5",
     "shared/conversation/activityGroups.ts": "4022a2f640c7dfdbe586a6d5abb527c33ed068e4c3bdedfb29483635cea4e122",
+    "shared/chat/ActivityList.tsx": "ba0b4ef5040657727f030f8ba1c039a352e7f716ca7153ce540da3ec3660a9b5",
     "shared/chat/commandPreview.ts": "bf69bfed6601ff7210b2b743fedfd6ebf0bddab8ec5c7ccd7aab5857b91f844b",
     "shared/conversation/collaborationActivity.ts": "d741e2d74057a02a06b7669ea0f6b91dbcb64db34fb5e5021e3fdfb3155723b2",
     "shared/remote-chat/contextUsage.ts": "2e50a63610f8ced8d57cb1b14d3f4542ca1d0fa47739ccdd26dcb8918637d6df",
@@ -1363,6 +1364,7 @@
     "shared/port-mapping/target.ts": "33a84374b85115e9085c75f481149e27839ff7acfae25f25cc216851c4d35a40",
     "shared/port-mapping/streamBudget.ts": "5f0005d0141da79ac2f68115c081f2c58c116da0f0065f3e4facb6d282538f02",
     "shared/remote-chat/views/useMobileHistoryVisibility.ts": "2925fa60285dcc2b5b01e3312fe1aa4b184fc0f228a42081c18a36d4520a8e62",
+    "shared/chat/activityList.less": "469ef84144fc9d6e9114cf7c46af27d56933d2ab8ebe47415f822c7784c93b57",
     "shared/context-usage/format.ts": "591f5e3a1dc48be689c77e285c18e3914c46a2db35c0342340c56816943c0ac1",
     "shared/remote-chat/views/messageReferences.css": "61f02bc6fb2e51dcb6f67c99a83724f2bb731b38155b036de707ddaa25ee9179",
     "shared/chat/messageAttachments.css": "86a96352bae313e6dbe76c09b029d72dbaaa0f65a7111d7fde3295f9cb385997",
@@ -1630,7 +1632,7 @@
     "apps/desktop/src/pages/codexGui/TurnPlan.module.less": "21a34dda89e5757e346d231471a9524e7696b4accc2a957b479f28e32992b58f",
     "apps/desktop/src/pages/codexGui/workspaceOperationContext.ts": "be61f27036e63d7dcab6a24e9727206b1748465c81976fc8221df04c84ec6b34",
     "apps/desktop/src/pages/codexGui/TurnRetryButton.tsx": "26941888c0c54be2bd770b211377b65b090d02ee4ab09299cbc276e07c4c22ce",
-    "apps/desktop/src/pages/codexGui/WorkItems.tsx": "98418be4b481dcb55220511691fee58945b9b50630729cd5e7a4386a031e2bfc",
+    "apps/desktop/src/pages/codexGui/WorkItems.tsx": "8932fb8d5b94c303d678a20c380495e56a29a0760a74d7bb56c039265b357d81",
     "shared/chat/imageTransform.ts": "2e8c267e53e62c609cf45e2c984f4979ea3470ea4a223f5993436eef364afe4b",
     "shared/project-explorer/loadDirectory.ts": "becbc5be8dcdecbb37d3b09e3bd538c244ce1876963031be5a4f28aab037ba05",
     "shared/project-explorer/ExplorerAddress.tsx": "f211f54c6c77f26ce05a6ba06f3046b56f383b288a6c50875cc6ccb54bb49ea3",
