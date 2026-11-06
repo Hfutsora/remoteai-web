@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "748140b1d9a59a14de1177759a60b8587369d652",
+  "revision": "9d8a19cc6d379f06ce06de032ef8c889f63cdfb5",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "94f85a97d69adad82fcf45285c76a9fbea7a506a"
+    "revision": "2f5697bbd05746fed7d6ecd3497f2e865ba9ea9b"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -20,7 +20,7 @@
     "apps/desktop/e2e/mobile-fixture.mjs": "b8ee2df837d7865a0ce795997225a68f62ffb8f2d108a8852ca042c39ab19ddc",
     "apps/desktop/src-tauri/icons/32x32.png": "7f5310d2f4b466d841479766ddf28a8b1003e167bfbc2e723d6de7ee967f4466",
     "apps/desktop/src-tauri/icons/128x128.png": "c6e11f099d213c5e3b81dc9264403858841e130f07e6f832069cac8eae47db02",
-    "apps/desktop/src-tauri/tauri.conf.json": "26b344b2881186b3cf80abcecf9e27ab89192d966dec011b79a698300931ea78",
+    "apps/desktop/src-tauri/tauri.conf.json": "9968cc78df548981043309ff519930167b43b197c96145ba8bda82f93b018569",
     "shared/localization/testLocale.ts": "6ca4daa3a6a5d9442013a8b5861803edfafebf20d2bd875d6a2608158dc53e35",
     "apps/desktop/e2e/browser-chrome-checks.ts": "ffb5e29d72a5b938cdea6adbe30bead71f221aecc1ef3f49e8a1890d88fd231e",
     "apps/desktop/e2e/browser-loading-checks.ts": "75711e132895ee135d1a2f1b54396cd0a114f2722169001434a7e15aec364118",
@@ -1151,7 +1151,7 @@
     "shared/lounge/LoungeAttachment.tsx": "44672842686728af728bd2de430b6283f9cbc7fd910f05b041ed738a084b344f",
     "shared/lounge/LoungeMessageMenu.tsx": "72ad4e64ec2ae5170c293768a6b19c4ca7a9948e7f137271025dc7a715d98600",
     "shared/lounge/LoungeDeliveryStatus.tsx": "3892337d915aa35edc9a4e78b303f1bc04a0b6c60451f223cf74e7d86e77a4b3",
-    "shared/lounge/useGroupReadObserver.ts": "1ef5fb904f2ebaeaa133dbe670e101291a10f09c9d4df12e53bfa33d19e86016",
+    "shared/lounge/useGroupReadObserver.ts": "03ee0790ddc55a1b1a933f198056e82d7b388e6832d951db60d0eafed1c9fd68",
     "shared/lounge/MobileLoungeHistory.tsx": "e01158569f2652cd4781c1fb1a9fe530051facf6c65b950d02859a1a944a5b2c",
     "shared/lounge/DesktopLoungeHistory.tsx": "694baa1dec3379e625991a04a35050fc3c675eea1f67ebf797f3eadd8bb5f114",
     "shared/lounge/saveImage.ts": "7e4d300f5ee22b038407bbcb86c6acfabe6ae318142c05a9aabe4a7eacce93d3",
@@ -1533,6 +1533,7 @@
     "shared/lounge/MobileLoungeMessageMenu.tsx": "5ea64fed89ea742bcc93f763d94e8ce8ea49161e3aee69dc6996da39af9b0d87",
     "shared/lounge/messageMenuActions.ts": "c671f4bd591515ce972c140489f5f6c9dd91ead5e81ae7010f52b82ca3bf4365",
     "shared/lounge/LoungeGroupReadStatus.tsx": "e17e8fa4e5285ede6757dc2c7e34d662d90e6b99dba4774914e05e584970e51b",
+    "shared/lounge/groupReadVisibility.ts": "c2655f6f9c2b7d7c929376ff1f0e41c24f84bbae1aa1cdff884dde10f619d7be",
     "shared/lounge/useHistoryTimeline.ts": "dc377837733e1bb98a31c75e743c26c723a4fa7b01cbb73742a8ae0ed55cd05e",
     "shared/lounge/historyTimelineRows.ts": "d0a1423c5557baaf502e81dbb6ff8623ba813347b61e07f5c68e455d0d2dc738",
     "shared/lounge/useHistoryVirtualList.ts": "ff03c6e5f2f4ffc69492034efd9ee6bd0aa0631260464b23ad702a3c9883545c",
