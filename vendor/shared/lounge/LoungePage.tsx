@@ -28,6 +28,7 @@ import { historyKey } from './archive';
 import { useLoungeNavigation } from './useLoungeNavigation';
 import { scrollToLoungeMessage } from './scrollToMessage';
 import { LoungeDesktopProfile } from './LoungeDesktopProfile';
+import { LoungeClientVersion } from './LoungeClientVersion';
 import { LoungeAssistanceButton, LoungeAssistanceProvider, type RequestLoungeAssistance } from './LoungeAssistance';
 
 export function LoungePage(props: {
@@ -104,7 +105,9 @@ function DesktopLoungePage({ controller, onLogin, mobile = false }: {
         onClick={() => setPeopleOpen(true)}><Users size={21} /></button>
       {contact ? <span role="img" aria-label={t(contactStatus(contact))}
         className={`lounge-peer-presence${state.status === 'connected' && contact.online === true ? ' is-online' : ''}`} />
-        : <Coffee size={21} />}<h1>{contact ? accountName(contact.user) : t('client.lounge.title')}</h1></div>
+        : <Coffee size={21} />}<div className="lounge-heading-peer">
+        <h1>{contact ? accountName(contact.user) : t('client.lounge.title')}</h1>
+        {contact && <LoungeClientVersion user={contact.user} />}</div></div>
       <div className="lounge-heading-actions"><span className={`lounge-connection is-${state.status}`} role="status">
         <i />{t(`client.lounge.${state.status}`)}</span>
         {state.policy.moderator && state.onlineCount !== undefined && <span className="lounge-online-count">
@@ -134,13 +137,15 @@ function DesktopLoungePage({ controller, onLogin, mobile = false }: {
               ? ' is-highlighted' : ''}`}>
             <LoungeAvatar user={message.sender}
               onProfile={state.conversation ? () => showProfile(message.sender) : undefined}
+              onMenuProfile={() => showProfile(message.sender)}
               onMention={!own ? () => composer.current?.mention(message.sender) : undefined}
               onDirect={!own && state.directAvailable ? () => select(message.sender) : undefined} />
             <div className="lounge-message-main">
               <LoungeSender user={message.sender} manage={state.policy.moderator && !own
                 ? () => setModerating(message.sender) : undefined} />
               <LoungeMessageBody message={message} preview={setPreview} controller={controller} locate={locate}
-                actions={{ reply: quote, blocked: state.blocked.includes(message.sender.id),
+                actions={{ reply: quote, profile: !own ? () => showProfile(message.sender) : undefined,
+                  blocked: state.blocked.includes(message.sender.id),
                   direct: !own && state.directAvailable ? () => select(message.sender) : undefined,
                   block: !own && state.directAvailable ? () => setBlocking(message.sender) : undefined }}
                 onImageLoad={() => { if (atBottom && list.current) list.current.scrollTop = list.current.scrollHeight; }} />
@@ -173,7 +178,7 @@ function DesktopLoungePage({ controller, onLogin, mobile = false }: {
       send={draft => controller.send({ ...draft, to: state.conversation || undefined })}
       onHistory={() => setHistoryOpen(true)} />
     <LoungeHistory open={historyOpen} close={() => setHistoryOpen(false)} controller={controller}
-      profile={state.conversation ? user => { setHistoryOpen(false); showProfile(user); } : undefined}
+      profile={user => { setHistoryOpen(false); showProfile(user); }}
       mention={user => { setHistoryOpen(false); composer.current?.mention(user); }}
       preview={setPreview} reply={quote} direct={select} locate={locate} navigationError={navigation.error} />
     {avatarOpen && state.user && <LoungeAvatarSettings user={state.user} controller={controller}

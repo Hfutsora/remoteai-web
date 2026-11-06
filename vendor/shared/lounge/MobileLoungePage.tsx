@@ -13,6 +13,7 @@ import { LoungeHistory } from './LoungeHistory';
 import { LoungePreview } from './LoungePreview';
 import { LoungeAvatarSettings } from './LoungeAvatarSettings';
 import { LoungeAvatar } from './LoungeAvatar';
+import { LoungeClientVersion } from './LoungeClientVersion';
 import { LoungeModeration } from './LoungeModeration';
 import { LoungeBlockDialog } from './LoungeBlockDialog';
 import { LoungeAbout } from './MobileLoungeSheet';
@@ -96,7 +97,9 @@ function MobileHeading({ model }: { model: MobileLounge }) {
       <div className="lounge-heading-details">
         <h1>{contact ? <button type="button" className="lounge-heading-account"
           aria-label={t('client.lounge.viewProfile', { account: accountName(contact.user) })}
-          onClick={() => model.setProfile(contact.user)}>{accountName(contact.user)}</button>
+          onClick={() => model.setProfile(contact.user)}>
+          <span className="lounge-heading-account-name">{accountName(contact.user)}</span>
+          <LoungeClientVersion user={contact.user} /></button>
           : t('client.lounge.title')}</h1>
         <button type="button" className="lounge-members-trigger" onClick={() => model.setSheet('members')}>
           <i className={state.status === 'connected' && (!contact || contact.online === true) ? 'is-online' : ''} />

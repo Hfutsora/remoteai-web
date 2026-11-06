@@ -1,0 +1,4 @@
+.lounge-client-version { font-weight: 400; line-height: 1.5; overflow-wrap: anywhere; }
+.lounge-client-version.is-profile { display: block; margin-top: 8px; }
+.lounge-heading-peer { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; min-width: 0; }
+.lounge-heading-title h1 { min-width: 0; }

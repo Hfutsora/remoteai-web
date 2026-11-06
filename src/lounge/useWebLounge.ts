@@ -10,12 +10,14 @@ import { apiJson, getActiveSession } from '../api';
 import type { AuthSession } from '../types';
 import { useBrowserLoungeDownloads } from '../../../../shared/lounge/useBrowserLoungeDownloads';
 import { downloadOwner } from '../../../../shared/downloads/manager';
+import { version } from '../../../../package.json';
 
 export function useWebLounge(session: AuthSession | null) {
   const baseUrl = session?.baseUrl;
   const email = session?.email;
   const controller = useMemo(() => new LoungeController(baseUrl && email ? {
     sync: browserLoungeSync,
+    clientVersion: version,
     attachmentImages: browserAttachmentImages(JSON.stringify([baseUrl, email]), browserAttachmentSink),
     baseUrl, account: email, avatars: browserAvatarStore(baseUrl),
     // Profile refreshes must not replace the live connection and discard recent speakers or drafts.
