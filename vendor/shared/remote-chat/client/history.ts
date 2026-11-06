@@ -62,7 +62,8 @@ export function mergeHistory(snapshot: Thread, live: Thread, before: Thread,
   const turns = new Map(snapshot.turns?.map((turn) => [turn.id, turn]));
   for (const turn of live.turns ?? []) {
     const existing = turns.get(turn.id);
-    if (!options.retainCached && turn === original.get(turn.id) && (options.authoritative || (turn.status !== 'inProgress'
+    if (!options.retainCached && turn === original.get(turn.id)
+      && (options.authoritative || (turn.status !== 'inProgress'
       && !turn.items.some((item) => item.localEcho) && !existing?.items.some((item) => item.localEcho)))) continue;
     turns.set(turn.id, existing ? mergeTurn(existing, turn, original.get(turn.id), options) : turn);
   }

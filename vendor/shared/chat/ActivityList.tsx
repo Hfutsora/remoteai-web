@@ -4,7 +4,13 @@ import './activityList.less';
 
 const VISIBLE_ACTIVITY_COUNT = 5;
 
-/** Keep the viewport at five summary rows even while individual tool details are open. */
+function activityRow(summary: HTMLElement, list: HTMLElement) {
+  let row = summary;
+  while (row.parentElement && row.parentElement !== list) row = row.parentElement;
+  return row;
+}
+
+/** Limit collapsed summaries to five rows and reserve room for the largest opened detail. */
 export function ActivityList({ children, className, rowSelector }: {
   children: ReactNode; className: string; rowSelector: string;
 }) {
@@ -12,19 +18,24 @@ export function ActivityList({ children, className, rowSelector }: {
   useLayoutEffect(() => {
     const node = list.current;
     if (!node) return;
-    const rows = Array.from(node.querySelectorAll<HTMLElement>(rowSelector)).slice(0, VISIBLE_ACTIVITY_COUNT);
+    const summaries = Array.from(node.querySelectorAll<HTMLElement>(rowSelector));
+    const rows = summaries.map(summary => activityRow(summary, node));
     const measure = () => {
       const style = getComputedStyle(node);
       const spacing = ['paddingTop', 'paddingBottom', 'borderTopWidth', 'borderBottomWidth'] as const;
       const padding = spacing.reduce((sum, property) => sum + (parseFloat(style[property]) || 0), 0);
       const gap = parseFloat(style.rowGap) || 0;
-      const height = rows.reduce((sum, row) => sum + row.getBoundingClientRect().height, 0);
-      if (height > 0) node.style.maxHeight = `${height + gap * (rows.length - 1) + padding}px`;
+      const visible = summaries.slice(0, VISIBLE_ACTIVITY_COUNT);
+      const height = visible.reduce((sum, summary) => sum + summary.getBoundingClientRect().height, 0);
+      const detail = summaries.reduce((largest, summary, index) => Math.max(largest,
+        rows[index].getBoundingClientRect().height - summary.getBoundingClientRect().height), 0);
+      if (height > 0) node.style.maxHeight = `${height + gap * (visible.length - 1) + padding + detail}px`;
     };
     measure();
     if (typeof ResizeObserver === 'undefined') return;
     const observer = new ResizeObserver(measure);
     observer.observe(node);
+    summaries.forEach(summary => observer.observe(summary));
     rows.forEach(row => observer.observe(row));
     return () => observer.disconnect();
   }, [children, rowSelector]);

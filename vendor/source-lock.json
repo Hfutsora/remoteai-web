@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "9d8a19cc6d379f06ce06de032ef8c889f63cdfb5",
+  "revision": "76e3931bc8ae948e461d7916ceb34a8925d15d83",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "f9b62bb76a6cd59a69e698b5ca53974e3692c988"
+    "revision": "684b534edbd6b8eed82b20b6232c844fe270b1b7"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "d7383290e68da3aa1a2037c4255839d2fbed2384"
+    "revision": "f6efeac26ad72a5ca9334687f9fdacfb7ae64d25"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.6/remoteai-i18n-0.1.6.tgz",
   "files": {
@@ -49,7 +49,7 @@
     "shared/remote-chat/views/ChatProcessing.tsx": "11608c8edbb7dddbdefaa520ace75e855fbd82609c846e68c78c6206e412f682",
     "shared/remote-chat/views/ChatQuotes.tsx": "e719d22dc3ef4dd237941a245803f41ae17096ae5c9f1fc8f18eb82397bb0b14",
     "shared/conversation/ConversationChangesButton.tsx": "5cd7e7a7c536eae3d8118361a6b50f7c34e700593ae34b2e634fb6f946a9d103",
-    "shared/remote-chat/client/history.ts": "ff8c7a066df3ae2885500d9bcb0f22d5befb68691a33455952f2e5af784233c2",
+    "shared/remote-chat/client/history.ts": "e7340722fcd483a83086a78e9847064273a779cd1dd5b7ea1ca0e5d3fa21a052",
     "shared/remote-chat/client/historyLoad.ts": "b74d39fd3369d839bfbe876b4e135663943cf2b807e10b6e57be1a7a3f5798a1",
     "shared/chat/runningTurn.ts": "f09e1ab643fe4c599251bfa6ddcca219c7c82ea6438f6584b92bcb577c9544dd",
     "apps/desktop/e2e/git-drawer-checks.ts": "1714e4fa662376954a3c86088c7a6af36cd669a4ee208338884437628bf9b344",
@@ -117,6 +117,7 @@
     "apps/desktop/e2e/process-history-harness.tsx": "3fa56febbfa50e6da005845113d91268a43c171f2445342bfba4d48213ef693e",
     "apps/desktop/e2e/process-history-checks.ts": "0746566c4dd99d6ccbcdbb6fc893644a8419d96c5b5ced6829aa137338c55c49",
     "apps/desktop/e2e/process-history-merge-checks.ts": "797444e46810301a26f8b9cd4c69222440f19e9af5fa7bec3ba6fc6dbcabad50",
+    "apps/desktop/e2e/command-height-checks.ts": "78fe6e677d7936918ebeddf2e68889dad0c22dd3da444dee62828a0823456391",
     "shared/remote-desktop/clipboard.ts": "0752cb32445471277a6c4cd25e0d7a2d48185fc61cd8dc80d29c9988d9628c42",
     "apps/desktop/src/remoteDesktop/host.ts": "de982a1942bc30cf9a0a8f1bcf2b312f59f1a54f44706821f22fced977fcbe31",
     "shared/conversation/GuiRemoteDesktop.tsx": "f9901eee331a534ad06f9ede60004b9f074cfa9fc1c588ab50d1ad8f4ba4b29f",
@@ -909,7 +910,7 @@
     "shared/chat/turnGroups.ts": "db997f471bb8d6b3ac2c7e6ad1c205680caaabcc1163b05ab171b6501b4269a4",
     "shared/chat/processContent.ts": "108093f38c7245747fa8ce539e83cde76c8ba02e4a732df6363e70caaa9ab8f5",
     "shared/conversation/activityGroups.ts": "4022a2f640c7dfdbe586a6d5abb527c33ed068e4c3bdedfb29483635cea4e122",
-    "shared/chat/ActivityList.tsx": "ba0b4ef5040657727f030f8ba1c039a352e7f716ca7153ce540da3ec3660a9b5",
+    "shared/chat/ActivityList.tsx": "9ff4da5cdbc8671d4d1a6763619787286447073f2a494cc3dc7566ff3e3fab59",
     "shared/chat/commandPreview.ts": "bf69bfed6601ff7210b2b743fedfd6ebf0bddab8ec5c7ccd7aab5857b91f844b",
     "shared/conversation/collaborationActivity.ts": "d741e2d74057a02a06b7669ea0f6b91dbcb64db34fb5e5021e3fdfb3155723b2",
     "shared/remote-chat/contextUsage.ts": "2e50a63610f8ced8d57cb1b14d3f4542ca1d0fa47739ccdd26dcb8918637d6df",
