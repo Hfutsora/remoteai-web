@@ -44,17 +44,6 @@ function SummaryContent({ data }: { data: TokenSummary }) {
   const daily = new Map(data.dailyUsage.map(day => [day.date, day]));
   const maximum = Math.max(1, ...data.dailyUsage.map(day => day.totalTokens));
   return <>
-    <section className="chat-token-card"><h3>{t("client.chat.recent")} {data.weeks}  {t("client.chat.weeksTotalTokens")}</h3>
-      <div className="chat-token-metrics">{TOKEN_FIELDS.map(([label, field]) => <div key={field}><small>{t(label)}</small>
-        <strong>{formatTokens(data.dailyUsage.reduce((sum, day) => sum + day[field], 0))}</strong></div>)}</div>
-      {data.errors.usage && <p className="chat-error">{t("client.chat.someTokenDataCouldNotBeLoadedPleaseRefreshTo")}</p>}
-    </section>
-    <TokenQuota data={data} />
-    <OfficialUsagePanel data={data} />
-    <Consumption data={data} title={t("client.chat.shortLongContextUsage")} fields={CONTEXT_FIELDS}
-      hint={t("client.chat.requestsWithMoreThanInputTokensIncludingCachedTokensCount", { value1: data.thresholdTokens.toLocaleString(getLocale()) })} />
-    <Consumption data={data} title={t("client.chat.standardFastModeUsage")} fields={MODE_FIELDS}
-      hint={t("client.chat.dailyTokenTotalsUsageWithoutARecordedModeIsShown")} />
     <section className="chat-token-card"><h3>{t("client.chat.dailyActivity")}</h3><div className="chat-token-heatmap">
       {data.dateKeys.map(date => { const tokens = daily.get(date)?.totalTokens ?? 0;
         return <span key={date} tabIndex={0} title={`${date} · ${formatTokens(tokens)} Token`}
@@ -65,6 +54,17 @@ function SummaryContent({ data }: { data: TokenSummary }) {
       <TokenBars labels={TOKEN_FIELDS.map(([label]) => t(label))} points={data.dateKeys.map(date => ({ label: date,
         values: TOKEN_FIELDS.map(([, field]) => daily.get(date)?.[field] ?? 0),
       }))} /></section>
+    <Consumption data={data} title={t("client.chat.shortLongContextUsage")} fields={CONTEXT_FIELDS}
+      hint={t("client.chat.requestsWithMoreThanInputTokensIncludingCachedTokensCount", { value1: data.thresholdTokens.toLocaleString(getLocale()) })} />
+    <Consumption data={data} title={t("client.chat.standardFastModeUsage")} fields={MODE_FIELDS}
+      hint={t("client.chat.dailyTokenTotalsUsageWithoutARecordedModeIsShown")} />
+    <section className="chat-token-card"><h3>{t("client.chat.recent")} {data.weeks}  {t("client.chat.weeksTotalTokens")}</h3>
+      <div className="chat-token-metrics">{TOKEN_FIELDS.map(([label, field]) => <div key={field}><small>{t(label)}</small>
+        <strong>{formatTokens(data.dailyUsage.reduce((sum, day) => sum + day[field], 0))}</strong></div>)}</div>
+      {data.errors.usage && <p className="chat-error">{t("client.chat.someTokenDataCouldNotBeLoadedPleaseRefreshTo")}</p>}
+    </section>
+    <TokenQuota data={data} />
+    <OfficialUsagePanel data={data} />
     <Ranking title={t("client.chat.providerUsageRanking")} ranking={data.rankings.providers} count={data.entryCount} />
     <Ranking title={t("client.chat.modelUsageRanking")} ranking={data.rankings.models} count={data.entryCount} />
     <Ranking title={t("client.chat.accountUsageRanking")} ranking={data.rankings.accounts} count={data.entryCount} />

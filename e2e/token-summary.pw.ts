@@ -22,7 +22,9 @@ test('retains the latest token summary while refreshing and after an offline rel
   await page.getByRole('button', { name: 'Open summary' }).click();
   const weeks = page.getByRole('spinbutton');
   const refresh = page.getByRole('button', { name: '刷新 Token 汇总' });
-  const total = page.locator('.chat-token-card').first();
+  const total = page.locator('.chat-token-card').filter({
+    has: page.getByRole('heading', { name: /周.*Token.*总消耗|weeks.*Total tokens/ }),
+  });
   await expect(total).toContainText('1.23M');
   await weeks.fill('3');
   await page.getByRole('button', { name: '应用', exact: true }).click();

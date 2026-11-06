@@ -20,7 +20,7 @@ test('independent token-summary route remains visible with chat inactive and pau
     const range = page.getByRole('spinbutton', { name: '统计周数，1 至 52 周' });
     await range.fill('3');
     await page.getByRole('button', { name: '应用', exact: true }).click();
-    await expect(page.locator('.chat-token-card h3').first()).toContainText('3');
+    await expect(page.getByRole('heading', { name: /周.*Token.*总消耗|weeks.*Total tokens/ })).toContainText('3');
     await page.waitForTimeout(500);
     const prefix = `../../.codex-tmp/token-lifecycle/after-web-route-${info.project.name}`;
     await page.screenshot({ path: `${prefix}-open.png`, animations: 'disabled' });
