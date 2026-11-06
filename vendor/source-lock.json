@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "ff6ed2f5c5a4c01c6719493fe3f849469bc2f57c",
+  "revision": "7d9e2817fec14c026586dd7e322b57ba1732eca5",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
     "revision": "b6d0e672fd85687f8d3087e82962487a387bbc51"
@@ -775,7 +775,7 @@
     "shared/lounge/runtime.ts": "5fe159c0ea8522eb56caa4c1ebd868022ffbaf56f175600a18a71fe07b47704f",
     "shared/lounge/history.ts": "0968d5082ebf7bbcef215693d6d6881d491e76d7508509b3a705eb00178486b2",
     "shared/lounge/contactSync.ts": "c011d8b687f47213acc3604beae056981edd172db91dc52c13b09a4daa4b0f76",
-    "shared/lounge/directDelivery.ts": "2a93d083e4aa4dac7b10431071782da9d1857e7b47e3ae4fce5ea9180d0e1ab3",
+    "shared/lounge/directDelivery.ts": "cc296af88a9ca13cc0a186d95a54824215f15cfc8274306d2f112cfba9c2663d",
     "shared/lounge/deliveryTransport.ts": "aee4e3591912efae69eca755c0ecd79327f93309ea8bb55e82afe7a97262dd96",
     "shared/lounge/directState.ts": "47ad0b0c044d242f3dbcf6a0b8584daf1c5106db1ba00085cbcdf65645c17ae4",
     "shared/lounge/authorize.ts": "ee3ef4440df2141936ac9a44b0e50e6d517eb972af450b93f92e496f2686802b",
@@ -1287,7 +1287,7 @@
     "shared/terminal/SshX11Field.tsx": "7fb4c1f7af560ae42ec3195f6828d4beb77622d1b13e17b66e710d4753e58a6e",
     "shared/downloads/desktop/DownloadFileIcon.tsx": "8dc9f4011dab8045ba5dd16a67ed82c028f2a8c5a23b85e6deb22afda6043302",
     "shared/downloads/hashWorker.ts": "c890c6834b1d579f048a5a5b2705ccaaf6190e1514b621e981686aad9d5c1851",
-    "shared/lounge/directPermission.ts": "3190167d726d44cc8709d97471d461f0229329dfc37c6a970fb704695d13891d",
+    "shared/lounge/directPermission.ts": "e334bcd1a0df5c1a0938929c712593e957070c3cadc3f3c42d7b4edc36eb56d3",
     "shared/lounge/avatarCache.ts": "1fc751ff3cdfef5d412cc04b6540ad1016047094d81e298717cb97e3a6b4503c",
     "shared/lounge/syncArchive.ts": "b086719073f9e2d39c738cc5be787688d29779ffe7134aabb46bc3213581f8cc",
     "shared/lounge/attachmentConnection.ts": "0960d7d1f0d149acf180e239ee1348a044fdf3c5e86b06f8e0b6a9c7a601478c",
