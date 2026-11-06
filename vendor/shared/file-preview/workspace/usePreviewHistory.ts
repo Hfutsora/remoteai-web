@@ -65,6 +65,7 @@ export function usePreviewHistory({ onOpen, onNavigate }: { onOpen: () => void; 
   const adoptWebsite = websites.adopt;
   const openResourceTab = websites.openResource;
   const selectResource = websites.selectResource;
+  const addWebsite = websites.onNewTab;
   // Retain targets only: old file URLs belong to released sessions and must be reopened when revisited.
   const history = useRef(EMPTY_HISTORY);
   const request = useRef(0);
@@ -128,6 +129,9 @@ export function usePreviewHistory({ onOpen, onNavigate }: { onOpen: () => void; 
   const openManagedWebsite = useCallback((tab: ManagedBrowserTab) => {
     cancel(); onOpen(); adoptWebsite(tab); setPreview({ kind: 'website', url: tab.url }); onNavigate();
   }, [cancel, onOpen, adoptWebsite, onNavigate]);
+  const openBrowser = useCallback(() => {
+    cancel(); onOpen(); addWebsite(); setPreview({ kind: 'website', url: '' }); onNavigate();
+  }, [cancel, onOpen, addWebsite, onNavigate]);
   const openResource = useCallback((resource: BrowserResource) => {
     cancel(); onOpen(); openResourceTab(resource); setPreview({ kind: 'website', url: resource.url }); onNavigate();
   }, [cancel, onOpen, openResourceTab, onNavigate]);
@@ -147,7 +151,7 @@ export function usePreviewHistory({ onOpen, onNavigate }: { onOpen: () => void; 
   useEffect(() => {
     if (preview?.kind === "file") return preview.release;
   }, [preview]);
-  return { preview, websites, openFile, openRemoteFile, openWebsite, openManagedWebsite, openResource, cancel, reset,
+  return { preview, websites, openFile, openRemoteFile, openWebsite, openBrowser, openManagedWebsite, openResource, cancel, reset,
     hasFileHistory: history.current.entries.some(target => target.kind !== 'website'), navigation: {
     loading, canGoBack: !loading && history.current.index > 0,
     canGoForward: !loading && history.current.index < history.current.entries.length - 1,

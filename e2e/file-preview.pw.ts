@@ -216,11 +216,12 @@ test('PC remote files share tables, code, source location, menus and relative HT
   await expect(page.locator('iframe')).toHaveAttribute('sandbox', 'allow-scripts');
 });
 
-test('PC remote Markdown links use the shared right drawer with navigation and source controls', async ({ page }, info) => {
+test('PC remote Markdown links use browser tabs with retained source controls', async ({ page }, info) => {
   await page.goto('e2e/file-preview-harness.html?workspace');
   await page.getByRole('button', { name: '交接文档', exact: true }).click();
   const drawer = page.locator('aside[data-details-panel]');
-  const preview = drawer.getByRole('region', { name: '文件预览', exact: true });
+  const browser = drawer.locator('.website-preview-browser');
+  const preview = browser.getByRole('tabpanel');
   await expect(preview.getByRole('heading', { name: '文件预览', exact: true })).toBeVisible();
   await expect(page.getByRole('dialog')).toHaveCount(1);
   await expect(drawer).toHaveAttribute('role', 'dialog');
@@ -231,14 +232,16 @@ test('PC remote Markdown links use the shared right drawer with navigation and s
   await preview.getByRole('button', { name: '原文', exact: true }).click();
   await expect(preview.locator('pre')).toContainText('# 文件预览');
   await drawer.getByRole('tab', { name: '文件更改', exact: true }).click();
-  await drawer.getByRole('tab', { name: '预览', exact: true }).click();
+  await drawer.getByRole('tab', { name: '浏览器', exact: true }).click();
   await expect(preview.locator('pre')).toContainText('# 文件预览');
   await preview.getByRole('button', { name: '预览', exact: true }).click();
   await preview.getByRole('button', { name: '后续文档', exact: true }).click();
   await expect(preview.getByRole('heading', { name: '后续文档' })).toBeVisible();
-  await expect(preview).toContainText('F:/remote/docs/next.md');
+  await expect(browser.getByRole('textbox', { name: '页面地址', exact: true }))
+    .toHaveValue('file:///F:/remote/docs/next.md');
   await expect(page.locator('aside[data-details-panel]')).toHaveCount(1);
-  await preview.getByRole('button', { name: '返回上一页' }).click();
+  await expect(browser.getByRole('tab')).toHaveCount(2);
+  await browser.getByRole('tab', { name: 'handoff.md', exact: true }).click();
   await expect(preview.getByRole('heading', { name: '文件预览', exact: true })).toBeVisible();
   await drawer.getByRole('button', { name: '最小化详情抽屉' }).click();
   await expect(drawer).toBeHidden();

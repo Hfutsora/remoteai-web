@@ -24,7 +24,7 @@ export function useDetailsPanel({ selected, enabled, active, remoteFiles = false
     if (diff) setViewId(value => value + 1);
   }, [openTab]);
   const revealPreview = useCallback(() => reveal(false), [reveal]);
-  const { preview, websites, navigation, hasFileHistory, openFile, openRemoteFile, openWebsite,
+  const { preview, websites, navigation, hasFileHistory, openFile, openRemoteFile, openWebsite, openBrowser,
     openManagedWebsite, openResource, cancel, reset }
     = usePreviewHistory({
     onOpen: rememberOpener, onNavigate: revealPreview,
@@ -60,7 +60,8 @@ export function useDetailsPanel({ selected, enabled, active, remoteFiles = false
     openRemoteFile: remoteFiles ? openRemoteFile : undefined, visible, showingChanges }),
   [open, update, close, openFile, openRemoteFile, remoteFiles, openWebsite, openResource, setConversationChanges,
     visible, showingChanges]);
-  return { context, entry, preview, websites, navigation, hasFileHistory, showingChanges, visible, viewId, expanded, setExpanded,
+  return { context, entry, preview, websites, navigation, hasFileHistory, openBrowser,
+    showingChanges, visible, viewId, expanded, setExpanded,
     showChanges: () => { if (!entry) setEntry(changes.current); cancel(); openTab("changes"); },
     showPreview: () => { cancel(); openTab("preview"); } };
 }

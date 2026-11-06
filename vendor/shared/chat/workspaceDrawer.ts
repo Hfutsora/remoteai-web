@@ -31,6 +31,7 @@ export const WorkspaceDrawerContext = createContext<{
   /** Open content tabs remain active while the drawer is hidden or minimized. */
   hasOpenTabs: boolean;
   tabs: WorkspaceTabs;
+  openStart: () => void;
 } | null>(null);
 
 /** Portals retain the caller's providers and mounted state while the shared drawer changes tabs. */

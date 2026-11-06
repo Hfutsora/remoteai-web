@@ -1,6 +1,7 @@
 import { displayText } from '../../../../shared/localization/browserClient';
 import { useContext, useEffect, useState, type ReactNode } from 'react';
 import { WorkspaceDrawerContext, workspaceTabId } from '../../../../shared/chat/workspaceDrawer';
+import { useWorkspaceLauncher } from '../../../../shared/chat/workspaceLaunchers';
 import { Popover } from 'antd';
 import { FolderSearch, GitBranch, Monitor, SquareTerminal, Wrench } from 'lucide-react';
 import type { GuiToolsClient } from '../../../../shared/remote-chat/guiTools';
@@ -25,13 +26,15 @@ export function ChatTools(props: Props) {
   const desktopLayout = useDesktopLayout();
   const wide = desktopLayout && Boolean(props.desktopActions);
   const workspace = useContext(WorkspaceDrawerContext);
+  const openFiles = () => {
+    const id = workspaceTabId.files(props.cwd);
+    if (!workspace?.tabs.entries.some(tab => tab.id === id)) browsers.open(props.cwd);
+    workspace?.tabs.open(id);
+  };
+  useWorkspaceLauncher({ id: 'files', enabled: props.active && props.connected && Boolean(props.cwd), open: openFiles });
   return <>
     {wide && props.desktopActions}
-    <ProjectTools key={props.cwd} {...props} wide={wide} openDesktop={desktop.open} openFiles={() => {
-      const id = workspaceTabId.files(props.cwd);
-      if (!workspace?.tabs.entries.some(tab => tab.id === id)) browsers.open(props.cwd);
-      workspace?.tabs.open(id);
-    }} />
+    <ProjectTools key={props.cwd} {...props} wide={wide} openDesktop={desktop.open} openFiles={openFiles} />
     {browsers.projects.map(project => <ProjectBrowserDrawer key={project} client={props.client.projectBrowser}
       cwd={project} active={props.active && browsers.visible === project}
       connected={props.connected} onClose={browsers.close} />)}
@@ -47,6 +50,10 @@ function ProjectTools({ client, openFiles, wide, terminal, ...props }: Props & {
   const [menu, setMenu] = useState(false);
   const [launchId, setLaunchId] = useState(0);
   const [git, setGit] = useState(false);
+  const openGit = () => {
+    setGit(true); workspace?.tabs.open(workspaceTabId.git(props.cwd));
+  };
+  useWorkspaceLauncher({ id: 'git', enabled: props.active && props.connected && Boolean(props.cwd), open: openGit });
   useEffect(() => { if (!props.active) setMenu(false); }, [props.active]);
   return <>
     {!wide && <Popover trigger="click" placement="bottomRight" arrow={false}
@@ -59,7 +66,7 @@ function ProjectTools({ client, openFiles, wide, terminal, ...props }: Props & {
           onClick={() => { setMenu(false); setLaunchId(value => value + 1); }}>
           <SquareTerminal size={20} />{t("client.projectBrowser.terminal")}</button>
         <button type="button" onClick={() => {
-          setMenu(false); setGit(true); workspace?.tabs.open(workspaceTabId.git(props.cwd));
+          setMenu(false); openGit();
         }}>
           <GitBranch size={20} />{displayText('Git')}</button>
         <button type="button" disabled={!props.connected || !props.cwd}

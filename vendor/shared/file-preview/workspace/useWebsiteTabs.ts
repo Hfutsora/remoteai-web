@@ -136,7 +136,7 @@ export function useWebsiteTabs() {
         title: pageTitle(tab.url), automationThread: tab.threadId }] }));
   }, []);
   return { ...state, open, reset, adopt, remove, resources, openResource, selectResource,
-    onCloseTab: close, onCloseTabs: closeTabs, onNewTab: () => add(),
+    onCloseTab: close, onCloseTabs: closeTabs, onNewTab: add,
     onSelect: (activeId: string) => setState(current => ({ ...current, activeId })),
     onNavigate: (id: string, url: string) => { void navigate(id, url); }, onPageNavigate: pageNavigate,
     onPopup: (_id: string, url: string) => { if (pageUrl(url)) add(url, true); }, onAction: action };
