@@ -10,6 +10,7 @@ import { useTaskReviewAvailable } from '../TaskReviewContext';
 import { ChatRetryButton } from './ChatRetryButton';
 import { CapacityErrorNotice } from '../../conversation/CapacityErrorNotice';
 import { isModelCapacityError } from '../../conversation/requestError';
+import { processOutputs } from '../../conversation/processDetails';
 
 export type TurnPanel = 'plan' | 'changes' | 'error' | 'result';
 export function turnErrorNotice(turn: Turn) {
@@ -25,7 +26,7 @@ export function ChatTurnSummary({ turn, onOpen, hideStopped = false }: {
   useLanguage();
   const reviewAvailable = useTaskReviewAvailable(turn.status);
   const files = useMemo(() => completedTurnFiles(turn), [turn]);
-  const generated = [...new Set(turn.items.filter(item => item.type === 'imageGeneration'
+  const generated = [...new Set(processOutputs(turn.items).filter(item => item.type === 'imageGeneration'
     && item.status === 'completed' && !item.failure).map(generatedImageSource).filter(Boolean))];
   const running = turn.status === 'inProgress';
   const capacityError = isModelCapacityError(turn.error ?? turn.retryError);

@@ -27,6 +27,8 @@ import { ChatSelectionQuote } from './ChatSelectionQuote';
 import './messages.css';
 import './desktopMessages.css';
 import type { Item, Turn } from './types';
+import { processActivityCount } from '../../conversation/processDetails';
+import { ChatProcessItems } from './ChatProcessItems';
 
 export type RenderUserMessage = (props: { item: Item; turn: Turn }) => ReactNode;
 
@@ -39,13 +41,17 @@ function WorkSummary({ entry, open, inline, desktop }: {
   const elapsed = entry.timed ? turnElapsedMs(entry.turn, 0) : null;
   const label = elapsed == null ? (running ? t("client.chat.working") : t("client.chat.activity")) : t("client.chat.duration", { value1: formatTurnDuration(elapsed) });
   if (desktop) return <div className="chat-work-summary chat-desktop-work">
-    <button type="button" aria-label={t("client.chat.viewActivityActions", { value1: entry.items.length })} aria-expanded={entry.inline}
+    <button type="button" aria-label={t("client.chat.viewActivityActions", {
+      value1: processActivityCount(entry.items),
+    })} aria-expanded={entry.inline}
       onClick={() => inline(entry.turn.id, !entry.inline)}>
       <span>{entry.timed ? <ChatTurnTiming turn={entry.turn} fallback={t("client.chat.activity")} /> : t("client.chat.activity")}</span>
       <ChevronRight size={14} /></button>
   </div>;
   return <div className="chat-work-summary">
-    <button type="button" aria-label={t("client.chat.viewActivityActions", { value1: entry.items.length })} onClick={open}>
+    <button type="button" aria-label={t("client.chat.viewActivityActions", {
+      value1: processActivityCount(entry.items),
+    })} onClick={open}>
       <span>{label}</span><ChevronRight size={14} /></button>
     {(entry.inline || ['inProgress', 'interrupted', 'failed'].includes(entry.turn.status)) &&
       <button type="button" aria-expanded={entry.inline} aria-label={entry.inline ? t("client.chat.collapseActivity") : t("client.chat.expandActivity")}
@@ -86,6 +92,7 @@ const TimelineEntry = memo(function TimelineEntry({ entry, open, inline, desktop
     onOpen={panel => open({ type: 'turn', id: entry.turn.id, panel })} />;
   if (entry.kind === 'work') return <WorkSummary entry={entry} inline={inline} desktop={desktop}
     open={() => open({ type: 'work', id: entry.id })} />;
+  if (entry.item.processRef) return <ChatProcessItems items={[entry.item]} turn={entry.turn} />;
   if (entry.item.type === 'userMessage' && renderUserMessage) {
     return renderUserMessage({ item: entry.item, turn: entry.turn });
   }

@@ -36,6 +36,7 @@ function createController(session: AuthSession, deviceId: string) {
     createPeer: (options) => new RtcPeer(options, () => new RTCPeerConnection({ iceServers: options.iceServers })),
   }), undefined, undefined, createWebSshProfiles(session));
   controller.deferToolDetails = true;
+  controller.deferProcessDetails = true;
   controller.previewDownloads = createPreviewDownloads({ owner: downloadOwner(session), deviceId });
   return controller;
 }

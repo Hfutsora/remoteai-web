@@ -2,6 +2,7 @@ import { displayText } from '../../localization/browserClient';
 import { displayError } from '../../localization/browserClient';
 import { ImageAiContext } from '../../chat/ImageAiContext';
 import { DesktopUsageContext } from '../../chat/DesktopUsageContext';
+import { ProcessDetailsContext } from '../../chat/DeferredProcessDetails';
 import { useVisibleChatUsage } from './useVisibleChatUsage';
 import { imageAiSender } from '../client/imageAiSender';
 import { prepareImageEdit } from './prepareImageEdit';
@@ -166,6 +167,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
     running={state.sending || running || Object.values(state.sidebar.threads).some(thread => thread.running)}
     chooseDevice={() => { drawerMotion.closeDrawer(); setPickingDevice(true); }} />);
   return <ToolDetailsContext.Provider value={{ load: controller.toolDetails, active: active && foreground && ready }}>
+    <ProcessDetailsContext.Provider value={{ load: controller.processDetails, active: active && foreground && ready }}>
     <DesktopUsageContext.Provider value={usageSnapshot}>
     <ImageAiContext.Provider value={{ enabled: active && ready && !state.selectedArchived
     && !state.sending && !state.settingsBusy && !state.workspaceBusy && !state.compacting,
@@ -240,5 +242,5 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
       refresh={deviceRefresh} choose={(id) => { chooseDevice(id); setPickingDevice(false); }} />}
   </ChatQuotesProvider></ChatFileReferencesProvider></ChatDetailsWorkspace></ChatBrowserProvider>
   </ChatFileContext.Provider></ChatAttachmentMetadata></ChatImageContext.Provider></ImageAiContext.Provider>
-  </DesktopUsageContext.Provider></ToolDetailsContext.Provider>;
+  </DesktopUsageContext.Provider></ProcessDetailsContext.Provider></ToolDetailsContext.Provider>;
 }
