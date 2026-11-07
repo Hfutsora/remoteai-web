@@ -18,7 +18,8 @@ async function fixture(t) {
   write('vendor/shared/example.ts', 'export const shared = true;');
   write('node_modules/@remoteai/i18n/src/index.ts', 'export {};');
   write('node_modules/@remoteai/i18n/package.json', '{"name":"@remoteai/i18n"}');
-  write('playwright.startup-update.config.ts', 'export default {};');
+  write('scripts/playwright.startup-update.config.ts', 'export default {};');
+  write('scripts/vite.config.ts', 'export default { root: ".." };');
   write('scripts/workspace.mjs', fs.readFileSync(new URL('./workspace.mjs', import.meta.url)));
   const workspace = await import(pathToFileURL(path.join(root, 'scripts/workspace.mjs')).href);
   return { root, write, ...workspace };
@@ -32,7 +33,13 @@ test('standalone preparation reconstructs host paths and uses the Web repository
   assert.equal(JSON.parse(fs.readFileSync(path.join(f.workspace, 'package.json'), 'utf8')).version, '9.8.7');
   f.write('.workspace/apps/desktop/e2e/probe.js', 'export const fixture = true;');
   assert.equal((await import(pathToFileURL(path.join(f.workspace, 'apps/desktop/e2e/probe.js')))).fixture, true);
-  assert.ok(fs.existsSync(path.join(f.application, 'playwright.startup-update.config.ts')));
+  assert.ok(fs.existsSync(path.join(f.application, 'scripts/playwright.startup-update.config.ts')));
+  assert.equal(fs.readFileSync(path.join(f.application, 'scripts/vite.config.ts'), 'utf8'),
+    'export default { root: ".." };');
+  f.write('scripts/vite.config.ts', 'export default { root: "../" };');
+  f.copySourceChange(path.join(f.root, 'scripts/vite.config.ts'));
+  assert.equal(fs.readFileSync(path.join(f.application, 'scripts/vite.config.ts'), 'utf8'),
+    'export default { root: "../" };');
   f.write('src/screen.ts', 'export const value = 2;');
   f.copySourceChange(path.join(f.root, 'src/screen.ts'));
   assert.equal(fs.readFileSync(path.join(f.application, 'src/screen.ts'), 'utf8'), 'export const value = 2;');

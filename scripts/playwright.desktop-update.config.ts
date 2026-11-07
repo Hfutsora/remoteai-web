@@ -1,9 +1,9 @@
-import { testBrowserLaunchOptions } from '../../scripts/test-browser.mjs';
+import { testBrowserLaunchOptions } from '../../../scripts/test-browser.mjs';
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './e2e', testMatch: '**/desktop-update.pw.ts', workers: 1,
-  outputDir: '../../.codex-tmp/desktop-update-results', reporter: 'list',
+  testDir: '../e2e', testMatch: '**/desktop-update.pw.ts', workers: 1,
+  outputDir: '../../../.codex-tmp/desktop-update-results', reporter: 'list',
   use: {
     launchOptions: testBrowserLaunchOptions(),
     baseURL: 'http://127.0.0.1:1427/web/', locale: 'zh-CN', headless: true,
@@ -13,8 +13,10 @@ export default defineConfig({
     { name: 'desktop', use: { viewport: { width: 1280, height: 900 } } },
   ],
   webServer: [
-    { command: 'node e2e/desktop-update-fixture.mjs', url: 'http://127.0.0.1:1459', reuseExistingServer: true },
-    { command: 'npx vite --host 127.0.0.1 --port 1427 --strictPort',
+    { cwd: '..',
+      command: 'node e2e/desktop-update-fixture.mjs',
+      url: 'http://127.0.0.1:1459', reuseExistingServer: true },
+    { cwd: '..', command: 'npx vite --config scripts/vite.config.ts --host 127.0.0.1 --port 1427 --strictPort',
       url: 'http://127.0.0.1:1427/web/', reuseExistingServer: true },
   ],
 });

@@ -1,8 +1,8 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import { imageEditorPlugin } from '../../shared/chat/imageEditorPlugin';
-import { fontSizePlugin } from '../../shared/appearance/fontSizePlugin';
-import { pdfAssetsPlugin } from '../../shared/file-preview/pdfAssetsPlugin';
+import { imageEditorPlugin } from '../../../shared/chat/imageEditorPlugin';
+import { fontSizePlugin } from '../../../shared/appearance/fontSizePlugin';
+import { pdfAssetsPlugin } from '../../../shared/file-preview/pdfAssetsPlugin';
 
 export default defineConfig({
   plugins: [react(), imageEditorPlugin(), pdfAssetsPlugin()],

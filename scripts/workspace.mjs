@@ -5,9 +5,9 @@ import { fileURLToPath } from 'node:url';
 export const root = fileURLToPath(new URL('../', import.meta.url));
 export const workspace = path.join(root, '.workspace');
 export const application = path.join(workspace, 'apps/web');
-export const sourceDirectories = ['src', 'public', 'e2e', 'build'];
+export const sourceDirectories = ['src', 'public', 'e2e', 'build', 'scripts'];
 export const sourceFiles = () => fs.readdirSync(root).filter(filename =>
-  /^(?:.*\.html|(?:vite|vitest|playwright(?:\.[\w-]+)*)\.config\.ts|tsconfig.*\.json|package\.json|\.env(?:\..*)?)$/
+  /^(?:.*\.html|tsconfig.*\.json|package\.json|\.env(?:\..*)?)$/
     .test(filename));
 
 function resetGeneratedDirectory(directory) {

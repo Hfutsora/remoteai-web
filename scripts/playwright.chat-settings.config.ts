@@ -8,11 +8,13 @@ const baseURL = `http://127.0.0.1:${port}/web/`;
 export default defineConfig({
   ...chatConfig,
   testMatch: '**/chat-setting-segments.pw.ts',
-  outputDir: '../../.codex-tmp/chat-settings-card-web',
+  outputDir: '../../../.codex-tmp/chat-settings-card-web',
   reporter: [['list']],
   use: { ...chatConfig.use, baseURL },
   webServer: {
-    command: `npx vite --host 127.0.0.1 --port ${port} --strictPort`, url: baseURL,
+    cwd: '..',
+      command: `npx vite --config scripts/vite.config.ts --host 127.0.0.1 --port ${port} --strictPort`,
+      url: baseURL,
     timeout: 120_000,
   },
 });

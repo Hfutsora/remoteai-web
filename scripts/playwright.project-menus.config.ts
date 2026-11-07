@@ -6,6 +6,6 @@ export default defineConfig({
   ...chatConfig,
   testMatch: '**/project-menus.pw.ts',
   webServer: Array.isArray(chatConfig.webServer) ? chatConfig.webServer.slice(1) : chatConfig.webServer,
-  outputDir: '../../.codex-tmp/project-menus-playwright',
+  outputDir: '../../../.codex-tmp/project-menus-playwright',
   reporter: [['list']],
 });

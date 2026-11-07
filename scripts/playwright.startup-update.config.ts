@@ -1,9 +1,9 @@
-import { testBrowserChannel, testBrowserLaunchOptions } from '../../scripts/test-browser.mjs';
+import { testBrowserChannel, testBrowserLaunchOptions } from '../../../scripts/test-browser.mjs';
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './e2e', testMatch: '**/startup-update.pw.ts', workers: 1, timeout: 30_000,
-  outputDir: '../../.codex-tmp/startup-update-playwright', reporter: 'list',
+  testDir: '../e2e', testMatch: '**/startup-update.pw.ts', workers: 1, timeout: 30_000,
+  outputDir: '../../../.codex-tmp/startup-update-playwright', reporter: 'list',
   use: {
     launchOptions: testBrowserLaunchOptions(),
     baseURL: 'http://127.0.0.1:1428/web/', channel: testBrowserChannel(process.env.CHAT_TEST_BROWSER),
@@ -13,6 +13,6 @@ export default defineConfig({
     { name: 'narrow', use: { viewport: { width: 320, height: 740 }, isMobile: true, hasTouch: true } },
     { name: 'desktop', use: { viewport: { width: 1440, height: 1000 } } },
   ],
-  webServer: { command: 'npx vite --host 127.0.0.1 --port 1428 --strictPort',
+  webServer: { cwd: '..', command: 'npx vite --config scripts/vite.config.ts --host 127.0.0.1 --port 1428 --strictPort',
     url: 'http://127.0.0.1:1428/web/' },
 });

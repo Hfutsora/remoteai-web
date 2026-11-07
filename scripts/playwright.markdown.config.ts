@@ -6,7 +6,7 @@ export default defineConfig({
   use: { ...chatConfig.use, channel: undefined },
   // These display fixtures provide their own messages and do not need the remote-chat backend.
   webServer: Array.isArray(chatConfig.webServer) ? chatConfig.webServer.slice(1) : chatConfig.webServer,
-  outputDir: '../../.codex-tmp/markdown-playwright',
+  outputDir: '../../../.codex-tmp/markdown-playwright',
   reporter: [['list']],
   projects: [
     { name: 'chromium-mobile', use: { channel: undefined, browserName: 'chromium',

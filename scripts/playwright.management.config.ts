@@ -1,12 +1,12 @@
-import { testBrowserChannel, testBrowserLaunchOptions } from '../../scripts/test-browser.mjs';
+import { testBrowserChannel, testBrowserLaunchOptions } from '../../../scripts/test-browser.mjs';
 import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './e2e', testMatch: ['**/management.pw.ts', '**/account-usage.pw.ts',
+  testDir: '../e2e', testMatch: ['**/management.pw.ts', '**/account-usage.pw.ts',
     '**/i18n.pw.ts', '**/agreement.pw.ts', '**/theme.pw.ts', '**/download-count.pw.ts'],
   workers: 1, timeout: 45_000,
-  outputDir: '../../.codex-tmp/web-management-playwright',
-  reporter: [['list'], ['html', { outputFolder: '../../.codex-tmp/web-management-report', open: 'never' }]],
+  outputDir: '../../../.codex-tmp/web-management-playwright',
+  reporter: [['list'], ['html', { outputFolder: '../../../.codex-tmp/web-management-report', open: 'never' }]],
   use: {
     launchOptions: testBrowserLaunchOptions(),
     baseURL: 'http://127.0.0.1:1423/web/', channel: testBrowserChannel(process.env.CHAT_TEST_BROWSER),
@@ -17,9 +17,12 @@ export default defineConfig({
     { name: 'desktop', use: { viewport: { width: 1440, height: 1000 } } },
   ],
   webServer: [
-    { command: 'node e2e/management-fixture.mjs', url: 'http://127.0.0.1:1491/auth/me',
+    { cwd: '..', command: 'node e2e/management-fixture.mjs', url: 'http://127.0.0.1:1491/auth/me',
       reuseExistingServer: process.env.MANAGEMENT_REUSE_SERVER === '1' },
-    { command: 'npx vite --host 127.0.0.1 --port 1423 --strictPort', url: 'http://127.0.0.1:1423/web/',
-      env: { VITE_DEV_API_URL: 'http://127.0.0.1:1491' }, reuseExistingServer: process.env.MANAGEMENT_REUSE_SERVER === '1' },
+    { cwd: '..',
+      command: 'npx vite --config scripts/vite.config.ts --host 127.0.0.1 --port 1423 --strictPort',
+      url: 'http://127.0.0.1:1423/web/',
+      env: { VITE_DEV_API_URL: 'http://127.0.0.1:1491' },
+      reuseExistingServer: process.env.MANAGEMENT_REUSE_SERVER === '1' },
   ],
 });

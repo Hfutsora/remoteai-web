@@ -47,12 +47,18 @@ try {
   let status = 0;
   if (command === 'check') status = await run('typescript', 'tsc', ['--noEmit', '-p', 'tsconfig.json']);
   if (!status && ['build', 'check'].includes(command)) {
-    status = await run('vite', 'vite', ['build', '--outDir', path.join(root, 'dist'), ...arguments_]);
-  } else if (command === 'dev') status = await run('vite', 'vite', arguments_);
-  else if (command === 'preview') {
-    status = await run('vite', 'vite', ['preview', '--outDir', path.join(root, 'dist'), ...arguments_]);
-  } else if (command === 'test') status = await run('vitest', 'vitest', ['run', ...arguments_]);
-  else if (command === 'playwright') status = await run('@playwright/test', 'playwright', ['test', ...arguments_]);
+    status = await run('vite', 'vite', ['build', '--config', 'scripts/vite.config.ts',
+      '--outDir', path.join(root, 'dist'), ...arguments_]);
+  } else if (command === 'dev') {
+    status = await run('vite', 'vite', ['--config', 'scripts/vite.config.ts', ...arguments_]);
+  } else if (command === 'preview') {
+    status = await run('vite', 'vite', ['preview', '--config', 'scripts/vite.config.ts',
+      '--outDir', path.join(root, 'dist'), ...arguments_]);
+  } else if (command === 'test') {
+    status = await run('vitest', 'vitest', ['run', '--config', 'scripts/vitest.config.ts', ...arguments_]);
+  } else if (command === 'playwright') {
+    status = await run('@playwright/test', 'playwright', ['test', ...arguments_]);
+  }
   process.exitCode = status;
 } finally {
   await watcher?.close();
