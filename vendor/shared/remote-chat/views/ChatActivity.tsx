@@ -8,6 +8,7 @@ import { useDesktopLayout } from '../../layout/useDesktopLayout';
 import type { Item } from './types';
 import { messageContent, messageLabel } from '../../chat/messageDetails';
 import { commandPreview } from '../../chat/commandPreview';
+import { activityPreview } from '../../chat/activityPreview';
 import { collaborationSummary, isCollaborationActivity }
   from '../../conversation/collaborationActivity';
 
@@ -45,7 +46,7 @@ export function ChatActivity({ item, onOpen, running, inline = false, onInspect,
 }) {
   useLanguage();
   const [expanded, setExpanded] = useState(false);
-  const label = activityLabel(item).slice(0, 160).replace(/\s+/g, ' ').trim();
+  const label = activityPreview(activityLabel(item));
   if (!label) return null;
   const icons = { commandExecution: Terminal, fileChange: FileText, reasoning: Lightbulb, webSearch: Search };
   const Icon = isCollaborationActivity(item) ? Users : icons[item.type as keyof typeof icons] || Wrench;
