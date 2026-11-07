@@ -19,13 +19,13 @@ function loadImage(threadId: string, source: string, variant: "thumbnail" | "ori
   return request;
 }
 
-export function useImageSource(source?: string) {
+export function useImageSource(source?: string, thumbnail?: string) {
   const threadId = useContext(ImageThreadContext);
   const local = source ? localImageSource(source) : undefined;
   const [attempt, setAttempt] = useState(0);
   const [result, setResult] = useState<{ source: string; threadId: string; url?: string; failed?: boolean }>();
   useEffect(() => {
-    if (!local || !threadId) return;
+    if (!local || !threadId || thumbnail) return;
     let cancelled = false;
     setResult(undefined);
     void loadImage(threadId, local, "thumbnail").then(
@@ -33,10 +33,10 @@ export function useImageSource(source?: string) {
       () => { if (!cancelled) setResult({ source: local, threadId, failed: true }); },
     );
     return () => { cancelled = true; };
-  }, [local, threadId, attempt]);
+  }, [local, threadId, attempt, thumbnail]);
   const current = result?.source === local && result?.threadId === threadId ? result : undefined;
   const remote = source && (/^https?:\/\//i.test(source) || isInlineImage(source)) ? source : undefined;
-  return { url: remote || current?.url, failed: current?.failed,
+  return { url: remote || thumbnail || current?.url, failed: current?.failed,
     original: async () => remote || (local && threadId ? loadImage(threadId, local, "original") : ''),
-    loading: Boolean(local && threadId && !current), retry: () => setAttempt((value) => value + 1) };
+    loading: Boolean(local && threadId && !thumbnail && !current), retry: () => setAttempt((value) => value + 1) };
 }

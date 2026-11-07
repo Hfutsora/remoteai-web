@@ -29,6 +29,7 @@ import './desktopMessages.css';
 import type { Item, Turn } from './types';
 import { processActivityCount } from '../../conversation/processDetails';
 import { ChatProcessItems } from './ChatProcessItems';
+import { ConversationImageGallery } from '../../chat/ImageGallery';
 
 export type RenderUserMessage = (props: { item: Item; turn: Turn }) => ReactNode;
 
@@ -155,7 +156,7 @@ function ChatMessageHistory({ props, scroll }: {
     ? turns.flatMap(turn => turn.items).find(item => item.id === selection.id) : undefined;
   const turn = selection?.type === 'turn' ? turns.find(turn => turn.id === selection.id) : undefined;
   const close = () => setSelection(null);
-  return <>
+  return <ConversationImageGallery turns={turns}>
     <div ref={scroll.content} className={`chat-message-content${!entries.length ? ' is-empty' : ''}`}
       onClickCapture={desktop ? scroll.pauseFollowing : undefined}>
       {(hasMore || loadingMore || (loading && !entries.length)) && <div className="chat-history-more">
@@ -188,5 +189,5 @@ function ChatMessageHistory({ props, scroll }: {
     {item && <ChatToolDetails item={item} onClose={close} />}
     {turn && selection?.type === 'turn' && <ChatTurnDetails turn={turn} panel={selection.panel} onClose={close} />}
     {drawers.panels}
-  </>;
+  </ConversationImageGallery>;
 }

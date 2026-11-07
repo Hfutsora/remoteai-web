@@ -8,6 +8,7 @@ import { PreviewTransferProgress } from './PreviewTransferProgress';
 import { ImageViewerFrame } from './ImageViewerFrame';
 import { ImageAiToolbar } from './ImageAiToolbar';
 import { useMobileImageViewer } from './useMobileImageViewer';
+import type { ImageNavigation } from './ImageGallery';
 
 interface Props {
   thumbnail: string; description: string; load: PreviewImageLoader; close: () => void;
@@ -18,11 +19,12 @@ interface Props {
   formatError?: (error: unknown) => string;
   autoLoadOriginal?: boolean;
   inlineViewControls?: boolean;
+  navigation?: ImageNavigation;
 }
 
 export function ImageViewer({ thumbnail, description, load, close, download, contextMenu, feedback,
   translate = defaultText, formatError = remoteErrorText, autoLoadOriginal = false,
-  inlineViewControls = false }: Props) {
+  inlineViewControls = false, navigation }: Props) {
   const image = useImageViewer(load, autoLoadOriginal);
   const [downloadError, setDownloadError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -36,6 +38,7 @@ export function ImageViewer({ thumbnail, description, load, close, download, con
     close={close} translate={translate} viewControls={viewControls}
     originalAction={mobile ? undefined : originalAction} />;
   return <ImageViewerFrame src={image.url ?? thumbnail} description={description} close={close}
+    navigation={navigation}
     renderToolbar={inlineViewControls ? renderEditor : undefined}
     translate={translate} onError={image.fail} onContextMenu={(event) => {
       if (!contextMenu) return;
