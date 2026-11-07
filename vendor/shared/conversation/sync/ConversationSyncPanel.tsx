@@ -1,10 +1,11 @@
-import { useState } from 'react';
-import { Alert, Button, Descriptions, Empty, Input, Modal, Progress, Radio, Select, Space, Table, theme } from 'antd';
+import { useMemo, useState } from 'react';
+import { Alert, Button, Descriptions, Input, Modal, Progress, Radio, Select, Space } from 'antd';
 import { RefreshCw, Search, FolderSync } from 'lucide-react';
 import { uiText } from '../../localization/uiText';
 import { useGuiLanguage } from '../../localization/useGuiLanguage';
 import { useConversationSync, useSyncSources, useSyncThreads } from './useConversationSync';
-import type { SyncHost, SyncThread } from './types';
+import type { SyncHost } from './types';
+import { SyncThreadTable } from './SyncThreadTable';
 import styles from './sync.module.less';
 
 export function syncError(error: unknown) {
@@ -16,8 +17,7 @@ export function syncError(error: unknown) {
 export function ConversationSyncPanel({ hosts, destination, onSynced }: {
   hosts: SyncHost[]; destination: SyncHost; onSynced: () => void;
 }) {
-  const language = useGuiLanguage();
-  const { token } = theme.useToken();
+  useGuiLanguage();
   const directory = useSyncSources(hosts, destination);
   const [sourceKey, setSource] = useState('');
   const [notice, setNotice] = useState('');
@@ -29,17 +29,9 @@ export function ConversationSyncPanel({ hosts, destination, onSynced }: {
     list.setSelected([]); list.refresh(); onSynced();
   } });
   const [kind, setKind] = useState('all');
-  const threads = kind === 'all' ? list.threads : list.threads.filter(thread => thread.sessionKind === kind);
+  const threads = useMemo(() => kind === 'all' ? list.threads
+    : list.threads.filter(thread => thread.sessionKind === kind), [kind, list.threads]);
   const locked = sync.open || sync.busy;
-  const columns = [
-    { title: uiText('client.conversationSync.titleColumn'), key: 'title', render: (_: unknown, thread: SyncThread) =>
-      <div className={styles.thread}><strong>{thread.title || uiText('client.conversationSync.untitled')}</strong>
-        <span style={{ color: token.colorTextSecondary }}>{thread.cwd}</span>
-        {thread.matchExcerpt && <span>{thread.matchExcerpt}</span>}</div> },
-    { title: uiText('client.conversationSync.updated'), key: 'updated', width: 160,
-      responsive: ['md' as const], render: (_: unknown, thread: SyncThread) => thread.updatedAt
-        ? new Date(thread.updatedAt * 1000).toLocaleString(language) : '—' },
-  ];
   return <section className={styles.panel} aria-label={uiText('client.workspaceSettings.conversationSync')}>
     <div className={styles.toolbar}>
       <Select className={styles.source} value={source?.key} onChange={setSource} loading={directory.loading}
@@ -63,13 +55,8 @@ export function ConversationSyncPanel({ hosts, destination, onSynced }: {
       uiText('client.conversationSync.unavailable', { names: directory.failures.join('、') })} />}
     {list.error !== undefined && <Alert type="error" showIcon message={syncError(list.error)} />}
     {notice && <Alert type="success" showIcon message={notice} closable onClose={() => setNotice('')} />}
-    <Table<SyncThread> className={styles.table} size="small" rowKey="sessionId" columns={columns}
-      dataSource={threads} loading={list.loading || directory.loading}
-      rowSelection={{ selectedRowKeys: list.selected, onChange: keys => list.setSelected(keys.map(String)),
-        getCheckboxProps: () => ({ disabled: locked }) }}
-      pagination={{ defaultPageSize: 50, hideOnSinglePage: true, showSizeChanger: false }}
-      locale={{ emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}
-        description={uiText('client.conversationSync.empty')} /> }} />
+    <SyncThreadTable key={source?.key} threads={threads} selected={list.selected} onSelect={list.setSelected}
+      loading={list.loading || directory.loading} locked={locked} query={list.query} />
     <Modal open={sync.open} title={uiText('client.conversationSync.confirm')} width={480}
       onCancel={sync.cancel} onOk={() => void sync.commit()} confirmLoading={sync.committing}
       okText={uiText('client.conversationSync.start')} cancelText={uiText('client.conversationSync.cancel')}

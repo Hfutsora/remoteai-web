@@ -3,6 +3,7 @@ import { Button, Modal, Spin } from 'antd';
 import { FolderSync } from 'lucide-react';
 import { uiText } from '../../localization/uiText';
 import { useGuiLanguage } from '../../localization/useGuiLanguage';
+import styles from './sync.module.less';
 
 export const SyncDialogPanel = lazy(() => import('./ConversationSyncPanel')
   .then(module => ({ default: module.ConversationSyncPanel })));
@@ -16,7 +17,8 @@ export function ConversationSyncDialog({ children, active = true }: {
   return <>
     <Button type="text" icon={<FolderSync size={17} />} disabled={!active} onClick={() => setOpen(true)}
       aria-label={uiText('client.workspaceSettings.conversationSync')} />
-    <Modal open={open} onCancel={() => setOpen(false)} width={1000} footer={null} destroyOnClose
+    <Modal className={styles.dialog} open={open} onCancel={() => setOpen(false)} width={1000}
+      footer={null} destroyOnClose
       title={uiText('client.workspaceSettings.conversationSync')} maskClosable={false}>
       {open && <Suspense fallback={<Spin />}>{children}</Suspense>}
     </Modal>

@@ -8,6 +8,14 @@ export function conversationSyncFixture(parameters: URLSearchParams) {
   const release = () => { released = true; resume?.(); };
   const thread = { sessionId: 'thread-sync', sessionKind: 'conversation', title: '排查项目中的登录问题',
     cwd: 'F:/projects/remoteai', updatedAt: 1_799_999_000, sizeBytes: 512 * 1024, matchExcerpt: null };
+  const threads = parameters.has('grouped') ? [thread,
+    ...Array.from({ length: 64 }, (_, index) => ({ ...thread, sessionId: `thread-${index}`,
+      title: `项目对话 ${index + 1}`, updatedAt: thread.updatedAt - index - 1,
+      sessionKind: index === 0 ? 'external' : 'conversation' })),
+    { ...thread, sessionId: 'other-project', title: '整理第二个项目', cwd: 'D:/clients/remoteai',
+      updatedAt: thread.updatedAt - 100 },
+    { ...thread, sessionId: 'no-project', title: '临时对话', cwd: '', updatedAt: null },
+  ] : [thread];
   const duplicates = parameters.has('duplicates') ? [thread.sessionId] : [];
   const remote = parameters.get('mode') !== 'local';
   const directory = (source: boolean) => ({ name: source ? 'Office PC' : 'My PC', homes: [
@@ -19,7 +27,7 @@ export function conversationSyncFixture(parameters: URLSearchParams) {
     calls.push({ host: id, request });
     let result: unknown = {};
     if (request.action === 'homes') result = directory(id === 'source');
-    if (request.action === 'list') result = [thread].filter(item => item.title.includes(request.query ?? ''));
+    if (request.action === 'list') result = threads.filter(item => item.title.includes(request.query ?? ''));
     if (['prepare', 'export', 'begin'].includes(request.action)) result = { id: `transfer-${id}`,
       size: 512 * 1024, sha256: 'a'.repeat(64), sessionIds: [thread.sessionId] };
     if (request.action === 'read') {

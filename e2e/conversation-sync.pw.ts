@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 for (const path of ['relay', 'direct']) {
   test(`web sync shows ${path}, speed and duplicate confirmation`, async ({ page }) => {
     await page.goto(`e2e/conversation-sync-harness.html?path=${path}&hold=1`);
+    await page.getByRole('button', { name: '展开项目: F:/projects/remoteai', exact: true }).click();
     await expect(page.getByText('排查项目中的登录问题')).toBeVisible();
     await expect(page.locator('.ant-select-selection-item').first()).toHaveText('Office PC · D:/work/.codex');
     await page.getByRole('checkbox').last().check();
@@ -30,6 +31,7 @@ for (const path of ['relay', 'direct']) {
 test('web sync fits an enlarged dark desktop window and can skip duplicates', async ({ page }) => {
   await page.setViewportSize({ width: 800, height: 900 });
   await page.goto('e2e/conversation-sync-harness.html?font=20&dark=1');
+  await page.getByRole('button', { name: '展开项目: F:/projects/remoteai', exact: true }).click();
   await expect(page.getByText('排查项目中的登录问题')).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(800);
   await page.getByRole('checkbox').last().check();

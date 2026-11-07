@@ -30,6 +30,7 @@ export function useSyncSources(hosts: SyncHost[], destination: SyncHost) {
 }
 
 export function useSyncThreads(source?: SyncSource) {
+  const [listedSource, setListedSource] = useState(source?.key);
   const [threads, setThreads] = useState<SyncThread[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>();
@@ -37,7 +38,9 @@ export function useSyncThreads(source?: SyncSource) {
   const [selected, setSelected] = useState<string[]>([]);
   const [revision, refresh] = useState(0);
   const generation = useRef(0);
-  useEffect(() => { setQuery(''); setSelected([]); setThreads([]); }, [source?.key]);
+  useEffect(() => {
+    setListedSource(source?.key); setQuery(''); setSelected([]); setThreads([]);
+  }, [source?.key]);
   useEffect(() => {
     const id = ++generation.current;
     if (!source) return;
@@ -53,7 +56,10 @@ export function useSyncThreads(source?: SyncSource) {
     }, query ? 300 : 0);
     return () => { clearTimeout(timer); generation.current += 1; };
   }, [source?.key, query, revision]);
-  return { threads, loading, error, query, setQuery, selected, setSelected,
+  const currentSource = listedSource === source?.key;
+  return { threads: currentSource ? threads : [], loading: loading || !currentSource,
+    error: currentSource ? error : undefined, query: currentSource ? query : '', setQuery,
+    selected: currentSource ? selected : [], setSelected,
     refresh: () => refresh(value => value + 1) };
 }
 
