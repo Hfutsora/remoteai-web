@@ -37,6 +37,7 @@ import { TaskReviewProvider } from '../TaskReviewContext';
 import { ChatRetryProvider } from '../ChatRetryProvider';
 import { ChatQuotesProvider } from './ChatQuotes';
 import { ChatFileReferencesProvider } from '../../chat/ChatFileReferences';
+import { ImageAnnotationsProvider } from '../../chat/ImageAnnotations';
 import { ChatDetailsWorkspace } from './ChatDetailsWorkspace';
 import { ChatBrowserProvider } from './ChatBrowserProvider';
 import { ChatTerminalLayout } from './ChatTerminalLayout';
@@ -179,7 +180,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
       load: controller.textPreview }}>
     <ChatBrowserProvider controller={controller}>
     <ChatDetailsWorkspace selected={state.selected?.id ?? null} active={active} enabled={showDesktopDiffs}>
-    <ChatFileReferencesProvider>
+    <ChatFileReferencesProvider><ImageAnnotationsProvider>
     <ChatQuotesProvider scope={state.draftScope ?? state.selected?.id ?? null} sending={state.sending}
     enabled={active && !state.selectedArchived}>
     <ChatTerminalLayout>
@@ -240,7 +241,8 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
       select={thread => { setSearching(false); drawerMotion.closeDrawer(); void controller.select(thread); }} />}
     {pickingDevice && <ChatDevices chooseLocal={chooseLocal} devices={devices} onClose={() => setPickingDevice(false)}
       refresh={deviceRefresh} choose={(id) => { chooseDevice(id); setPickingDevice(false); }} />}
-  </ChatQuotesProvider></ChatFileReferencesProvider></ChatDetailsWorkspace></ChatBrowserProvider>
+  </ChatQuotesProvider></ImageAnnotationsProvider></ChatFileReferencesProvider>
+  </ChatDetailsWorkspace></ChatBrowserProvider>
   </ChatFileContext.Provider></ChatAttachmentMetadata></ChatImageContext.Provider></ImageAiContext.Provider>
   </DesktopUsageContext.Provider></ProcessDetailsContext.Provider></ToolDetailsContext.Provider>;
 }

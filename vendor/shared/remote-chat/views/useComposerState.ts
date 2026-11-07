@@ -16,6 +16,7 @@ import { pickChatImages } from './pickChatImages';
 import { useComposerPaste } from './useComposerPaste';
 import { fileDropError, useFileDrop } from '../../chat/useFileDrop';
 import { useComposerFileReferences } from '../../chat/ChatFileReferences';
+import { useComposerImageAnnotations } from '../../chat/ImageAnnotations';
 
 export function useComposerState(props: ComposerProps) {
   const { threadId, active, ready, sending, settingsBusy, compacting, selection, send, goals, running } = props;
@@ -69,6 +70,9 @@ export function useComposerState(props: ComposerProps) {
       menu.restoreCaret(start + inserted.length);
     }, addFiles });
   const busy = sending || draft.picking || attachments.busy || queueEditor.loading || paste.reading || drop.reading;
+  useComposerImageAnnotations({ scope: `${draftScope ?? ''}:${props.cwd}`,
+    enabled: active && !disabled && !busy && !goalMode.enabled, add: draft.addAnnotatedImage,
+    focus: () => menu.input.current?.focus() });
   useComposerFileReferences({ scope: `${threadId ?? ''}:${props.cwd}`,
     enabled: active && !disabled && !busy && !goalMode.enabled, add: attachments.add,
     addQuote: quote => quotes?.add({ ...quote, role: 'tool' }) ?? false,
