@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "1f62045037a0a540e1831d5af7722372c4344df2",
+  "revision": "bf3c8a23e6a345695031d348c8f174197e68baed",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "5b3725be6962b0efe788d7386f4e03799f630874"
+    "revision": "b471af5cf1cf4c57e04aa145fa0e69da25cd79e1"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -720,7 +720,7 @@
     "shared/git/views/GitHistory.tsx": "d741dd3d5ad834fede58b2449ff8d765a7976b3eb6523ad3afefbd9dc2b2ff7b",
     "shared/git/views/GitChanges.tsx": "677da160461c911095350d596bbe027d3314bcdf75443cdb21b6d263c14f6f85",
     "shared/git/views/GitCommitFiles.tsx": "c8ac1d490909a7c5b79748bdf6b3425b9cef1739d7d2708afd4c367227ec3dbe",
-    "shared/git/views/GitToolbar.tsx": "74d24278d4fbe75a82b198de1569e38ca5d23eb2715c9c366fbda4fb0628bd0a",
+    "shared/git/views/GitToolbar.tsx": "72db52bd3b614888c8047fe74dbdcc17749f02a78b1225d8855ccd5ae3d3bfca",
     "shared/remote-chat/gitWorkspaceClient.ts": "e0c306bd2bd07c2eda3b0d2476128786ba311e4ada6e83f713b4fff304b9be22",
     "shared/git/views/GitFileActionDialog.tsx": "f8401e2d2242df956bd7c05579c90339dcdfd26ec6caee1d0ff261e2d7ba28d7",
     "shared/git/views/GitRevisionDialog.tsx": "cd861000cfffefe7345226e500a443a6c21c3d3dcc1fe8ea209963bb7289b2af",
