@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "b209474a628bbea2532c0a35e6db9cc63e8dc461",
+  "revision": "5252bb2ec713c33b412bdf0d24749a3f97797164",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "196057d1b8ad308ffcabf6226d92f1dc9cd73321"
+    "revision": "0425cc08f161fcf2add2deab6260a538d8f7d0e6"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "027288237b38c669e0ea457b17f73cb3201831f0"
+    "revision": "8a66e40453f666399e4feecf42b30b87391e32a4"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.9/remoteai-i18n-0.1.9.tgz",
   "files": {
@@ -386,7 +386,7 @@
     "shared/chat/ChatFileReferences.tsx": "11c0697f551233c21fcfc34b143a8c2c5ebbe17bdfc168e87ab8f04acb8269e0",
     "apps/desktop/src/pages/codexGui/Composer.tsx": "788ed6ef12175c056c51c8339b78de114da609ab9cfa5cdcbceb12f7a2470f19",
     "shared/project-browser/views/ProjectBrowserButton.tsx": "2e6e81e12180966fb68a2b905958469649434d833ff9d1b761f4058d6634137c",
-    "apps/desktop/e2e/project-browser-fixture.ts": "9ebf6785204c40be839fbdf51e1a512dfcdd754c977a6830b7e7979ee2b0144a",
+    "apps/desktop/e2e/project-browser-fixture.ts": "94bef3f05bfa825f0d9577fc64eeb59d2791c85e157629c4031d623b2ac87cc4",
     "shared/chat/dictation/ComposerDictation.tsx": "a7d28a0ea50ee040a1a10fd3faa2652f5051984436ee7035b24f1a7c79758f68",
     "shared/chat/useComposerSuggestion.ts": "a70a5ba70ec54a2dbf67d9de99f3ea5863847291c250308788008da5e8f6ccdd",
     "shared/remote-chat/views/ComposerSuggestion.tsx": "5db5a515e5396d6a2a897fd22968ba5730474d89336add53d00616dc8153d852",
@@ -1727,7 +1727,7 @@
     "shared/project-browser/TabMenu.tsx": "24c24aec0a65354b93586a1adace6d9cac99e5e602e10ddb60b2fdfb90c953ed",
     "shared/project-browser/TabOverflowMenu.tsx": "459ae5681db020d05cdad81f9a1757977bd26428b9e866d85fbf7c33453c585a",
     "shared/project-browser/ProjectWindowNavigation.tsx": "5fb51fcf511bd71445f2df026c79519b8c1812b0e3e55f1d80bf285bca07ca0b",
-    "shared/project-browser/ProjectEditor.tsx": "1314886a76e9ade71b913a2ac0b623268dc44ad35171f53a40b6bf756eac035a",
+    "shared/project-browser/ProjectEditor.tsx": "6642b11b8c870fa90880f65a94ac6ee87b11b003bbd5394fbe9c5a9ae45ac06d",
     "shared/terminal/linkChunks.ts": "fe28d90aece3980545cfc9696c8e69abf9be1345bcb303b7a74202fce54a5436",
     "apps/desktop/src/pages/codexGui/MessageEditorImages.tsx": "a4d9e6b579f4e80f34536c7886e8b8f2ca2f25389e894129ed6644627b1c3078",
     "apps/desktop/src/pages/codexGui/useMessageEditDraft.ts": "2bc520fab2cfab4092d1bd09e90b45de7bb39788138acc4a78378219d1304719",
