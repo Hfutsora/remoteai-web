@@ -9,7 +9,7 @@ import { FileEnvironmentContext } from '../../conversation/fileEnvironment';
 import { uiText } from '../../localization/uiText';
 import type { ManagedBrowserTab } from '../../browser/automation';
 import { BrowserClientContext } from './browserClient';
-import { useBrowserResources, type BrowserResource } from './browserResources';
+import { browserResourcePage, useBrowserResources, type BrowserResource } from './browserResources';
 import { remainingBrowserTabs } from '../../provider-market/browserTabCommands';
 
 interface BrowserState {
@@ -21,6 +21,12 @@ function pageTitle(url: string) {
   if (!page) return '';
   const name = page.pathname.split('/').filter(Boolean).at(-1);
   return name ? `${name} · ${page.hostname}` : page.hostname;
+}
+
+function visitResource(tab: BrowserTab, resource: BrowserResource): BrowserTab {
+  if (tab.url === resource.url) return { ...tab, title: resource.title };
+  const history = [...tab.history.slice(0, tab.historyIndex + 1), resource.url];
+  return { ...tab, url: resource.url, title: resource.title, history, historyIndex: history.length - 1 };
 }
 
 /** Reserve tabs before resolving remote URLs, so rapid clicks cannot replace or reorder pages. */
@@ -45,10 +51,13 @@ export function useWebsiteTabs() {
     sources.current.clear(); requests.current.clear(); clearResources(); setState(emptyState());
   }, [clearResources]);
   const pageNavigate = useCallback((id: string, url: string) => {
-    if (!pageUrl(url)) return;
-    setState(current => ({ ...current, tabs: current.tabs.map(tab => tab.id === id
-      ? { ...navigateTab(tab, url), title: pageTitle(url) } : tab) }));
-  }, []);
+    const resource = browserResourcePage(resources.get(id), url);
+    if (!resource && !pageUrl(url)) return;
+    setState(current => ({ ...current, tabs: current.tabs.map(tab => {
+      if (tab.id !== id) return tab;
+      return resource ? visitResource(tab, resource) : { ...navigateTab(tab, url), title: pageTitle(url) };
+    }) }));
+  }, [resources]);
   const navigate = useCallback(async (id: string, url: string, resolved = false) => {
     if (!pageUrl(url)) return;
     if (managedCommand(id, { action: 'navigate', url })) return;
@@ -122,8 +131,8 @@ export function useWebsiteTabs() {
       setState(current => ({ ...current, tabs: current.tabs.map(tab => {
         if (tab.id !== id) return tab;
         const next = moveTab(tab, action === 'back' ? -1 : 1);
-        const resource = resources.get(id);
-        return { ...next, title: resource?.url === next.url ? resource.title : pageTitle(next.url) };
+        const resource = browserResourcePage(resources.get(id), next.url);
+        return { ...next, title: resource?.title ?? pageTitle(next.url) };
       }) }));
       return;
     }

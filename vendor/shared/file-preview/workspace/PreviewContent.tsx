@@ -6,6 +6,7 @@ import { JsonPreview } from '../JsonPreview';
 import { isJsonPath } from '../jsonHighlightLimit';
 import { PreviewMarkdown } from "./PreviewMarkdown";
 import styles from "./preview.module.less";
+import { ResourceHtmlPreview } from './ResourceHtmlPreview';
 
 function MediaPreview({ data }: { data: FilePreviewData }) {
   const [failed, setFailed] = useState(false);
@@ -36,8 +37,7 @@ export function PreviewContent({ data, source }: { data: FilePreviewData; source
     if (isJsonPath(data.path)) return <JsonPreview text={data.text} size={data.size} line={data.line} />;
     return <PreviewCode text={data.text} path={data.path} line={data.line} />;
   }
-  if (data.kind === "html") return <iframe title={uiText("client.downloads.htmlPreview")} className={styles.frame}
-    src={data.url} sandbox="allow-scripts" referrerPolicy="no-referrer" />;
+  if (data.kind === "html") return <ResourceHtmlPreview data={data} />;
   if (data.kind === "markdown") return <PreviewMarkdown text={data.text ?? ""} path={data.path} url={data.url} />;
   return <MediaPreview key={data.url} data={data} />;
 }

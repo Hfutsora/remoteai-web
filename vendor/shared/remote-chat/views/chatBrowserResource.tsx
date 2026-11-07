@@ -11,6 +11,7 @@ import { t } from '../../localization/browserClient';
 import { isDownloadOnlyFile } from '../filePreview';
 import { ResourceDownloadCard } from '../../file-preview/ResourceDownloadCard';
 import { FileDownloadButton } from '../../downloads/FileDownloadButton';
+import { navigableBrowserResource } from '../../file-preview/workspace/resourceNavigation';
 
 function BinaryResource({ path, context, active }: { path: string; context: FilePreviewContext; active: boolean }) {
   const [data, setData] = useState<FilePreviewData>();
@@ -52,8 +53,12 @@ function ChatResourceContent({ path, line, context, active }: {
   </ChatFileContext.Provider>;
 }
 
-export function chatBrowserResource(path: string, context: FilePreviewContext, line?: number): BrowserResource {
+function chatBrowserPage(path: string, context: FilePreviewContext, line?: number): BrowserResource {
   return { key: fileResourceKey({ path, threadId: context.threadId, line }),
     title: path.split(/[\\/]/).at(-1) ?? path, url: fileResourceUrl(path),
     render: props => <ChatResourceContent path={path} line={line} context={context} active={props.active} /> };
+}
+
+export function chatBrowserResource(path: string, context: FilePreviewContext, line?: number): BrowserResource {
+  return navigableBrowserResource(chatBrowserPage(path, context, line), next => chatBrowserPage(next, context));
 }
