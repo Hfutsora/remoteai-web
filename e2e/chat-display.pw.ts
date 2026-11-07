@@ -116,6 +116,29 @@ test('shows conversation references during send, after reload and without messag
   await expect(bubble).not.toContainText('继续这个任务');
 });
 
+for (const status of ['inProgress', 'completed', 'failed']) {
+  test(`keeps proxy diagnostics behind error details when ${status}`, async ({ page }, info) => {
+    const raw = 'Reconnecting... 4/5 unexpected status 502 Bad Gateway, url: http://localhost:8080/v1/responses';
+    const value = fixture([reply], status === 'inProgress');
+    const turn = value.turns![0];
+    turn.status = status;
+    if (status === 'failed') turn.error = { message: raw };
+    else turn.retryError = { message: raw };
+    await open(page, value);
+    const message = status === 'inProgress' ? '连接暂时中断，Codex 正在重试…'
+      : status === 'completed' ? '本次回复曾出现连接中断，现已恢复。' : '本次回复遇到问题，已中断。';
+    await expect(page.locator('.chat-turn-error')).toContainText(message);
+    await expect(page.locator('body')).not.toContainText(raw);
+    await screenshot(page, info, `web-desktop-${status}-collapsed`);
+    await page.getByRole('button', { name: '查看报错详情', exact: true }).click();
+    const dialog = page.getByRole('dialog');
+    await expect(dialog).toContainText(raw);
+    await expect(dialog).toHaveCSS('opacity', '1');
+    await expect(dialog).toHaveCSS('transform', 'none');
+    await screenshot(page, info, `web-desktop-${status}-details`);
+  });
+}
+
 for (const status of ['interrupted', 'failed']) {
   test(`hides automatic retry after ${status} during streaming and after reload`, async ({ page }, info) => {
     const value = fixture([]);
