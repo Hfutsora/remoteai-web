@@ -125,8 +125,19 @@ for (const status of ['inProgress', 'completed', 'failed']) {
     if (status === 'failed') turn.error = { message: raw };
     else turn.retryError = { message: raw };
     await open(page, value);
+    if (status === 'completed') {
+      await expect(page.getByText('展示完成。', { exact: true })).toBeVisible();
+      await expect(page.locator('.chat-turn-error')).toHaveCount(0);
+      await expect(page.getByRole('button', { name: '查看报错详情', exact: true })).toHaveCount(0);
+      await expect(page.locator('[data-message-id="turn:summary"]')).toHaveCount(0);
+      await screenshot(page, info, 'web-desktop-completed-clean');
+      await page.reload();
+      await expect(page.getByText('展示完成。', { exact: true })).toBeVisible();
+      await expect(page.locator('.chat-turn-error')).toHaveCount(0);
+      return;
+    }
     const message = status === 'inProgress' ? '连接暂时中断，Codex 正在重试…'
-      : status === 'completed' ? '本次回复曾出现连接中断，现已恢复。' : '本次回复遇到问题，已中断。';
+      : '本次回复遇到问题，已中断。';
     await expect(page.locator('.chat-turn-error')).toContainText(message);
     await expect(page.locator('body')).not.toContainText(raw);
     await screenshot(page, info, `web-desktop-${status}-collapsed`);
@@ -138,6 +149,34 @@ for (const status of ['inProgress', 'completed', 'failed']) {
     await screenshot(page, info, `web-desktop-${status}-details`);
   });
 }
+
+test('removes retry warnings and open diagnostics when streaming recovers', async ({ page }, info) => {
+  const value = fixture([reply], true);
+  const turn = value.turns![0];
+  turn.retryError = { message: 'HTTP 502 Bad Gateway' };
+  turn.requestErrors = [{ id: 'retry', afterItemId: reply.id, itemCount: 2,
+    willRetry: true, error: turn.retryError }];
+  await open(page, value);
+  await page.getByRole('button', { name: '查看报错详情', exact: true }).click();
+  await expect(page.getByRole('dialog')).toContainText('HTTP 502 Bad Gateway');
+  turn.items.push({ id: 'resumed', type: 'agentMessage', text: '已继续处理任务。', phase: 'final_answer' });
+  await update(page, value);
+  await expect(page.getByText('已继续处理任务。', { exact: true })).toBeVisible();
+  await expect(page.locator('.chat-turn-error')).toHaveCount(0);
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await screenshot(page, info, 'web-desktop-resumed-clean');
+  turn.requestErrors.push({ id: 'retry-again', afterItemId: 'resumed', itemCount: 3,
+    willRetry: true, error: turn.retryError });
+  await update(page, value);
+  await expect(page.locator('.chat-turn-error')).toBeVisible();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  turn.status = 'completed';
+  await update(page, value);
+  await page.reload();
+  await expect(page.getByText('已继续处理任务。', { exact: true })).toBeVisible();
+  await expect(page.locator('.chat-turn-error')).toHaveCount(0);
+  await expect(page.getByText('本次回复曾出现连接中断，现已恢复。', { exact: true })).toHaveCount(0);
+});
 
 for (const status of ['interrupted', 'failed']) {
   test(`hides automatic retry after ${status} during streaming and after reload`, async ({ page }, info) => {
