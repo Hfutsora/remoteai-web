@@ -42,22 +42,25 @@ export function DetailsWorkspace({ selected, active, children, enabled = true, c
   const panelId = useId();
   const panel = useDetailsPanel({ selected, enabled, active, remoteFiles: Boolean(renderRemoteFile), drawer: drawer.tabs });
   const { entry, preview, viewId, expanded, showingChanges } = panel;
+  const hasChanges = Boolean(enabled && (entry?.files.length || panel.hasConversationChanges));
   const showingPreview = drawer.tabs.selected === "preview";
   const showingStart = enabled && drawer.tabs.selected === 'start';
   const tool = drawer.tabs.entries.find(tab => tab.id === drawer.tabs.selected);
   const visible = drawer.tabs.visible
-    && Boolean(showingStart || tool || (enabled && ((showingChanges && entry) || (showingPreview && preview))));
-  const hasTabs = Boolean(showingStart || entry || preview || drawer.tabs.entries.length);
+    && Boolean(showingStart || tool || (enabled && ((showingChanges && entry?.files.length)
+      || (showingPreview && preview))));
+  const hasTabs = Boolean(showingStart || hasChanges || preview || drawer.tabs.entries.length);
   const tabs = showingStart ? [{ id: 'start', title: startTitle, icon: <Globe size={16} /> }] : [
-    ...(enabled ? [{ id: 'changes', title: t('client.chat.fileChanges.049e14'), icon: <FileDiff size={16} /> }] : []),
+    ...(hasChanges ? [{ id: 'changes', title: t('client.chat.fileChanges.049e14'), icon: <FileDiff size={16} /> }] : []),
     ...(preview ? [{ id: 'preview', title: t('client.configLabels.browser'), icon: <FileSearch size={16} /> }] : []),
     ...drawer.tabs.entries,
   ].filter(tab => !drawer.tabs.closed.has(tab.id));
-  const hasOpenTabs = Boolean(enabled && ((entry && !drawer.tabs.closed.has('changes'))
+  const hasOpenTabs = Boolean(enabled && ((hasChanges && !drawer.tabs.closed.has('changes'))
     || (preview && !drawer.tabs.closed.has('preview'))))
     || drawer.tabs.entries.some(tab => !drawer.tabs.closed.has(tab.id));
-  const workspace = useMemo(() => ({ active, tabs: drawer.tabs, hasOpenTabs,
-    openStart: () => drawer.tabs.open('start') }), [active, drawer.tabs, hasOpenTabs]);
+  const workspace = useMemo(() => ({ active, visible, tabs: drawer.tabs, hasOpenTabs,
+    open: () => drawer.tabs.open(tabs.find(tab => tab.id === drawer.tabs.selected)?.id ?? tabs[0]?.id ?? 'start'),
+  }), [active, visible, drawer.tabs, hasOpenTabs, tabs]);
   const label = showingStart ? startTitle
     : tool?.title ?? t(showingChanges ? "client.chat.fileChangeDetails" : "client.desktopGuiExtras.previewDetails");
   const resize = useDrawerResize(host);
@@ -111,9 +114,9 @@ export function DetailsWorkspace({ selected, active, children, enabled = true, c
           </div>
         </header>
         {showingStart && <WorkspaceStartPage launchers={launchers.launchers} openBrowser={panel.openBrowser} />}
-        {entry && <div hidden={!showingChanges} key={`${entry.id}:${entry.filePath ?? ""}:${viewId}`}
+        {hasChanges && entry && entry.files.length > 0
+          && <div hidden={!showingChanges} key={`${entry.id}:${entry.filePath ?? ""}:${viewId}`}
           className={styles.content}>
-          {!entry.files.length && <p className={styles.empty}>{t("client.chat.noFileChangesYet")}</p>}
           <DiffDocument files={entry.files} filePath={entry.filePath}
             title={entry.title} status={entry.status}
             initialOpen continuous />

@@ -20,16 +20,16 @@ export function ConversationChangesButton({ value }: { value?: Pick<Conversation
   const register = panel?.setConversationChanges;
   useEffect(() => { register?.(entry); }, [register, entry]);
   const showingChanges = Boolean(panel?.visible && panel.showingChanges);
-  const empty = Boolean(workspace && !workspace.hasOpenTabs && !files.length);
+  const sidebar = Boolean(workspace && !files.length);
   const showingStart = Boolean(workspace?.tabs.visible && workspace.tabs.selected === 'start');
-  const expanded = showingChanges || showingStart;
-  const label = empty ? t('client.desktopGuiExtras.sidebarContent')
+  const expanded = sidebar ? Boolean(workspace?.visible) : showingChanges || showingStart;
+  const label = sidebar ? t('client.desktopGuiExtras.sidebarContent')
     : t(showingChanges ? "client.chat.hideFileChanges" : "client.chat.viewFileChanges");
   return <PanelToggleButton icon={expanded ? <PanelRightClose size={16} /> : <PanelRight size={16} />}
     label={label} expanded={expanded} active={workspace?.hasOpenTabs ?? Boolean(panel?.visible)}
     onClick={() => {
       if (expanded) panel?.close();
-      else if (empty) workspace?.openStart();
+      else if (sidebar) workspace?.open();
       else panel?.open(entry);
     }} />;
 }
