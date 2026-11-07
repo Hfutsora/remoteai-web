@@ -23,6 +23,7 @@ import { GuiRemoteDesktop } from '../../../../shared/conversation/GuiRemoteDeskt
 import { RemoteGuiTools } from '../../../../shared/conversation/remote/RemoteGuiTools';
 import { RemoteGuiProject } from '../../../../shared/conversation/remote/RemoteGuiProject';
 import './desktopTools.css';
+import { ConversationSync } from './ConversationSync';
 
 interface Props {
   session: AuthSession; devices: RemoteDevice[]; active: boolean; openAccounts?: () => void;
@@ -100,6 +101,9 @@ function WebChat({ session, device, selected, ...props }: Props & {
         current: device ?? null, devices: props.devices, authenticated: true, login: () => {},
         choose: selected => { if (selected) props.chooseDevice(selected.deviceId); } }} />}
     headerActions={<div className="chat-header-tools">
+      {desktop && device && <ConversationSync session={session} devices={props.devices} deviceId={device.deviceId}
+        active={props.active && chat.foreground}
+        onSynced={() => { void chat.controller.list(); }} />}
       <ChatTools client={chat.controller.guiTools} active={props.active} terminal={terminal}
         desktopActions={<><GuiRemoteDesktop client={chat.controller.guiTools.desktop} active={props.active}
           connected={chat.state.mode === 'direct' || chat.state.mode === 'relay'} />
