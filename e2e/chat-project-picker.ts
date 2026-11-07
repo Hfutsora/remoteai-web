@@ -67,20 +67,25 @@ export async function projectPickerJourney({ page, request, relay }: {
 
 async function chooseNewProjectFolder(page: Page) {
   const picker = page.locator('.chat-project-picker');
-  await picker.getByRole('button', { name: '此电脑', exact: true }).click();
-  await expect(picker.getByRole('button', { name: '选择此文件夹' })).toBeDisabled();
+  const choose = picker.getByRole('button', { name: '使用此文件夹', exact: true });
+  const computer = async () => {
+    await picker.getByRole('button', { name: '文件夹地址', exact: true }).click();
+    await picker.getByRole('button', { name: '此电脑', exact: true }).click();
+  };
+  await computer();
+  await expect(choose).toBeDisabled();
   await picker.getByRole('button', { name: 'F:', exact: true }).click();
   await picker.getByRole('button', { name: 'projects', exact: true }).click();
   await picker.getByRole('button', { name: '不可访问的文件夹' }).click();
   await expect(picker.getByRole('alert')).toBeVisible();
-  await picker.getByRole('button', { name: '此电脑', exact: true }).click();
+  await computer();
   await picker.getByRole('button', { name: 'F:', exact: true }).click();
   await picker.getByRole('button', { name: 'projects', exact: true }).click();
   await picker.getByRole('button', { name: LONG_PROJECT_NAME, exact: true }).click();
   if ((page.viewportSize()?.width ?? 0) <= 860) await preservePickerInBackground(page);
   await picker.getByRole('button', { name: '返回上一级' }).click();
   await picker.getByRole('button', { name: LONG_PROJECT_NAME, exact: true }).click();
-  await picker.getByRole('button', { name: '选择此文件夹' }).click();
+  await choose.click();
 }
 
 async function preservePickerInBackground(page: Page) {
@@ -92,7 +97,7 @@ async function preservePickerInBackground(page: Page) {
     }, visibility);
     await expect(picker).toBeVisible();
     await expect(picker).toContainText(LONG_PROJECT_NAME);
-    await expect(picker.getByRole('button', { name: '选择此文件夹' })).toBeEnabled();
+    await expect(picker.getByRole('button', { name: '使用此文件夹' })).toBeEnabled();
   }
 }
 
