@@ -9,6 +9,8 @@ import type { Item } from './types';
 import { messageContent, messageLabel } from '../../chat/messageDetails';
 import { commandPreview } from '../../chat/commandPreview';
 import { activityPreview } from '../../chat/activityPreview';
+import { commandStatusLabel, useToolSummary } from '../../chat/useToolSummary';
+import { isItemFinished } from '../../conversation/itemStatus';
 import { collaborationSummary, isCollaborationActivity }
   from '../../conversation/collaborationActivity';
 
@@ -21,7 +23,7 @@ function activityLabel(item: Item) {
     const action = item.commandActions?.find(entry => entry.type !== 'unknown');
     const labels: Record<string, string> = { read: t("client.chat.readFile"), listFiles: t("client.chat.browseFiles"), search: t("client.chat.searchCode") };
     return action ? `${labels[action.type] || t("client.chat.runCommand")} · ${action.name || action.query || action.path || ''}`
-      : [t("client.chat.runCommand"), commandPreview(item.commandPreview ?? item.command ?? ''), item.status === 'interrupted' ? t("client.chat.stopped") : '']
+      : [commandStatusLabel(item.status), commandPreview(item.commandPreview ?? item.command ?? '')]
         .filter(Boolean).join(' · ');
   }
   if (item.type === 'reasoning') return [...item.summary ?? [], messageContent(item)]
@@ -40,18 +42,19 @@ function GroupedActivities({ children }: { children: ReactNode }) {
     : <div className={className}>{children}</div>;
 }
 
-export function ChatActivity({ item, onOpen, running, inline = false, onInspect, count, content }: {
+export function ChatActivity({ item: source, onOpen, running, inline = false, onInspect, count, content }: {
   item: Item; onOpen: (id: string) => void; running?: boolean;
   inline?: boolean; onInspect?: () => void; count?: number; content?: () => ReactNode;
 }) {
   useLanguage();
+  const { item, onLoad } = useToolSummary(source);
   const [expanded, setExpanded] = useState(false);
   const label = activityPreview(activityLabel(item));
   if (!label) return null;
   const icons = { commandExecution: Terminal, fileChange: FileText, reasoning: Lightbulb, webSearch: Search };
   const Icon = isCollaborationActivity(item) ? Users : icons[item.type as keyof typeof icons] || Wrench;
   return <div className={inline ? 'chat-inline-activity' : undefined}>
-    <button type="button" className={`chat-activity${running ? ' is-running' : ''}`}
+    <button type="button" className={`chat-activity${running && !isItemFinished(item.status) ? ' is-running' : ''}`}
       aria-label={count ? t("client.downloads.viewGroupedOperationsActivities", { value1: count }) : undefined}
       aria-expanded={inline ? expanded : undefined} onClick={() => {
         if (!inline) return onOpen(item.id);
@@ -63,7 +66,7 @@ export function ChatActivity({ item, onOpen, running, inline = false, onInspect,
     {inline && expanded && (count && content
       ? <GroupedActivities>{content()}</GroupedActivities>
       : <div className="chat-inline-tool-content chat-detail-stack">
-        {content ? content() : <ChatToolContent item={item} />}
+        {content ? content() : <ChatToolContent item={source} onLoad={onLoad} />}
       </div>)}
   </div>;
 }
