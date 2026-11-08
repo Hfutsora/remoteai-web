@@ -32,6 +32,7 @@ import { LoungeClientVersion } from './LoungeClientVersion';
 import { LoungeAssistanceButton, LoungeAssistanceProvider, type RequestLoungeAssistance } from './LoungeAssistance';
 import { LoungeDeleteDialog } from './LoungeDeleteDialog';
 import { useLoungeDeletion } from './useLoungeDeletion';
+import { useLoungeDrafts } from './useLoungeDrafts';
 
 export function LoungePage(props: {
   controller: LoungeController; onLogin?: () => void; mobile?: boolean; onBack?: () => void;
@@ -55,7 +56,9 @@ function DesktopLoungePage({ controller, onLogin, mobile = false }: {
   const [moderating, setModerating] = useState<LoungeAccount>();
   const [avatarOpen, setAvatarOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
-  const [reply, setReply] = useState<LoungeReply>();
+  const draftState = useLoungeDrafts(controller, state);
+  const reply = draftState.draft.reply;
+  const setReply = (value?: LoungeReply) => draftState.change(current => ({ ...current, reply: value }));
   const [peopleOpen, setPeopleOpen] = useState(false);
   const [newChatOpen, setNewChatOpen] = useState(false);
   const newChat = () => { setPeopleOpen(false); setNewChatOpen(true); };
@@ -73,7 +76,7 @@ function DesktopLoungePage({ controller, onLogin, mobile = false }: {
     const entries = state.deletedConversations ?? {};
     const peer = previousConversation.current;
     if (peer && (entries[peer] ?? 0) > (previousDeletions.current[peer] ?? 0)) {
-      navigation.clear(); setHistoryOpen(false); setReply(undefined); setProfile(undefined); setPeopleOpen(false);
+      navigation.clear(); setHistoryOpen(false); setProfile(undefined); setPeopleOpen(false);
     }
     previousConversation.current = state.conversation; previousDeletions.current = entries;
   }, [state.conversation, state.deletedConversations]);
@@ -86,7 +89,6 @@ function DesktopLoungePage({ controller, onLogin, mobile = false }: {
     const frame = requestAnimationFrame(() => scrollToLoungeMessage(list.current, navigation.focus!.key));
     return () => cancelAnimationFrame(frame);
   }, [navigation.focus]);
-  useEffect(() => setReply(undefined), [controller, state.conversation]);
   const quote = (message: LoungeMessage) => { setReply(quoteMessage(message)); setHistoryOpen(false); };
   const [now, setNow] = useState(Date.now);
   const mutedUntil = state.policy.mutedUntil;
@@ -186,10 +188,10 @@ function DesktopLoungePage({ controller, onLogin, mobile = false }: {
     {navigation.error && <p className="lounge-mute-notice" role="status">{t(navigation.error)}</p>}
     <LoungeComposer direct={!!state.conversation} filesAvailable={state.attachmentsAvailable}
       key={`${state.user?.id ?? 'guest'}:${state.conversation}`}
-      composerRef={composer}
+      composerRef={composer} draftState={draftState}
       assistance={contact && <LoungeAssistanceButton user={contact.user} />}
       connected={state.status === 'connected' && !muted && (!state.conversation || state.directAvailable)} mobile={mobile}
-      reply={reply} cancelReply={sent => setReply(current => !sent || current === sent ? undefined : current)}
+      reply={reply} cancelReply={() => setReply(undefined)}
       send={draft => controller.send({ ...draft, to: state.conversation || undefined })}
       onHistory={() => setHistoryOpen(true)} />
     <LoungeHistory open={historyOpen} close={() => setHistoryOpen(false)} controller={controller}
