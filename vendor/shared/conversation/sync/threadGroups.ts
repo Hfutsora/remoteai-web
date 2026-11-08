@@ -8,15 +8,24 @@ export interface SyncProjectRow {
 export type SyncRow = SyncProjectRow | SyncThreadRow;
 
 export const syncThreadKey = (sessionId: string) => JSON.stringify(['thread', sessionId]);
+export const SYNC_RECENT_KEY = JSON.stringify(['project', '']);
+
+const SCRATCH_WORKSPACE = /(?:^|[\\/])codex-gui-workspaces[\\/][\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}[\\/]*$/i;
+
+function projectDirectory(cwd: string) {
+  // Older hosts expose the scratch directory instead of an empty project path.
+  return !cwd.trim() || SCRATCH_WORKSPACE.test(cwd.trim()) ? '' : cwd;
+}
 
 export function groupSyncThreads(threads: SyncThread[]): SyncProjectRow[] {
   const projects = new Map<string, SyncProjectRow>();
   for (const thread of threads) {
-    let project = projects.get(thread.cwd);
+    const cwd = projectDirectory(thread.cwd);
+    let project = projects.get(cwd);
     if (!project) {
-      project = { key: JSON.stringify(['project', thread.cwd]), type: 'project', cwd: thread.cwd,
-        title: thread.cwd.split(/[\\/]/).filter(Boolean).at(-1) ?? '', updatedAt: null, children: [] };
-      projects.set(thread.cwd, project);
+      project = { key: JSON.stringify(['project', cwd]), type: 'project', cwd,
+        title: cwd.split(/[\\/]/).filter(Boolean).at(-1) ?? '', updatedAt: null, children: [] };
+      projects.set(cwd, project);
     }
     project.children.push({ ...thread, key: syncThreadKey(thread.sessionId), type: 'thread' });
     if ((thread.updatedAt ?? 0) > (project.updatedAt ?? 0)) project.updatedAt = thread.updatedAt;

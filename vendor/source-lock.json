@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "5252bb2ec713c33b412bdf0d24749a3f97797164",
+  "revision": "82be0efadf64a27e032c143c793caaaafce6a5cc",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "0425cc08f161fcf2add2deab6260a538d8f7d0e6"
+    "revision": "933376a0a98c13b62d2c251856e1fe3098bc0023"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "8a66e40453f666399e4feecf42b30b87391e32a4"
+    "revision": "bdc85b7c9d8e8b7a4394b24ff36856a80b00ae97"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.9/remoteai-i18n-0.1.9.tgz",
   "files": {
@@ -20,7 +20,7 @@
     "apps/desktop/e2e/mobile-fixture.mjs": "7bdefc5f3b02a3c6da056e2a3226da6ad57c9705ac0e09e90bfebdb953f0b8a0",
     "apps/desktop/src-tauri/icons/32x32.png": "7f5310d2f4b466d841479766ddf28a8b1003e167bfbc2e723d6de7ee967f4466",
     "apps/desktop/src-tauri/icons/128x128.png": "c6e11f099d213c5e3b81dc9264403858841e130f07e6f832069cac8eae47db02",
-    "apps/desktop/src-tauri/tauri.conf.json": "f56553e0dc926ef34831fea109f7c626fc751717632d37cbcaa18e3a97ed9245",
+    "apps/desktop/src-tauri/tauri.conf.json": "a7532dbcff8a0b1cdd59c66ed449c7a76940018d2fb538a1ee0daa7fcee77da6",
     "shared/localization/testLocale.ts": "6ca4daa3a6a5d9442013a8b5861803edfafebf20d2bd875d6a2608158dc53e35",
     "apps/desktop/e2e/browser-chrome-checks.ts": "ffb5e29d72a5b938cdea6adbe30bead71f221aecc1ef3f49e8a1890d88fd231e",
     "apps/desktop/e2e/browser-loading-checks.ts": "75711e132895ee135d1a2f1b54396cd0a114f2722169001434a7e15aec364118",
@@ -88,7 +88,7 @@
     "shared/remote-chat/views/chatUsage.css": "41a77db3e64c76329db7ae002b046162c982b2048b876dbeee62c9b31a2f97cd",
     "shared/conversation/sync/ConversationSyncPanel.tsx": "4061c0def1360d7ad5a7a55966672d5b8923a64bfa8a047bf29e52bf5b6aa243",
     "shared/conversation/sync/ConversationSyncDialog.tsx": "bbbe4668b264214244a615b0104384b249339c4d5dc950724d60e3e835dc1af7",
-    "shared/testing/conversationSyncFixture.ts": "9ff108920e04b6cc3bcad1205d08cc73e13de21340df99aa0bc49f58fb18fbd2",
+    "shared/testing/conversationSyncFixture.ts": "50171cb10c34b046b77a25b78f458f6f9483455f7472589b6dc47b7a775bb682",
     "shared/appearance/fontSize.ts": "b06503931507efe9633a80602c439791489e64f7483d121c10a770ca7b9eddd3",
     "apps/desktop/e2e/deferred-tool-details-harness.tsx": "1bbffb8af7cfa173c9977c96d23f73fa2d8aaf42b732d4440c542dadc0c0c13b",
     "apps/desktop/e2e/remote-dictation-harness.html": "eb6b69d76a31929e21217b41500815e2c6e281806f4d93cd6a16bc96c2fa720e",
@@ -474,7 +474,7 @@
     "shared/localization/useGuiLanguage.ts": "758cb0e9af7aabb01966ccad5f16ece554893e3e4a6ce67dc607ca8ecea2eac1",
     "shared/conversation/sync/useConversationSync.ts": "1df6bf40d1cc90c3345be8f67ae342436ee247a50a1fc5c9896d89f488d192c6",
     "shared/conversation/sync/types.ts": "315b7eb1dbf035f30d5acd02051c2e764de2b34039c5772efbb2911b5644190d",
-    "shared/conversation/sync/SyncThreadTable.tsx": "9efcea14ece4a32231785da24a8f41e8f4b7b718e088e9943f191c029be7c525",
+    "shared/conversation/sync/SyncThreadTable.tsx": "9d373ff4947b6ef01f57b095114e0163bf3f2cef37cd4e3dce26781c19bbac23",
     "shared/conversation/sync/sync.module.less": "55ebbbc9880ea83f9a7c3c03a2c2e758f4c64fae8ac608fbcb0db7d59441acb6",
     "apps/desktop/src/pages/codexGui/ActivityRow.tsx": "dae1b1a34e2a8280516648206904c827e2c89e83bc9b80099be9d7131b739393",
     "shared/chat/DeferredToolDetails.tsx": "f0a441cdc92f5a4763e1cfb06147fd1009145b77d7e746e3212d8ec0f267b431",
@@ -1031,7 +1031,7 @@
     "shared/chat/latestUserMessage.ts": "b996210743de81c7b21124181eec56de9a33af959084058feb2b86e71a48fc2e",
     "shared/conversation/editedMessageDraft.ts": "d4363f20340b10b9f431b35634dda6e10077709d0741a9473f08856328987d0a",
     "shared/conversation/sync/transfer.ts": "1f2dbbe63b0f942f19cab637961f4241698a3e781e41935f7a74a167e75cc0ff",
-    "shared/conversation/sync/threadGroups.ts": "301115b6b03d5e9e1059d627316cae83f71209555df5db67fe21de92db4519da",
+    "shared/conversation/sync/threadGroups.ts": "9975c3a87ec13ef0be90b2429e2f5ec39cf2b5cba1f7270dde9b59443a6cc0eb",
     "apps/desktop/src/pages/codexGui/ToolDetails.tsx": "afd78714ebebeea9b2839138036115a450a4ca1592a2e9ab305c365e7aace220",
     "apps/desktop/src/pages/codexGui/DeferredDetails.tsx": "dc58832083e9ebfe73293d58c448245220f09a9b49e5e8d711d555af72acafff",
     "apps/desktop/src/pages/codexGui/ActivityRow.module.less": "84922e05c9f86d103d900ea11e388f2f9bb0a2c7a245bdf65464d59a210f88e5",

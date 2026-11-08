@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState, type Key } from 'react';
 import { Empty, Table, theme } from 'antd';
 import type { TableColumnsType } from 'antd';
-import { ChevronDown, ChevronRight, Folder } from 'lucide-react';
+import { ChevronDown, ChevronRight, Clock3, Folder } from 'lucide-react';
 import { uiText } from '../../localization/uiText';
 import { useGuiLanguage } from '../../localization/useGuiLanguage';
-import { groupSyncThreads, syncThreadKey, type SyncRow } from './threadGroups';
+import { groupSyncThreads, SYNC_RECENT_KEY, syncThreadKey, type SyncRow } from './threadGroups';
 import type { SyncThread } from './types';
 import styles from './sync.module.less';
 
@@ -13,11 +13,17 @@ interface Props {
   loading: boolean; locked: boolean; query: string;
 }
 
+function toggleLabel(open: boolean, cwd: string) {
+  const key = cwd ? (open ? 'client.chat.collapseProject' : 'client.chat.expandProject')
+    : (open ? 'client.chat.collapse' : 'client.chat.expand');
+  return `${uiText(key)}: ${cwd || uiText('client.chat.recent')}`;
+}
+
 export function SyncThreadTable({ threads, selected, onSelect, loading, locked, query }: Props) {
   const language = useGuiLanguage();
   const { token } = theme.useToken();
   const projects = useMemo(() => groupSyncThreads(threads), [threads]);
-  const [expanded, setExpanded] = useState<readonly Key[]>([]);
+  const [expanded, setExpanded] = useState<readonly Key[]>([SYNC_RECENT_KEY]);
   const projectKeys = JSON.stringify(projects.map(project => project.key));
   useEffect(() => {
     if (query.trim()) setExpanded(JSON.parse(projectKeys) as string[]);
@@ -25,11 +31,13 @@ export function SyncThreadTable({ threads, selected, onSelect, loading, locked, 
   const columns: TableColumnsType<SyncRow> = [
     { title: uiText('client.conversationSync.titleColumn'), key: 'title', render: (_, row) =>
       <div className={styles.titleCell}>
-        {row.type === 'project' && <Folder size={18} color={token.colorTextSecondary} aria-hidden="true" />}
+        {row.type === 'project' && (row.cwd
+          ? <Folder size={18} color={token.colorTextSecondary} aria-hidden="true" />
+          : <Clock3 size={18} color={token.colorTextSecondary} aria-hidden="true" />)}
         <div className={styles.thread}>
           <strong>{row.title || uiText(row.type === 'project'
-            ? 'client.chat.noProjectSelected' : 'client.conversationSync.untitled')}</strong>
-          {row.type === 'project' && <span style={{ color: token.colorTextSecondary }}>{row.cwd}</span>}
+            ? 'client.chat.recent' : 'client.conversationSync.untitled')}</strong>
+          {row.type === 'project' && row.cwd && <span style={{ color: token.colorTextSecondary }}>{row.cwd}</span>}
           {row.type === 'thread' && row.matchExcerpt && <span>{row.matchExcerpt}</span>}
         </div>
       </div> },
@@ -53,8 +61,7 @@ export function SyncThreadTable({ threads, selected, onSelect, loading, locked, 
       onExpandedRowsChange: setExpanded, indentSize: 24,
       expandIcon: ({ expanded: open, expandable, record, onExpand }) => expandable
         ? <button type="button" className={styles.expand} aria-expanded={open}
-          aria-label={`${uiText(open ? 'client.chat.collapseProject' : 'client.chat.expandProject')}: ${
-            record.cwd || uiText('client.chat.noProjectSelected')}`}
+          aria-label={toggleLabel(open, record.cwd)}
           onClick={event => onExpand(record, event)}>
           {open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
         </button> : <span className={styles.expandSpace} /> }}
