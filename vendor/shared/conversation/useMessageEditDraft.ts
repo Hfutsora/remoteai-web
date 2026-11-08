@@ -1,9 +1,9 @@
-import { uiText } from "../../../../../shared/localization/uiText";
+import { uiText } from "../localization/uiText";
 import { useEffect, useRef, useState, type ClipboardEvent } from "react";
-import type { Content, SkillReference } from "../../../../../shared/conversation/types";
-import { IMAGE_TYPES, MAX_IMAGES, MAX_IMAGE_BYTES, readImage, type DraftImage } from "./draftImages";
-import { queuedMessageText } from "../../../../../shared/conversation/queuedMessageDraft";
-import type { MessageEditContent } from "../../../../../shared/conversation/messageEditContent";
+import type { Content, SkillReference } from "./types";
+import { IMAGE_TYPES, MAX_IMAGES, MAX_IMAGE_BYTES, readImage, type DraftImage } from "../chat/draftImages";
+import { queuedMessageText } from "./queuedMessageDraft";
+import type { MessageEditContent } from "./messageEditContent";
 
 export function useMessageEditDraft({ text, images, skills }: {
   text: string; images: Content[]; skills: SkillReference[];

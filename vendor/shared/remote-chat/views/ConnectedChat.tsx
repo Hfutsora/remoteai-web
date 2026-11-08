@@ -18,6 +18,7 @@ import { ChatProjectSwitch } from './ChatProjectSwitch';
 import type { NativeFileDrop } from './composerProps';
 import { queueProps } from '../client/queueProps';
 import { ChatMessages, type RenderUserMessage } from './ChatMessages';
+import { EditableChatMessage } from './EditableChatMessage';
 import { ChatProcessing } from './ChatProcessing';
 import { currentRunningTurn } from '../../chat/runningTurn';
 import { ChatImageContext } from './ChatImage';
@@ -215,7 +216,8 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
       <ChatRetryProvider controller={controller} state={state}>
       <ChatMessages thread={state.selected} offline={!ready}
         footer={scrollableComposer ? composer : undefined}
-        renderUserMessage={renderUserMessage}
+        renderUserMessage={renderUserMessage ?? (desktop ? props => <EditableChatMessage {...props}
+          state={state} controller={controller} active={active && foreground} /> : undefined)}
         loading={state.historyLoading} loadingMore={state.historyLoadingMore} hasMore={state.historyHasMore}
         loadOlder={() => controller.loadOlder()} historyLoad={state.historyLoad}
         processing={runningTurn && <ChatProcessing key={runningTurn.id} turn={runningTurn}

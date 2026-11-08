@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test:dictation:e2e": "node scripts/run.mjs playwright --config scripts/playwright.dictation.config.ts",
+    "test:message-edit:e2e": "node scripts/run.mjs playwright --config scripts/playwright.message-edit.config.ts",
     "dev": "node scripts/run.mjs dev",
     "build": "node scripts/run.mjs build",
     "check": "npm run check:dependencies && npm run check:i18n && node scripts/run.mjs check",
