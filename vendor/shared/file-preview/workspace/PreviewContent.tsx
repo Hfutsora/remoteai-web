@@ -7,6 +7,7 @@ import { isJsonPath } from '../jsonHighlightLimit';
 import { PreviewMarkdown } from "./PreviewMarkdown";
 import styles from "./preview.module.less";
 import { ResourceHtmlPreview } from './ResourceHtmlPreview';
+import { PdfUrlPreview } from '../PdfUrlPreview';
 
 function MediaPreview({ data }: { data: FilePreviewData }) {
   const [failed, setFailed] = useState(false);
@@ -14,9 +15,7 @@ function MediaPreview({ data }: { data: FilePreviewData }) {
   if (failed) return <p className={styles.feedback} role="status">
     {uiText("client.workspaceActions.thisFileCannotBePreviewedRightNowUseTheFile")}</p>;
   const onError = () => setFailed(true);
-  if (data.kind === "pdf") return <object className={styles.frame} data={data.url} type="application/pdf">
-    <p className={styles.feedback}>{uiText("client.workspaceActions.thisPdfCannotBePreviewedRightNowOpenItUsing")}</p>
-  </object>;
+  if (data.kind === "pdf") return <PdfUrlPreview url={data.url} name={data.name} />;
   if (data.kind === "image") return <div className={styles.imageArea}>
     <button type="button" className={styles.imageToggle} onClick={() => setOriginalSize(!originalSize)}>
       {originalSize ? uiText("client.workspaceActions.fitToWindow") : uiText("client.workspaceActions.originalSize")}

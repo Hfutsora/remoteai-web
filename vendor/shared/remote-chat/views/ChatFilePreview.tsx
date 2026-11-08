@@ -22,6 +22,8 @@ import { PreviewTransferProgress } from '../../chat/PreviewTransferProgress';
 import { ChatDownloadFile, isDownloadOnlyFile } from './ChatDownloadFile';
 import { ChatFileContext } from './ChatFileLink';
 import { filePreviewError } from '../fileErrors';
+import { filePreviewKind } from '../../file-preview/kinds';
+import { ChatPdfBrowser } from './ChatPdfBrowser';
 import './filePreview.css';
 
 export interface FilePreviewContext {
@@ -83,10 +85,11 @@ function VideoFile({ path, context }: { path: string; context: FilePreviewContex
   return <video controls playsInline src={url} style={{ width: '100%', maxHeight: '60dvh' }}
     onError={() => setError(t("client.chat.yourBrowserCannotPlayThisFormatDownloadTheVideoTo"))} />;
 }
-export function ChatFilePreviewContent({ path, line, context }: {
-  path: string; line?: number; context: FilePreviewContext;
+export function ChatFilePreviewContent({ path, line, context, active = true }: {
+  path: string; line?: number; context: FilePreviewContext; active?: boolean;
 }) {
   useLanguage();
+  if (filePreviewKind(path) === 'pdf') return <ChatPdfBrowser path={path} context={context} active={active} />;
   const image = /\.(png|jpe?g|gif|webp|bmp|avif)$/i.test(path);
   return <ChatFileContext.Provider value={{ ...context, basePath: path }}>
     <div className="chat-detail-stack">
@@ -102,6 +105,7 @@ export function ChatFilePreview({ path, line, context, onClose }: {
 }) {
   useLanguage();
   const [fullscreen, setFullscreen] = useState(false);
+  if (filePreviewKind(path) === 'pdf') return <ChatPdfBrowser path={path} context={context} onClose={onClose} />;
   if (isDownloadOnlyFile(path)) return <ChatDownloadFile path={path} context={context} onClose={onClose} />;
   return <AdaptiveSheet open truncateTitle title={path.split(/[\\/]/).at(-1) || t("client.projectBrowser.filePreview")}
     className="chat-file-preview-sheet" mobileFullscreen={fullscreen}

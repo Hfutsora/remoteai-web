@@ -8,6 +8,7 @@ import type { ManagedBrowserTab } from '../../browser/automation';
 import { fileResourceKey, RemoteBrowserResourceContext, type BrowserResource } from './browserResources';
 import { fileBrowserResource } from './fileResource';
 import { downloadBrowserResource } from './downloadResource';
+import { filePreviewKind } from '../kinds';
 
 export type FilePreviewTarget = Parameters<typeof filePreviewApi.open>[0];
 /** Already resolved URLs belong to the viewing computer, including when revisiting history. */
@@ -21,6 +22,11 @@ type Preview = { kind: "file"; data: FilePreviewData; release: () => void }
 interface History { entries: Target[]; index: number }
 const EMPTY_HISTORY: History = { entries: [], index: -1 };
 const MAX_HISTORY_ENTRIES = 100;
+
+function routePdfToBrowser(target: Target): Target {
+  if (target.kind !== 'file' || filePreviewKind(target.file.path) !== 'pdf') return target;
+  return { ...target, browser: true };
+}
 
 function sameTarget(current: Target | undefined, next: Target) {
   if (current?.kind === "website" && next.kind === "website") {
@@ -79,6 +85,7 @@ export function usePreviewHistory({ onOpen, onNavigate }: { onOpen: () => void; 
     history.current = EMPTY_HISTORY; setPreview(null); resetWebsites();
   }, [resetWebsites]);
   const visit = useCallback(async (target: Target, index?: number) => {
+    target = routePdfToBrowser(target);
     const id = ++request.current;
     onOpen();
     if (target.kind === 'website') {
