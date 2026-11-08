@@ -28,11 +28,16 @@
   :global(.ant-table-container) { display: flex; flex-direction: column; min-height: 0; }
   :global(.ant-table-header) { flex-shrink: 0; }
   :global(.ant-table-body) { flex: 1; min-height: 0; max-height: none !important; overscroll-behavior: contain; }
-  :global(.ant-table-row-indent), .expand, .expandSpace { float: inline-start; }
 }
-.titleCell { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.titleColumn .titleRow {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  > :global(.ant-table-row-indent) { flex-shrink: 0; }
+}
+.titleCell { display: flex; flex: 1; align-items: center; gap: 8px; min-width: 0; }
 .titleCell > svg { flex-shrink: 0; }
-.expand, .expandSpace { width: 24px; height: 24px; margin-inline-end: 8px; }
+.expand, .expandSpace { flex-shrink: 0; width: 24px; height: 24px; margin-inline-end: 8px; }
 .expand {
   display: inline-grid;
   place-items: center;

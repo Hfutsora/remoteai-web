@@ -3,6 +3,7 @@ import { closePreparedSync, prepareSync, uploadPreparedSync, type PreparedSync }
 import { SYNC_HOME_ID, type SyncDirectory, type SyncHost, type SyncResult, type SyncSource,
   type SyncThread, type SyncProvider } from './types';
 import { uiText } from '../../localization/uiText';
+import { syncSourceLabel } from './sourceLabel';
 
 export function useSyncSources(hosts: SyncHost[], destination: SyncHost) {
   const [sources, setSources] = useState<SyncSource[]>([]);
@@ -16,7 +17,7 @@ export function useSyncSources(hosts: SyncHost[], destination: SyncHost) {
       const directory = await host.request<SyncDirectory>({ action: 'homes' });
       return directory.homes.filter(home => host.id !== destination.id || home.id !== SYNC_HOME_ID)
         .map(home => ({ key: JSON.stringify([host.id, home.id]), host, home,
-          label: `${host.name || directory.name} · ${home.path}` }));
+          label: syncSourceLabel(host.name || directory.name, home) }));
     })).then(results => {
       if (cancelled) return;
       setSources(results.flatMap(result => result.status === 'fulfilled' ? result.value : []));

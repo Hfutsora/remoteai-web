@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type Key } from 'react';
+import { useEffect, useMemo, useState, type ComponentProps, type Key } from 'react';
 import { Empty, Table, theme } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { ChevronDown, ChevronRight, Clock3, Folder } from 'lucide-react';
@@ -19,6 +19,11 @@ function toggleLabel(open: boolean, cwd: string) {
   return `${uiText(key)}: ${cwd || uiText('client.chat.recent')}`;
 }
 
+function SyncTableCell({ children, className, ...props }: ComponentProps<'td'>) {
+  return <td {...props} className={className}>{className?.includes(styles.titleColumn)
+    ? <div className={styles.titleRow}>{children}</div> : children}</td>;
+}
+
 export function SyncThreadTable({ threads, selected, onSelect, loading, locked, query }: Props) {
   const language = useGuiLanguage();
   const { token } = theme.useToken();
@@ -29,7 +34,8 @@ export function SyncThreadTable({ threads, selected, onSelect, loading, locked, 
     if (query.trim()) setExpanded(JSON.parse(projectKeys) as string[]);
   }, [query, projectKeys]);
   const columns: TableColumnsType<SyncRow> = [
-    { title: uiText('client.conversationSync.titleColumn'), key: 'title', render: (_, row) =>
+    { title: uiText('client.conversationSync.titleColumn'), key: 'title', className: styles.titleColumn,
+      render: (_, row) =>
       <div className={styles.titleCell}>
         {row.type === 'project' && (row.cwd
           ? <Folder size={18} color={token.colorTextSecondary} aria-hidden="true" />
@@ -53,6 +59,7 @@ export function SyncThreadTable({ threads, selected, onSelect, loading, locked, 
       ...rows.flatMap(row => row.type === 'thread' ? [row.sessionId] : [])])]);
   };
   return <Table<SyncRow> className={styles.table} size="small" rowKey="key" columns={columns}
+    components={{ body: { cell: SyncTableCell } }}
     dataSource={projects} loading={loading} pagination={false} scroll={{ y: '100%' }} tableLayout="fixed"
     onRow={row => row.type === 'project' ? { style: { background: token.colorFillAlter } } : {}}
     rowSelection={{ selectedRowKeys: selected.map(syncThreadKey), checkStrictly: false, preserveSelectedRowKeys: true,
