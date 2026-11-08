@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "7621dcc5cb40ff80a0e49452a33d1a21f21986a8",
+  "revision": "2732ba10d3f32eb4c3b00d09d9156fc48a932386",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "9bca6a741ce99cc3c588df627a14567de8716db0"
+    "revision": "7ef2965ba49085d4c945d0c3e669824ac41fd000"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -983,7 +983,7 @@
     "shared/remote-chat/views/useSettingSegmentDrag.ts": "4b63877788c3a2accd18dd9df020784405f6e402abca3302fe9d0fca3118b5f6",
     "shared/remote-chat/views/chatSettingSegments.css": "90062c4b15e4029db4f41fa8da9ff4546467f0866e3ac299f5af299bb7c2475e",
     "shared/context-usage/settings.js": "55f03a6dccee8471f1921f35dfefc6e7ea2b0c47b065416c11bc35be18ea5557",
-    "shared/conversation/ProjectPicker.module.less": "ff40ddc1d282b23016a4df625e0fc4ddd9f597161554268fd817494d2b4981e3",
+    "shared/conversation/ProjectPicker.module.less": "73f138f105ab65f5b8c00208f7cab1a8069c980acf27bb9d427b3d8c77bb6bec",
     "shared/conversation/GuiHostPicker.module.less": "b2d21f420767f80ab93736a1261fea873d8f5178a15e0972757beb4535fe1c0b",
     "shared/appearance/themeColor.ts": "41d9cbcc78bc95d97e4322e2836e526235481ba5dcec63e8bd11cc095887496b",
     "apps/desktop/src/pages/codexGui/SkillInput.tsx": "a02abcfe2be104adf721aefd8844d050f3c8c83d8bcf90046e88abd4d046c3bb",
@@ -1108,7 +1108,7 @@
     "apps/desktop/src/pages/codexGui/UserMessage.tsx": "7d57c99765a0b63bf88e648c9e6c8e92b9c74c555694ed4adbe89bc0f32fa6ac",
     "shared/project-explorer/ProjectExplorer.tsx": "e4d3ffb33a959a6a236a8fc5d84a034ae9f1d7ab2dc3a7a0e54035af1c93314e",
     "shared/remote-chat/views/MobileProjectPicker.tsx": "039cbc5d68426408d642168d98bfb97758df9b17fb7f37c37454f87fac0f859e",
-    "shared/conversation/ProjectFolderPicker.tsx": "ea1b833f01b29efd79360667e98169937d85145158d5feca570d74f0d966a2b2",
+    "shared/conversation/ProjectFolderPicker.tsx": "17e63d2b56c818e9e7225a9d12c1519b59fbb065ff9770e94f940863e6fc25c1",
     "shared/chat/viewportObserver.ts": "8aff23813cbb171e1e761e60658e10bec8b81b540fb9184b6566a5b66b180239",
     "shared/chat/imageThumbnail.module.css": "be603ce6c23eb4a0451553b5a988878b8cd5bee68dfde2dfe72fcb6666d897f7",
     "shared/chat/ImageViewer.tsx": "ea1b60e57bf5a9da03c4e16bbe649806917051b45751bc3a74b0e784ba891cbd",
