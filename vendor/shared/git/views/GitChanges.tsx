@@ -9,7 +9,10 @@ import { gitAreaColors } from './gitTheme';
 import { GitFileMenu } from './GitFileMenu';
 import { GitCommitForm } from './GitCommitForm';
 import { GitConflicts } from './GitConflicts';
+import { GitVirtualList } from './GitVirtualList';
 import { t } from '../../localization/browserClient';
+
+const rowKey = (row: GitFileRow) => row.id;
 
 export function GitChanges({ panel, connected }: { panel: RemoteGit; connected: boolean }) {
   const files = panel.changes?.files ?? [];
@@ -25,11 +28,11 @@ export function GitChanges({ panel, connected }: { panel: RemoteGit; connected: 
         {(['tree', 'flat'] as const).map(mode => <button key={mode} type="button" aria-pressed={list.mode === mode}
           onClick={() => list.setMode(mode)}>{t(mode === 'tree' ? "client.git.folders" : "client.git.flat")}</button>)}
       </div>}</div>
-    <div className="git-files" role="tree" aria-label={t('client.git.gitRepository')}>
-      {panel.changes && !files.length && <p className="git-notice">{t("client.git.thereAreNoUncommittedChanges")}</p>}
-      {list.rows.map(row => <GitRow key={row.id} row={row} panel={panel} connected={connected}
-        onToggle={() => list.toggleFolder(row.id)} flat={list.mode === 'flat'} />)}
-    </div>
+    <GitVirtualList items={list.rows} itemKey={rowKey} role="tree" label={t('client.git.gitRepository')}
+      empty={panel.changes && <p className="git-notice">{t("client.git.thereAreNoUncommittedChanges")}</p>}>
+      {row => <GitRow row={row} panel={panel} connected={connected}
+        onToggle={() => list.toggleFolder(row.id)} flat={list.mode === 'flat'} />}
+    </GitVirtualList>
     {!panel.changes?.integration && <GitCommitForm panel={panel} />}
   </>;
 }
