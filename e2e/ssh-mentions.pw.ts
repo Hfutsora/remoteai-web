@@ -1,7 +1,8 @@
 import { expect, test } from '@playwright/test';
 
 for (const appearance of [{ width: 1280, large: false, dark: false },
-  { width: 680, large: true, dark: true }]) {
+  { width: 680, large: true, dark: true }, { width: 390, large: false, dark: false },
+  { width: 390, large: true, dark: true }]) {
   const label = `web-${appearance.dark ? 'dark' : 'light'}-${appearance.width}`;
   test(`${label} SSH candidates filter, select and send`, async ({ page }) => {
     await page.setViewportSize({ width: appearance.width, height: 900 });

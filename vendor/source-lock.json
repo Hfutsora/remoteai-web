@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "021ea55f93798f350f9967004530c23d7790f455",
+  "revision": "cc9822b91372bf6156e852b2d66fc18fd5692556",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "82837c5af4a296714c5ad53795839a1d97cd77d0"
+    "revision": "c7ac18f7d12abbec6ddc09e1f24eb2815bc06888"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "053b1f1bbd3a826ab5e46ef91fb13d4ec1f6a90c"
+    "revision": "f51f5c17ccd9ce664111158e03d506df3a54eb58"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.10/remoteai-i18n-0.1.10.tgz",
   "files": {
@@ -20,7 +20,7 @@
     "apps/desktop/e2e/mobile-fixture.mjs": "7bdefc5f3b02a3c6da056e2a3226da6ad57c9705ac0e09e90bfebdb953f0b8a0",
     "apps/desktop/src-tauri/icons/32x32.png": "7f5310d2f4b466d841479766ddf28a8b1003e167bfbc2e723d6de7ee967f4466",
     "apps/desktop/src-tauri/icons/128x128.png": "c6e11f099d213c5e3b81dc9264403858841e130f07e6f832069cac8eae47db02",
-    "apps/desktop/src-tauri/tauri.conf.json": "3f7a4b983a834f45d68766bca7d4bb2206e2f6ad247d8f2f03f255662d2a6f9b",
+    "apps/desktop/src-tauri/tauri.conf.json": "8c8e647b7dee27b40b63e6476a14dccbb4ec09c0be76438347a006036b7baa97",
     "shared/localization/testLocale.ts": "6ca4daa3a6a5d9442013a8b5861803edfafebf20d2bd875d6a2608158dc53e35",
     "apps/desktop/e2e/browser-chrome-checks.ts": "ffb5e29d72a5b938cdea6adbe30bead71f221aecc1ef3f49e8a1890d88fd231e",
     "apps/desktop/e2e/browser-loading-checks.ts": "75711e132895ee135d1a2f1b54396cd0a114f2722169001434a7e15aec364118",
@@ -124,7 +124,7 @@
     "shared/file-preview/PdfPreview.tsx": "c2491abdef4b12a96c0a261b9857342bb948277530d56aa5ceb3ab6c4bd53b51",
     "shared/file-preview/pdfAssets.ts": "21f2085d00960f44f4cf3c320c01e524c86e6e556988dd4db49bd6b2acd82de9",
     "apps/desktop/e2e/cmap-pdf-fixture.ts": "8ccb217d9cc9b2686b4bf28ca8a87f4791c42eef36e757acad51e51e0e79bda6",
-    "apps/desktop/e2e/pdf-continuous.pw.ts": "58e317c053e53bb2c15d1c2f0bd44ac34a6c7141c486e148a9d94767954bab8b",
+    "apps/desktop/e2e/pdf-continuous.pw.ts": "66a872343f8362b6b790024f4aed057a163a1293361a66a87b5f7f4e65bfffa6",
     "apps/desktop/e2e/pdf-routing.pw.ts": "246fbc8fef671e0549b80c0a3239ec7aa45a269c31e8e59589293e09efc04ff9",
     "apps/desktop/e2e/process-history-harness.tsx": "c0883a0f840bd94586af39bd1cef9d7084397d992d0024ee9baf762e101b3632",
     "apps/desktop/e2e/process-history-checks.ts": "0746566c4dd99d6ccbcdbb6fc893644a8419d96c5b5ced6829aa137338c55c49",
@@ -548,7 +548,7 @@
     "shared/file-preview/PdfToolbar.tsx": "c437fc58096466c528ed06143a4bc3bf9dd9218c8a5697348cdfc87aae804907",
     "shared/file-preview/pdfLayout.ts": "ecf8aa0bdc2f7ca97a508883bbeb5e1f98dba6e0df80ecde7a9ed35be2edd8a0",
     "shared/file-preview/usePdfDocument.ts": "76c8ac947328f96d911a16db3b431d5d0d58b8231e40e1b9e9328ecff989f87c",
-    "shared/file-preview/usePdfViewport.ts": "eccde8b33c7dd20ad996bb3f5c51e5d4e5dadb493fb24f3b1e6f6ce062156d45",
+    "shared/file-preview/usePdfViewport.ts": "6e282eb63d65ea5d064706a302c6a9ae225e04f271a8667caba5f999c05c6f3b",
     "shared/file-preview/usePdfZoom.ts": "371fdc6315a2ea4fd211508a75527194029135fef8320491dbff7290dfd72cd9",
     "shared/file-preview/usePdfTheme.ts": "c10b6b0b1eddb7d1a02033967bc5094c0559958a06244fd7edda64bcb4210e54",
     "shared/file-preview/pdfPreview.css": "89597532de4139de0f28b322fea9e38a80d5f3ccbb9f6494e3511768d4bb4388",
