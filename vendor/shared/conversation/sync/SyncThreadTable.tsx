@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ComponentProps, type Key } from 'react';
+import { forwardRef, useEffect, useMemo, useState, type ComponentProps, type Key } from 'react';
 import { Empty, Table, theme } from 'antd';
 import type { TableColumnsType } from 'antd';
 import { ChevronDown, ChevronRight, Clock3, Folder } from 'lucide-react';
@@ -6,7 +6,10 @@ import { uiText } from '../../localization/uiText';
 import { useGuiLanguage } from '../../localization/useGuiLanguage';
 import { groupSyncThreads, SYNC_RECENT_KEY, syncThreadKey, type SyncRow } from './threadGroups';
 import type { SyncThread } from './types';
+import { useSyncTableSize } from './useSyncTableSize';
 import styles from './sync.module.less';
+
+const UPDATED_COLUMN_EM = 15;
 
 interface Props {
   threads: SyncThread[]; selected: string[]; onSelect: (ids: string[]) => void;
@@ -19,14 +22,17 @@ function toggleLabel(open: boolean, cwd: string) {
   return `${uiText(key)}: ${cwd || uiText('client.chat.recent')}`;
 }
 
-function SyncTableCell({ children, className, ...props }: ComponentProps<'td'>) {
-  return <td {...props} className={className}>{className?.includes(styles.titleColumn)
-    ? <div className={styles.titleRow}>{children}</div> : children}</td>;
+function SyncTableCell(props: ComponentProps<'div'>) {
+  return <div {...props} role="cell" />;
 }
+
+const SyncTableRow = forwardRef<HTMLDivElement, ComponentProps<'div'>>((props, ref) =>
+  <div {...props} ref={ref} role="row" />);
 
 export function SyncThreadTable({ threads, selected, onSelect, loading, locked, query }: Props) {
   const language = useGuiLanguage();
   const { token } = theme.useToken();
+  const { container, size } = useSyncTableSize();
   const projects = useMemo(() => groupSyncThreads(threads), [threads]);
   const [expanded, setExpanded] = useState<readonly Key[]>([SYNC_RECENT_KEY]);
   const projectKeys = JSON.stringify(projects.map(project => project.key));
@@ -49,7 +55,7 @@ export function SyncThreadTable({ threads, selected, onSelect, loading, locked, 
       </div> },
     { title: uiText('client.conversationSync.kind.conversation'), key: 'count', width: 80, align: 'right',
       render: (_, row) => row.type === 'project' ? row.children.length : null },
-    { title: uiText('client.conversationSync.updated'), key: 'updated', width: 180,
+    { title: uiText('client.conversationSync.updated'), key: 'updated', width: token.fontSize * UPDATED_COLUMN_EM,
       responsive: ['md'], render: (_, row) => row.updatedAt
         ? new Date(row.updatedAt * 1000).toLocaleString(language) : '—' },
   ];
@@ -58,11 +64,14 @@ export function SyncThreadTable({ threads, selected, onSelect, loading, locked, 
     onSelect([...new Set([...selected.filter(id => !visible.has(id)),
       ...rows.flatMap(row => row.type === 'thread' ? [row.sessionId] : [])])]);
   };
-  return <Table<SyncRow> className={styles.table} size="small" rowKey="key" columns={columns}
-    components={{ body: { cell: SyncTableCell } }}
-    dataSource={projects} loading={loading} pagination={false} scroll={{ y: '100%' }} tableLayout="fixed"
+  return <div ref={container} className={styles.table}>
+    <Table<SyncRow> size="small" rowKey="key" columns={columns} virtual
+    components={{ body: { cell: SyncTableCell, row: SyncTableRow } }}
+    dataSource={projects} loading={loading} pagination={false}
+    scroll={{ x: size.width, y: size.height }} tableLayout="fixed"
     onRow={row => row.type === 'project' ? { style: { background: token.colorFillAlter } } : {}}
-    rowSelection={{ selectedRowKeys: selected.map(syncThreadKey), checkStrictly: false, preserveSelectedRowKeys: true,
+    rowSelection={{ columnWidth: token.controlHeight + token.paddingXS,
+      selectedRowKeys: selected.map(syncThreadKey), checkStrictly: false, preserveSelectedRowKeys: true,
       onChange: (_, rows) => changeSelection(rows), getCheckboxProps: () => ({ disabled: locked }) }}
     expandable={{ expandedRowKeys: expanded,
       onExpandedRowsChange: setExpanded, indentSize: 24,
@@ -73,5 +82,6 @@ export function SyncThreadTable({ threads, selected, onSelect, loading, locked, 
           {open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
         </button> : <span className={styles.expandSpace} /> }}
     locale={{ emptyText: <Empty image={Empty.PRESENTED_IMAGE_SIMPLE}
-      description={uiText('client.conversationSync.empty')} /> }} />;
+      description={uiText('client.conversationSync.empty')} /> }} />
+  </div>;
 }

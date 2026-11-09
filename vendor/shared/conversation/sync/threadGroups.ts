@@ -17,9 +17,23 @@ function projectDirectory(cwd: string) {
   return !cwd.trim() || SCRATCH_WORKSPACE.test(cwd.trim()) ? '' : cwd;
 }
 
+// Older hosts can list both the active and archived rollout of the same conversation.
+// Titles are display text; only the session ID identifies a selectable conversation.
+export function uniqueSyncThreads(threads: SyncThread[]): SyncThread[] {
+  const unique = new Map<string, SyncThread>();
+  for (const thread of threads) {
+    const current = unique.get(thread.sessionId);
+    const latest = !current || (thread.updatedAt ?? 0) > (current.updatedAt ?? 0) ? thread : current;
+    unique.set(thread.sessionId, { ...latest,
+      matchExcerpt: latest.matchExcerpt || current?.matchExcerpt || thread.matchExcerpt,
+    });
+  }
+  return [...unique.values()];
+}
+
 export function groupSyncThreads(threads: SyncThread[]): SyncProjectRow[] {
   const projects = new Map<string, SyncProjectRow>();
-  for (const thread of threads) {
+  for (const thread of uniqueSyncThreads(threads)) {
     const cwd = projectDirectory(thread.cwd);
     let project = projects.get(cwd);
     if (!project) {

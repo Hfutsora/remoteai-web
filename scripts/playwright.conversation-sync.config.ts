@@ -7,6 +7,7 @@ export default defineConfig({
   use: { baseURL: 'http://127.0.0.1:1496/web/', viewport: { width: 1280, height: 900 },
     locale: 'zh-CN', headless: true, launchOptions: testBrowserLaunchOptions(),
     screenshot: 'only-on-failure', trace: 'retain-on-failure' },
-  webServer: { cwd: '..', command: 'npx vite --config scripts/vite.config.ts --host 127.0.0.1 --port 1496 --strictPort',
+  webServer: { cwd: '..',
+    command: 'npx vite --config scripts/vite.conversation-sync.config.ts --host 127.0.0.1 --port 1496 --strictPort',
     url: 'http://127.0.0.1:1496/web/', timeout: 120_000 },
 });

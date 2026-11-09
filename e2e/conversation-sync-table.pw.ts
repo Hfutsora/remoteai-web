@@ -26,7 +26,7 @@ for (const enlarged of [false, true]) {
     await expect(pane.getByRole('button', { name: '对话同步', exact: true })).toBeEnabled();
     await pane.getByRole('button', { name: `展开项目: ${projectPath}`, exact: true }).click();
     await expect(first.getByRole('checkbox')).not.toBeChecked();
-    const body = pane.locator('.ant-table-body');
+    const body = pane.locator('.ant-table-tbody-virtual-holder');
     const header = pane.locator('.ant-table-header');
     const top = (await header.boundingBox())!.y;
     const height = await body.evaluate(element => element.clientHeight);
@@ -63,4 +63,5 @@ test('web search exposes matching conversations and keeps project folding usable
   await expect(pane.getByText('项目对话 64', { exact: true })).toBeHidden();
   await pane.getByPlaceholder('搜索标题和对话内容').fill('不存在的对话');
   await expect(pane.getByText('没有可同步的对话')).toBeVisible();
+  await page.screenshot({ path: '../../.codex-tmp/sync-empty-web-light.png', animations: 'disabled' });
 });

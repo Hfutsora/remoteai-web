@@ -8,6 +8,17 @@ function fixtureThreads(parameters: URLSearchParams) {
     cwd: 'F:/projects/customer-workspaces/remoteai-long-running-conversation-synchronization-regression-project',
   } : thread;
   const scratchRoot = 'C:/Users/Codex/AppData/Roaming/dev.codex.switch/codex-gui-workspaces';
+  if (parameters.has('regression')) return [
+    { ...thread, sessionId: 'copy', title: '同名对话', cwd: '', updatedAt: thread.updatedAt + 5 },
+    { ...thread, sessionId: 'copy', title: '同名对话', cwd: 'F:/outdated-project', updatedAt: thread.updatedAt },
+    { ...thread, sessionId: 'same-title', title: '同名对话', cwd: '', updatedAt: thread.updatedAt + 4 },
+    { ...thread, sessionId: 'external-projectless', title: '普通目录中的非项目对话', cwd: '',
+      sessionKind: 'external', updatedAt: thread.updatedAt + 3 },
+    { ...thread, sessionId: 'scratch', title: '临时工作区对话', cwd: `${scratchRoot}/0300e13d-5059-40fe-925f-53e639c4f0cb`,
+      updatedAt: thread.updatedAt + 2 },
+    ...Array.from({ length: 3000 }, (_, index) => ({ ...thread, sessionId: `large-${index}`,
+      title: `批量项目对话 ${index + 1}`, updatedAt: thread.updatedAt - index })),
+  ];
   if (parameters.has('projectless')) return [project,
     { ...thread, sessionId: 'scratch-windows', title: '整理本周工作计划', updatedAt: thread.updatedAt + 3,
       cwd: `${scratchRoot}/0300e13d-5059-40fe-925f-53e639c4f0cb`.replaceAll('/', '\\') },

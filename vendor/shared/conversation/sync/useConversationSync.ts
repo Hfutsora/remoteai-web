@@ -4,6 +4,7 @@ import { SYNC_HOME_ID, type SyncDirectory, type SyncHost, type SyncResult, type 
   type SyncThread, type SyncProvider } from './types';
 import { uiText } from '../../localization/uiText';
 import { syncSourceLabel } from './sourceLabel';
+import { uniqueSyncThreads } from './threadGroups';
 
 export function useSyncSources(hosts: SyncHost[], destination: SyncHost) {
   const [sources, setSources] = useState<SyncSource[]>([]);
@@ -50,8 +51,10 @@ export function useSyncThreads(source?: SyncSource) {
       void source.host.request<SyncThread[]>({ action: 'list', homeId: source.home.id, query })
         .then(result => {
           if (generation.current !== id) return;
-          setThreads(result);
-          setSelected(current => current.filter(id => result.some(thread => thread.sessionId === id)));
+          const threads = uniqueSyncThreads(result);
+          const available = new Set(threads.map(thread => thread.sessionId));
+          setThreads(threads);
+          setSelected(current => current.filter(id => available.has(id)));
         }).catch(error => { if (generation.current === id) setError(error); })
         .finally(() => { if (generation.current === id) setLoading(false); });
     }, query ? 300 : 0);

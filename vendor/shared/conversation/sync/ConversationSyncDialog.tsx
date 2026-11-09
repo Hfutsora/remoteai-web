@@ -18,7 +18,7 @@ export function ConversationSyncDialog({ children, active = true }: {
     <Button type="text" icon={<FolderSync size={17} />} disabled={!active} onClick={() => setOpen(true)}
       aria-label={uiText('client.workspaceSettings.conversationSync')} />
     <Modal className={styles.dialog} open={open} onCancel={() => setOpen(false)} width={1000}
-      footer={null} destroyOnClose
+      footer={null} destroyOnHidden
       title={uiText('client.workspaceSettings.conversationSync')} maskClosable={false}>
       {open && <Suspense fallback={<Spin />}>{children}</Suspense>}
     </Modal>
