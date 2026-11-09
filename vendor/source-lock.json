@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "d8c9a5cac76aa95194781deee8de2f66d5984d8c",
+  "revision": "269fe6db85f75c3f3d7276f8379812a94660304b",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
     "revision": "df5537cf28e1f1ca8c521e0e84bfb753106ef0ab"
@@ -544,7 +544,7 @@
     "shared/conversation/useFileMenu.ts": "eed0a37af5ed69dd8239ededf2cda575bdb821f98b062df0cdeeb2421e98d38e",
     "shared/file-preview/PdfPage.tsx": "ae474ced3565bc058bef0e79fc023f1f6b5999025ccb007180e4c63cc7654f4c",
     "shared/file-preview/pdfPreview.css": "20e53dffad36f6a797186da3988337d9ff9759908b0ba6326a0d0b47dea48439",
-    "apps/desktop/e2e/preview-samples.ts": "c7e29e9e66baf8d388263ea0e3e61bb3eee1a4dc4c439b69a6916be28e435c12",
+    "apps/desktop/e2e/preview-samples.ts": "d3bc5b8fb4f56fe1f0eb1af80edf23d741f4295fb8c7410da649b714182298a4",
     "shared/chat/DeferredProcessDetails.tsx": "da5ccb8532ee17721fc44056223a37726e89b5a0e3844f7c1f7baadba7c47ba6",
     "apps/desktop/e2e/process-history-merge-data.ts": "afcfb8c0655864031f388b61fabb34729fc8464936ee5d29432fbb7b29723cff",
     "shared/remote-chat/commandMetrics.ts": "a014685293733fe1e4258954e921f198ffe144930b1d54f466aea72281d55187",
