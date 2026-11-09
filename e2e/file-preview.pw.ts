@@ -78,48 +78,45 @@ async function clipboard(page: Page) {
   return page.evaluate(async () => (await navigator.clipboard.readText()).replace(/\r\n/g, '\n'));
 }
 
-test('mobile previews fill the drawer and preserve content across fullscreen changes', async ({ page }, info) => {
+test('mobile previews open fullscreen with a compact header and download icon', async ({ page }, info) => {
   test.skip(info.project.name !== 'mobile');
   await open(page, 'page.HTML');
   const sheet = page.locator('.chat-file-preview-sheet');
   const frame = page.locator('.chat-html-frame');
   await expect(frame).toBeVisible();
-  const initial = (await sheet.boundingBox())!;
-  expect(initial.height).toBeGreaterThan(page.viewportSize()!.height * 0.9);
-  const initialFrame = (await frame.boundingBox())!;
-  expect(initialFrame.y + initialFrame.height).toBeGreaterThan(page.viewportSize()!.height - 32);
-  await page.frameLocator('.chat-html-frame').locator('body').evaluate(node => { node.dataset.retained = 'yes'; });
-  await page.getByRole('button', { name: '全屏浏览', exact: true }).click();
   await expect(sheet).toHaveClass(/mobile-popup-fullscreen/);
   expect((await sheet.boundingBox())!.height).toBeCloseTo(page.viewportSize()!.height, 0);
-  expect((await frame.boundingBox())!.height).toBeGreaterThan(initialFrame.height);
-  await expect(page.getByRole('button', { name: '下载', exact: true })).toBeHidden();
+  const preview = (await frame.boundingBox())!;
+  expect(preview.y).toBeLessThan(140);
+  expect(preview.y + preview.height).toBeGreaterThan(page.viewportSize()!.height - 16);
+  const download = sheet.getByRole('button', { name: '下载', exact: true });
+  await expect(download).toBeVisible();
+  await expect(download).toHaveText('');
+  expect((await download.boundingBox())!.y).toBeLessThan(60);
+  await expect(sheet.getByRole('button', { name: /全屏/ })).toHaveCount(0);
+  await page.frameLocator('.chat-html-frame').locator('body').evaluate(node => { node.dataset.retained = 'yes'; });
   await dragSheet(page, 120, { target: page.locator('.sheet-header'), follows: false });
   await expect(sheet).toHaveClass(/mobile-popup-fullscreen/);
   await expect(page.frameLocator('.chat-html-frame').locator('body')).toHaveAttribute('data-retained', 'yes');
   await screenshot(page, info, 'html-fullscreen');
   await page.getByRole('button', { name: '源码', exact: true }).click();
   await expect(page.locator('.chat-html-preview pre')).toContainText('<h1>页面预览</h1>');
-  await page.getByRole('button', { name: '退出全屏', exact: true }).click();
   await expect(page.locator('.chat-html-preview pre')).toBeVisible();
-  await expect(page.getByRole('button', { name: '下载', exact: true })).toBeVisible();
-  await dragSheet(page, 30);
-  await expect(sheet).toHaveCSS('translate', '0px');
+  await expect(download).toBeVisible();
+  await screenshot(page, info, 'html-fullscreen-source');
   await page.getByRole('button', { name: '预览', exact: true }).click();
   await expect(frame).toBeVisible();
-  await screenshot(page, info, 'html-filled-drawer');
   await page.setViewportSize({ width: 700, height: 390 });
-  await page.getByRole('button', { name: '全屏浏览', exact: true }).click();
   await expect(frame).toBeVisible();
   expect((await frame.boundingBox())!.height).toBeGreaterThan(100);
+  await screenshot(page, info, 'html-fullscreen-landscape');
 });
 
 test('mobile Markdown and code remain scrollable in fullscreen', async ({ page }, info) => {
   test.skip(info.project.name !== 'mobile');
   for (const path of ['long.md', 'source.ts']) {
     await open(page, path);
-    await page.getByRole('button', { name: '全屏浏览', exact: true }).click();
-    await expect(page.getByRole('button', { name: '退出全屏', exact: true })).toBeVisible();
+    await expect(page.locator('.chat-file-preview-sheet')).toHaveClass(/mobile-popup-fullscreen/);
     const content = page.locator('.adaptive-sheet-content');
     if (path.endsWith('.md')) {
       await content.evaluate(node => { node.scrollTop = node.scrollHeight; });
@@ -130,35 +127,79 @@ test('mobile Markdown and code remain scrollable in fullscreen', async ({ page }
       expect(await source.evaluate(node => node.scrollTop)).toBeGreaterThan(0);
     }
     await expect(page.locator('pre')).toBeVisible();
-    await page.getByRole('button', { name: '退出全屏', exact: true }).click();
     await expect(page.getByRole('button', { name: '下载', exact: true })).toBeAttached();
   }
 });
 
-test('unsupported remote files only offer a local download on left and right click', async ({ page }, info) => {
+test('mobile preview headers fit long filenames at default and enlarged fonts', async ({ page }, info) => {
+  test.skip(info.project.name !== 'mobile');
+  await page.setViewportSize({ width: 320, height: 740 });
+  for (const size of [14, 20]) {
+    await page.addInitScript(fontSize => {
+      localStorage.setItem('codex-switch:global-font-size', String(fontSize));
+    }, size);
+    await page.emulateMedia({ colorScheme: size === 14 ? 'light' : 'dark' });
+    await open(page, externalCodePath);
+    const title = page.locator('.sheet-header h2');
+    await expect(title).toHaveText('legacyLinkFailures.test.ts');
+    if (size === 20) expect(await title.evaluate(node => node.scrollWidth > node.clientWidth)).toBe(true);
+    const header = (await page.locator('.sheet-header').boundingBox())!;
+    expect(header.height).toBeLessThan(70);
+    const close = (await page.getByRole('button', { name: '关闭', exact: true }).boundingBox())!;
+    expect(close.x + close.width).toBeLessThanOrEqual(320);
+    await expect(page.locator('pre')).toHaveText(sourceCode);
+    await screenshot(page, info, `compact-header-${size}px-${size === 14 ? 'light' : 'dark'}`);
+  }
+});
+
+test('mobile download icons retain progress, cancel, save and error feedback', async ({ page }, info) => {
+  test.skip(info.project.name !== 'mobile');
+  await page.goto('e2e/file-preview-harness.html?path=page.HTML&delay=600');
+  await page.getByRole('button', { name: '下载', exact: true }).click();
+  const progress = page.getByRole('progressbar', { name: '下载进度', exact: true });
+  await expect(progress).toBeVisible();
+  await expect.poll(() => progress.getAttribute('value')).toMatch(/^[1-9]/);
+  await screenshot(page, info, 'compact-header-download-progress');
+  await page.getByRole('button', { name: '取消下载', exact: true }).click();
+  await expect(progress).toBeHidden();
+  const saving = page.waitForEvent('download');
+  await page.getByRole('button', { name: '下载', exact: true }).click();
+  const download = await saving;
+  expect(download.suggestedFilename()).toBe('page.HTML');
+  expect(await readFile((await download.path())!)).toEqual(Buffer.alloc(8 * 1024 * 1024, 'A'));
+  await expect(page.locator('.chat-html-frame')).toBeVisible();
+  await page.goto('e2e/file-preview-harness.html?path=page.HTML&download=error');
+  await page.getByRole('button', { name: '下载', exact: true }).click();
+  await expect(page.getByRole('status')).toHaveText('下载失败，请检查连接和存储空间后重试。');
+  await screenshot(page, info, 'compact-header-download-error');
+});
+
+test('unsupported remote files show a download card and download-only context menus', async ({ page }, info) => {
   await page.goto('e2e/file-preview-harness.html?pc');
   for (const path of ['F:/remote/Remote AI.MSI', 'F:/remote/release.zip']) {
-    const link = page.getByRole('button', { name: `文件操作：${path}`, exact: true });
-    for (const button of ['left', 'right'] as const) {
-      await link.click({ button });
-      const menu = page.getByRole('menu');
-      await expect(menu.getByRole('menuitem')).toHaveText(['下载到本机…']);
-      await expect(menu.getByRole('separator')).toHaveCount(0);
-      await expect(page.locator('aside[data-details-panel]')).toHaveCount(0);
-      const bounds = (await menu.boundingBox())!;
-      expect(bounds.width).toBeLessThanOrEqual(400);
-      expect(bounds.x).toBeGreaterThanOrEqual(0);
-      expect(bounds.x + bounds.width).toBeLessThanOrEqual(page.viewportSize()!.width);
-      await page.keyboard.press('Escape');
-      await expect(menu).toHaveCount(0);
-    }
+    const link = page.getByRole('button', { name: `预览文件：${path}`, exact: true });
+    await link.click({ button: 'right' });
+    const menu = page.getByRole('menu');
+    await expect(menu.getByRole('menuitem')).toHaveText(['下载到本机…']);
+    await expect(menu.getByRole('separator')).toHaveCount(0);
+    await expect(page.locator('aside[data-details-panel]:visible')).toHaveCount(0);
+    const bounds = (await menu.boundingBox())!;
+    expect(bounds.width).toBeLessThanOrEqual(400);
+    expect(bounds.x).toBeGreaterThanOrEqual(0);
+    expect(bounds.x + bounds.width).toBeLessThanOrEqual(page.viewportSize()!.width);
+    await page.keyboard.press('Escape');
+    await expect(menu).toHaveCount(0);
     await link.click();
-    await expect(page.getByRole('menu')).toBeVisible();
+    const drawer = page.locator('aside[data-details-panel]');
+    const card = drawer.getByRole('region', { name: path.split('/').at(-1)!, exact: true });
+    await expect(card).toBeVisible();
+    await expect(card.locator('.resource-download-name')).toHaveText(path.split('/').at(-1)!);
     await screenshot(page, info, `download-only-${path.split('.').at(-1)}`);
-    await page.getByRole('menuitem', { name: '下载到本机…', exact: true }).click();
+    await card.getByRole('button', { name: '下载', exact: true }).click();
     await expect(page.getByLabel('文件操作结果')).toHaveText(JSON.stringify({
       computer: 'remote-PC', path, threadId: 'remote-thread', action: 'saveAs',
     }));
+    await drawer.getByRole('button', { name: '关闭详情抽屉', exact: true }).click();
   }
 });
 
@@ -231,8 +272,9 @@ test('PC remote Markdown links use browser tabs with retained source controls', 
   }).toBeLessThanOrEqual(1);
   await preview.getByRole('button', { name: '原文', exact: true }).click();
   await expect(preview.locator('pre')).toContainText('# 文件预览');
-  await drawer.getByRole('tab', { name: '文件更改', exact: true }).click();
-  await drawer.getByRole('tab', { name: '浏览器', exact: true }).click();
+  await drawer.getByRole('button', { name: '最小化详情抽屉', exact: true }).click();
+  await expect(drawer).toBeHidden();
+  await page.getByRole('button', { name: '恢复预览', exact: true }).click();
   await expect(preview.locator('pre')).toContainText('# 文件预览');
   await preview.getByRole('button', { name: '预览', exact: true }).click();
   await preview.getByRole('button', { name: '后续文档', exact: true }).click();

@@ -1,5 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { WebLocaleProvider } from '../src/i18n/WebLocaleProvider';
+import { ApplicationTypography } from '../../../shared/appearance/ApplicationTypography';
 import { initializeTheme } from '../src/theme/preference';
 import { ChatFilePreview, type FilePreviewContext } from '../../../shared/remote-chat/views/ChatFilePreview';
 import { ChatFileContext } from '../../../shared/remote-chat/views/ChatFileLink';
@@ -67,12 +68,13 @@ const context: FilePreviewContext = {
 };
 const path = params.get('path') ?? 'verification.md';
 createRoot(document.getElementById('root')!).render(
-  <WebLocaleProvider>{params.has('pc') ? <PcFilePreviewFixture legacy={params.has('legacy')} />
+  <WebLocaleProvider><ApplicationTypography>{params.has('pc') ? <PcFilePreviewFixture legacy={params.has('legacy')} />
   : params.has('workspace') ? <div className="chat-page" style={{ height: '100dvh' }}>
     <ChatFileContext.Provider value={context}>
       <ChatDetailsWorkspace selected={context.threadId} active enabled>
         <ChatMarkdown text="[交接文档](F:/remote/docs/handoff.md)" />
       </ChatDetailsWorkspace>
     </ChatFileContext.Provider>
-  </div> : <ChatFilePreview path={path} line={3} context={context} onClose={() => {}} />}</WebLocaleProvider>,
+  </div> : <ChatFilePreview path={path} line={3} context={context} onClose={() => {}} />}
+  </ApplicationTypography></WebLocaleProvider>,
 );
