@@ -31,6 +31,7 @@ import { ComposerAddMenu, ComposerPluginMenu, ChatCommandMenu, type ComposerAddA
 import { ComposerProjectFiles } from './ComposerProjectFiles';
 import { ComposerConversationMenu } from './ComposerConversationMenu';
 import { ComposerFileMenu } from './ComposerFileMenu';
+import { ComposerSshMenu } from './ComposerSshMenu';
 import { useComposerState } from './useComposerState';
 import type { ComposerProps } from './composerProps';
 import './composer.css';
@@ -143,7 +144,10 @@ export function ChatComposer(props: ComposerProps) {
         {!adding && menu.files && <ComposerFileMenu key={`${threadId}:${cwd}`} input={menu.input}
           query={menu.query} threadId={threadId} cwd={cwd} ready={ready && !busy} load={loadFiles} close={menu.close}
           choose={reference => { if (attachments.add(reference)) menu.consumeTrigger(); }} />}
-        {!adding && !menu.plugins && !menu.conversations && !menu.files && <ChatCommandMenu
+        {!adding && menu.ssh && <ComposerSshMenu key={`${threadId}:${cwd}`} input={menu.input}
+          query={menu.query} ready={ready && !busy} profiles={props.sshProfiles} close={menu.close}
+          choose={reference => { if (attachments.add(reference)) menu.consumeTrigger(); }} />}
+        {!adding && !menu.plugins && !menu.conversations && !menu.files && !menu.ssh && <ChatCommandMenu
             catalog={catalog} query={menu.query} skillsOnly={menu.skillsOnly} input={menu.input}
             compactReason={props.compactReason} choose={menu.choose} compact={() => { void menu.runCompact(); }}
             goal={() => { menu.consumeTrigger(); goalMode.enter(); }} close={menu.close} />}</div>}

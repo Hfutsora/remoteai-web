@@ -149,6 +149,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
         && state.compacting === state.selected?.id} compact={controller.compact}
       loadCatalog={controller.loadComposerCatalog} loadFiles={controller.loadProjectFiles}
       loadConversations={controller.searchThreads}
+      sshProfiles={controller.guiTools.terminal.ssh.profiles}
       uploadProgress={state.upload}
       threadId={state.selected?.id ?? null} draftScope={state.draftScope} models={state.models} selection={state.settings}
       readUsage={controller.readUsage} tokenUsage={state.selected?.tokenUsage}
