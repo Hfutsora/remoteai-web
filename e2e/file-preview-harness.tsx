@@ -29,6 +29,7 @@ const files: Record<string, string> = {
   'F:/remote/docs/next.md': '# 后续文档\n\n这是同一台远程电脑上的文件。',
   'verification.md': markdown, 'README.MARKDOWN': markdown, 'long.md': longMarkdown,
   'empty.md': ' \n', 'source.ts': sourceCode, [externalCodePath]: sourceCode,
+  [externalCodePath.replace(/\.ts$/, '.html')]: '<h1>页面预览</h1>',
   'page.HTML': '<h1>页面预览</h1><script>document.body.dataset.ready = "yes";'
     + 'try { parent.previewScriptRan = true } catch {}'
     + 'try { localStorage.setItem("unsafe", "yes") } catch {}'

@@ -87,7 +87,11 @@ test('mobile previews open fullscreen with a compact header and download icon', 
   await expect(sheet).toHaveClass(/mobile-popup-fullscreen/);
   expect((await sheet.boundingBox())!.height).toBeCloseTo(page.viewportSize()!.height, 0);
   const preview = (await frame.boundingBox())!;
-  expect(preview.y).toBeLessThan(140);
+  expect(preview.y).toBeLessThan(95);
+  await expect(sheet.locator('.chat-markdown-preview-toolbar')).toHaveCount(0);
+  const toggle = sheet.getByRole('button', { name: '源码', exact: true });
+  await expect(toggle).toHaveText('');
+  expect((await toggle.boundingBox())!.y).toBeLessThan(60);
   expect(preview.y + preview.height).toBeGreaterThan(page.viewportSize()!.height - 16);
   const download = sheet.getByRole('button', { name: '下载', exact: true });
   await expect(download).toBeVisible();
@@ -100,6 +104,7 @@ test('mobile previews open fullscreen with a compact header and download icon', 
   await expect(page.frameLocator('.chat-html-frame').locator('body')).toHaveAttribute('data-retained', 'yes');
   await screenshot(page, info, 'html-fullscreen');
   await page.getByRole('button', { name: '源码', exact: true }).click();
+  await expect(sheet.getByRole('button', { name: '预览', exact: true })).toHaveText('');
   await expect(page.locator('.chat-html-preview pre')).toContainText('<h1>页面预览</h1>');
   await expect(page.locator('.chat-html-preview pre')).toBeVisible();
   await expect(download).toBeVisible();
@@ -139,16 +144,24 @@ test('mobile preview headers fit long filenames at default and enlarged fonts', 
       localStorage.setItem('codex-switch:global-font-size', String(fontSize));
     }, size);
     await page.emulateMedia({ colorScheme: size === 14 ? 'light' : 'dark' });
-    await open(page, externalCodePath);
+    await open(page, externalCodePath.replace(/\.ts$/, '.html'));
     const title = page.locator('.sheet-header h2');
-    await expect(title).toHaveText('legacyLinkFailures.test.ts');
+    await expect(title).toHaveText('legacyLinkFailures.test.html');
     if (size === 20) expect(await title.evaluate(node => node.scrollWidth > node.clientWidth)).toBe(true);
     const header = (await page.locator('.sheet-header').boundingBox())!;
     expect(header.height).toBeLessThan(70);
     const close = (await page.getByRole('button', { name: '关闭', exact: true }).boundingBox())!;
     expect(close.x + close.width).toBeLessThanOrEqual(320);
-    await expect(page.locator('pre')).toHaveText(sourceCode);
+    await expect(page.frameLocator('.chat-html-frame').getByRole('heading', { name: '页面预览' })).toBeVisible();
+    const toggle = page.getByRole('button', { name: '源码', exact: true });
+    await expect(toggle).toHaveText('');
+    await expect(page.locator('.chat-markdown-preview-toolbar')).toHaveCount(0);
     await screenshot(page, info, `compact-header-${size}px-${size === 14 ? 'light' : 'dark'}`);
+    await toggle.click();
+    await expect(page.locator('pre')).toHaveText('<h1>页面预览</h1>');
+    await screenshot(page, info, `compact-source-${size}px-${size === 14 ? 'light' : 'dark'}`);
+    await page.getByRole('button', { name: '预览', exact: true }).click();
+    await expect(page.locator('.chat-html-frame')).toBeVisible();
   }
 });
 
@@ -323,8 +336,10 @@ test('renders Markdown, preserves source copying and contains tables on narrow s
   await expect(page.getByRole('button', { name: '下载', exact: true })).toBeVisible();
   await expect(page.getByText('引用位置：第 3 行')).toBeVisible();
   expect(await page.evaluate(() => Reflect.get(window, 'previewScriptRan'))).toBeUndefined();
-  await page.getByRole('button', { name: '复制原文', exact: true }).click();
-  expect(await clipboard(page)).toBe(markdown);
+  if (info.project.name === 'desktop') {
+    await page.getByRole('button', { name: '复制原文', exact: true }).click();
+    expect(await clipboard(page)).toBe(markdown);
+  }
   const table = await rendered.locator('table').boundingBox();
   expect(table!.x + table!.width).toBeLessThanOrEqual(page.viewportSize()!.width);
   await screenshot(page, info, 'markdown-file-preview');
@@ -358,11 +373,12 @@ test('previews and copies code from an external deployment path', async ({ page 
   await screenshot(page, info, 'external-code-file-preview');
 });
 
-test('handles uppercase extensions, empty files, ordinary source and load failures', async ({ page }) => {
+test('handles uppercase extensions, empty files, ordinary source and load failures', async ({ page }, info) => {
   await open(page, 'README.MARKDOWN');
   await expect(page.locator('.chat-markdown-preview table')).toBeVisible();
   await open(page, 'empty.md');
   await expect(page.getByText('（空文件）')).toBeVisible();
+  if (info.project.name === 'mobile') await page.getByRole('button', { name: '原文', exact: true }).click();
   await expect(page.getByRole('button', { name: '复制原文' })).toBeEnabled();
   await open(page, 'source.ts');
   await expect(page.locator('.chat-markdown-preview')).toHaveCount(0);

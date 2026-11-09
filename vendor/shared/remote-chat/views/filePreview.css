@@ -30,6 +30,9 @@
   .chat-file-preview-sheet .sheet-header { flex-shrink: 0; gap: 8px; padding: 4px 12px; border-bottom: 0; }
   .chat-file-preview-sheet .sheet-header h2 { margin: 0; font-size: 1em; letter-spacing: 0; }
   .chat-file-preview-sheet .sheet-title-row > h2 { flex: 1; }
+  .chat-file-preview-actions { display: flex; align-items: center; gap: 4px; flex: 0 0 auto; }
+  .chat-file-preview-sheet .chat-file-preview-mode { color: var(--app-accent, #14806f); }
+  .chat-file-preview-mode:focus-visible { outline: 2px solid var(--app-accent, #14806f); outline-offset: 2px; }
   .chat-file-preview-sheet .sheet-close { width: 44px; height: 44px; }
   .chat-file-preview-sheet .adaptive-sheet-content { padding: 0; }
   .chat-file-preview-sheet .chat-detail-stack { gap: 4px; }
