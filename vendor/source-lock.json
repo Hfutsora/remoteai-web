@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "96a4e60915f7b314d5029da8d63573c1c5e78ce7",
+  "revision": "5738b2157fc0221f0e67184722cb488939b7fb25",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
     "revision": "129fb7996151c4e88037a31f63230b064680cd1e"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "f51f5c17ccd9ce664111158e03d506df3a54eb58"
+    "revision": "b867130db43e4b5ea58405d0f064324c8c5628a8"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.11/remoteai-i18n-0.1.11.tgz",
   "files": {
@@ -563,7 +563,7 @@
     "apps/desktop/e2e/continuous-pdf-fixture.ts": "8d7ce2935ec8967a9855c63f0bc6b258c824d4e7efc1f8ff2623cbb7335a9264",
     "apps/desktop/e2e/preview-samples.ts": "45f3433d0278f4e1a17174c05b1b22ec6f82eedcc7c002466683f156abf5bdd1",
     "apps/desktop/e2e/reply-resources-harness.html": "2da026d39efc43452a719f2324fcba526d51ba4e760a487bf563bd4b3aabe647",
-    "apps/native/e2e/pdf-touch.mjs": "d3f3b4aa75d04a3920118a8d3606be79a1b2d4e5e449e7ac75e8c0c710b543cf",
+    "apps/native/e2e/pdf-touch.mjs": "bf0adf7508dfa9085fbb65cd89c9a398eeb21b5422e2836809caf44e1bf8e39f",
     "shared/chat/DeferredProcessDetails.tsx": "da5ccb8532ee17721fc44056223a37726e89b5a0e3844f7c1f7baadba7c47ba6",
     "apps/desktop/e2e/process-history-merge-data.ts": "afcfb8c0655864031f388b61fabb34729fc8464936ee5d29432fbb7b29723cff",
     "shared/remote-chat/commandMetrics.ts": "a014685293733fe1e4258954e921f198ffe144930b1d54f466aea72281d55187",
