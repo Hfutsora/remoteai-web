@@ -227,7 +227,7 @@ export function ChatComposer(props: ComposerProps) {
         </div>
       </div>
     </form>
-    <ComposerFooter desktop={desktop} cliVersion={props.cliVersion}
+    <ComposerFooter desktop={desktop} cliVersion={props.cliVersion} threadId={props.threadId}
       readServiceStatus={props.readServiceStatus} statusActive={active} statusConnected={props.serviceStatusConnected}
       usage={usageSnapshot.usage} metrics={metrics}
       connectionInfo={props.connectionInfo} />

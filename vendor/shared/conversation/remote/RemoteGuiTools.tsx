@@ -1,6 +1,6 @@
 import { uiText } from "../../localization/uiText";
 import { remoteErrorText } from "../../localization/errors";
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Alert, Button, Popover, Tooltip } from 'antd';
 import { PanelBottom, RefreshCw } from 'lucide-react';
 import type { ChatState } from '../../remote-chat/client/types';
@@ -12,10 +12,11 @@ import { GuiChatSettingsButton } from '../GuiChatSettingsButton';
 import { PanelToggleButton } from '../../chat/PanelToggleButton';
 import type { useRemoteCliInstaller } from './useRemoteCliInstaller';
 
-export function RemoteGuiTools({ controller, state, installer, terminal, active }: {
+export function RemoteGuiTools({ controller, state, installer, terminal, active, settings }: {
   controller: ChatController; state: ChatState; installer: ReturnType<typeof useRemoteCliInstaller>;
   terminal?: TerminalPanelState & { error?: string; busy?: boolean };
   active: boolean;
+  settings?: ReactNode;
 }) {
   const connected = state.mode === 'direct' || state.mode === 'relay';
   const [reconnecting, setReconnecting] = useState(false);
@@ -31,7 +32,7 @@ export function RemoteGuiTools({ controller, state, installer, terminal, active 
     finally { setReconnecting(false); }
   };
   return <div className="gui-remote-tools">
-    <GuiChatSettingsButton active={active} />
+    {settings === undefined ? <GuiChatSettingsButton active={active} /> : settings}
     <Tooltip title={uiText("client.workspaceActions.reconnectRemoteCodex")} styles={{ root: { maxWidth: 400 } }}>
       <Button type="text" className="gui-remote-secondary-tool"
         icon={<RefreshCw size={16} />} aria-label={uiText("client.workspaceActions.reconnectRemoteCodex")}

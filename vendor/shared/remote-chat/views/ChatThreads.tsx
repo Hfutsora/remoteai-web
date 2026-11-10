@@ -20,6 +20,8 @@ import { threadPresentation } from '../sidebar';
 import { BrowserGroups } from '../../chat/groups/BrowserGroups';
 import { GroupHeading } from '../../chat/groups/GroupHeading';
 import { remoteSidebarDrag } from '../client/sidebarDrag';
+import { CliConversationList } from '../../cli-gui/CliConversationList';
+import { useCliGui } from '../../cli-gui/context';
 
 interface Props {
   state: ChatState; controller: ChatController; newChat: (project?: ChatProject) => void; onClose: () => void;
@@ -36,6 +38,7 @@ export function ChatThreads(props: Props) {
 
 function ChatThreadsContent({ state, controller, newChat, onClose, openSearch, profile, accountPicker }: Props) {
   useLanguage();
+  const cli = useCliGui();
   const desktop = useDesktopLayout();
   const [query, setQuery] = useState('');
   const searching = desktop && Boolean(query.trim());
@@ -73,8 +76,9 @@ function ChatThreadsContent({ state, controller, newChat, onClose, openSearch, p
     </div>
     <div ref={pagination.list} className="chat-scroll chat-thread-list"
       aria-busy={searching ? search.loading : state.loading}>
+      <CliConversationList archived={state.archived} query={query} onSelect={onClose} />
       {searching ? <ChatSearchResults state={state} search={search} query={query}
-        select={thread => { void controller.select(thread); onClose(); }} /> : <>
+        select={thread => { cli?.controller.showCodex(); void controller.select(thread); onClose(); }} /> : <>
       {groups.map(group => ({ ...group, label: group.kind === 'group' || group.cwd
         ? group.label : t(group.id === 'ungrouped' ? 'client.groups.ungrouped' : 'client.chat.recent') })).map((group) =>
         <section className="chat-project-group" aria-label={group.label} key={group.id}
@@ -103,7 +107,7 @@ function ChatThreadsContent({ state, controller, newChat, onClose, openSearch, p
             {group.expanded ? t("client.chat.collapse") : t("client.chat.showMore.83ad87")}</button>}
           </div>
         </section>)}
-      {!state.threads.length && <p className="chat-empty chat-muted">
+      {!state.threads.length && !cli?.state.sessions.length && <p className="chat-empty chat-muted">
         {ready ? t("client.chat.noChatsYet") : t("client.chat.connectToYourComputerToViewChats")}</p>}
       <div className="chat-thread-pagination">
         {pagination.loadingMore && <span role="status" className="chat-muted chat-row">

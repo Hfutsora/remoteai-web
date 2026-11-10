@@ -1,7 +1,7 @@
 import { displayText, uiText } from "../../../../../../shared/localization/uiText";
 import type { ReactNode } from 'react';
 import { Button, Segmented } from 'antd';
-import { ChevronRight, Folder, Layers, Pin, RefreshCw, Search, SquarePen } from 'lucide-react';
+import { ChevronRight, Folder, FolderSync, Layers, Pin, RefreshCw, Search, SquarePen } from 'lucide-react';
 import { RemoteProjectMenu } from '../../../../../../shared/remote-chat/client/RemoteProjectMenu';
 import type { ChatSidebarActions } from '../../../../../../shared/remote-chat/views/ConnectedChat';
 import type { ChatController, ChatState } from '../../../../../../shared/remote-chat/views/types';
@@ -21,6 +21,8 @@ import { BrowserGroups } from '../../../../../../shared/chat/groups/BrowserGroup
 import { GroupHeading } from '../../../../../../shared/chat/groups/GroupHeading';
 import { useGrouping } from '../../../../../../shared/chat/groups/context';
 import { remoteSidebarDrag } from '../../../../../../shared/remote-chat/client/sidebarDrag';
+import { useCliGui } from '../../../../../../shared/cli-gui/context';
+import { CliConversationList } from '../../../../../../shared/cli-gui/CliConversationList';
 
 export function RemoteGuiSidebar(props: Parameters<typeof RemoteGuiSidebarContent>[0]) {
   return <BrowserGroups grouping={props.state.sidebar.grouping} client={props.controller.groups}
@@ -28,9 +30,10 @@ export function RemoteGuiSidebar(props: Parameters<typeof RemoteGuiSidebarConten
     translate={uiText} ready={props.state.ready}><RemoteGuiSidebarContent {...props} /></BrowserGroups>;
 }
 
-function RemoteGuiSidebarContent({ state, controller, actions, accountPicker, focusMode }: {
+function RemoteGuiSidebarContent({ state, controller, actions, accountPicker, focusMode, syncing, onOpenSync }: {
   state: ChatState; controller: ChatController; actions: ChatSidebarActions;
   accountPicker: ReactNode; focusMode: GuiFocusMode;
+  syncing?: boolean; onOpenSync?: () => void;
 }) {
   const { groups: projectGroups, toggle, toggleCollapse } = useThreadGroups(state);
   const groups = projectGroups.map(group => ({
@@ -39,6 +42,7 @@ function RemoteGuiSidebarContent({ state, controller, actions, accountPicker, fo
   }));
   const threadActions = useThreadActions(state, controller);
   const grouping = useGrouping();
+  const cli = useCliGui();
   const renderHeading = (group: typeof groups[number]) => <button type="button" className={groupsStyle.heading}
     aria-expanded={!group.collapsed} onClick={() => toggleCollapse(group.id)}>
     <span className={groupsStyle.icon} aria-hidden="true">
@@ -73,12 +77,17 @@ function RemoteGuiSidebarContent({ state, controller, actions, accountPicker, fo
       <button type="button" disabled={state.sending} onClick={() => actions.newChat()}>
         <SquarePen size={18} strokeWidth={1.6} /><span>{uiText("client.workspaceSettings.newConversation")}</span>
       </button>
+      {onOpenSync && <button type="button" aria-current={syncing ? 'page' : undefined} onClick={onOpenSync}>
+        <FolderSync size={18} strokeWidth={1.6} aria-hidden="true" />
+        <span>{uiText('client.workspaceSettings.conversationSync')}</span>
+      </button>}
     </nav>
     <Segmented className={styles.threadFilter} block size="small" value={state.archived ? 'archived' : 'recent'}
       options={[{ label: uiText("client.chat.recent"), value: 'recent' }, { label: uiText("client.mobile.archived"), value: 'archived' }]}
       disabled={!state.ready || state.loading}
       onChange={value => { void controller.list({ archived: value === 'archived' }); }} />
     <div className={styles.threadList} aria-busy={state.loading} {...pagination}>
+      <CliConversationList archived={state.archived} onSelect={actions.onClose} />
       {groups.map(group => <section className={groupsStyle.group} aria-label={group.label} key={group.id}
         style={{ paddingInlineStart: Math.min(group.depth, 8) * 14,
           ...(group.kind === 'group' ? { margin: '0 0 4px' } : {}) }}>
@@ -95,13 +104,13 @@ function RemoteGuiSidebarContent({ state, controller, actions, accountPicker, fo
         <div className={groupsStyle.content} hidden={group.collapsed}>
           {group.data.map(thread => {
             const view = threadPresentation(thread, state.sidebar, displayText);
-            const selected = state.selected?.id === thread.id;
+            const selected = (!cli || cli.state.engine === 'codex') && state.selected?.id === thread.id;
             return <RemoteThreadMenu key={thread.id} thread={thread} state={state} controller={controller}
               actions={threadActions} onClose={actions.onClose}>
               <div className={`${styles.thread} ${selected ? styles.selected : ''}`}>
                 <button type="button" className={styles.threadSelect} aria-label={view.title}
                   aria-current={selected ? 'page' : undefined} disabled={!state.ready || state.sending}
-                  onClick={() => { void controller.select(thread); actions.onClose(); }}>
+                  onClick={() => { cli?.controller.showCodex(); void controller.select(thread); actions.onClose(); }}>
                   <span className={styles.threadTitle}>{view.title}</span>
                   <ThreadStatus running={view.running} unread={view.unread}
                     needsInput={state.approvals.some(event => event.params.threadId === thread.id)} />
@@ -114,7 +123,7 @@ function RemoteGuiSidebarContent({ state, controller, actions, accountPicker, fo
             {group.expanded ? uiText("client.chat.collapse") : uiText("client.chat.showMore.83ad87")}</button>}
         </div>
       </section>)}
-      {!state.threads.length && <p className={styles.listEmpty}>{state.ready ? uiText("client.workspaceActions.noConversationsYet") : uiText("client.workspaceActions.connectToAComputerToViewConversations")}</p>}
+      {!state.threads.length && !cli?.state.sessions.length && <p className={styles.listEmpty}>{state.ready ? uiText("client.workspaceActions.noConversationsYet") : uiText("client.workspaceActions.connectToAComputerToViewConversations")}</p>}
       {state.cursor && <ThreadPagination loading={state.loading} />}
     </div>
     {accountPicker}

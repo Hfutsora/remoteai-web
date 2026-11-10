@@ -1,7 +1,7 @@
 import { uiText } from "../../localization/uiText";
 import { remoteErrorText } from "../../localization/errors";
 import { useEffect, useRef, useState, type ReactNode } from 'react';
-import { RefreshCw } from 'lucide-react';
+import { RefreshCw, Settings } from 'lucide-react';
 import type { GuiAccountsClient, SelectableGuiAccount } from '../../remote-chat/guiAccounts';
 import { useGuiAccounts } from '../../remote-chat/client/useGuiAccounts';
 import { maskAccountEmail } from '../../accounts/privacy';
@@ -13,10 +13,12 @@ import styles from '../ProxyAccountPicker.module.less';
 
 const ACCOUNT_REFRESH_MS = 60_000;
 
-export function RemoteAccountPicker({ active, ready, client, computers, privacyMode }: {
+export function RemoteAccountPicker({ active, ready, client, computers, privacyMode, renderSettings }: {
   active: boolean; ready: boolean; client: GuiAccountsClient; computers: GuiComputerNavigation; privacyMode: boolean;
+  renderSettings?: (onClose: () => void) => ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const accounts = useGuiAccounts(client, ready && active, ACCOUNT_REFRESH_MS);
   const selection = accounts.snapshot?.selection;
@@ -24,7 +26,7 @@ export function RemoteAccountPicker({ active, ready, client, computers, privacyM
   const name = current ? privacyMode && current.kind === 'account' ? maskAccountEmail(current.name) : current.name
     : uiText("client.conversation.chooseGuiAccount");
   const disabled = !ready || accounts.loading || Boolean(accounts.saving) || !accounts.snapshot?.running;
-  useEffect(() => { if (!active) setOpen(false); }, [active]);
+  useEffect(() => { if (!active) { setOpen(false); setSettingsOpen(false); } }, [active]);
   const select = async (kind: SelectableGuiAccount['kind'], id: string) => {
     if (await accounts.select({ kind, id })) { setOpen(false); trigger.current?.focus(); }
   };
@@ -44,13 +46,20 @@ export function RemoteAccountPicker({ active, ready, client, computers, privacyM
       {ready && accounts.snapshot && !accounts.snapshot.running
         && <p className={styles.hint}>{uiText("client.workspaceActions.startTheLocalProxyOnThisComputerFirst")}</p>}
       {accounts.error && <p className={styles.error} role="alert">{remoteErrorText(accounts.error)}</p>}
+      {renderSettings ? <button type="button" className={styles.settings}
+        aria-label={uiText('client.workspaceSettings.codexGuiSettings')} aria-haspopup="dialog"
+        disabled={!ready || accounts.loading || Boolean(accounts.saving)}
+        onClick={() => { setOpen(false); setSettingsOpen(true); }}>
+        <Settings size={19} />{uiText('client.app.settings')}</button> :
       <button type="button" className={styles.settings} aria-label={uiText("client.workspaceActions.refreshAccountList")}
         disabled={!ready || accounts.loading || Boolean(accounts.saving)} onClick={accounts.refresh}>
-        <RefreshCw size={17} />{uiText("client.workspaceActions.refreshAccounts")}</button>
+        <RefreshCw size={17} />{uiText("client.workspaceActions.refreshAccounts")}</button>}
     </>} />;
-  return <GuiAccountMenu active={active} open={open} trigger={trigger} name={name} computers={computers}
+  return <><GuiAccountMenu active={active} open={open} trigger={trigger} name={name} computers={computers}
     busy={Boolean(accounts.saving)} accounts={panel}
     onOpenChange={(next) => { setOpen(next); if (next && ready) accounts.refresh(); }}
     summary={<RemoteAccountSummary name={name} current={current} ready={ready}
-      running={accounts.snapshot?.running} />} />;
+      running={accounts.snapshot?.running} />} />
+    {settingsOpen && active && renderSettings?.(() => { setSettingsOpen(false); trigger.current?.focus(); })}
+  </>;
 }
