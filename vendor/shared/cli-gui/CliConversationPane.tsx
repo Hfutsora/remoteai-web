@@ -6,7 +6,7 @@ import type { DictationClient } from '../chat/dictation/client';
 import { useCliGui } from './context';
 import { CliMessages, type CliMessagesProps } from './CliMessages';
 import { CliPermissions } from './CliPermissions';
-import { CliComposer, type CliModelSource } from './CliComposer';
+import { CliComposer, type CliComposerProps, type CliModelSource } from './CliComposer';
 import { CliInstaller } from './CliInstaller';
 import { cliErrorText } from './errors';
 import { useGuiFontSize, guiFontStyle } from '../appearance/fontSize';
@@ -24,9 +24,12 @@ function InstallationConversation({ footer }: { footer: ReactNode }) {
 }
 
 export function CliConversationPane({ cwd = '', projectPicker, dictation, modelSource, active = true,
-  renderMessages = props => <CliMessages {...props} />, scrollableComposer, remoteLayout = false }: {
+  renderMessages = props => <CliMessages {...props} />, scrollableComposer, remoteLayout = false,
+  composerHeader, connectionInfo, renderComposer = props => <CliComposer {...props} /> }: {
   cwd?: string; projectPicker?: ReactNode; dictation?: DictationClient;
   modelSource: CliModelSource; active?: boolean; scrollableComposer?: boolean; remoteLayout?: boolean;
+  composerHeader?: ReactNode; connectionInfo?: ReactNode;
+  renderComposer?: (props: CliComposerProps) => ReactNode;
   renderMessages?: (props: CliMessagesProps) => ReactNode;
 }) {
   useLanguage();
@@ -38,8 +41,9 @@ export function CliConversationPane({ cwd = '', projectPicker, dictation, modelS
   const status = state.runtime[state.engine === 'claude' ? 'claude' : 'gemini'];
   const ready = status?.status === 'ready';
   const footer = <>
-    {state.selected && <CliPermissions session={state.selected} busy={state.busy || !ready} respond={controller.act} />}
-    <CliComposer projectPicker={projectPicker} dictation={dictation} modelSource={modelSource} remoteLayout={remoteLayout} />
+    {state.selected && <CliPermissions session={state.selected} busy={state.busy || !ready}
+      respond={controller.act} remoteLayout={remoteLayout} />}
+    {renderComposer({ projectPicker, dictation, modelSource, remoteLayout, active, composerHeader, connectionInfo })}
   </>;
   return <section className="cli-gui-pane" style={guiFontStyle(fontSize)} aria-label={uiText('client.cliGui.conversation')}>
     {state.error && <Alert type="error" showIcon message={cliErrorText(state.error)} closable

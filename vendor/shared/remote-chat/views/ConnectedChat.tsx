@@ -239,9 +239,12 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
     </header>
     {external && cli && <CliConversationPane cwd={cwd} dictation={controller.dictation} remoteLayout
       active={active && foreground} scrollableComposer={scrollableComposer}
+      composerHeader={composerHeader}
+      connectionInfo={<ChatConnectionInfo state={state} controller={controller} device={device} active={active}
+        chooseDevice={() => setPickingDevice(true)} />}
       modelSource={{ models: state.models, loading: state.settingsBusy,
         error: state.settingsError, refresh: controller.refreshModels }}
-      projectPicker={composerHeader ?? <ProjectBar active={active} scope={workspaceCwd}>
+      projectPicker={composerHeader ? undefined : <ProjectBar active={active} scope={workspaceCwd}>
         <RemoteProjectPicker state={state} controller={controller} active={active} workspace={{
           cwd: workspaceCwd, disabled: Boolean(cli.state.selected) || cli.state.busy,
           choose: cwd => { cli.controller.patch({ cwd }); void cli.controller.loadCatalog(); },
