@@ -4,6 +4,7 @@
 .cli-gui-pane { display: flex; flex: 1; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden; }
 .cli-gui-pane .chat-message-region { font-family: inherit; }
 .cli-gui-pane .ant-alert { margin: 8px 16px; }
+.cli-gui-install-region { display: flex; flex-direction: column; flex: 1; min-width: 0; }
 .cli-gui-setup [role=status] { display: inline-flex; align-items: center; gap: 8px; }
 .cli-gui-footer { padding: 8px 24px 12px; width: min(100%, 920px); align-self: center; box-sizing: border-box;
   color: var(--muted); display: flex; align-items: center;

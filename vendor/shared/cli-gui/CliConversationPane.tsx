@@ -10,11 +10,23 @@ import { CliComposer, type CliModelSource } from './CliComposer';
 import { CliInstaller } from './CliInstaller';
 import { cliErrorText } from './errors';
 import { useGuiFontSize, guiFontStyle } from '../appearance/fontSize';
+import styles from '../conversation/styles.module.less';
+
+function InstallationConversation({ footer }: { footer: ReactNode }) {
+  return <div className={styles.messageArea}>
+    <div className={styles.messageViewport}>
+      <div className={styles.messageScrollBody}>
+        <div className="cli-gui-install-region"><CliInstaller /></div>
+        <div className={styles.messageFooter}>{footer}</div>
+      </div>
+    </div>
+  </div>;
+}
 
 export function CliConversationPane({ cwd = '', projectPicker, dictation, modelSource, active = true,
-  renderMessages = props => <CliMessages {...props} />, scrollableComposer }: {
+  renderMessages = props => <CliMessages {...props} />, scrollableComposer, remoteLayout = false }: {
   cwd?: string; projectPicker?: ReactNode; dictation?: DictationClient;
-  modelSource: CliModelSource; active?: boolean; scrollableComposer?: boolean;
+  modelSource: CliModelSource; active?: boolean; scrollableComposer?: boolean; remoteLayout?: boolean;
   renderMessages?: (props: CliMessagesProps) => ReactNode;
 }) {
   useLanguage();
@@ -24,14 +36,15 @@ export function CliConversationPane({ cwd = '', projectPicker, dictation, modelS
   if (!cli || cli.state.engine === 'codex') return null;
   const { state, controller } = cli;
   const status = state.runtime[state.engine === 'claude' ? 'claude' : 'gemini'];
+  const ready = status?.status === 'ready';
   const footer = <>
-    {state.selected && <CliPermissions session={state.selected} busy={state.busy} respond={controller.act} />}
-    <CliComposer projectPicker={projectPicker} dictation={dictation} modelSource={modelSource} />
+    {state.selected && <CliPermissions session={state.selected} busy={state.busy || !ready} respond={controller.act} />}
+    <CliComposer projectPicker={projectPicker} dictation={dictation} modelSource={modelSource} remoteLayout={remoteLayout} />
   </>;
   return <section className="cli-gui-pane" style={guiFontStyle(fontSize)} aria-label={uiText('client.cliGui.conversation')}>
     {state.error && <Alert type="error" showIcon message={cliErrorText(state.error)} closable
       onClose={() => controller.patch({ error: '' })} />}
-    {status?.status !== 'ready' ? <CliInstaller /> : renderMessages({ history: state.history,
+    {!ready ? <InstallationConversation footer={footer} /> : renderMessages({ history: state.history,
       selected: state.selected?.id ?? null, loading: state.loading, loadOlder: controller.loadOlder,
       footer, active, scrollableComposer })}
   </section>;

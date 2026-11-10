@@ -3,7 +3,7 @@ import { Download, Terminal } from 'lucide-react';
 import { uiText } from '../localization/uiText';
 import styles from '../conversation/styles.module.less';
 import { useCliGui } from './context';
-import { EngineSelector, engineNames } from './EngineSelector';
+import { engineNames } from './EngineSelector';
 import { CliInstallLink } from './CliInstallLink';
 import { cliErrorText } from './errors';
 
@@ -14,8 +14,7 @@ export function CliInstaller({ compact = false }: { compact?: boolean }) {
   const { engine, runtime, busy } = cli.state;
   const status = runtime[engine];
   const installing = status?.status === 'installing';
-  return <>
-    <div className={`${compact ? styles.installCompact : styles.install} cli-gui-setup`}>
+  return <div className={`${compact ? styles.installCompact : styles.install} cli-gui-setup`}>
       {!compact && <div className={styles.welcomeIcon}><Terminal size={30} /></div>}
       <h2>{uiText(engineNames[engine])}{status?.cliVersion ? ` ${status.cliVersion}` : ''}</h2>
       <p>{uiText('client.cliGui.setupHint')}</p>
@@ -30,7 +29,5 @@ export function CliInstaller({ compact = false }: { compact?: boolean }) {
         <CliInstallLink engine={engine} officialOnly />
       </div>
       {status?.error && <p role="alert">{cliErrorText(status.error)}</p>}
-    </div>
-    {!compact && <footer className="cli-gui-footer"><EngineSelector active={false} /></footer>}
-  </>;
+  </div>;
 }

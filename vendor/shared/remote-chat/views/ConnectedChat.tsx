@@ -237,7 +237,7 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
         value={!external && state.selected?.turns ? { turns: state.selected.turns } : undefined} />}
       {headerEnd}
     </header>
-    {external && cli && <CliConversationPane cwd={cwd} dictation={controller.dictation}
+    {external && cli && <CliConversationPane cwd={cwd} dictation={controller.dictation} remoteLayout
       active={active && foreground} scrollableComposer={scrollableComposer}
       modelSource={{ models: state.models, loading: state.settingsBusy,
         error: state.settingsError, refresh: controller.refreshModels }}

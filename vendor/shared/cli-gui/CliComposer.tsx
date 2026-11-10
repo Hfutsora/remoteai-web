@@ -15,13 +15,14 @@ import { CliInstallLink } from './CliInstallLink';
 import styles from '../conversation/styles.module.less';
 import '../remote-chat/views/composer.css';
 import '../remote-chat/views/composerDesktop.css';
+import '../remote-chat/views/composerFooter.css';
 
 export interface CliModelSource {
   models: Model[]; loading?: boolean; error?: string; refresh: () => Promise<void>;
 }
 
-export function CliComposer({ projectPicker, dictation, modelSource }: {
-  projectPicker?: ReactNode; dictation?: DictationClient; modelSource: CliModelSource;
+export function CliComposer({ projectPicker, dictation, modelSource, remoteLayout = false }: {
+  projectPicker?: ReactNode; dictation?: DictationClient; modelSource: CliModelSource; remoteLayout?: boolean;
 }) {
   const { state, controller } = useCliGui()!;
   const { engine, selected, catalog, busy } = state;
@@ -88,6 +89,8 @@ export function CliComposer({ projectPicker, dictation, modelSource }: {
         </div>
       </div>
     </div>
-    <div className={styles.composerHint}><EngineSelector /><CliInstallLink engine={engine} /></div>
+    <div className={remoteLayout ? 'chat-composer-hint' : styles.composerHint}>
+      <EngineSelector /><CliInstallLink engine={engine} />
+    </div>
   </div>;
 }
