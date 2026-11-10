@@ -1,8 +1,10 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import { Button, Dropdown, Input, Tooltip } from 'antd';
 import { ArrowUp, Archive, ChevronDown, RefreshCw, ShieldCheck, Square } from 'lucide-react';
 import { uiText } from '../localization/uiText';
 import { ModelPicker } from '../conversation/ModelPicker';
+import type { Model } from '../conversation/types';
+import { resolveModelSelection } from '../conversation/modelSelection';
 import { ComposerContextMenu } from '../chat/ComposerContextMenu';
 import { ComposerDictation } from '../chat/dictation/ComposerDictation';
 import type { DictationClient } from '../chat/dictation/client';
@@ -14,20 +16,33 @@ import styles from '../conversation/styles.module.less';
 import '../remote-chat/views/composer.css';
 import '../remote-chat/views/composerDesktop.css';
 
-export function CliComposer({ projectPicker, dictation }: { projectPicker?: ReactNode; dictation?: DictationClient }) {
+export interface CliModelSource {
+  models: Model[]; loading?: boolean; error?: string; refresh: () => Promise<void>;
+}
+
+export function CliComposer({ projectPicker, dictation, modelSource }: {
+  projectPicker?: ReactNode; dictation?: DictationClient; modelSource: CliModelSource;
+}) {
   const { state, controller } = useCliGui()!;
   const { engine, selected, catalog, busy } = state;
   const [dictating, setDictating] = useState(false);
   const fontSize = useGuiFontSize();
+  const { models, loading, error, refresh } = modelSource;
+  useEffect(() => {
+    const selection = resolveModelSelection(models, { model: state.model, effort: state.effort });
+    if (selection.model !== state.model || selection.effort !== state.effort) controller.patch(selection);
+  }, [models, state.model, state.effort, controller]);
   if (engine === 'codex') return null;
   const running = selected?.status === 'running';
   const ready = state.runtime[engine]?.status === 'ready';
   const disabled = busy || dictating || selected?.archived;
-  const canSend = ready && !disabled && !running && !selected?.permissions.length && !!state.model
+  const canSend = ready && !disabled && !running && !selected?.permissions.length && !loading
+    && models.some(model => model.model === state.model)
     && Boolean(state.draft.trim()) && (Boolean(selected) || Boolean(state.cwd));
-  const models = (catalog?.models ?? []).map(model => ({ id: model.id, model: model.id,
-    displayName: model.label, isDefault: !!model.isDefault, defaultReasoningEffort: model.defaultEffort ?? '',
-    supportedReasoningEfforts: model.efforts?.map(effort => ({ reasoningEffort: effort.id, description: effort.label })) ?? [] }));
+  const refreshCatalog = async () => {
+    try { await refresh(); await controller.refresh(); await controller.loadCatalog(); }
+    catch (reason) { controller.report(reason); }
+  };
   return <div className={styles.composerWrap} style={guiFontStyle(fontSize)}>
     {projectPicker ?? <div className={styles.projectBar}><Input value={selected?.cwd ?? state.cwd}
       disabled={Boolean(selected) || busy} aria-label={uiText('client.cliGui.folder')}
@@ -35,7 +50,7 @@ export function CliComposer({ projectPicker, dictation }: { projectPicker?: Reac
       onChange={event => controller.patch({ cwd: event.target.value })} /></div>}
     <div className={styles.composer}>
       <ComposerContextMenu scope={`${engine}:${selected?.id ?? 'draft'}`} active translate={uiText}>
-        <Input.TextArea value={state.draft} autoSize={{ minRows: 2, maxRows: 8 }}
+        <Input.TextArea value={state.draft} autoSize={{ minRows: 3, maxRows: 8 }}
           aria-label={uiText('client.cliGui.message')} placeholder={uiText('client.cliGui.messageHint')}
           disabled={disabled} onChange={event => controller.edit(event.target.value)}
           onKeyDown={event => {
@@ -59,9 +74,9 @@ export function CliComposer({ projectPicker, dictation }: { projectPicker?: Reac
                 engine, action: 'archive', id: selected.id,
               }); }} /></Tooltip>}
           <Button type="text" size="small" icon={<RefreshCw size={14} />} disabled={busy}
-            aria-label={uiText('client.cliGui.refresh')} onClick={() => { void controller.refresh().then(controller.loadCatalog); }} />
+            aria-label={uiText('client.cliGui.refresh')} onClick={() => { void refreshCatalog(); }} />
           <ModelPicker models={models} model={state.model} effort={state.effort}
-            disabled={!ready || busy || Boolean(running)} onRetry={controller.loadCatalog}
+            error={error} disabled={!ready || busy || Boolean(running) || Boolean(loading)} onRetry={refreshCatalog}
             onChange={selection => controller.patch(selection)} />
           {dictation && <ComposerDictation client={dictation} active={ready} disabled={Boolean(disabled)}
             onBusyChange={setDictating} onText={text => controller.edit(`${state.draft}${text}`)} />}

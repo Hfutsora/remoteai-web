@@ -12,16 +12,16 @@ export const officialInstallUrls: Record<ExternalEngine, string> = {
   gemini: 'https://geminicli.com/docs/get-started/installation/',
 };
 
-export function CliInstallLink({ engine }: { engine: ExternalEngine }) {
+export function CliInstallLink({ engine, officialOnly = false }: { engine: ExternalEngine; officialOnly?: boolean }) {
   const url = officialInstallUrls[engine];
   const cli = useCliGui();
   const installing = cli?.state.runtime[engine]?.status === 'installing';
   return <span className="cli-gui-install-link">
-    <button type="button" className="chat-text-action" disabled={installing || cli?.state.busy}
+    {!officialOnly && <button type="button" className="chat-text-action" disabled={installing || cli?.state.busy}
       onClick={() => { void cli?.controller.install(); }}>
       {uiText(installing ? 'client.cliGui.installing' : cli?.state.runtime[engine]?.cliVersion
         ? 'client.cliGui.update' : 'client.cliGui.install')}
-    </button>
+    </button>}
     <a href={url} target="_blank" rel="noopener noreferrer"
     aria-label={uiText('client.cliGui.officialInstall', { cli: engine === 'claude' ? 'Claude Code' : 'Gemini CLI' })}
     onClick={event => {
@@ -33,5 +33,6 @@ export function CliInstallLink({ engine }: { engine: ExternalEngine }) {
       }); });
     }}>
     <ExternalLink size={12} aria-hidden="true" />
+    {officialOnly && uiText('client.cliGui.officialInstall', { cli: engine === 'claude' ? 'Claude Code' : 'Gemini CLI' })}
   </a></span>;
 }

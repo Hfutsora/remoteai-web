@@ -58,6 +58,8 @@ import { CliGuiProvider, useCliGui } from '../../cli-gui/context';
 import { CliConversationPane } from '../../cli-gui/CliConversationPane';
 import { RemoteProjectPicker } from '../../conversation/remote/RemoteProjectPicker';
 import { ProjectBar } from '../../conversation/ProjectBar';
+import { GuiToolbox } from '../../conversation/GuiToolbox';
+import { ProjectBrowserButton } from '../../project-browser/views/ProjectBrowserButton';
 import { engineNames } from '../../cli-gui/EngineSelector';
 
 export interface ConnectedChatProps {
@@ -79,6 +81,7 @@ export interface ConnectedChatProps {
   nativeFileDrop?: NativeFileDrop;
   openAccounts?: () => void;
   workspacePage?: { title: string; content: ReactNode; onClose: () => void };
+  onWorkspaceChange?: (cwd: string) => void;
 }
 
 export interface ChatSidebarActions {
@@ -99,7 +102,7 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
   chooseLocal, accountPicker, headerActions, headerConnectionActions, headerEnd, renderSidebar, composerHeader,
   conversationFooter, renderUserMessage, draggableHeader, scrollableComposer,
   readClipboardImages, nativeFileDrop, desktopDiffs, deviceRefresh, cliVersion, openAccounts,
-  workspacePage }: ConnectedChatProps) {
+  workspacePage, onWorkspaceChange }: ConnectedChatProps) {
   useLanguage();
   const cli = useCliGui();
   const external = Boolean(cli && cli.state.engine !== 'codex' && !workspacePage);
@@ -122,6 +125,8 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
     cliVersion === undefined && desktop && active && foreground && ready);
   const error = visibleChatError(state.error, state);
   const cwd = state.selected?.cwd ?? state.draftProject?.cwd ?? '';
+  const workspaceCwd = external && cli ? cli.state.selected?.cwd ?? cli.state.cwd : cwd;
+  useEffect(() => { onWorkspaceChange?.(workspaceCwd); }, [workspaceCwd, onWorkspaceChange]);
   const catalog = useChatCatalog(controller, cwd, ready);
   const runningTurn = currentRunningTurn(state.selected?.turns);
   const running = Boolean(runningTurn);
@@ -149,7 +154,7 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
       scope={scope}
       disabled={!ready || state.sending || state.settingsBusy || state.selectedArchived || state.queueBusy
         || state.compacting === state.selected?.id} answer={controller.answerAsyncQuestion} />
-    {composerHeader}
+    {!external && composerHeader}
     <ChatComposer suggestions={remotePromptSuggestion(state, controller.suggestNextPrompt, { scope })}
       dictation={controller.dictation}
       cliVersion={cliVersion === undefined ? installer.version : cliVersion}
@@ -204,7 +209,8 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
     <ChatFileContext.Provider value={{ threadId: state.selected?.id ?? null, ready, client: controller.files,
       load: controller.textPreview }}>
     <ChatBrowserProvider controller={controller}>
-    <ChatDetailsWorkspace selected={state.selected?.id ?? null} active={conversationActive} enabled={showDesktopDiffs}>
+    <ChatDetailsWorkspace selected={external ? `cli:${cli?.state.engine}:${cli?.state.selected?.id ?? 'draft'}`
+      : state.selected?.id ?? null} active={active && !workspacePage} enabled={showDesktopDiffs}>
     <ChatFileReferencesProvider><ImageAnnotationsProvider>
     <ChatQuotesProvider scope={state.draftScope ?? state.selected?.id ?? null} sending={state.sending}
     enabled={conversationActive && !state.selectedArchived}>
@@ -226,17 +232,23 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
         disabled={!ready || running}
         onClick={() => { void controller.archive().then(drawerMotion.openDrawer); }}>
         {t("client.chat.restore")}</button>}
-      {!external && headerActions}
-      {!external && !workspacePage && showDesktopDiffs && <ConversationChangesButton
-        value={state.selected?.turns ? { turns: state.selected.turns } : undefined} />}
+      {headerActions}
+      {!workspacePage && showDesktopDiffs && <ConversationChangesButton
+        value={!external && state.selected?.turns ? { turns: state.selected.turns } : undefined} />}
       {headerEnd}
     </header>
     {external && cli && <CliConversationPane cwd={cwd} dictation={controller.dictation}
-      projectPicker={<ProjectBar active={active} scope={cli.state.cwd}>
+      active={active && foreground} scrollableComposer={scrollableComposer}
+      modelSource={{ models: state.models, loading: state.settingsBusy,
+        error: state.settingsError, refresh: controller.refreshModels }}
+      projectPicker={composerHeader ?? <ProjectBar active={active} scope={workspaceCwd}>
         <RemoteProjectPicker state={state} controller={controller} active={active} workspace={{
-          cwd: cli.state.selected?.cwd ?? cli.state.cwd, disabled: Boolean(cli.state.selected) || cli.state.busy,
+          cwd: workspaceCwd, disabled: Boolean(cli.state.selected) || cli.state.busy,
           choose: cwd => { cli.controller.patch({ cwd }); void cli.controller.loadCatalog(); },
         }} />
+        <GuiToolbox trigger="git" active={active} connected={ready} cwd={workspaceCwd} git={controller.guiTools.git} />
+        <ProjectBrowserButton client={controller.guiTools.projectBrowser} cwd={workspaceCwd}
+          active={active} connected={ready} desktopStyle />
       </ProjectBar>} />}
     {workspacePage && <div className="gui-remote-feature">{workspacePage.content}</div>}
     <div className="cli-gui-codex-content" hidden={external}>
@@ -258,8 +270,8 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
           processing={state.processing} active={conversationActive && ready} />} />
       </ChatRetryProvider></TaskReviewProvider>
     {!scrollableComposer && composer}
-    {conversationFooter}
     </div>
+    {conversationFooter}
     </ChatTerminalLayout>
     <ChatSidebar desktop={desktop} open={listOpen} onClose={closeList} customHeading={Boolean(renderSidebar)}
       motion={drawerMotion}

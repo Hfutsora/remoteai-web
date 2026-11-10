@@ -1,17 +1,21 @@
 import { useEffect, type ReactNode } from 'react';
-import { Alert, Button } from 'antd';
+import { Alert } from 'antd';
 import { uiText } from '../localization/uiText';
 import { useLanguage } from '../localization/browserClient';
 import type { DictationClient } from '../chat/dictation/client';
 import { useCliGui } from './context';
-import { CliMessages } from './CliMessages';
+import { CliMessages, type CliMessagesProps } from './CliMessages';
 import { CliPermissions } from './CliPermissions';
-import { CliComposer } from './CliComposer';
+import { CliComposer, type CliModelSource } from './CliComposer';
+import { CliInstaller } from './CliInstaller';
 import { cliErrorText } from './errors';
 import { useGuiFontSize, guiFontStyle } from '../appearance/fontSize';
 
-export function CliConversationPane({ cwd = '', projectPicker, dictation }: {
+export function CliConversationPane({ cwd = '', projectPicker, dictation, modelSource, active = true,
+  renderMessages = props => <CliMessages {...props} />, scrollableComposer }: {
   cwd?: string; projectPicker?: ReactNode; dictation?: DictationClient;
+  modelSource: CliModelSource; active?: boolean; scrollableComposer?: boolean;
+  renderMessages?: (props: CliMessagesProps) => ReactNode;
 }) {
   useLanguage();
   const cli = useCliGui();
@@ -20,20 +24,15 @@ export function CliConversationPane({ cwd = '', projectPicker, dictation }: {
   if (!cli || cli.state.engine === 'codex') return null;
   const { state, controller } = cli;
   const status = state.runtime[state.engine === 'claude' ? 'claude' : 'gemini'];
-  const installing = status?.status === 'installing';
+  const footer = <>
+    {state.selected && <CliPermissions session={state.selected} busy={state.busy} respond={controller.act} />}
+    <CliComposer projectPicker={projectPicker} dictation={dictation} modelSource={modelSource} />
+  </>;
   return <section className="cli-gui-pane" style={guiFontStyle(fontSize)} aria-label={uiText('client.cliGui.conversation')}>
     {state.error && <Alert type="error" showIcon message={cliErrorText(state.error)} closable
       onClose={() => controller.patch({ error: '' })} />}
-    {status?.status !== 'ready' && <div className="cli-gui-setup">
-      <p>{uiText('client.cliGui.setupHint')}</p>
-      <Button type="primary" loading={installing} onClick={() => { void controller.install(); }}>
-        <span role={installing ? 'status' : undefined}>
-          {uiText(installing ? 'client.cliGui.installing' : 'client.cliGui.install')}</span>
-      </Button>
-      {status?.error && <p role="alert">{cliErrorText(status.error)}</p>}
-    </div>}
-    <CliMessages history={state.history} loading={state.loading} loadOlder={controller.loadOlder} />
-    {state.selected && <CliPermissions session={state.selected} busy={state.busy} respond={controller.act} />}
-    <CliComposer projectPicker={projectPicker} dictation={dictation} />
+    {status?.status !== 'ready' ? <CliInstaller /> : renderMessages({ history: state.history,
+      selected: state.selected?.id ?? null, loading: state.loading, loadOlder: controller.loadOlder,
+      footer, active, scrollableComposer })}
   </section>;
 }
