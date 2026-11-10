@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "f656fc72b82da42cf5a7ac1b64c810767abb6a0c",
+  "revision": "695003c833f40b174a16ffb46d54cccbec200b36",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "458c637b415e7aa5703104a38074a05d19979598"
+    "revision": "fcc2a1bfff0b35e9f9cc5dfab78f7d33e7e570e8"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -530,7 +530,7 @@
     "shared/remote-chat/tcp/types.ts": "24e9c66e02a1a5d831d5d8af34e861b92146177ee1beb15c70d0983b624698cb",
     "shared/chat/chatPolicy.ts": "09ab716c5d3fd8190ffe95734a38c0941bf7b1f6ec4a906a10b593ed00aba699",
     "shared/conversation/MessageLink.tsx": "9530bfcef7bc97aeeba8b84977b2b109611eef43ba9f5eb3245e269e5c3f5960",
-    "shared/conversation/FileMenu.tsx": "4b1af36065dd01c9580d44a04eae8753cad8b8a17d6667c7605987dd40efe25f",
+    "shared/conversation/FileMenu.tsx": "2af4feba6c0a6f708c5807d24110822b22d434ffc42bb22d92d62585e33b7655",
     "apps/desktop/src/pages/settings/GlobalFontSettingsCard.tsx": "0ba68bb9f5262cbe3fd845b68791bbd1f85eeb7552aa07bd54ae56602e88cbdc",
     "shared/conversation/GuiAppearanceSettings.tsx": "a25c64af87f24ef84ca4c4e159eed8efcaf4395dc3fbb5a3abb4d96a1b42a480",
     "shared/conversation/GuiChatSettingsButton.tsx": "d1a2d9cd806fb25e5074a5b2f2bbf7d55b1b89844a337e43c04845227c9804ac",
@@ -940,7 +940,7 @@
     "shared/file-preview/workspace/resourceNavigation.tsx": "f80345bb705bdfb648fbb066ddf067bd78aea650880f24b225eb44bcedfa1286",
     "shared/file-preview/workspace/useWebsiteTabs.ts": "0f914768c676a5173490d7c0ebad776192579b1f935fd5474857119b504b3910",
     "shared/file-preview/workspace/fileResource.tsx": "71c97f1d6033be8da9b3dfbe7432ff06b01a054cf55b58c27cf3fe43628b6dc5",
-    "shared/file-preview/workspace/downloadResource.tsx": "ea50e3b3dbdfc1bb9de41918c90fbc7f0fe66a5e1877af047ccddcd8e8fe0a3d",
+    "shared/file-preview/workspace/downloadResource.tsx": "b672eb906f63a9200267140830e8fd3a5790e3d1fa5e697ec1298375d04e7d83",
     "shared/conversation/CodeBlock.tsx": "ab1692c50a7b8454ade9cf98d12b0439fffdfb1cac67f72bc16b4e94760aad72",
     "shared/conversation/MessageImage.tsx": "5324c07f45bcc6b0953943db0ce9e6b2e48a3505db22a056c10ab82d043ffe0e",
     "shared/conversation/imageSources.ts": "e9da96d68baf46ce9c090b3567502e0a022462110a3d160cad54fbff407b9a05",
@@ -1142,7 +1142,7 @@
     "shared/conversation/WebsiteIcon.tsx": "74e367d71cf711c4c077f1a8cd5346a81e9d2f1c9d4d61e6dc35eb4305f15b16",
     "shared/conversation/WebsiteLinkMenu.tsx": "00b3b4d7ed7a7a2ef7b67ec684b54c51d4cd8a521ba2c7a73e8de31425d18d1d",
     "shared/conversation/FileApplicationIcon.tsx": "e8916537223eb17bd5288a90447befe7bd6caa187459a069a0e8020126647473",
-    "shared/conversation/FileMenu.module.less": "96b9ff98a984dfa8ce7095841188b61045d298a8897b5d2ca3cfa77e484d3dec",
+    "shared/conversation/FileMenu.module.less": "11d3bc6bfb559d714411e01b63de42b4551826f3fceaccdd4be5cfd6d2b07c1b",
     "apps/desktop/src/pages/settings/GlobalFontSettingsCard.module.less": "c56ec378ecb89cd0306ee65d7fcfc23409fde2dad68f14117f6c58a7b5661b34",
     "shared/conversation/GuiAppearanceSettings.module.less": "feb8e5e2fabeb2c49e734622a89ab948e3bb74f9212b75182d01cbe6e45bc6b4",
     "shared/conversation/GuiMessageSettings.tsx": "f30eba502e7b8116c215bc915a6c137c9d5071cab62b12fbe42fcd3db903c357",
@@ -1451,7 +1451,7 @@
     "shared/browser/managed/ProviderBrowserSurface.tsx": "ac58581dfd7b94a8dbd09eb6a40b39f886a9b51be5804a5c08ea573c2f43365a",
     "shared/browser/managed/browserOverlays.ts": "7049ab695b456b6b81304be6a4d09ee9f789c3e20e5762799c86a3f56c507a4f",
     "shared/file-preview/workspace/nativeBrowserPlacement.ts": "1c92017b8a513a44853dc406d12c1213895a66842db6a3c82259dc8d81336967",
-    "shared/file-preview/resourceDownloadCard.css": "f11d424ec41e2ee3d32439604cec6f143041330fa91470a8ea96b8c7774be73f",
+    "shared/file-preview/resourceDownloadCard.css": "814b092087b2377aab8e9e883a629d8743671980e2c3e87b44af5dff1345a3ce",
     "shared/provider-market/pageLink.ts": "cef18ddf701dd9befaceda9e05ee1c91b89e0c341cfa4c6660bda68bd95be03c",
     "shared/provider-market/browserTabCommands.ts": "0d0f798666e34221ca6f8d17a5fc88a1e1a0d23ade7ed3da0879bd804cbd3d41",
     "shared/conversation/CodeBlock.module.less": "a67df8ffe10f2c69d9e19855483220eef11911836c43b869fcbd385f763c0bae",
