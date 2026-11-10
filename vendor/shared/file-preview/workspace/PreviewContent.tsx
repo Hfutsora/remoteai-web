@@ -15,7 +15,7 @@ function MediaPreview({ data }: { data: FilePreviewData }) {
   if (failed) return <p className={styles.feedback} role="status">
     {uiText("client.workspaceActions.thisFileCannotBePreviewedRightNowUseTheFile")}</p>;
   const onError = () => setFailed(true);
-  if (data.kind === "pdf") return <PdfUrlPreview url={data.url} name={data.name} />;
+  if (data.kind === "pdf") return <PdfUrlPreview url={data.url} name={data.name} size={data.size} remote={data.remote} />;
   if (data.kind === "image") return <div className={styles.imageArea}>
     <button type="button" className={styles.imageToggle} onClick={() => setOriginalSize(!originalSize)}>
       {originalSize ? uiText("client.workspaceActions.fitToWindow") : uiText("client.workspaceActions.originalSize")}
