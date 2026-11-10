@@ -254,7 +254,7 @@ test('changes context capacity and opens profile, account picker and token summa
   expect(await operationCount(request, 'tokenSummary')).toBe(count);
 });
 
-test('answers asynchronous questions without blocking the draft and preserves independent search', async ({ page, request }) => {
+test('answers asynchronous questions without blocking the draft and preserves independent search', async ({ page, request }, info) => {
   await request.post(`${fixtureUrl}/test/sidebar`, { data: { action: 'async-parity' } });
   await selectChat(page);
   await page.getByRole('textbox', { name: '聊天消息' }).fill('草稿保持不变');
@@ -263,7 +263,10 @@ test('answers asynchronous questions without blocking the draft and preserves in
   await expect(page.getByRole('button', { name: '提交回答' })).toBeDisabled();
   await page.getByRole('radio', { name: '聊天记录', exact: true }).check();
   await page.getByRole('textbox', { name: '还有哪些细节？' }).fill('表格和代码高亮');
-  await page.getByRole('button', { name: '提交回答' }).click();
+  await page.getByRole('textbox', { name: '还有哪些细节？' }).press('Shift+Enter');
+  await expect(page.getByRole('textbox', { name: '还有哪些细节？' })).toHaveValue('表格和代码高亮\n');
+  await screenshot(page, info, 'follow-up-answer-dialog');
+  await page.getByRole('textbox', { name: '还有哪些细节？' }).press('Enter');
   await expect(page.getByRole('button', { name: /回答补充问题/ })).toHaveCount(0);
   await expect(page.getByRole('textbox', { name: '聊天消息' })).toHaveValue('草稿保持不变');
   await openChatList(page);

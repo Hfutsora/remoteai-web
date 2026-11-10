@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "cc9822b91372bf6156e852b2d66fc18fd5692556",
+  "revision": "6f0b6cd91cd00d1530e0d4e663f24ff71d9e759c",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "4aa868656d2bafc6ef44958071a1d97f6f4963c1"
+    "revision": "7260f1ea2ddde6b00b75c40710639a9c75e09ecb"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -721,7 +721,7 @@
     "shared/remote-chat/ChatRetryProvider.tsx": "a0edb73c1db8c6c8f9a83cc5672089ff1c80971b0d38148d0d6e3715cad1c7ea",
     "shared/chat/ImageAnnotations.tsx": "5f01618f423406826c61c30a04daa79b782751a970e622f6ac7f6adadc04e547",
     "shared/remote-chat/views/ChatBrowserProvider.tsx": "0ca5e77dbb30f2aab5498ac19b61c0a52bc7ebe1d9b3520380be247a133f453f",
-    "shared/remote-chat/views/ChatAsyncQuestions.tsx": "e201a6b480f8282237e5b925e5e724793174e8032d499650ecc1de72aec23f5e",
+    "shared/remote-chat/views/ChatAsyncQuestions.tsx": "f609d1fad66dba0dce556fd823ac5002434cce9ac41e48076722789e396f3b28",
     "shared/remote-chat/views/ChatSearch.tsx": "210192612cb4a5da5e2474c2cdb68c1e446919f0c18fb9da881e3e2ff265bf3a",
     "shared/remote-chat/views/useChatCatalog.ts": "b7882f065a0497342978893c4a9fde3904e835af062f0f83eb26ffe29a43ea07",
     "shared/remote-chat/views/useChatDrawerSwipe.ts": "68e5b8bab4df43466bb18aa6d5ca1c861fc050fae35acc00428436f49c0e4396",
@@ -1263,7 +1263,9 @@
     "shared/remote-chat/taskStatus.ts": "1312566552dff9b0fa0a766b77ac609a30bbc78a04fc21eeabd5291fd929740d",
     "shared/chat/TurnRetryContext.tsx": "8a335368d650ca29f21fd6369f70e3a4bf22c15034f34a87a61c60bd230c92bd",
     "shared/chat/turnRetry.ts": "54461af3096f2c0ed181666ba338cc2e666ddc0b867851e69a23e9a8970f2ef6",
+    "shared/conversation/questionKeyboard.ts": "82e65e6561d846b213da4d190d79e6f8cf8fb7f422e3b29e89e98129e1d572b9",
     "shared/remote-chat/views/useDismissedQuestions.ts": "9b857871e26d63ce8fef39259a4e517cfc62814636cc5eef6811036f1057f101",
+    "shared/remote-chat/views/asyncQuestions.css": "e3915bd0cfec318fb4093c9dba1a79e83f6c52b3e39894f6b8a76f9d34c4ce11",
     "shared/remote-chat/useScriptTerminalRefresh.ts": "c2a0d723b8bc3b163810474d660ed42cf11fc678fa34674e3c79aa7256b9d0bc",
     "shared/cli/installerState.ts": "edcb694d22aac56045a1819a0418de9d491e2326ecc406195249e92e73d6986d",
     "shared/conversation/CliManualDownload.tsx": "8b84df585f68370dc01941ed28f05436179f3a51c92ced783d0d537da11f5366",
