@@ -51,7 +51,7 @@ test('web: toggle stays centered when the project name and path wrap', async ({ 
   const pane = page.getByRole('region', { name: '对话同步', exact: true });
   const project = pane.getByRole('row').filter({ has: page.getByText(/^F:\/projects\/customer-workspaces\//) });
   await expect(project).toBeVisible();
-  expect((await project.boundingBox())!.height).toBeGreaterThan(80);
+  await expect.poll(async () => (await project.boundingBox())!.height).toBeGreaterThan(80);
   await expectCenteredToggle(project);
   await project.getByRole('button').click();
   await expect(pane.getByText('排查项目中的登录问题', { exact: true })).toBeVisible();

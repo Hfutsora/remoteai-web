@@ -5,7 +5,7 @@ import { SYNC_HOME_ID, type SyncDirectory, type SyncHost, type SyncResult, type 
 import { uiText } from '../../localization/uiText';
 import { downloadManager } from '../../downloads/manager';
 import { enqueueSyncDownload, syncTransferMode } from './downloads';
-import { syncSourceLabel } from './sourceLabel';
+import { orderSyncSources, syncSourceLabel } from './sourceLabel';
 import { uniqueSyncThreads } from './threadGroups';
 
 export function useSyncSources(hosts: SyncHost[], destination: SyncHost) {
@@ -23,7 +23,7 @@ export function useSyncSources(hosts: SyncHost[], destination: SyncHost) {
           label: syncSourceLabel(host.name || directory.name, home) }));
     })).then(results => {
       if (cancelled) return;
-      setSources(results.flatMap(result => result.status === 'fulfilled' ? result.value : []));
+      setSources(orderSyncSources(results.flatMap(result => result.status === 'fulfilled' ? result.value : [])));
       setFailures(results.flatMap((result, index) => result.status === 'rejected'
         ? [hosts[index].name || uiText('client.git.local')] : []));
       setLoading(false);

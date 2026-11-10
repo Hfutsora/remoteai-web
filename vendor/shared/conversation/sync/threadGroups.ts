@@ -1,4 +1,5 @@
 import type { SyncThread } from './types';
+import { syncDisplayPath, syncProjectDirectory, syncProjectKey } from './projectDirectories';
 
 export interface SyncThreadRow extends SyncThread { key: string; type: 'thread' }
 export interface SyncProjectRow {
@@ -9,13 +10,6 @@ export type SyncRow = SyncProjectRow | SyncThreadRow;
 
 export const syncThreadKey = (sessionId: string) => JSON.stringify(['thread', sessionId]);
 export const SYNC_RECENT_KEY = JSON.stringify(['project', '']);
-
-const SCRATCH_WORKSPACE = /(?:^|[\\/])codex-gui-workspaces[\\/][\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}[\\/]*$/i;
-
-function projectDirectory(cwd: string) {
-  // Older hosts expose the scratch directory instead of an empty project path.
-  return !cwd.trim() || SCRATCH_WORKSPACE.test(cwd.trim()) ? '' : cwd;
-}
 
 // Older hosts can list both the active and archived rollout of the same conversation.
 // Titles are display text; only the session ID identifies a selectable conversation.
@@ -34,13 +28,17 @@ export function uniqueSyncThreads(threads: SyncThread[]): SyncThread[] {
 export function groupSyncThreads(threads: SyncThread[]): SyncProjectRow[] {
   const projects = new Map<string, SyncProjectRow>();
   for (const thread of uniqueSyncThreads(threads)) {
-    const cwd = projectDirectory(thread.cwd);
-    let project = projects.get(cwd);
+    // Source metadata takes precedence, including explicitly projectless conversations.
+    const cwd = thread.projectPath === undefined ? syncProjectDirectory(thread.cwd) : syncDisplayPath(thread.projectPath);
+    const key = syncProjectKey(cwd);
+    const name = cwd ? thread.projectName?.trim() : '';
+    let project = projects.get(key);
     if (!project) {
-      project = { key: JSON.stringify(['project', cwd]), type: 'project', cwd,
-        title: cwd.split(/[\\/]/).filter(Boolean).at(-1) ?? '', updatedAt: null, children: [] };
-      projects.set(cwd, project);
+      project = { key: JSON.stringify(['project', key]), type: 'project', cwd,
+        title: name || cwd.split(/[\\/]/).filter(Boolean).at(-1) || cwd, updatedAt: null, children: [] };
+      projects.set(key, project);
     }
+    if (name) project.title = name;
     project.children.push({ ...thread, key: syncThreadKey(thread.sessionId), type: 'thread' });
     if ((thread.updatedAt ?? 0) > (project.updatedAt ?? 0)) project.updatedAt = thread.updatedAt;
   }

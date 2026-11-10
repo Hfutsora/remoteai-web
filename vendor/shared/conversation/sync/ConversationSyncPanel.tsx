@@ -6,6 +6,7 @@ import { useGuiLanguage } from '../../localization/useGuiLanguage';
 import { useConversationSync, useSyncSources, useSyncThreads } from './useConversationSync';
 import type { SyncHost } from './types';
 import { SyncThreadTable } from './SyncThreadTable';
+import { SyncSourceLabel } from './SyncSourceLabel';
 import { formatBytes } from '../../downloads/DownloadCard';
 import styles from './sync.module.less';
 
@@ -37,8 +38,9 @@ export function ConversationSyncPanel({ hosts, destination, onSynced }: {
     <div className={styles.toolbar}>
       <Select className={styles.source} value={source?.key} onChange={setSource} loading={directory.loading}
         aria-label={uiText('client.conversationSync.source')} placeholder={uiText('client.conversationSync.source')}
-        disabled={locked} showSearch optionFilterProp="label"
-        popupMatchSelectWidth options={directory.sources.map(source => ({ value: source.key, label: source.label }))} />
+        disabled={locked} showSearch optionFilterProp="searchLabel"
+        popupMatchSelectWidth options={directory.sources.map(source => ({ value: source.key,
+          label: <SyncSourceLabel source={source} />, searchLabel: source.label, title: source.label }))} />
       <Input value={list.query} disabled={locked} allowClear prefix={<Search size={16} />}
         onChange={event => list.setQuery(event.target.value)} placeholder={uiText('client.conversationSync.search')} />
       <Select value={kind} onChange={setKind} disabled={locked} aria-label={uiText('client.conversationSync.kind')}
@@ -67,7 +69,8 @@ export function ConversationSyncPanel({ hosts, destination, onSynced }: {
       closable={!sync.committing} maskClosable={false} keyboard={!sync.committing}>
       <div className={styles.confirm}>
         <Descriptions size="small" column={1} items={[
-          { key: 'source', label: uiText('client.conversationSync.source'), children: source?.label },
+          { key: 'source', label: uiText('client.conversationSync.source'),
+            children: source && <SyncSourceLabel source={source} /> },
           { key: 'destination', label: uiText('client.conversationSync.destination'), children: destination.name || 'Codex GUI' },
           { key: 'count', label: uiText('client.conversationSync.selection'),
             children: sync.prepared?.plan.count ?? list.selected.length },

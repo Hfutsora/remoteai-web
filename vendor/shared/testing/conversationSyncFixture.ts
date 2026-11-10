@@ -8,6 +8,19 @@ function fixtureThreads(parameters: URLSearchParams) {
     cwd: 'F:/projects/customer-workspaces/remoteai-long-running-conversation-synchronization-regression-project',
   } : thread;
   const scratchRoot = 'C:/Users/Codex/AppData/Roaming/dev.codex.switch/codex-gui-workspaces';
+  if (parameters.has('externalProjects')) return [
+    { ...thread, sessionId: 'official', title: '普通 Codex 中的临时对话', updatedAt: thread.updatedAt + 4,
+      cwd: String.raw`\\?\C:\Users\ZH\Documents\Codex\2026-10-10\ce` },
+    { ...thread, sessionId: 'explicit-recent', title: '已移出项目的对话', updatedAt: thread.updatedAt + 3,
+      cwd: 'D:/old-project', projectPath: '' },
+    { ...thread, sessionId: 'named-project', title: '检查客户登录流程', updatedAt: thread.updatedAt + 2,
+      cwd: String.raw`\\?\D:\clients\portal\src`, projectPath: String.raw`\\?\D:\clients\portal`,
+      projectName: '客户门户' },
+    { ...thread, sessionId: 'equivalent-path', title: '完善客户设置页面', updatedAt: thread.updatedAt + 1,
+      cwd: 'd:/clients/PORTAL/', projectPath: 'd:/clients/PORTAL/' },
+    { ...thread, sessionId: 'old-host-project', title: '复查桌面同步功能',
+      cwd: String.raw`\\?\D:\github\codex-switch` },
+  ];
   if (parameters.has('regression')) return [
     { ...thread, sessionId: 'copy', title: '同名对话', cwd: '', updatedAt: thread.updatedAt + 5 },
     { ...thread, sessionId: 'copy', title: '同名对话', cwd: 'F:/outdated-project', updatedAt: thread.updatedAt },
