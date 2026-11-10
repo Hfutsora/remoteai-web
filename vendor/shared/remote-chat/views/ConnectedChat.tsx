@@ -1,4 +1,5 @@
 import { displayText } from '../../localization/browserClient';
+import { TaskRecoveryPrompt } from '../../conversation/recovery/TaskRecoveryPrompt';
 import { displayError } from '../../localization/browserClient';
 import { ImageAiContext } from '../../chat/ImageAiContext';
 import { DesktopUsageContext } from '../../chat/DesktopUsageContext';
@@ -73,6 +74,7 @@ export interface ConnectedChatProps {
   readClipboardImages?: () => Promise<File[]>;
   nativeFileDrop?: NativeFileDrop;
   openAccounts?: () => void;
+  workspacePage?: { title: string; content: ReactNode; onClose: () => void };
 }
 
 export interface ChatSidebarActions {
@@ -85,8 +87,10 @@ export interface ChatSidebarActions {
 export function ConnectedChat({ chat, device, devices, active, scope, email, chooseDevice,
   chooseLocal, accountPicker, headerActions, headerConnectionActions, headerEnd, renderSidebar, composerHeader,
   conversationFooter, renderUserMessage, draggableHeader, scrollableComposer,
-  readClipboardImages, nativeFileDrop, desktopDiffs, deviceRefresh, cliVersion, openAccounts }: ConnectedChatProps) {
+  readClipboardImages, nativeFileDrop, desktopDiffs, deviceRefresh, cliVersion, openAccounts,
+  workspacePage }: ConnectedChatProps) {
   useLanguage();
+  const conversationActive = active && !workspacePage;
   const { state, controller, foreground } = chat;
   const [drawer, setDrawer] = useState(false);
   const desktop = useDesktopLayout();
@@ -113,8 +117,9 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
     if (!state.sending) { controller.back(project); drawerMotion.closeDrawer(); }
   };
   useEffect(() => {
-    controller.setViewing(active && foreground && (desktop || !drawerMotion.visible) && !pickingDevice && !searching);
-  }, [active, foreground, desktop, drawerMotion.visible, pickingDevice, searching, controller]);
+    controller.setViewing(conversationActive && foreground
+      && (desktop || !drawerMotion.visible) && !pickingDevice && !searching);
+  }, [conversationActive, foreground, desktop, drawerMotion.visible, pickingDevice, searching, controller]);
   useEffect(() => {
     if (!active) { drawerMotion.closeDrawer(); setPickingDevice(false); setSearching(false); }
   }, [active, drawerMotion.closeDrawer]);
@@ -157,7 +162,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
       settingsBusy={state.settingsBusy || !!state.workspaceBusy} settingsError={state.settingsError}
       updateSettings={(settings) => controller.setSettings(settings)}
       refreshModels={controller.refreshModels}
-      active={active} ready={ready && !state.selectedArchived} sending={state.sending} running={running}
+      active={conversationActive} ready={ready && !state.selectedArchived} sending={state.sending} running={running}
       interrupted={state.selected?.turns?.at(-1)?.status === 'interrupted'}
       send={(input) => controller.enqueueMessage(input)} interrupt={() => controller.interrupt()} />
   </>;
@@ -169,10 +174,12 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
     guiTools={controller.guiTools} active={active && foreground && !searching}
     running={state.sending || running || Object.values(state.sidebar.threads).some(thread => thread.running)}
     chooseDevice={() => { drawerMotion.closeDrawer(); setPickingDevice(true); }} />);
-  return <ToolDetailsContext.Provider value={{ load: controller.toolDetails, active: active && foreground && ready }}>
-    <ProcessDetailsContext.Provider value={{ load: controller.processDetails, active: active && foreground && ready }}>
+  return <ToolDetailsContext.Provider value={{ load: controller.toolDetails,
+    active: conversationActive && foreground && ready }}>
+    <ProcessDetailsContext.Provider value={{ load: controller.processDetails,
+      active: conversationActive && foreground && ready }}>
     <DesktopUsageContext.Provider value={usageSnapshot}>
-    <ImageAiContext.Provider value={{ enabled: active && ready && !state.selectedArchived
+    <ImageAiContext.Provider value={{ enabled: conversationActive && ready && !state.selectedArchived
     && !state.sending && !state.settingsBusy && !state.workspaceBusy && !state.compacting,
     send: imageAiSender(controller, prepareImageEdit) }}>
     <ChatImageContext.Provider value={{ threadId: state.selected?.id ?? null, ready,
@@ -181,10 +188,10 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
     <ChatFileContext.Provider value={{ threadId: state.selected?.id ?? null, ready, client: controller.files,
       load: controller.textPreview }}>
     <ChatBrowserProvider controller={controller}>
-    <ChatDetailsWorkspace selected={state.selected?.id ?? null} active={active} enabled={showDesktopDiffs}>
+    <ChatDetailsWorkspace selected={state.selected?.id ?? null} active={conversationActive} enabled={showDesktopDiffs}>
     <ChatFileReferencesProvider><ImageAnnotationsProvider>
     <ChatQuotesProvider scope={state.draftScope ?? state.selected?.id ?? null} sending={state.sending}
-    enabled={active && !state.selectedArchived}>
+    enabled={conversationActive && !state.selectedArchived}>
     <ChatTerminalLayout>
     <header className={`chat-header${showDesktopDiffs ? ' workspace-toolbar' : ''}`}
       data-tauri-drag-region={draggableHeader || undefined}>
@@ -196,33 +203,38 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
         expanded={listOpen} onClick={listOpen ? drawerMotion.closeDrawer : drawerMotion.openDrawer} />}
       <div className="chat-grow" data-tauri-drag-region={draggableHeader || undefined}>
         <h2 data-tauri-drag-region={draggableHeader || undefined}>
-          {state.selected ? threadPresentation(state.selected, state.sidebar, displayText).title : t("client.chat.newChat")}</h2>
+          {workspacePage?.title ?? (state.selected
+            ? threadPresentation(state.selected, state.sidebar, displayText).title : t("client.chat.newChat"))}</h2>
         {headerConnectionActions}</div>
-      {state.selected && state.selectedArchived && <button type="button" className="chat-button"
+      {!workspacePage && state.selected && state.selectedArchived && <button type="button" className="chat-button"
         disabled={!ready || running}
         onClick={() => { void controller.archive().then(drawerMotion.openDrawer); }}>
         {t("client.chat.restore")}</button>}
       {headerActions}
-      {showDesktopDiffs && <ConversationChangesButton
+      {!workspacePage && showDesktopDiffs && <ConversationChangesButton
         value={state.selected?.turns ? { turns: state.selected.turns } : undefined} />}
       {headerEnd}
     </header>
+    {workspacePage && <div className="gui-remote-feature">{workspacePage.content}</div>}
+    <TaskRecoveryPrompt client={controller.taskRecovery}
+      enabled={active && (desktop || Boolean(draggableHeader)) && ready && state.taskRecoverySupported === true}
+      openThread={controller.openRecoveryThread} />
     <div className="chat-scroll chat-notices"><div className="chat-notice-content">
       <ChatTaskStatus state={state} />
       {!!error && <p role="alert" className="chat-error">{displayError(error)}</p>}
       {state.desktopOnly && <p className="chat-muted">
         {t("client.remoteDesktop.theDesktopIsReadyOpenRemoteDesktopAndSignIn")}</p>}
     </div></div>
-      <TaskReviewProvider controller={controller} state={state} active={active && foreground}>
+      <TaskReviewProvider controller={controller} state={state} active={conversationActive && foreground}>
       <ChatRetryProvider controller={controller} state={state}>
       <ChatMessages thread={state.selected} offline={!ready}
         footer={scrollableComposer ? composer : undefined}
         renderUserMessage={renderUserMessage ?? (desktop ? props => <EditableChatMessage {...props}
-          state={state} controller={controller} active={active && foreground} /> : undefined)}
+          state={state} controller={controller} active={conversationActive && foreground} /> : undefined)}
         loading={state.historyLoading} loadingMore={state.historyLoadingMore} hasMore={state.historyHasMore}
         loadOlder={() => controller.loadOlder()} historyLoad={state.historyLoad}
         processing={runningTurn && <ChatProcessing key={runningTurn.id} turn={runningTurn}
-          processing={state.processing} active={active && ready} />} />
+          processing={state.processing} active={conversationActive && ready} />} />
       </ChatRetryProvider></TaskReviewProvider>
     {!scrollableComposer && composer}
     {conversationFooter}
@@ -241,7 +253,8 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
         profile={!desktop && profileMenu} />}
     </ChatSidebar>
     {searching && <ChatSearch state={state} controller={controller} onClose={() => setSearching(false)}
-      select={thread => { setSearching(false); drawerMotion.closeDrawer(); void controller.select(thread); }} />}
+      select={thread => { workspacePage?.onClose(); setSearching(false);
+        drawerMotion.closeDrawer(); void controller.select(thread); }} />}
     {pickingDevice && <ChatDevices chooseLocal={chooseLocal} devices={devices} onClose={() => setPickingDevice(false)}
       refresh={deviceRefresh} choose={(id) => { chooseDevice(id); setPickingDevice(false); }} />}
   </ChatQuotesProvider></ImageAnnotationsProvider></ChatFileReferencesProvider>
