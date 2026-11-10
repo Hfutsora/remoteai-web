@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "695003c833f40b174a16ffb46d54cccbec200b36",
+  "revision": "4a43909ff486d921b06d64bec1517556bf080e03",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "a00757f0d8c097b4ffaa540cda8d83c2a67aecb9"
+    "revision": "9f2b1c96f929cc62f50e425c6b9cb983ab1ab8dc"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -488,7 +488,7 @@
     "shared/remote-chat/client/contextSettings.ts": "1a199fe2c056a330b85b5a4d606c6aed6c3946d3e3cb879a0554adf345e33a97",
     "shared/port-mapping/errors.ts": "a06f9c49bd0e59d7aaceb6197d226114af0a8701ca90e8bc285d4e1b73c56908",
     "shared/remote-chat/tokenSummaryCodec.ts": "bf7e96cfd2ff356d3e13720ebc377d0b4d17ab612077be39b1c99c0ab8d1b3bf",
-    "shared/cli-gui/types.ts": "729637582069a6ebb5f2a0697d48ee037d016d54babbfab46bad3e1aa5bb6782",
+    "shared/cli-gui/types.ts": "2ce1ec3086468de2c14e9b5583ae38cfa3932ba121b1d2653d5c90dcfde2da26",
     "shared/remote-chat/previewProgress.ts": "aa69b912e3afed62cd78c5f2c60c04f5275fc42a6746ccca50fcf6cf7e2d00a8",
     "shared/remote-chat/video.ts": "b594281d75165f754624f40ce0f0debdd0e6fd52b88055c651b7ff5d635ac5b0",
     "shared/remote-chat/textPreview.ts": "3f588578611c8aa92eb9262d493be5fb606cbd667d7c8648a08681db7fc142b2",
@@ -744,7 +744,7 @@
     "shared/remote-chat/terminalProject.ts": "ec714291a79387460dcc9e43982e676ca4082d845af192cae7cfe0c22510af69",
     "shared/terminal/TerminalLaunchContext.ts": "57f4d7bb84efed0d43235c37e8ebf9f332b4abc20f235e65bea2d9835aed57e7",
     "shared/terminal/views/useTerminalPanel.ts": "b83761191ff8443552fee345b79c3b33d4388677ef73976619d607ba67cc0763",
-    "shared/conversation/Installer.tsx": "80b5e40001fd498c7f3bf7daa12405e21fdee075a16b8ca75e10e44fd100ba9a",
+    "shared/conversation/Installer.tsx": "a4712881ded7f631d0127c1789770aa6cebfdeb040422882d156dcf669d47b59",
     "shared/conversation/CliUpdateIcon.tsx": "9feaf34904db27778ea59a153e60bc07c4c1c73cfa8d2d6dc160966fa14514d3",
     "shared/conversation/remote/useRemoteCliInstaller.ts": "340acd94af293bd736d884d28bf3e74c9ec6b3b3ea6409afb24874fab3634c6b",
     "shared/cli-gui/CliRuntimeTools.tsx": "a55620d96352928cd4670456b09fc48b5a3797e34f5003378c3a43848d7a82d7",
@@ -1089,6 +1089,7 @@
     "shared/chat/groups/memberPaging.ts": "bc2ce81485ed4a504d67295226e29621af43f62058cd4e0c5d7805a21919b160",
     "shared/chat/latestUserMessage.ts": "b996210743de81c7b21124181eec56de9a33af959084058feb2b86e71a48fc2e",
     "shared/conversation/editedMessageDraft.ts": "d4363f20340b10b9f431b35634dda6e10077709d0741a9473f08856328987d0a",
+    "shared/cli/installProgressTypes.ts": "2facbf8ae73c08852431906fcd2a852768b4ecd288ee0d95235db22cef8359fa",
     "shared/conversation/sync/sourceLabel.ts": "c886bfc64a9fda0e43c5b4edba90b59612351f9a61064ac81ec3d7794c9c3f9a",
     "shared/conversation/sync/threadGroups.ts": "446df817c4bbdcf0184bf094e773e5124987cb78e0e7eb65c182b731d5a70c3e",
     "shared/conversation/sync/useSyncTableSize.ts": "81b2e97a03a167244d62a0ae3214ffd3f6568a444d816dbbb6d90c8bb7ce4f1e",
@@ -1287,13 +1288,14 @@
     "shared/cli-gui/CliMessages.tsx": "18f795a29daf4a0d8ee61a2716d90734681062114ec6ebc4ac4fa7a3616ac41d",
     "shared/cli-gui/CliPermissions.tsx": "ebdb810c33150c89d54da3168c6776e69b32f101078147bfc78b4cef9abde2b5",
     "shared/cli-gui/CliComposer.tsx": "654ef84b118fceae3d026d68af89084dea7dcbebab80a64612c7710192aa2267",
-    "shared/cli-gui/CliInstaller.tsx": "d3795bc45af29a9cb3e7cc29b5c8add4ebc977933450a3a127b7d0f2ab4aa465",
+    "shared/cli-gui/CliInstaller.tsx": "0dc7d5c839ba1ea902ec3b843a1d31bfdbfd4043a9f866c05402d371eeabb962",
     "shared/cli-gui/errors.ts": "3ab568d80d89355af4170885339ebb81bca1a159efe0da7b06cdfe13fd47d6e9",
     "shared/conversation/useProjectBarOverflow.ts": "53479cf585a2377142463c21790641c2a0c69c8bf717455d5df12cd746cebaf7",
     "shared/conversation/ProjectBar.module.less": "0adf796d219ebce0f246d8be95e9c323cb9ed3cde1e85c739be8576a0156bdb4",
     "shared/remote-chat/useScriptTerminalRefresh.ts": "c2a0d723b8bc3b163810474d660ed42cf11fc678fa34674e3c79aa7256b9d0bc",
     "shared/cli/installerState.ts": "edcb694d22aac56045a1819a0418de9d491e2326ecc406195249e92e73d6986d",
     "shared/conversation/CliManualDownload.tsx": "8b84df585f68370dc01941ed28f05436179f3a51c92ced783d0d537da11f5366",
+    "shared/cli/InstallationProgress.tsx": "1c1186481c18cc31553b0903f83745a94b7b49a7f4a1782433b9e11b4f392a75",
     "shared/conversation/useGitWorkspace.ts": "a1ccde4560acfd2c7ad19574f1ebb0122ac0941fa99b73e51e47d998dca95731",
     "shared/chat/useConversationWorkspace.ts": "7a2e1a3ed056bc2127f07bca7d77faa23a1062b53851945ed996fc5899d3ee08",
     "shared/conversation/ConversationWorkspaceStatus.module.less": "be91eddfd016934f01b0788cd243a58f1b8d5c53a71f0997097e9774eba4b3c7",

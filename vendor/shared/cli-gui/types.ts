@@ -1,3 +1,5 @@
+import type { InstallationProgress } from '../cli/installProgressTypes';
+
 export type GuiEngine = 'codex' | 'claude' | 'gemini';
 export type ExternalEngine = Exclude<GuiEngine, 'codex'>;
 export const CLI_GUI_OPERATION = 'cliGui';
@@ -17,6 +19,7 @@ export interface CliRuntimeStatus {
   version: string;
   error?: string;
   cliVersion?: string;
+  progress?: InstallationProgress;
 }
 export interface CliPermission {
   id: string; title: string; description?: string;

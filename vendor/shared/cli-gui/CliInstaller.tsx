@@ -6,6 +6,7 @@ import { useCliGui } from './context';
 import { engineNames } from './EngineSelector';
 import { CliInstallLink } from './CliInstallLink';
 import { cliErrorText } from './errors';
+import { InstallationProgress } from '../cli/InstallationProgress';
 
 /** Use the same centered installation surface as the built-in GUI. */
 export function CliInstaller({ compact = false }: { compact?: boolean }) {
@@ -28,6 +29,7 @@ export function CliInstaller({ compact = false }: { compact?: boolean }) {
         </Button>
         <CliInstallLink engine={engine} officialOnly />
       </div>
+      {installing && <InstallationProgress progress={status.progress} />}
       {status?.error && <p role="alert">{cliErrorText(status.error)}</p>}
   </div>;
 }
