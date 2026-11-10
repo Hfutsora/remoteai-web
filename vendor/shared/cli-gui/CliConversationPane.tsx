@@ -1,5 +1,5 @@
 import { useEffect, type ReactNode } from 'react';
-import { Alert, Button, Spin } from 'antd';
+import { Alert, Button } from 'antd';
 import { uiText } from '../localization/uiText';
 import { useLanguage } from '../localization/browserClient';
 import type { DictationClient } from '../chat/dictation/client';
@@ -27,8 +27,9 @@ export function CliConversationPane({ cwd = '', projectPicker, dictation }: {
     {status?.status !== 'ready' && <div className="cli-gui-setup">
       <p>{uiText('client.cliGui.setupHint')}</p>
       <Button type="primary" loading={installing} onClick={() => { void controller.install(); }}>
-        {uiText(installing ? 'client.cliGui.installing' : 'client.cliGui.install')}</Button>
-      {installing && <span role="status"><Spin size="small" /> {uiText('client.cliGui.installing')}</span>}
+        <span role={installing ? 'status' : undefined}>
+          {uiText(installing ? 'client.cliGui.installing' : 'client.cliGui.install')}</span>
+      </Button>
       {status?.error && <p role="alert">{cliErrorText(status.error)}</p>}
     </div>}
     <CliMessages history={state.history} loading={state.loading} loadOlder={controller.loadOlder} />

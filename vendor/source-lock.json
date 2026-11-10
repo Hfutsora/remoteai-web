@@ -3,7 +3,7 @@
   "revision": "9d944531e093195e92af53d6ad3daa6cf03ee93a",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "1c319e3b7619c847684fb9398945f2770ed541e8"
+    "revision": "371a4adf6238e9189304cd3ef3105be11b1b79cb"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -736,7 +736,7 @@
     "shared/remote-chat/views/ChatSearch.tsx": "210192612cb4a5da5e2474c2cdb68c1e446919f0c18fb9da881e3e2ff265bf3a",
     "shared/remote-chat/views/useChatCatalog.ts": "b7882f065a0497342978893c4a9fde3904e835af062f0f83eb26ffe29a43ea07",
     "shared/remote-chat/views/useChatDrawerSwipe.ts": "68e5b8bab4df43466bb18aa6d5ca1c861fc050fae35acc00428436f49c0e4396",
-    "shared/cli-gui/CliConversationPane.tsx": "3e59a4d5147651064d1ec77283f1bfada04b8bb2223546c5386734e17e71ba67",
+    "shared/cli-gui/CliConversationPane.tsx": "9c935a94c5ec25682a5a729ed59b0e468df3d6ac5a6c91af4fdda273d29c2f64",
     "shared/conversation/ProjectBar.tsx": "2dc9dda7c31ac3330a551405ef2c2548d7ead5cf2761dbba24049768d4767b0f",
     "shared/remote-chat/ComputerSearchBar.module.less": "09c264b087c0bdf28631b321aff10b6afbdcfc5196faf3ea719b453f5c8fcadd",
     "shared/remote-chat/useRemoteTerminalPanel.ts": "7296dac71de1171c5a2bc047f4442b319420c31d62dcb8e57bf44eb0756a53c8",
