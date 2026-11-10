@@ -14,10 +14,5 @@
   color: var(--muted); display: flex; align-items: center;
   justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 .cli-gui-install-link { display: inline-flex; align-items: center; gap: 4px; font-size: .9em; }
-.cli-gui-thread-list { border-top: 1px solid var(--line); padding-top: 6px; margin-top: 6px; }
-.cli-gui-thread-copy { display: flex; flex-direction: column; flex: 1; min-width: 0; gap: 2px; text-align: left; }
-.cli-gui-thread-copy small { color: var(--muted); font-size: .85em; }
-.cli-gui-thread-list button { font-family: inherit; }
-.cli-gui-thread-list [data-selected=true] { background: var(--green-selection, var(--chat-pale)); }
 .cli-gui-codex-content[hidden] { display: none !important; }
 .cli-gui-codex-content { display: contents; }

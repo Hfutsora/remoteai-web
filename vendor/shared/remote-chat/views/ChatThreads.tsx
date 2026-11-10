@@ -20,7 +20,8 @@ import { threadPresentation } from '../sidebar';
 import { BrowserGroups } from '../../chat/groups/BrowserGroups';
 import { GroupHeading } from '../../chat/groups/GroupHeading';
 import { remoteSidebarDrag } from '../client/sidebarDrag';
-import { CliConversationList } from '../../cli-gui/CliConversationList';
+import { CliThreadRow } from '../../cli-gui/CliThreadRow';
+import { useCliSidebar } from '../../cli-gui/useCliSidebar';
 import { useCliGui } from '../../cli-gui/context';
 
 interface Props {
@@ -44,7 +45,10 @@ function ChatThreadsContent({ state, controller, newChat, onClose, openSearch, p
   const searching = desktop && Boolean(query.trim());
   const search = useChatSearch({ controller, query: desktop ? query : '',
     archived: state.archived, ready: state.ready });
-  const { groups, toggle, toggleCollapse } = useThreadGroups(state);
+  const sidebar = useCliSidebar({ threads: searching ? search.threads : state.threads,
+    archived: state.archived, query });
+  const { groups, toggle, toggleCollapse } = useThreadGroups({ ...state,
+    threads: sidebar.threads, selected: sidebar.selected ?? state.selected });
   const pagination = useThreadListScroll(state, controller, !searching);
   const ready = state.ready;
   const actions = useThreadActions(state, controller);
@@ -76,9 +80,13 @@ function ChatThreadsContent({ state, controller, newChat, onClose, openSearch, p
     </div>
     <div ref={pagination.list} className="chat-scroll chat-thread-list"
       aria-busy={searching ? search.loading : state.loading}>
-      <CliConversationList archived={state.archived} query={query} onSelect={onClose} />
-      {searching ? <ChatSearchResults state={state} search={search} query={query}
-        select={thread => { cli?.controller.showCodex(); void controller.select(thread); onClose(); }} /> : <>
+      {searching ? <ChatSearchResults state={{ ...state, selected: sidebar.selected ?? state.selected }}
+        search={{ ...search, threads: sidebar.threads }} query={query} select={thread => {
+          const session = sidebar.session(thread);
+          if (session) cli?.controller.open(session);
+          else { cli?.controller.showCodex(); void controller.select(thread); }
+          onClose();
+        }} /> : <>
       {groups.map(group => ({ ...group, label: group.kind === 'group' || group.cwd
         ? group.label : t(group.id === 'ungrouped' ? 'client.groups.ungrouped' : 'client.chat.recent') })).map((group) =>
         <section className="chat-project-group" aria-label={group.label} key={group.id}
@@ -96,6 +104,8 @@ function ChatThreadsContent({ state, controller, newChat, onClose, openSearch, p
           </div>}
           <div>
           {group.data.map(thread => {
+            const session = sidebar.session(thread);
+            if (session) return <CliThreadRow key={thread.id} session={session} web onSelect={onClose} />;
             const { cwd } = threadPresentation(thread, state.sidebar);
             return <ChatThreadRow key={thread.id} thread={thread} state={state}
             select={() => { void controller.select(thread); onClose(); }} actions={actions}
@@ -107,7 +117,7 @@ function ChatThreadsContent({ state, controller, newChat, onClose, openSearch, p
             {group.expanded ? t("client.chat.collapse") : t("client.chat.showMore.83ad87")}</button>}
           </div>
         </section>)}
-      {!state.threads.length && !cli?.state.sessions.length && <p className="chat-empty chat-muted">
+      {!sidebar.threads.length && <p className="chat-empty chat-muted">
         {ready ? t("client.chat.noChatsYet") : t("client.chat.connectToYourComputerToViewChats")}</p>}
       <div className="chat-thread-pagination">
         {pagination.loadingMore && <span role="status" className="chat-muted chat-row">
