@@ -54,7 +54,7 @@ export function DownloadManagerPage({ owner, onBack }: { owner: string; onBack: 
     </div>
     <div className="download-tasks">{tasks.map(task => <DownloadCard key={task.id} task={task} busy={!!busy}
       selected={selected.has(task.id)} toggleSelection={() => toggle(task.id)}
-      connected={!!downloadManager.connectionForSource(task.source)?.ready}
+      connected={downloadManager.taskConnected(task)}
       action={() => { void run(task); }} open={() => { void run(task, 'open'); }}
       share={() => { void run(task, 'share'); }}
       remove={() => { void run(task, 'remove'); }} />)}</div>

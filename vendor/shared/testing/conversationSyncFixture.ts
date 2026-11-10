@@ -41,9 +41,10 @@ function fixtureThreads(parameters: URLSearchParams) {
 export function conversationSyncFixture(parameters: URLSearchParams) {
   const calls: { host: string; request: SyncRequest }[] = [];
   let mode = parameters.get('path') === 'direct' ? 'direct' as const : 'relay' as const;
+  let written = 0;
   let released = false;
-  let resume: (() => void) | undefined;
-  const release = () => { released = true; resume?.(); };
+  const waiters = new Set<() => void>();
+  const release = () => { released = true; waiters.forEach(resolve => resolve()); waiters.clear(); };
   const threads = fixtureThreads(parameters);
   const duplicates = parameters.has('duplicates') ? [thread.sessionId] : [];
   const remote = parameters.get('mode') !== 'local';
@@ -59,15 +60,22 @@ export function conversationSyncFixture(parameters: URLSearchParams) {
     let result: unknown = {};
     if (request.action === 'homes') result = directory(id === 'source');
     if (request.action === 'list') result = threads.filter(item => item.title.includes(request.query ?? ''));
-    if (['prepare', 'export', 'begin'].includes(request.action)) result = { id: `transfer-${id}`,
-      size: 512 * 1024, sha256: 'a'.repeat(64), sessionIds: [thread.sessionId] };
+    if (['prepare', 'export', 'begin', 'resume'].includes(request.action)) result = { id: `transfer-${id}`,
+      size: 512 * 1024, originalSize: 2 * 1024 * 1024, chunkBytes: 128 * 1024,
+      resumeToken: 'resume-' + id, written: id === 'source' ? 512 * 1024 : written,
+      sha256: 'a'.repeat(64), sessionIds: [thread.sessionId] };
     if (request.action === 'read') {
       if (parameters.has('hold') && request.offset >= 96 * 1024 && !released) {
-        await new Promise<void>(resolve => { resume = resolve; });
+        await new Promise<void>(resolve => { waiters.add(resolve); });
       }
-      if (parameters.has('switchPath') && request.offset > 96 * 1024) mode = 'direct';
       await new Promise(resolve => setTimeout(resolve, mode === 'relay' ? 70 : 15));
-      result = { data: 'Y29udmVyc2F0aW9u' };
+      const length = Math.min(request.length ?? 12 * 1024, 512 * 1024 - request.offset);
+      result = { data: btoa('a'.repeat(length)) };
+    }
+    if (request.action === 'write') {
+      await new Promise(resolve => setTimeout(resolve, mode === 'relay' ? 100 : 40));
+      if (parameters.has('switchPath') && request.offset >= 128 * 1024) mode = 'direct';
+      written = request.offset + atob(request.data).length; result = { written };
     }
     if (request.action === 'plan') result = { count: 1, duplicateIds: duplicates };
     if (request.action === 'commit') result = { completedCount: duplicates.length && !request.overwriteIds.length ? 0 : 1,

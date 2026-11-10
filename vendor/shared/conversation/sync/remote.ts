@@ -15,6 +15,11 @@ export function remoteSyncHost(options: {
         error: message => reject(new Error(message)) });
       connection.start();
     });
+    const attempt = ready;
+    void attempt.catch(() => {
+      if (ready !== attempt) return;
+      ready = undefined; connection?.stop(); connection = undefined;
+    });
   };
   return { id: options.id, name: options.name, mode: () => mode,
     request: async <T>(request: SyncRequest) => {

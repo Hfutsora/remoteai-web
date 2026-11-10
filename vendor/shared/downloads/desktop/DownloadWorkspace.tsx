@@ -44,7 +44,7 @@ export function DownloadWorkspace({ tasks, owner, busy, error, run, removeTasks,
   const itemProps = (task: DownloadTask): DownloadItemProps => ({
     task, busy, text, run, allowShare, selecting, selected: selection.selected.has(task.id),
     toggle: () => { setBatch(true); selection.toggle(task.id); },
-    connected: !!downloadManager.connectionForSource(task.source)?.ready,
+    connected: downloadManager.taskConnected(task),
     retryAttempt: downloadManager.retryAttempt(task.id),
   });
   const reset = () => { setFilter('all'); setQuery(''); };

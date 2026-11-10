@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { closePreparedSync, prepareSync, uploadPreparedSync, type PreparedSync } from './transfer';
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { closePreparedSync, prepareSync, type PreparedSync } from './transfer';
 import { SYNC_HOME_ID, type SyncDirectory, type SyncHost, type SyncResult, type SyncSource,
   type SyncThread, type SyncProvider } from './types';
 import { uiText } from '../../localization/uiText';
+import { downloadManager } from '../../downloads/manager';
+import { enqueueSyncDownload, syncTransferMode } from './downloads';
 import { syncSourceLabel } from './sourceLabel';
 import { uniqueSyncThreads } from './threadGroups';
 
@@ -71,42 +73,44 @@ export function useConversationSync(options: {
   destination: SyncHost; source?: SyncSource; selected: string[]; complete: (result: SyncResult) => void;
 }) {
   const [open, setOpen] = useState(false);
-  const [busy, setBusy] = useState(false);
-  const [committing, setCommitting] = useState(false);
-  const [transferring, setTransferring] = useState(false);
+  const [preparing, setPreparing] = useState(false);
   const [prepared, setPrepared] = useState<PreparedSync>();
   const [error, setError] = useState<unknown>();
   const [overwrite, setOverwrite] = useState(false);
   const [provider, setProvider] = useState<SyncProvider>('codex-switch-gui');
+  const [taskId, setTaskId] = useState<string>();
+  const tasks = useSyncExternalStore(downloadManager.subscribe, downloadManager.snapshot);
+  const task = tasks.find(task => task.id === taskId);
   const abort = useRef<AbortController>();
   const preparedRef = useRef<PreparedSync>();
   const mounted = useRef(true);
   const inFlight = useRef(false);
   const complete = useRef(options.complete); complete.current = options.complete;
   const destination = options.destination;
-  const meter = useSyncProgress(options.source, destination);
   const cancel = useCallback(() => {
     abort.current?.abort();
-    meter.stop();
     const current = preparedRef.current;
     preparedRef.current = undefined;
     if (current) void closePreparedSync(destination, current);
-    setOpen(false); setPrepared(undefined);
+    setOpen(false); setPrepared(undefined); setTaskId(undefined);
   }, [destination]);
   useEffect(() => {
     mounted.current = true;
     return () => {
-      mounted.current = false;
-      abort.current?.abort();
+      mounted.current = false; abort.current?.abort();
       if (preparedRef.current) void closePreparedSync(destination, preparedRef.current);
     };
   }, [destination]);
+  useEffect(() => {
+    if (task?.status !== 'completed' || !task.sync?.result) return;
+    complete.current(task.sync.result); cancel();
+  }, [task?.status, taskId, cancel]);
   const show = async () => {
     if (inFlight.current || !options.source || !options.selected.length) return;
     inFlight.current = true;
     const controller = new AbortController(); abort.current = controller;
-    setOpen(true); setBusy(true); setError(undefined); setOverwrite(false); meter.reset();
-    setPrepared(undefined); setProvider('codex-switch-gui');
+    setOpen(true); setPreparing(true); setError(undefined); setOverwrite(false);
+    setPrepared(undefined); setTaskId(undefined); setProvider('codex-switch-gui');
     try {
       const result = await prepareSync({ source: options.source, destination,
         sessionIds: [...options.selected], signal: controller.signal });
@@ -116,83 +120,26 @@ export function useConversationSync(options: {
       preparedRef.current = result; setPrepared(result);
     } catch (error) {
       if (mounted.current && !controller.signal.aborted) setError(error);
-    } finally { inFlight.current = false; if (mounted.current) setBusy(false); }
+    } finally { inFlight.current = false; if (mounted.current) setPreparing(false); }
   };
   const commit = async () => {
-    if (inFlight.current || !prepared) return;
-    inFlight.current = true;
-    const controller = new AbortController(); abort.current = controller;
-    setBusy(true); setError(undefined);
-    const needsTransfer = prepared.remote && (overwrite || prepared.plan.count > prepared.plan.duplicateIds.length);
+    if (inFlight.current || !prepared || !options.source) return;
+    if (taskId) { await downloadManager.resume(taskId); return; }
+    inFlight.current = true; setPreparing(true); setError(undefined);
     try {
-      if (needsTransfer) {
-        setTransferring(true); meter.start();
-        await uploadPreparedSync({ prepared, destination, signal: controller.signal, progress: meter.add });
-        meter.stop(); setTransferring(false);
-      }
-      controller.signal.throwIfAborted();
-      setCommitting(true);
-      const result = await destination.request<SyncResult>({ action: 'commit', id: prepared.id,
-        overwriteIds: overwrite ? prepared.plan.duplicateIds : [], modelProvider: provider });
-      if (mounted.current) { complete.current(result); cancel(); }
-    } catch (error) {
-      if (mounted.current && !controller.signal.aborted) setError(error);
-    } finally {
-      inFlight.current = false; meter.stop();
-      if (mounted.current) { setBusy(false); setCommitting(false); setTransferring(false); }
-    }
+      const id = await enqueueSyncDownload({ prepared, source: options.source.host, destination,
+        overwriteIds: overwrite ? prepared.plan.duplicateIds : [], provider });
+      preparedRef.current = undefined;
+      if (mounted.current) setTaskId(id);
+    } catch (error) { if (mounted.current) setError(error); }
+    finally { inFlight.current = false; if (mounted.current) setPreparing(false); }
   };
-  return { open, busy, committing, transferring, progress: meter.progress, transfer: meter.transfer,
-    prepared, error, overwrite, setOverwrite, provider, setProvider, cancel, show, commit };
-}
-
-const SPEED_SAMPLE_MS = 500;
-function useSyncProgress(source: SyncSource | undefined, destination: SyncHost) {
-  const [progress, setProgress] = useState(0);
-  const [transfer, setTransfer] = useState({ bytesPerSecond: 0, mode: 'connecting' });
-  const timer = useRef<ReturnType<typeof setInterval>>();
-  const mounted = useRef(true);
-  const sample = useRef({ bytes: 0, lastBytes: 0, startedAt: 0, lastAt: 0, transferredAt: 0 });
-  useEffect(() => {
-    mounted.current = true;
-    return () => { mounted.current = false; clearInterval(timer.current); };
-  }, []);
-  const reset = () => {
-    clearInterval(timer.current);
-    sample.current = { bytes: 0, lastBytes: 0, startedAt: 0, lastAt: 0, transferredAt: 0 };
-    setProgress(0); setTransfer({ bytesPerSecond: 0, mode: transferMode(source, destination) });
-  };
-  const stop = () => {
-    clearInterval(timer.current);
-    const current = sample.current;
-    if (mounted.current) setTransfer({ mode: transferMode(source, destination),
-      bytesPerSecond: current.bytes * 1000 / Math.max(1, current.transferredAt - current.startedAt) });
-  };
-  const start = () => {
-    reset();
-    sample.current.startedAt = performance.now(); sample.current.lastAt = performance.now();
-    timer.current = setInterval(() => {
-      const now = performance.now();
-      const current = sample.current;
-      setTransfer({ bytesPerSecond: (current.bytes - current.lastBytes) * 1000 / (now - current.lastAt),
-        mode: transferMode(source, destination) });
-      current.lastBytes = current.bytes; current.lastAt = now;
-    }, SPEED_SAMPLE_MS);
-  };
-  const add = (fraction: number, bytes: number) => {
-    sample.current.bytes += bytes; sample.current.transferredAt = performance.now();
-    if (mounted.current) {
-      setProgress(fraction);
-      const current = sample.current;
-      setTransfer({ bytesPerSecond: current.bytes * 1000 / Math.max(1, current.transferredAt - current.startedAt),
-        mode: transferMode(source, destination) });
-    }
-  };
-  return { progress, transfer, reset, start, stop, add };
-}
-
-function transferMode(source: SyncSource | undefined, destination: SyncHost) {
-  const paths = [source?.host.mode?.(), destination.mode?.()].filter(Boolean);
-  if (paths.includes('relay')) return 'relay';
-  return paths.length && paths.every(mode => mode === 'direct') ? 'direct' : 'connecting';
+  const busy = preparing || !!task && ['queued', 'preparing', 'downloading', 'verifying'].includes(task.status);
+  return { open, busy, committing: task?.status === 'verifying', transferring: task?.status === 'downloading',
+    task, progress: task?.size ? task.received / task.size : 0,
+    transfer: { bytesPerSecond: task?.bytesPerSecond ?? 0,
+      mode: options.source ? syncTransferMode(options.source.host, destination) : 'connecting' },
+    prepared, error: error ?? (task?.status === 'failed' ? task.message : undefined),
+    overwrite, setOverwrite, provider, setProvider, cancel, show, commit,
+    pause: () => taskId ? downloadManager.pause(taskId) : Promise.resolve() };
 }

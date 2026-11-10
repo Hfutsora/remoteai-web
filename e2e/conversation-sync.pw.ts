@@ -24,7 +24,7 @@ for (const path of ['relay', 'direct']) {
     const calls = await page.evaluate(() => Reflect.get(window, 'syncCalls') as {
       host: string; request: { action: string; overwriteIds?: string[] } }[]);
     expect(calls.filter(call => call.host === 'source').every(call =>
-      ['homes', 'list', 'export', 'read', 'close'].includes(call.request.action))).toBe(true);
+      ['homes', 'list', 'export', 'resume', 'read', 'close'].includes(call.request.action))).toBe(true);
   });
 }
 

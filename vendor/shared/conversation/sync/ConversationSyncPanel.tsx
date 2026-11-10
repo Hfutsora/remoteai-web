@@ -6,6 +6,7 @@ import { useGuiLanguage } from '../../localization/useGuiLanguage';
 import { useConversationSync, useSyncSources, useSyncThreads } from './useConversationSync';
 import type { SyncHost } from './types';
 import { SyncThreadTable } from './SyncThreadTable';
+import { formatBytes } from '../../downloads/DownloadCard';
 import styles from './sync.module.less';
 
 export function syncError(error: unknown) {
@@ -59,7 +60,8 @@ export function ConversationSyncPanel({ hosts, destination, onSynced }: {
       loading={list.loading || directory.loading} locked={locked} query={list.query} />
     <Modal open={sync.open} title={uiText('client.conversationSync.confirm')} width={480}
       onCancel={sync.cancel} onOk={() => void sync.commit()} confirmLoading={sync.committing}
-      okText={uiText('client.conversationSync.start')} cancelText={uiText('client.conversationSync.cancel')}
+      okText={uiText(sync.task && !sync.busy ? 'client.downloads.resumeDownload' : 'client.conversationSync.start')}
+      cancelText={uiText(sync.task ? 'client.conversationSync.background' : 'client.conversationSync.cancel')}
       okButtonProps={{ disabled: sync.busy || !sync.prepared, loading: sync.busy }}
       cancelButtonProps={{ disabled: sync.committing }}
       closable={!sync.committing} maskClosable={false} keyboard={!sync.committing}>
@@ -69,9 +71,20 @@ export function ConversationSyncPanel({ hosts, destination, onSynced }: {
           { key: 'destination', label: uiText('client.conversationSync.destination'), children: destination.name || 'Codex GUI' },
           { key: 'count', label: uiText('client.conversationSync.selection'),
             children: sync.prepared?.plan.count ?? list.selected.length },
+          { key: 'total', label: uiText('client.conversationSync.totalSize'),
+            children: sync.prepared ? formatBytes(sync.prepared.bundle.originalSize ?? sync.prepared.bundle.size) : '…' },
+          ...(!moving ? [{ key: 'archive', label: uiText('client.conversationSync.archiveSize'),
+            children: sync.prepared ? formatBytes(sync.prepared.bundle.size) : '…' }] : []),
         ]} />
         <p>{uiText(moving ? 'client.conversationSync.moveHint' : 'client.conversationSync.copyHint')}</p>
-        {sync.transferring && <Progress percent={Math.round(sync.progress * 100)} status="active" />}
+        {sync.task && <div aria-live="polite">
+          <Progress percent={Math.round(sync.progress * 100)}
+            status={sync.task.status === 'failed' ? 'exception' : sync.busy ? 'active' : 'normal'} />
+          <p>{formatBytes(sync.task.received)} / {formatBytes(sync.task.size)}</p>
+          <p>{uiText(sync.committing ? 'client.conversationSync.importing' : 'client.conversationSync.inDownloads')}</p>
+          {sync.transferring && <Button size="small" onClick={() => void sync.pause()}>
+            {uiText('client.downloads.pause')}</Button>}
+        </div>}
         {!moving && <Descriptions size="small" column={1} items={[
           { key: 'mode', label: uiText('client.conversationSync.connection'),
             children: sync.transfer.mode === 'direct' ? 'P2P' : sync.transfer.mode === 'relay' ? 'Relay'
@@ -82,13 +95,13 @@ export function ConversationSyncPanel({ hosts, destination, onSynced }: {
         {Boolean(sync.prepared?.plan.duplicateIds.length) && <div className={styles.duplicates}>
           <p>{uiText('client.conversationSync.duplicates', { count: sync.prepared!.plan.duplicateIds.length })}</p>
           <Radio.Group value={sync.overwrite} onChange={event => sync.setOverwrite(event.target.value as boolean)}
-            disabled={sync.busy}><Space direction="vertical">
+            disabled={sync.busy || !!sync.task}><Space direction="vertical">
             <Radio value={false}>{uiText('client.conversationSync.skip')}</Radio>
             <Radio value={true}>{uiText('client.conversationSync.overwrite')}</Radio>
           </Space></Radio.Group>
         </div>}
         <label className={styles.provider}>{uiText('client.conversationSync.provider')}
-          <Select value={sync.provider} onChange={sync.setProvider} disabled={sync.busy}
+          <Select value={sync.provider} onChange={sync.setProvider} disabled={sync.busy || !!sync.task}
             aria-label={uiText('client.conversationSync.provider')}
             options={['openai', 'codex-switch-local', 'codex-switch-gui'].map(value => ({ value, label: value }))} />
         </label>

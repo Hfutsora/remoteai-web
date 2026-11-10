@@ -37,6 +37,8 @@ import { useWebLounge } from './lounge/useWebLounge';
 import { LoungeAvatar } from '../../../shared/lounge/LoungeAvatar';
 import { accountLabel } from '../../../shared/lounge/accountLabel';
 import { downloadOwner } from '../../../shared/downloads/manager';
+import { useSyncDownloadAccount } from '../../../shared/conversation/sync/useSyncDownloadAccount';
+import { WebSyncDownloads } from './chat/useWebSyncHosts';
 import { loadRefreshMinutes, REFRESH_INTERVAL_EVENT } from "./settings/refreshInterval";
 import { useTotpVault } from "./useTotpVault";
 import { ChatPage } from "./chat/ChatPage";
@@ -288,6 +290,7 @@ function AppShell() {
   const { session } = useAppSelector((state) => state.auth);
   const lounge = useWebLounge(session);
   const { page, profile, devices, refreshing, error } = useAppSelector((state) => state.data);
+  useSyncDownloadAccount(session ? downloadOwner(session) : '');
   const desktopLayout = useDesktopLayout();
   useChatViewport(page === 'lounge' && !desktopLayout);
   const lastRefreshRef = useRef(Date.now());
@@ -365,8 +368,8 @@ function AppShell() {
     lounge: <LoungePage controller={lounge.controller} mobile={!desktopLayout}
       onBack={() => dispatch(pageChanged('discover'))} />,
     discover: discoveryPage, 'token-summary': discoveryPage, ssh: null,
-    downloads: session && <DownloadManagerPage owner={downloadOwner(session)}
-      onBack={() => dispatch(pageChanged('discover'))} />,
+    downloads: session && <><WebSyncDownloads session={session} devices={devices} />
+      <DownloadManagerPage owner={downloadOwner(session)} onBack={() => dispatch(pageChanged('discover'))} /></>,
     accounts: <AccountsPage />, devices: <DevicesPage />,
     totp: <TotpPage manager={totpManager} onBack={() => dispatch(pageChanged('discover'))} />,
     settings: <SettingsPage totpManager={totpManager} loungeController={lounge.controller} />,

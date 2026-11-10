@@ -21,7 +21,7 @@ export interface DownloadItemProps {
 function TaskMenu({ task, busy, run, text, allowShare, retryAttempt }: DownloadItemProps) {
   const items = [{ key: 'remove', label: text('client.projectBrowser.deleted'),
     icon: <Trash2 size={16} />, danger: true, onClick: () => run(task, 'remove') }];
-  const share = allowShare && isDownloadReady(task) && canShareDownload(task)
+  const share = !task.sync && allowShare && isDownloadReady(task) && canShareDownload(task)
     ? [{ key: 'share', label: text('client.downloads.share'), icon: <Share2 size={16} />,
       danger: false, onClick: () => run(task, 'share') }] : [];
   const pause = retryAttempt ? [{ key: 'pause', label: text('client.downloads.pause'), icon: <Pause size={16} />,
@@ -80,14 +80,17 @@ export function ActiveDownloadCard(props: DownloadItemProps) {
         <strong onClick={selecting && !busy ? toggle : undefined}>{task.name}</strong>
         <TaskStatus {...props} /><TaskMenu {...props} />
       </div>
-      <p className="dw-source">{task.source.deviceName}</p>
+      <p className="dw-source">{task.source.deviceName}
+        {task.sync?.mode && ` · ${task.sync.mode === 'direct' ? 'P2P' : task.sync.mode === 'relay' ? 'Relay'
+          : text('client.conversationSync.connecting')}`}</p>
       <div className="dw-progress-row">
         <progress max={100} value={percent} aria-label={text(preparation
           ? 'client.downloads.compressionProgress' : 'client.downloads.downloadProgress.38d673',
         { name: task.name })} />
         {percent !== undefined && <span>{percent}%</span>}
         <button type="button" className={`dw-button dw-transfer-action${running && !retry ? ' dw-pause' : ''}`}
-          aria-label={text(label)} disabled={busy || ((!running || retry) && !connected)}
+          aria-label={text(label)} disabled={busy || (task.sync && task.status === 'verifying')
+            || ((!running || retry) && !connected)}
           onClick={() => run(task, retry ? 'retry' : 'action')}>
           <Icon size={16} />{(!running || retry) && text(label)}
         </button>
@@ -121,13 +124,15 @@ export function ReadyDownloadRow(props: DownloadItemProps) {
     <span className="dw-file-size">{formatBytes(task.size)}</span>
     <div className="dw-ready-status"><TaskStatus {...props} />
       {completion.summary && <p className="download-completion">{completion.summary}</p>}
+      {task.sync?.result && <p>{text('client.conversationSync.completed', {
+        count: task.sync.result.completedCount, skipped: task.sync.result.skippedCount })}</p>}
     </div>
     <div className="dw-row-actions">
-      <button type="button" className="dw-button dw-open" onClick={() => run(task, 'open')}
+      {!task.sync && <><button type="button" className="dw-button dw-open" onClick={() => run(task, 'open')}
         disabled={busy || task.status === 'saving'}><ExternalLink size={17} />
         {text('client.portForwarding.open')}</button>
       <button type="button" className="dw-button" onClick={() => run(task)} disabled={busy || task.status === 'saving'}>
-        <Download size={17} />{text('client.downloads.saveToDevice')}</button>
+        <Download size={17} />{text('client.downloads.saveToDevice')}</button></>}
       <TaskMenu {...props} />
     </div>
     {task.message && task.status !== 'completed'

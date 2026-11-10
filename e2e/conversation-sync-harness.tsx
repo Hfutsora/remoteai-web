@@ -7,6 +7,7 @@ import { saveGlobalFontSize } from '../../../shared/appearance/fontSize';
 import { setLanguage } from '../../../shared/localization/browserClient';
 import { WebLocaleProvider } from '../src/i18n/WebLocaleProvider';
 import { setThemeMode } from '../src/theme/preference';
+import { SyncDownloadHarness } from '../../../shared/testing/SyncDownloadHarness';
 import 'antd/dist/reset.css';
 import '../src/styles.css';
 
@@ -23,7 +24,7 @@ saveGlobalFontSize(Number(parameters.get('font')) || 14);
 createRoot(document.getElementById('root')!).render(
   <ApplicationTypography><WebLocaleProvider>
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      {parameters.has('dialog')
+      {parameters.has('managed') ? <SyncDownloadHarness {...fixture} /> : parameters.has('dialog')
         ? <ConversationSyncDialog><ConversationSyncPanel {...fixture} onSynced={() => {}} /></ConversationSyncDialog>
         : <ConversationSyncPanel {...fixture} onSynced={() => {}} />}
     </div>
