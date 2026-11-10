@@ -4,11 +4,12 @@ import type { CliCatalog, CliEntry, CliHistory, CliRequest, CliRuntimeStatus, Cl
 export interface CliState {
   engine: GuiEngine; selected: CliSession | null; sessions: CliSession[]; history: CliHistory | null;
   runtime: Partial<Record<ExternalEngine, CliRuntimeStatus>>; catalog: CliCatalog | null;
-  cwd: string; model: string; mode: string; draft: string; busy: boolean; loading: boolean; error: string; archived: boolean;
+  cwd: string; model: string; effort: string; mode: string; draft: string;
+  busy: boolean; loading: boolean; error: string; archived: boolean;
 }
 export class CliController {
   private state: CliState = { engine: 'codex', selected: null, sessions: [], history: null, runtime: {},
-    catalog: null, cwd: '', model: '', mode: '', draft: '', busy: false, loading: false, error: '', archived: false };
+    catalog: null, cwd: '', model: '', effort: '', mode: '', draft: '', busy: false, loading: false, error: '', archived: false };
   private listeners = new Set<() => void>();
   private drafts = new Map<string, string>();
   private revision = 0;
@@ -19,6 +20,7 @@ export class CliController {
   private refreshAgain = false;
   private timer?: ReturnType<typeof setTimeout>;
   private unsubscribe?: () => void;
+  private unsubscribeAccount?: () => void;
   constructor(private readonly transport: CliTransport) {}
   getSnapshot = () => this.state;
   subscribe = (listener: () => void) => { this.listeners.add(listener); return () => { this.listeners.delete(listener); }; };
@@ -32,11 +34,19 @@ export class CliController {
   start() {
     const generation = ++this.generation;
     this.active = true;
+    if (this.transport.subscribeAccountChange) {
+      void Promise.resolve(this.transport.subscribeAccountChange(() => {
+        this.catalogRevision++; this.patch({ catalog: null, model: '', effort: '' }); void this.loadCatalog();
+      })).then(stop => {
+        if (this.active && generation === this.generation) this.unsubscribeAccount = stop; else stop();
+      }).catch(this.report);
+    }
     void Promise.resolve(this.transport.subscribe(() => this.schedule())).then(unsubscribe => {
       if (this.active && generation === this.generation) this.unsubscribe = unsubscribe; else unsubscribe();
     }).catch(this.report);
     void this.refresh();
-    return () => { this.active = false; this.unsubscribe?.(); clearTimeout(this.timer); this.timer = undefined; };
+    return () => { this.active = false; this.unsubscribe?.(); this.unsubscribeAccount?.();
+      clearTimeout(this.timer); this.timer = undefined; };
   }
   private schedule = () => {
     if (!this.active || this.timer) return;
@@ -63,9 +73,11 @@ export class CliController {
   open = (selected: CliSession) => {
     if (this.state.busy) return;
     this.saveDraft(); this.revision++;
-    this.patch({ selected, engine: selected.engine, history: null, loading: true, error: '',
+    this.patch({ selected, engine: selected.engine, model: selected.model, effort: selected.effort ?? '',
+      history: null, loading: true, error: '',
       draft: this.drafts.get(`${selected.engine}:${selected.id}`) ?? '' });
     void this.refresh();
+    void this.loadCatalog();
   };
   private async read<T>(request: CliRequest) { return this.transport.request<T>(request); }
 
@@ -114,7 +126,10 @@ export class CliController {
     try {
       const catalog = await this.read<CliCatalog>({ engine, action: 'catalog', cwd: cwd || undefined });
       if (revision !== this.revision || catalogRevision !== this.catalogRevision || cwd !== this.state.cwd) return;
-      this.patch({ catalog, model: catalog.models.find(model => model.isDefault)?.id ?? catalog.models[0]?.id ?? '',
+      const chosen = catalog.models.find(model => model.id === this.state.model)
+        ?? catalog.models.find(model => model.isDefault) ?? catalog.models[0];
+      this.patch({ catalog, model: chosen?.id ?? '', effort: chosen?.efforts?.some(item => item.id === this.state.effort)
+        ? this.state.effort : chosen?.defaultEffort ?? '',
         mode: catalog.modes.some(mode => mode.id === 'default') ? 'default' : catalog.defaultMode ?? '' });
     } catch (error) {
       if (revision === this.revision && catalogRevision === this.catalogRevision) this.report(error);
@@ -127,15 +142,16 @@ export class CliController {
     catch (error) { this.report(error); }
   };
   send = async () => {
-    const { engine, selected, cwd, model, mode, draft } = this.state;
+    const { engine, selected, cwd, model, effort, mode, draft } = this.state;
     if (engine === 'codex' || this.state.busy || !draft.trim() || selected?.archived) return;
     const revision = this.revision;
     this.patch({ busy: true, error: '' });
     try {
-      const target = selected ?? await this.read<CliSession>({ engine, action: 'create', cwd, model,
+      const target = selected ?? await this.read<CliSession>({ engine, action: 'create', cwd, model, effort: effort || undefined,
         ...(mode ? { mode } : {}) });
       if (revision === this.revision) this.patch({ selected: target, history: null });
-      await this.read({ engine, action: 'send', id: target.id, text: draft, messageId: crypto.randomUUID() });
+      await this.read({ engine, action: 'send', id: target.id, text: draft, messageId: crypto.randomUUID(),
+        model, effort: effort || undefined });
       this.drafts.delete(`${engine}:${selected?.id ?? 'draft'}`);
       if (revision === this.revision) this.edit('');
       await this.refresh();

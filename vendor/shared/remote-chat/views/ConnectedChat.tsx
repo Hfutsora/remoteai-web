@@ -56,6 +56,8 @@ import './chat.css';
 import { ToolDetailsContext } from '../../chat/DeferredToolDetails';
 import { CliGuiProvider, useCliGui } from '../../cli-gui/context';
 import { CliConversationPane } from '../../cli-gui/CliConversationPane';
+import { RemoteProjectPicker } from '../../conversation/remote/RemoteProjectPicker';
+import { ProjectBar } from '../../conversation/ProjectBar';
 import { engineNames } from '../../cli-gui/EngineSelector';
 
 export interface ConnectedChatProps {
@@ -229,7 +231,13 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
         value={state.selected?.turns ? { turns: state.selected.turns } : undefined} />}
       {headerEnd}
     </header>
-    {external && <CliConversationPane cwd={cwd} />}
+    {external && cli && <CliConversationPane cwd={cwd} dictation={controller.dictation}
+      projectPicker={<ProjectBar active={active} scope={cli.state.cwd}>
+        <RemoteProjectPicker state={state} controller={controller} active={active} workspace={{
+          cwd: cli.state.selected?.cwd ?? cli.state.cwd, disabled: Boolean(cli.state.selected) || cli.state.busy,
+          choose: cwd => { cli.controller.patch({ cwd }); void cli.controller.loadCatalog(); },
+        }} />
+      </ProjectBar>} />}
     {workspacePage && <div className="gui-remote-feature">{workspacePage.content}</div>}
     <div className="cli-gui-codex-content" hidden={external}>
     <div className="chat-scroll chat-notices"><div className="chat-notice-content">

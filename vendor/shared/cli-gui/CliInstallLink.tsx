@@ -4,6 +4,7 @@ import { openUrl } from '@tauri-apps/plugin-opener';
 import { message } from 'antd';
 import { uiText } from '../localization/uiText';
 import type { ExternalEngine } from './types';
+import { useCliGui } from './context';
 
 // Keep installation entry points on the vendors' official domains on every host.
 export const officialInstallUrls: Record<ExternalEngine, string> = {
@@ -13,7 +14,16 @@ export const officialInstallUrls: Record<ExternalEngine, string> = {
 
 export function CliInstallLink({ engine }: { engine: ExternalEngine }) {
   const url = officialInstallUrls[engine];
-  return <a className="cli-gui-install-link" href={url} target="_blank" rel="noopener noreferrer"
+  const cli = useCliGui();
+  const installing = cli?.state.runtime[engine]?.status === 'installing';
+  return <span className="cli-gui-install-link">
+    <button type="button" className="chat-text-action" disabled={installing || cli?.state.busy}
+      onClick={() => { void cli?.controller.install(); }}>
+      {uiText(installing ? 'client.cliGui.installing' : cli?.state.runtime[engine]?.cliVersion
+        ? 'client.cliGui.update' : 'client.cliGui.install')}
+    </button>
+    <a href={url} target="_blank" rel="noopener noreferrer"
+    aria-label={uiText('client.cliGui.officialInstall', { cli: engine === 'claude' ? 'Claude Code' : 'Gemini CLI' })}
     onClick={event => {
       if (!isTauri()) return;
       event.preventDefault();
@@ -22,7 +32,6 @@ export function CliInstallLink({ engine }: { engine: ExternalEngine }) {
         style: { maxWidth: 400, marginInline: 'auto' },
       }); });
     }}>
-    {uiText('client.cliGui.officialInstall', { cli: engine === 'claude' ? 'Claude Code' : 'Gemini CLI' })}
     <ExternalLink size={12} aria-hidden="true" />
-  </a>;
+  </a></span>;
 }

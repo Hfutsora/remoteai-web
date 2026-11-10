@@ -1,6 +1,7 @@
 import { uiText } from '../localization/uiText';
 
 const errors = {
+  'client.cliGui.accountUnavailable': true, 'client.cliGui.unsupportedContent': true,
   'client.cliGui.installFailed': true, 'client.cliGui.setupNeeded': true,
   'client.cliGui.connectionFailed': true, 'client.cliGui.invalidRequest': true,
   'client.cliGui.busy': true, 'client.cliGui.unavailable': true,

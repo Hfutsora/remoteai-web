@@ -1,36 +1,15 @@
 .cli-gui-engine { display: inline-flex; align-items: center; gap: 5px; padding: 0; border: 0;
   background: transparent; color: inherit; cursor: pointer; font: inherit; text-align: left; }
 .cli-gui-engine:focus-visible { outline: 2px solid var(--accent, #26976c); outline-offset: 4px; border-radius: 3px; }
-.cli-gui-pane { display: flex; flex: 1; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden; }
+.cli-gui-pane { display: flex; flex: 1; flex-direction: column; min-height: 0; min-width: 0; overflow: hidden;
+  --gui-border: var(--line, var(--app-border)); --gui-muted: var(--muted, var(--app-muted));
+  --gui-composer-surface: var(--panel, var(--app-surface)); }
+.cli-gui-pane .chat-message-region { color: inherit; font-family: inherit; }
+.cli-gui-pane .chat-user-message { background: var(--gui-chat-surface, var(--app-elevated)); color: inherit; }
 .cli-gui-pane .ant-alert { margin: 8px 16px; }
 .cli-gui-setup { padding: 12px 20px; border-bottom: 1px solid var(--line); }
 .cli-gui-setup p, .cli-gui-help { color: var(--muted); margin: 4px 0 10px; }
 .cli-gui-setup [role=status] { display: inline-flex; align-items: center; gap: 8px; }
-.cli-gui-messages { flex: 1; min-height: 0; overflow: auto; padding: 20px max(20px, calc((100% - 900px) / 2));
-  scroll-behavior: auto; overflow-wrap: anywhere; }
-.cli-gui-message { margin: 0 0 20px; }
-.cli-gui-user { margin-left: auto; padding: 8px 14px; width: fit-content; max-width: 88%;
-  border-radius: 14px; background: var(--gui-chat-surface, color-mix(in srgb, currentColor 5%, transparent)); }
-.cli-gui-error { color: var(--ant-color-error, #c84141); }
-.cli-gui-notice { color: var(--muted); }
-.cli-gui-tool { margin: 10px 0; color: var(--muted); }
-.cli-gui-tool summary { display: flex; gap: 10px; cursor: pointer; }
-.cli-gui-tool pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 400px; overflow: auto;
-  padding: 10px; border-radius: 8px; background: color-mix(in srgb, currentColor 5%, transparent); }
-.cli-gui-permissions { flex-shrink: 0; max-height: 40%; overflow: auto; padding: 0 20px;
-  width: min(100%, 920px); align-self: center; }
-.cli-gui-permission { border: 1px solid var(--line); border-radius: 12px; padding: 12px; margin-bottom: 10px; }
-.cli-gui-permission p { white-space: pre-wrap; overflow-wrap: anywhere; }
-.cli-gui-permission fieldset { border: 0; padding: 8px 0; }
-.cli-gui-permission-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
-.cli-gui-composer { margin: 8px 20px 0; padding: 10px 12px; border: 1px solid var(--line); border-radius: 16px;
-  width: min(calc(100% - 40px), 880px); align-self: center; box-sizing: border-box;
-  background: var(--gui-composer-surface, var(--card, var(--panel))); }
-.cli-gui-composer textarea.ant-input { border: 0; box-shadow: none; background: transparent; padding: 10px 0; }
-.cli-gui-composer-options { display: flex; align-items: center; gap: 8px; min-width: 0; }
-.cli-gui-composer-options > .ant-input { flex: 1; min-width: 0; }
-.cli-gui-composer-options > .ant-select { min-width: 100px; max-width: 45%; }
-.cli-gui-spacer { flex: 1; }
 .cli-gui-footer { padding: 8px 24px 12px; width: min(100%, 920px); align-self: center; box-sizing: border-box;
   color: var(--muted); display: flex; align-items: center;
   justify-content: space-between; flex-wrap: wrap; gap: 8px; }
@@ -42,9 +21,3 @@
 .cli-gui-thread-list [data-selected=true] { background: var(--green-selection, var(--chat-pale)); }
 .cli-gui-codex-content[hidden] { display: none !important; }
 .cli-gui-codex-content { display: contents; }
-@media (max-width: 600px) {
-  .cli-gui-messages { padding: 16px 12px; }
-  .cli-gui-composer { margin-inline: 10px; }
-  .cli-gui-composer-options { flex-wrap: wrap; }
-  .cli-gui-footer { padding-inline: 14px; }
-}

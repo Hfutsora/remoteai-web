@@ -3,7 +3,8 @@ export type ExternalEngine = Exclude<GuiEngine, 'codex'>;
 export const CLI_GUI_OPERATION = 'cliGui';
 export const CLI_GUI_EVENT = 'cliGui/changed';
 
-export interface CliModel { id: string; label: string; isDefault?: boolean }
+export interface CliModel { id: string; label: string; isDefault?: boolean;
+  defaultEffort?: string; efforts?: { id: string; label: string }[] }
 export interface CliMode { id: string; label: string }
 export interface CliCatalog {
   status: 'ready' | 'unavailable' | 'loading' | 'error';
@@ -25,6 +26,7 @@ export interface CliPermission {
 export interface CliSession {
   id: string; engine: ExternalEngine; title: string; cwd: string; model: string;
   status: string; updatedAt: string; archived: boolean;
+  effort?: string;
   permissions: CliPermission[];
 }
 export interface CliEntry {
@@ -40,9 +42,9 @@ export type CliRequest = { engine: ExternalEngine } & (
   | { action: 'status' | 'install' }
   | { action: 'catalog'; cwd?: string }
   | { action: 'list'; archived: boolean }
-  | { action: 'create'; cwd: string; model: string; mode?: string }
+  | { action: 'create'; cwd: string; model: string; mode?: string; effort?: string }
   | { action: 'read'; id: string; cursor?: CliCursor }
-  | { action: 'send'; id: string; text: string; messageId: string }
+  | { action: 'send'; id: string; text: string; messageId: string; model?: string; effort?: string }
   | { action: 'stop' | 'archive'; id: string }
   | { action: 'approve'; id: string; permissionId: string; actionId: string;
       answers?: Record<string, string> }
@@ -50,4 +52,5 @@ export type CliRequest = { engine: ExternalEngine } & (
 export interface CliTransport {
   request<T>(request: CliRequest): Promise<T>;
   subscribe(listener: () => void): Promise<() => void> | (() => void);
+  subscribeAccountChange?(listener: () => void): Promise<() => void> | (() => void);
 }
