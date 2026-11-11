@@ -24,7 +24,8 @@ export class CliController {
   private unsubscribe?: () => void;
   private unsubscribeAccount?: () => void;
   private older?: { revision: number; generation: number; history: CliHistory };
-  constructor(private readonly transport: CliTransport) {}
+  constructor(private readonly transport: CliTransport,
+    private readonly createMessageId: () => string = () => crypto.randomUUID()) {}
   getSnapshot = () => this.state;
   subscribe = (listener: () => void) => { this.listeners.add(listener); return () => { this.listeners.delete(listener); }; };
   patch = (patch: Partial<CliState>) => {
@@ -171,7 +172,7 @@ export class CliController {
       const target = selected ?? await this.read<CliSession>({ engine, action: 'create', cwd, model, effort: effort || undefined,
         ...(mode ? { mode } : {}) });
       if (revision === this.revision) this.patch({ selected: target, history: null });
-      await this.read({ engine, action: 'send', id: target.id, text: draft, messageId: crypto.randomUUID(),
+      await this.read({ engine, action: 'send', id: target.id, text: draft, messageId: this.createMessageId(),
         model, effort: effort || undefined });
       this.drafts.delete(`${engine}:${selected?.id ?? 'draft'}`);
       if (revision === this.revision) this.edit('');

@@ -8,6 +8,7 @@ import { cliPickerModels } from './modelSelection';
 import { ComposerDictation } from '../chat/dictation/ComposerDictation';
 import type { DictationClient } from '../chat/dictation/client';
 import { useGuiFontSize, guiFontStyle } from '../appearance/fontSize';
+import { useDesktopLayout } from '../layout/useDesktopLayout';
 import { DesktopUsageContext } from '../chat/DesktopUsageContext';
 import { UsageAmounts } from '../chat/UsageAmounts';
 import { ComposerContext } from '../remote-chat/views/ComposerContext';
@@ -35,6 +36,7 @@ export function CliComposer({ projectPicker, composerHeader, dictation,
   const { engine, selected, catalog, busy } = state;
   const [dictating, setDictating] = useState(false);
   const fontSize = useGuiFontSize();
+  const desktop = useDesktopLayout();
   const usage = useContext(DesktopUsageContext);
   const models = useMemo(() => cliPickerModels(catalog?.models ?? []), [catalog]);
   const loading = catalog?.status !== 'ready';
@@ -75,7 +77,7 @@ export function CliComposer({ projectPicker, composerHeader, dictation,
             onChange={mode => controller.patch({ mode })} classes={local?.modeClasses} />
         </div>
         <div className={remoteLayout ? 'chat-composer-trailing' : styles.modelControls}>
-          {remoteLayout ? status : <div className={styles.composerSecondary}>{status}</div>}
+          {remoteLayout ? desktop && status : <div className={styles.composerSecondary}>{status}</div>}
           {remoteLayout ? <ComposerModelPicker key={engine + ':' + selected?.id} models={models}
             selection={{ model: state.model, effort: state.effort, access: 'read-only' }}
             settingsBusy={!ready || busy || Boolean(running) || Boolean(loading)} ready={ready}
@@ -97,7 +99,7 @@ export function CliComposer({ projectPicker, composerHeader, dictation,
         </div>
       </div>
     </div>
-    {remoteLayout ? <ComposerFooter desktop usage={usage.usage} connectionInfo={connectionInfo}
+    {remoteLayout ? <ComposerFooter desktop={desktop} usage={usage.usage} connectionInfo={connectionInfo}
       threadId={selected?.id} statusActive={active} /> : <div className={styles.composerHint + ' cs-usage-footer-container'}>
       <EngineSelector active={active} />{local?.footer}
     </div>}
