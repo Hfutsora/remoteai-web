@@ -1,4 +1,5 @@
 import { displayText } from '../../localization/browserClient';
+import { TaskRecoveryPrompt } from '../../conversation/recovery/TaskRecoveryPrompt';
 import { displayError } from '../../localization/browserClient';
 import { ImageAiContext } from '../../chat/ImageAiContext';
 import { DesktopUsageContext } from '../../chat/DesktopUsageContext';
@@ -254,6 +255,13 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
           active={active} connected={ready} desktopStyle />
       </ProjectBar>} />}
     {workspacePage && <div className="gui-remote-feature">{workspacePage.content}</div>}
+    <TaskRecoveryPrompt client={controller.taskRecovery}
+      enabled={active && (desktop || Boolean(draggableHeader)) && ready && state.taskRecoverySupported === true}
+      openThread={threadId => {
+        cli?.controller.showCodex();
+        workspacePage?.onClose();
+        void controller.openRecoveryThread(threadId);
+      }} />
     <div className="cli-gui-codex-content" hidden={external}>
     <div className="chat-scroll chat-notices"><div className="chat-notice-content">
       <ChatTaskStatus state={state} />
