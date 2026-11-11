@@ -1,9 +1,16 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "e45886fa2661a49516ef71d74b012ac7ffe5ca00",
+  "revision": "362e0b0948a8bfb46f77281781044f99b26377a5",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "11969b695e62e52cd5d246b15a119581b459ada1"
+    "revision": "16df4f0dcea4039505e331d695951ac93d2eb921"
+  },
+  "retainedTestSources": {
+    "repository": "https://github.com/piperhex/remoteai",
+    "revision": "e45886fa2661a49516ef71d74b012ac7ffe5ca00",
+    "paths": [
+      "apps/desktop/e2e/"
+    ]
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -1178,7 +1185,7 @@
     "shared/chat/groups/groups.css": "d9c2a62acbd8580a1495ba5405aec9f38f409ebdd1871c1b01f8e037b61bcfa1",
     "shared/chat/groups/SidebarDrag.tsx": "31935c04b0d36d19c3d8ad31dbb1f0f7c868c93f83ce1692715425505605f393",
     "shared/conversation/ThreadStatus.tsx": "81cb28612412d3e70e237051c960c6d6f6d455e9979be3a68416986a072a3678",
-    "shared/cli-gui/controller.ts": "7eb9572a275b3197fced553399ab508bfaf77b0784738163b0da2705670b6980",
+    "shared/cli-gui/controller.ts": "b4085744d652be251533b9d1894087d127a52bcbfbab432a487ca0824e4f96df",
     "apps/desktop/src/pages/codexGui/ThreadPagination.module.less": "a8067036007562d5fb0aaef64bfa793559571020eac9c15ceda3c6691d1206d0",
     "shared/chat/ThreadContextMenu.module.less": "edcedcf042fd5daa5869b338cb02b4125a07d68aafd98532a4d41c1e4d6a193d",
     "shared/chat/groups/useGroupMenu.tsx": "1a0fe98fe6c74950057494788b610b3535949661bac8e2264c335fe9c7c1c30f",
