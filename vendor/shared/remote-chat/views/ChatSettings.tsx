@@ -19,6 +19,8 @@ import { SETTINGS_FIELDS, settingOptions, settingValue, settingsNotice, visibleS
 
 interface Props {
   connection: ChatConnectionProps;
+  cliLocked?: boolean;
+  cwd?: string;
   threadId: string | null;
   contextSettings: ContextSettingsApi;
   tokenUsage?: ThreadTokenUsage;
@@ -35,7 +37,8 @@ interface Props {
 }
 
 export function ChatSettings({ models, selection, saving, ready, error, updateSettings, refreshModels, onClose,
-  readUsage, readConversationMetrics, tokenUsage, threadId, contextSettings, connection }: Props) {
+  readUsage, readConversationMetrics, tokenUsage, threadId, contextSettings, connection,
+  cliLocked = false, cwd }: Props) {
   useLanguage();
   const desktop = useDesktopLayout();
   const [field, setField] = useState<SettingField | null>(null);
@@ -56,7 +59,8 @@ export function ChatSettings({ models, selection, saving, ready, error, updateSe
     title={t("client.chat.chatSettings.1e06eb")} width={400} onClose={onClose}>
     <div className={`chat-settings${desktop ? '' : ' chat-settings-mobile'}`} aria-hidden={field !== null || contextOpen}>
       {!desktop && usage}
-      <ChatProfileMenu {...connection} variant="settings" compact={!desktop} ready={ready} />
+      <ChatProfileMenu {...connection} variant="settings" compact={!desktop} ready={ready}
+        cliLocked={Boolean(threadId) || cliLocked} cliCwd={cwd} />
       {visibleSettingsFields(selection).map((entry) => entry.field !== 'model'
         ? <ChatSettingSegments key={entry.field} field={entry.field} compact={!desktop}
           label={displayText(entry.label)} value={selection[entry.field] ?? ''}

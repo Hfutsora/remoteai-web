@@ -11,13 +11,14 @@ import { useGuiAccounts } from '../client/useGuiAccounts';
 import type { GuiToolsClient } from '../guiTools';
 import { ChatGuiUpdateSheet } from './ChatGuiUpdateSheet';
 import { ChatSettingsConnection } from './ChatSettingsConnection';
+import { MobileEngineSelector } from '../../cli-gui/MobileEngineSelector';
 
 const ACCOUNT_REFRESH_MS = 60_000;
 export interface ChatConnectionProps {
   client: GuiAccountsClient; deviceName: string; chooseDevice: () => void;
 }
 type Props = ChatConnectionProps & { ready: boolean; active?: boolean } & (
-  { variant: 'settings'; compact?: boolean } | { variant?: 'profile'; email: string;
+  { variant: 'settings'; compact?: boolean; cliLocked?: boolean; cliCwd?: string } | { variant?: 'profile'; email: string;
     guiTools: GuiToolsClient; running: boolean }
 );
 
@@ -56,7 +57,9 @@ export function ChatProfileMenu(props: Props) {
     {settings ? (props.compact ? <ChatSettingsConnection deviceName={deviceName}
       accountName={current?.name || t('client.chat.chooseAccount')}
       onDevice={() => { close(); chooseDevice(); }}
-      onAccount={() => { setQuery(''); setPanel('accounts'); if (ready) accounts.refresh(); }} />
+      onAccount={() => { setQuery(''); setPanel('accounts'); if (ready) accounts.refresh(); }}>
+      <MobileEngineSelector ready={ready} active={active} locked={props.cliLocked} cwd={props.cliCwd} />
+    </ChatSettingsConnection>
       : connectionOptions) : <button type="button"
       className="chat-profile-trigger"
       aria-label={t("client.chat.openProfileMenu")} aria-expanded={panel !== null} onClick={() => setPanel('profile')}>

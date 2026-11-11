@@ -6,7 +6,6 @@ import type { ComposerProps } from './composerProps';
 import { ConversationPerformanceValues } from './ConversationPerformance';
 import './composerFooter.css';
 import { EngineSelector } from '../../cli-gui/EngineSelector';
-import { useCliGui } from '../../cli-gui/context';
 import type { ReadCodexServiceStatus } from '../../codex-status/status';
 
 type Props = Pick<ComposerProps, 'connectionInfo'>
@@ -16,10 +15,9 @@ type Props = Pick<ComposerProps, 'connectionInfo'>
 export function ComposerFooter({ desktop, cliVersion, connectionInfo,
   usage = null, metrics = null, threadId, readServiceStatus, statusActive = true, statusConnected = false }: Props) {
   useLanguage();
-  const cli = useCliGui();
-  if (!desktop && !connectionInfo && !cli) return null;
+  if (!desktop && !connectionInfo) return null;
   return <div className="chat-composer-hint cs-usage-footer-container">
-    {(desktop || cli) && <EngineSelector version={cliVersion} locked={Boolean(threadId)} read={readServiceStatus}
+    {desktop && <EngineSelector version={cliVersion} locked={Boolean(threadId)} read={readServiceStatus}
       active={statusActive} connected={statusConnected} />}
     <div className="chat-composer-details">
       {connectionInfo}

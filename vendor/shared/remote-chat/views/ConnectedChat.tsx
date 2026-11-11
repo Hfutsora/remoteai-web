@@ -240,6 +240,9 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
       {headerEnd}
     </header>
     {external && cli && <CliConversationPane cwd={cwd} dictation={controller.dictation} remoteLayout
+      connected={ready}
+      connection={{ client: controller.guiAccounts, deviceName: device?.name ?? t('client.settings.chooseAComputer'),
+        chooseDevice: () => setPickingDevice(true) }}
       active={active && foreground} scrollableComposer={scrollableComposer}
       composerHeader={composerHeader}
       connectionInfo={<ChatConnectionInfo state={state} controller={controller} device={device} active={active}

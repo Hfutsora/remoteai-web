@@ -19,6 +19,8 @@ import { EngineSelector } from './EngineSelector';
 import { CliModePicker, type CliModeClasses } from './CliModePicker';
 import { CliAddContent, type CliAddClasses } from './CliAddContent';
 import { CliComposerInput } from './CliComposerInput';
+import { MobileCliSettings } from './MobileCliSettings';
+import type { ChatConnectionProps } from '../remote-chat/views/ChatProfileMenu';
 import styles from '../conversation/styles.module.less';
 import '../remote-chat/views/composer.css';
 import '../remote-chat/views/composerDesktop.css';
@@ -26,12 +28,13 @@ import '../remote-chat/views/composerDesktop.css';
 export interface CliComposerProps {
   projectPicker?: ReactNode; composerHeader?: ReactNode; dictation?: DictationClient;
   remoteLayout?: boolean; active?: boolean; connectionInfo?: ReactNode;
+  connection?: ChatConnectionProps; connected?: boolean;
   local?: { inputClassName: string; submitClassName: string; modeClasses: CliModeClasses; addClasses: CliAddClasses;
     status: ReactNode; footer: ReactNode; chooseFiles: (directory: boolean) => Promise<string[]> };
 }
 
 export function CliComposer({ projectPicker, composerHeader, dictation,
-  remoteLayout = false, active = true, connectionInfo, local }: CliComposerProps) {
+  remoteLayout = false, active = true, connectionInfo, local, connection, connected }: CliComposerProps) {
   const { state, controller } = useCliGui()!;
   const { engine, selected, catalog, busy } = state;
   const [dictating, setDictating] = useState(false);
@@ -71,14 +74,15 @@ export function CliComposer({ projectPicker, composerHeader, dictation,
       <div className={remoteLayout ? 'chat-composer-actions' : styles.composerControls}>
         <CliAddContent key={engine + ':' + (selected?.id ?? 'draft')}
           disabled={disabled || !active} classes={local?.addClasses} chooseFiles={local?.chooseFiles} />
-        <div className={remoteLayout ? 'cli-gui-remote-mode' : styles.composerSecondary}>
+        {(!remoteLayout || desktop) && <div className={remoteLayout ? 'cli-gui-remote-mode' : styles.composerSecondary}>
           <CliModePicker engine={engine} modes={catalog?.modes ?? []} value={state.mode}
             disabled={!ready || Boolean(selected) || busy || !catalog?.modes.length}
             onChange={mode => controller.patch({ mode })} classes={local?.modeClasses} />
-        </div>
+        </div>}
         <div className={remoteLayout ? 'chat-composer-trailing' : styles.modelControls}>
           {remoteLayout ? desktop && status : <div className={styles.composerSecondary}>{status}</div>}
-          {remoteLayout ? <ComposerModelPicker key={engine + ':' + selected?.id} models={models}
+          {remoteLayout && !desktop && <MobileCliSettings connection={connection} connected={connected} active={active} />}
+          {remoteLayout ? desktop && <ComposerModelPicker key={engine + ':' + selected?.id} models={models}
             selection={{ model: state.model, effort: state.effort, access: 'read-only' }}
             settingsBusy={!ready || busy || Boolean(running) || Boolean(loading)} ready={ready}
             refreshModels={refreshCatalog} beforeOpen={() => {}}

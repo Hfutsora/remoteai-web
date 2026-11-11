@@ -11,6 +11,7 @@ import { CliInstaller } from './CliInstaller';
 import { cliErrorText } from './errors';
 import { useGuiFontSize, guiFontStyle } from '../appearance/fontSize';
 import styles from '../conversation/styles.module.less';
+import type { ChatConnectionProps } from '../remote-chat/views/ChatProfileMenu';
 
 function InstallationConversation({ footer }: { footer: ReactNode }) {
   return <div className={styles.messageArea}>
@@ -25,10 +26,11 @@ function InstallationConversation({ footer }: { footer: ReactNode }) {
 
 export function CliConversationPane({ cwd = '', projectPicker, dictation, active = true,
   renderMessages = props => <CliMessages {...props} />, scrollableComposer, remoteLayout = false,
-  composerHeader, connectionInfo, renderComposer = props => <CliComposer {...props} /> }: {
+  composerHeader, connectionInfo, connection, connected, renderComposer = props => <CliComposer {...props} /> }: {
   cwd?: string; projectPicker?: ReactNode; dictation?: DictationClient;
   active?: boolean; scrollableComposer?: boolean; remoteLayout?: boolean;
   composerHeader?: ReactNode; connectionInfo?: ReactNode;
+  connection?: ChatConnectionProps; connected?: boolean;
   renderComposer?: (props: CliComposerProps) => ReactNode;
   renderMessages?: (props: CliMessagesProps) => ReactNode;
 }) {
@@ -43,7 +45,7 @@ export function CliConversationPane({ cwd = '', projectPicker, dictation, active
   const footer = <>
     {state.selected && <CliPermissions session={state.selected} busy={state.busy || !ready}
       respond={controller.act} remoteLayout={remoteLayout} />}
-    {renderComposer({ projectPicker, dictation, remoteLayout, active, composerHeader, connectionInfo })}
+    {renderComposer({ projectPicker, dictation, remoteLayout, active, composerHeader, connectionInfo, connection, connected })}
   </>;
   return <section className="cli-gui-pane" style={guiFontStyle(fontSize)} aria-label={uiText('client.cliGui.conversation')}>
     {state.error && <Alert type="error" showIcon message={cliErrorText(state.error)} closable
