@@ -49,8 +49,7 @@ export function CliComposer({ projectPicker, composerHeader, dictation, modelSou
   const ready = state.runtime[engine]?.status === 'ready';
   const disabled = Boolean(busy || dictating || selected?.archived);
   const canSend = ready && !disabled && !running && !selected?.permissions.length && !loading
-    && models.some(model => model.model === state.model) && Boolean(state.draft.trim())
-    && (Boolean(selected) || Boolean(state.cwd));
+    && models.some(model => model.model === state.model) && Boolean(state.draft.trim());
   const refreshCatalog = async () => {
     try { await refresh(); await controller.refresh(); await controller.loadCatalog(); }
     catch (reason) { controller.report(reason); }
@@ -77,7 +76,7 @@ export function CliComposer({ projectPicker, composerHeader, dictation, modelSou
         <CliAddContent key={engine + ':' + (selected?.id ?? 'draft')}
           disabled={disabled || !active} classes={local?.addClasses} chooseFiles={local?.chooseFiles} />
         <div className={remoteLayout ? 'cli-gui-remote-mode' : styles.composerSecondary}>
-          <CliModePicker modes={catalog?.modes ?? []} value={state.mode}
+          <CliModePicker engine={engine} modes={catalog?.modes ?? []} value={state.mode}
             disabled={!ready || Boolean(selected) || busy || !catalog?.modes.length}
             onChange={mode => controller.patch({ mode })} classes={local?.modeClasses} />
         </div>

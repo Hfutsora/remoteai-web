@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import { Popover } from 'antd';
+import { useEffect, useRef, useState, type CSSProperties } from 'react';
+import { Popover, theme } from 'antd';
 import { Check, ShieldCheck } from 'lucide-react';
 import { uiText } from '../localization/uiText';
-import type { CliMode } from './types';
+import type { CliMode, ExternalEngine } from './types';
+import { useLanguage } from '../localization/browserClient';
+import { cliModeLabel } from './modeLabels';
 
 export interface CliModeClasses {
   trigger: string; panel: string; heading: string; option?: string; copy?: string; check?: string;
@@ -10,17 +12,24 @@ export interface CliModeClasses {
 const remoteClasses: CliModeClasses = { trigger: 'chat-composer-access', panel: 'chat-composer-access-menu',
   heading: 'chat-composer-access-heading' };
 
-export function CliModePicker({ modes, value, disabled, onChange, classes = remoteClasses }: {
-  modes: CliMode[]; value: string; disabled: boolean; onChange: (mode: string) => void; classes?: CliModeClasses;
+export function CliModePicker({ engine, modes, value, disabled, onChange, classes = remoteClasses }: {
+  engine: ExternalEngine; modes: CliMode[]; value: string; disabled: boolean;
+  onChange: (mode: string) => void; classes?: CliModeClasses;
 }) {
+  useLanguage();
+  const { token } = theme.useToken();
+  // Portaled remote menus cannot inherit colors from the conversation's theme wrapper.
+  const panelStyle = classes === remoteClasses ? {
+    '--app-ink': token.colorText, '--app-muted': token.colorTextSecondary,
+    '--app-canvas': token.controlItemBgHover,
+  } as CSSProperties : undefined;
   const [open, setOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const selected = modes.find(mode => mode.id === value);
-  const label = (mode?: CliMode) => mode?.label === 'Default'
-    ? uiText('client.configHelp.default') : mode?.label || uiText('client.cliGui.mode');
+  const label = (mode?: CliMode) => cliModeLabel(engine, mode);
   const close = () => { setOpen(false); trigger.current?.focus(); };
   useEffect(() => { if (disabled) setOpen(false); }, [disabled]);
-  const panel = <div className={classes.panel} onKeyDown={event => {
+  const panel = <div className={classes.panel} style={panelStyle} onKeyDown={event => {
     if (event.key === 'Escape') { event.stopPropagation(); close(); }
     if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
     const options = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('[role=menuitemradio]'));

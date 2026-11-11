@@ -1,15 +1,15 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "ce8ec21fa62ec40f87e1955a78122771cd8b9643",
+  "revision": "8f94dd736d4ce679e0e0622a1e30d94419a0bdf6",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "889e05c9ae9f7fb8c47507bf127830853bfb10f9"
+    "revision": "147af867bc085eaef6ee39050003126e70e289d0"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
     "revision": "b867130db43e4b5ea58405d0f064324c8c5628a8"
   },
-  "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.13/remoteai-i18n-0.1.13.tgz",
+  "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.14/remoteai-i18n-0.1.14.tgz",
   "files": {
     "scripts/test-browser.mjs": "456d5b867ac937a571630f4a01cd37ded9380d519bee3011e8807480c0739733",
     "scripts/test-browser.d.mts": "0f13ced709be8e097af7d4038400129b64e5d400f62e9bea2a0371125ec4f70f",
@@ -1288,7 +1288,7 @@
     "shared/remote-chat/views/asyncQuestions.css": "e3915bd0cfec318fb4093c9dba1a79e83f6c52b3e39894f6b8a76f9d34c4ce11",
     "shared/cli-gui/CliMessages.tsx": "18f795a29daf4a0d8ee61a2716d90734681062114ec6ebc4ac4fa7a3616ac41d",
     "shared/cli-gui/CliPermissions.tsx": "07307bf0bea1c88705b123a6c81d7d596c457349acc4754ebe9f8d21449e52c3",
-    "shared/cli-gui/CliComposer.tsx": "0ff4a002473a80e1521f148a6cea1335358e268936f3e64b06e0e8bbd3fe2756",
+    "shared/cli-gui/CliComposer.tsx": "81ab43aaffbc2f37d42611ddff9587583d3a713a32c9114e504ad4be031554a1",
     "shared/cli-gui/CliInstaller.tsx": "0dc7d5c839ba1ea902ec3b843a1d31bfdbfd4043a9f866c05402d371eeabb962",
     "shared/cli-gui/errors.ts": "3ab568d80d89355af4170885339ebb81bca1a159efe0da7b06cdfe13fd47d6e9",
     "shared/conversation/useProjectBarOverflow.ts": "53479cf585a2377142463c21790641c2a0c69c8bf717455d5df12cd746cebaf7",
@@ -1675,7 +1675,7 @@
     "shared/remote-chat/usageSummary.ts": "8fc21ef14a964eeed2fb334c27497c52424f624e243bf6fcd250687967dc451b",
     "shared/chat/attachmentMetadata.ts": "ccbdb2ec4f5af2c8f1e9f6e7f30b83218f69ec22ed3f63c68ef778d0da84d470",
     "shared/cli-gui/presentation.ts": "5a2f11fa0dc1e3a763b1d82a11515f60478317d91b1468db785e131c452b5d5e",
-    "shared/cli-gui/CliModePicker.tsx": "b718e89ab63a839a7bea7b51353c12ee70f25dbc782780bf436934f2de905096",
+    "shared/cli-gui/CliModePicker.tsx": "654f8e866b847978365a8ed418ee4d5fa4e881e58d3158f00b082bb0ddc8901e",
     "shared/cli-gui/CliAddContent.tsx": "a171c08d8c4578c93a8b5da035e08d7092e82baf6af02fe3ec5aa3e6e361fd8b",
     "shared/cli-gui/CliComposerInput.tsx": "792e9ad6ae733be54fe667a19091b73f9e9e14b94b1df98e8f15e8a079bcb76f",
     "shared/cli-gui/CliInstallLink.tsx": "e6134243d8eb52bc54ccd64aaf723cf87ab6f6eb717bfe3cb9b682de10149c3c",
@@ -1789,6 +1789,7 @@
     "shared/lounge/conversationPreview.ts": "dd7996edb9baa7086ffd5fab1a5ef1eed94e3bb529989198eccc56e27da617eb",
     "shared/lounge/conversationActions.ts": "e730e10ea51f961c3a629f6c04432e6f9d992a462691e1faff8d6e221cc435b8",
     "shared/lounge/chatActions.css": "0e22b905bfeee0a8bc2d520b8652911edf01369d384b9afed1bb7a16ef01c53e",
+    "shared/cli-gui/modeLabels.ts": "09f454cc8e94dbb27856a6994e719beb845ef54dddf739365f5157cf8884a2de",
     "shared/terminal/zmodem.d.ts": "59939b99771f573be3f1b682c1d52dbf1f26e255fc0270f14791bbc37f823554",
     "shared/terminal/zmodemWriter.ts": "139f23a1d2cafe6da681300dd07b811e2bd6003f8365191910820cbc82a474e2",
     "shared/terminal/zmodemReceiver.ts": "b738867b6f6b4d84a438a33255e5c57cda65790d81f1f2c6c138cf9f2559c4cf",
