@@ -12,7 +12,8 @@ import styles from './sync.module.less';
 
 export function syncError(error: unknown) {
   const code = error instanceof Error ? error.message : String(error);
-  return uiText(code === 'CONVERSATION_SYNC_CHANGED' ? 'client.conversationSync.changed'
+  return uiText(code === 'CONVERSATION_SYNC_CHANGED' || code === 'client.conversationSync.changed'
+    ? 'client.conversationSync.changed'
     : 'client.conversationSync.failed');
 }
 

@@ -76,7 +76,7 @@ function WebChat({ session, device, selected, ...props }: Props & {
 }) {
   const chat = useChat(session, device?.deviceId ?? '', props.active && Boolean(device));
   const desktop = useDesktopLayout();
-  const cwd = chat.state.selected?.cwd ?? chat.state.draftProject?.cwd ?? '';
+  const [cwd, setWorkspaceCwd] = useState('');
   const terminal = useRemoteTerminalLauncher({ client: chat.controller.guiTools.terminal,
     cwd, connected: chat.state.ready });
   const installer = useRemoteCliInstaller(chat.controller.guiTools,
@@ -96,6 +96,7 @@ function WebChat({ session, device, selected, ...props }: Props & {
     <div hidden={props.sshDiscovery} style={{ display: props.sshDiscovery ? 'none' : 'contents' }}>
     <ConnectedChat {...props} active={props.active && !props.sshDiscovery} chat={chat} device={device} email={session.email}
     cliVersion={installer.version}
+    onWorkspaceChange={setWorkspaceCwd}
     composerHeader={desktop && <RemoteGuiProject state={chat.state} controller={chat.controller}
       active={props.active && chat.foreground} computers={{ ...props.deviceRefresh, allowLocal: false,
         current: device ?? null, devices: props.devices, authenticated: true, login: () => {},

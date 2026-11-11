@@ -1,8 +1,8 @@
-import { AlertCircle, ArrowDown, CheckCircle2, Download, ExternalLink, MoreVertical,
+import { AlertCircle, ArrowDown, CheckCircle2, Download, ExternalLink, FolderOpen, MoreVertical,
   Pause, Play, RotateCw, Share2, Trash2 } from 'lucide-react';
 import { Dropdown } from 'antd';
 import { displayError } from '../../localization/browserClient';
-import type { DownloadTask } from '../types';
+import type { DownloadOperation, DownloadTask } from '../types';
 import { formatBytes } from '../DownloadCard';
 import { canShareDownload } from '../shareDownload';
 import { downloadCompletionDetails } from '../completion';
@@ -14,8 +14,8 @@ import { downloadPercent, downloadStatus, isDownloadReady, isDownloadRunning, re
 export interface DownloadItemProps {
   task: DownloadTask; busy: boolean; connected: boolean; selected: boolean; selecting: boolean;
   retryAttempt: number; text: DownloadText; toggle: () => void;
-  run: (task: DownloadTask, operation?: 'action' | 'open' | 'remove' | 'share' | 'retry') => void;
-  allowShare?: boolean;
+  run: (task: DownloadTask, operation?: DownloadOperation) => void;
+  allowShare?: boolean; allowReveal?: boolean;
 }
 
 function TaskMenu({ task, busy, run, text, allowShare, retryAttempt }: DownloadItemProps) {
@@ -112,7 +112,7 @@ export function ActiveDownloadCard(props: DownloadItemProps) {
 }
 
 export function ReadyDownloadRow(props: DownloadItemProps) {
-  const { task, busy, selected, toggle, run, text } = props;
+  const { task, busy, selected, toggle, run, text, allowReveal } = props;
   const completion = downloadCompletionDetails(task, text);
   return <article className={`dw-ready-row${selected ? ' is-selected' : ''}`} aria-label={task.name}>
     <TaskSelection {...props} /><DownloadFileIcon name={task.name} />
@@ -131,6 +131,9 @@ export function ReadyDownloadRow(props: DownloadItemProps) {
       {!task.sync && <><button type="button" className="dw-button dw-open" onClick={() => run(task, 'open')}
         disabled={busy || task.status === 'saving'}><ExternalLink size={17} />
         {text('client.portForwarding.open')}</button>
+      {allowReveal && <button type="button" className="dw-button" onClick={() => run(task, 'reveal')}
+        disabled={busy || task.status === 'saving'}><FolderOpen size={17} />
+        {text('client.projectBrowser.openInExplorer')}</button>}
       <button type="button" className="dw-button" onClick={() => run(task)} disabled={busy || task.status === 'saving'}>
         <Download size={17} />{text('client.downloads.saveToDevice')}</button></>}
       <TaskMenu {...props} />

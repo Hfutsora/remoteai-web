@@ -55,6 +55,13 @@ import { useChatDrawerSwipe } from './useChatDrawerSwipe';
 import type { ChatController, ChatProject, ChatState } from './types';
 import './chat.css';
 import { ToolDetailsContext } from '../../chat/DeferredToolDetails';
+import { CliGuiProvider, useCliGui } from '../../cli-gui/context';
+import { CliConversationPane } from '../../cli-gui/CliConversationPane';
+import { RemoteProjectPicker } from '../../conversation/remote/RemoteProjectPicker';
+import { ProjectBar } from '../../conversation/ProjectBar';
+import { GuiToolbox } from '../../conversation/GuiToolbox';
+import { ProjectBrowserButton } from '../../project-browser/views/ProjectBrowserButton';
+import { engineNames } from '../../cli-gui/EngineSelector';
 
 export interface ConnectedChatProps {
   chat: { state: ChatState; controller: ChatController; foreground: boolean };
@@ -75,6 +82,7 @@ export interface ConnectedChatProps {
   nativeFileDrop?: NativeFileDrop;
   openAccounts?: () => void;
   workspacePage?: { title: string; content: ReactNode; onClose: () => void };
+  onWorkspaceChange?: (cwd: string) => void;
 }
 
 export interface ChatSidebarActions {
@@ -84,13 +92,22 @@ export interface ChatSidebarActions {
 }
 
 /** Conversation UI shared by the web client and the desktop's remote workspace. */
-export function ConnectedChat({ chat, device, devices, active, scope, email, chooseDevice,
+export function ConnectedChat(props: ConnectedChatProps) {
+  return <CliGuiProvider key={props.scope} transport={props.chat.controller.cliGui}
+    enabled={props.chat.state.ready && props.active && props.chat.foreground}>
+    <ConnectedChatContent {...props} />
+  </CliGuiProvider>;
+}
+
+function ConnectedChatContent({ chat, device, devices, active, scope, email, chooseDevice,
   chooseLocal, accountPicker, headerActions, headerConnectionActions, headerEnd, renderSidebar, composerHeader,
   conversationFooter, renderUserMessage, draggableHeader, scrollableComposer,
   readClipboardImages, nativeFileDrop, desktopDiffs, deviceRefresh, cliVersion, openAccounts,
-  workspacePage }: ConnectedChatProps) {
+  workspacePage, onWorkspaceChange }: ConnectedChatProps) {
   useLanguage();
-  const conversationActive = active && !workspacePage;
+  const cli = useCliGui();
+  const external = Boolean(cli && cli.state.engine !== 'codex' && !workspacePage);
+  const conversationActive = active && !workspacePage && !external;
   const { state, controller, foreground } = chat;
   const [drawer, setDrawer] = useState(false);
   const desktop = useDesktopLayout();
@@ -102,18 +119,23 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
   const listOpen = desktop ? sidebar : drawerMotion.visible;
   const ListToggleIcon = listOpen ? PanelLeftClose : PanelLeftOpen;
   const closeList = () => { if (desktop) setSidebar(false); else drawerMotion.closeDrawer(); };
-  const selectedFromList = () => { if (!desktop) drawerMotion.closeDrawer(); };
+  const selectedFromList = () => { workspacePage?.onClose(); if (!desktop) drawerMotion.closeDrawer(); };
   const ready = state.ready;
   const usageSnapshot = useVisibleChatUsage(controller.readUsage, desktop && active && foreground && ready);
   const installer = useRemoteCliInstaller(controller.guiTools,
     cliVersion === undefined && desktop && active && foreground && ready);
   const error = visibleChatError(state.error, state);
   const cwd = state.selected?.cwd ?? state.draftProject?.cwd ?? '';
+  const workspaceCwd = external && cli ? cli.state.selected?.cwd ?? cli.state.cwd : cwd;
+  useEffect(() => { onWorkspaceChange?.(workspaceCwd); }, [workspaceCwd, onWorkspaceChange]);
   const catalog = useChatCatalog(controller, cwd, ready);
   const runningTurn = currentRunningTurn(state.selected?.turns);
   const running = Boolean(runningTurn);
   const approvals = state.approvals.filter((event) => event.params.threadId === state.selected?.id);
   const newChat = (project?: ChatProject) => {
+    if (cli?.state.busy) return;
+    cli?.controller.newConversation();
+    if (project?.cwd) cli?.controller.patch({ cwd: project.cwd });
     if (!state.sending) { controller.back(project); drawerMotion.closeDrawer(); }
   };
   useEffect(() => {
@@ -133,7 +155,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
       scope={scope}
       disabled={!ready || state.sending || state.settingsBusy || state.selectedArchived || state.queueBusy
         || state.compacting === state.selected?.id} answer={controller.answerAsyncQuestion} />
-    {composerHeader}
+    {!external && composerHeader}
     <ChatComposer suggestions={remotePromptSuggestion(state, controller.suggestNextPrompt, { scope })}
       dictation={controller.dictation}
       cliVersion={cliVersion === undefined ? installer.version : cliVersion}
@@ -188,7 +210,8 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
     <ChatFileContext.Provider value={{ threadId: state.selected?.id ?? null, ready, client: controller.files,
       load: controller.textPreview }}>
     <ChatBrowserProvider controller={controller}>
-    <ChatDetailsWorkspace selected={state.selected?.id ?? null} active={conversationActive} enabled={showDesktopDiffs}>
+    <ChatDetailsWorkspace selected={external ? `cli:${cli?.state.engine}:${cli?.state.selected?.id ?? 'draft'}`
+      : state.selected?.id ?? null} active={active && !workspacePage} enabled={showDesktopDiffs}>
     <ChatFileReferencesProvider><ImageAnnotationsProvider>
     <ChatQuotesProvider scope={state.draftScope ?? state.selected?.id ?? null} sending={state.sending}
     enabled={conversationActive && !state.selectedArchived}>
@@ -203,22 +226,43 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
         expanded={listOpen} onClick={listOpen ? drawerMotion.closeDrawer : drawerMotion.openDrawer} />}
       <div className="chat-grow" data-tauri-drag-region={draggableHeader || undefined}>
         <h2 data-tauri-drag-region={draggableHeader || undefined}>
-          {workspacePage?.title ?? (state.selected
+          {external && cli ? cli.state.selected?.title || t(engineNames[cli.state.engine]) : workspacePage?.title ?? (state.selected
             ? threadPresentation(state.selected, state.sidebar, displayText).title : t("client.chat.newChat"))}</h2>
         {headerConnectionActions}</div>
-      {!workspacePage && state.selected && state.selectedArchived && <button type="button" className="chat-button"
+      {!external && !workspacePage && state.selected && state.selectedArchived && <button type="button" className="chat-button"
         disabled={!ready || running}
         onClick={() => { void controller.archive().then(drawerMotion.openDrawer); }}>
         {t("client.chat.restore")}</button>}
       {headerActions}
       {!workspacePage && showDesktopDiffs && <ConversationChangesButton
-        value={state.selected?.turns ? { turns: state.selected.turns } : undefined} />}
+        value={!external && state.selected?.turns ? { turns: state.selected.turns } : undefined} />}
       {headerEnd}
     </header>
+    {external && cli && <CliConversationPane cwd={cwd} dictation={controller.dictation} remoteLayout
+      active={active && foreground} scrollableComposer={scrollableComposer}
+      composerHeader={composerHeader}
+      connectionInfo={<ChatConnectionInfo state={state} controller={controller} device={device} active={active}
+        chooseDevice={() => setPickingDevice(true)} />}
+      modelSource={{ models: state.models, loading: state.settingsBusy,
+        error: state.settingsError, refresh: controller.refreshModels }}
+      projectPicker={composerHeader ? undefined : <ProjectBar active={active} scope={workspaceCwd}>
+        <RemoteProjectPicker state={state} controller={controller} active={active} workspace={{
+          cwd: workspaceCwd, disabled: Boolean(cli.state.selected) || cli.state.busy,
+          choose: cwd => { cli.controller.patch({ cwd }); void cli.controller.loadCatalog(); },
+        }} />
+        <GuiToolbox trigger="git" active={active} connected={ready} cwd={workspaceCwd} git={controller.guiTools.git} />
+        <ProjectBrowserButton client={controller.guiTools.projectBrowser} cwd={workspaceCwd}
+          active={active} connected={ready} desktopStyle />
+      </ProjectBar>} />}
     {workspacePage && <div className="gui-remote-feature">{workspacePage.content}</div>}
     <TaskRecoveryPrompt client={controller.taskRecovery}
       enabled={active && (desktop || Boolean(draggableHeader)) && ready && state.taskRecoverySupported === true}
-      openThread={controller.openRecoveryThread} />
+      openThread={threadId => {
+        cli?.controller.showCodex();
+        workspacePage?.onClose();
+        void controller.openRecoveryThread(threadId);
+      }} />
+    <div className="cli-gui-codex-content" hidden={external}>
     <div className="chat-scroll chat-notices"><div className="chat-notice-content">
       <ChatTaskStatus state={state} />
       {!!error && <p role="alert" className="chat-error">{displayError(error)}</p>}
@@ -237,6 +281,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
           processing={state.processing} active={conversationActive && ready} />} />
       </ChatRetryProvider></TaskReviewProvider>
     {!scrollableComposer && composer}
+    </div>
     {conversationFooter}
     </ChatTerminalLayout>
     <ChatSidebar desktop={desktop} open={listOpen} onClose={closeList} customHeading={Boolean(renderSidebar)}
@@ -253,7 +298,7 @@ export function ConnectedChat({ chat, device, devices, active, scope, email, cho
         profile={!desktop && profileMenu} />}
     </ChatSidebar>
     {searching && <ChatSearch state={state} controller={controller} onClose={() => setSearching(false)}
-      select={thread => { workspacePage?.onClose(); setSearching(false);
+      select={thread => { cli?.controller.showCodex(); workspacePage?.onClose(); setSearching(false);
         drawerMotion.closeDrawer(); void controller.select(thread); }} />}
     {pickingDevice && <ChatDevices chooseLocal={chooseLocal} devices={devices} onClose={() => setPickingDevice(false)}
       refresh={deviceRefresh} choose={(id) => { chooseDevice(id); setPickingDevice(false); }} />}

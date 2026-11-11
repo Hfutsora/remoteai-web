@@ -1,0 +1,112 @@
+import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { Button, Input } from 'antd';
+import { ArrowUp, Square } from 'lucide-react';
+import { uiText } from '../localization/uiText';
+import { ModelPicker } from '../conversation/ModelPicker';
+import type { Model } from '../conversation/types';
+import { resolveModelSelection } from '../conversation/modelSelection';
+import { ComposerDictation } from '../chat/dictation/ComposerDictation';
+import type { DictationClient } from '../chat/dictation/client';
+import { useGuiFontSize, guiFontStyle } from '../appearance/fontSize';
+import { DesktopUsageContext } from '../chat/DesktopUsageContext';
+import { UsageAmounts } from '../chat/UsageAmounts';
+import { ComposerContext } from '../remote-chat/views/ComposerContext';
+import { ComposerFooter } from '../remote-chat/views/ComposerFooter';
+import { ComposerModelPicker } from '../remote-chat/views/ComposerModelPicker';
+import { useCliGui } from './context';
+import { EngineSelector } from './EngineSelector';
+import { CliModePicker, type CliModeClasses } from './CliModePicker';
+import { CliAddContent, type CliAddClasses } from './CliAddContent';
+import { CliComposerInput } from './CliComposerInput';
+import styles from '../conversation/styles.module.less';
+import '../remote-chat/views/composer.css';
+import '../remote-chat/views/composerDesktop.css';
+
+export interface CliModelSource {
+  models: Model[]; loading?: boolean; error?: string; refresh: () => Promise<void>;
+}
+export interface CliComposerProps {
+  projectPicker?: ReactNode; composerHeader?: ReactNode; dictation?: DictationClient;
+  modelSource: CliModelSource; remoteLayout?: boolean; active?: boolean; connectionInfo?: ReactNode;
+  local?: { inputClassName: string; submitClassName: string; modeClasses: CliModeClasses; addClasses: CliAddClasses;
+    status: ReactNode; footer: ReactNode; chooseFiles: (directory: boolean) => Promise<string[]> };
+}
+
+export function CliComposer({ projectPicker, composerHeader, dictation, modelSource,
+  remoteLayout = false, active = true, connectionInfo, local }: CliComposerProps) {
+  const { state, controller } = useCliGui()!;
+  const { engine, selected, catalog, busy } = state;
+  const [dictating, setDictating] = useState(false);
+  const fontSize = useGuiFontSize();
+  const usage = useContext(DesktopUsageContext);
+  const { models, loading, error, refresh } = modelSource;
+  useEffect(() => {
+    const selection = resolveModelSelection(models, { model: state.model, effort: state.effort });
+    if (selection.model !== state.model || selection.effort !== state.effort) controller.patch(selection);
+  }, [models, state.model, state.effort, controller]);
+  if (engine === 'codex') return null;
+  const running = selected?.status === 'running';
+  const ready = state.runtime[engine]?.status === 'ready';
+  const disabled = Boolean(busy || dictating || selected?.archived);
+  const canSend = ready && !disabled && !running && !selected?.permissions.length && !loading
+    && models.some(model => model.model === state.model) && Boolean(state.draft.trim())
+    && (Boolean(selected) || Boolean(state.cwd));
+  const refreshCatalog = async () => {
+    try { await refresh(); await controller.refresh(); await controller.loadCatalog(); }
+    catch (reason) { controller.report(reason); }
+  };
+  const submit = () => { void (running && selected
+    ? controller.act({ engine, action: 'stop', id: selected.id }) : controller.send()); };
+  const status = local?.status ?? <div className="chat-composer-status">
+    <div className="chat-composer-usage" role="group" aria-label={uiText('client.chatQuota.currentUsage')}>
+      <ComposerContext threadId={null} ready={false} beforeOpen={() => {}} />
+      <UsageAmounts scope="current" translate={uiText} />
+    </div>
+  </div>;
+  return <>{composerHeader}<div className={remoteLayout ? 'chat-composer-dock' : styles.composerWrap}
+    style={guiFontStyle(fontSize)}>
+    {projectPicker ?? (!composerHeader && <div className={styles.projectBar}><Input value={selected?.cwd ?? state.cwd}
+      disabled={Boolean(selected) || busy} aria-label={uiText('client.cliGui.folder')}
+      placeholder={uiText('client.cliGui.folderHint')}
+      onChange={event => controller.patch({ cwd: event.target.value })} /></div>)}
+    <div className={remoteLayout ? 'chat-composer' : styles.composer}>
+      <CliComposerInput value={state.draft} scope={engine + ':' + (selected?.id ?? 'draft')} active={active}
+        disabled={disabled} canSend={canSend} onChange={controller.edit} onSend={submit}
+        remote={remoteLayout} className={local?.inputClassName} />
+      <div className={remoteLayout ? 'chat-composer-actions' : styles.composerControls}>
+        <CliAddContent key={engine + ':' + (selected?.id ?? 'draft')}
+          disabled={disabled || !active} classes={local?.addClasses} chooseFiles={local?.chooseFiles} />
+        <div className={remoteLayout ? 'cli-gui-remote-mode' : styles.composerSecondary}>
+          <CliModePicker modes={catalog?.modes ?? []} value={state.mode}
+            disabled={!ready || Boolean(selected) || busy || !catalog?.modes.length}
+            onChange={mode => controller.patch({ mode })} classes={local?.modeClasses} />
+        </div>
+        <div className={remoteLayout ? 'chat-composer-trailing' : styles.modelControls}>
+          {remoteLayout ? status : <div className={styles.composerSecondary}>{status}</div>}
+          {remoteLayout ? <ComposerModelPicker key={engine + ':' + selected?.id} models={models}
+            selection={{ model: state.model, effort: state.effort, access: 'read-only' }}
+            settingsBusy={!ready || busy || Boolean(running) || Boolean(loading)} ready={ready}
+            refreshModels={refreshCatalog} beforeOpen={() => {}}
+            updateSettings={async selection => controller.patch({
+              model: selection.model ?? state.model, effort: selection.effort ?? state.effort,
+            })} /> : <ModelPicker key={engine + ':' + selected?.id} models={models} model={state.model} effort={state.effort}
+              error={error} disabled={!ready || busy || Boolean(running) || Boolean(loading)} onRetry={refreshCatalog}
+              onChange={selection => controller.patch(selection)} />}
+          {dictation && <ComposerDictation client={dictation} active={active && ready} disabled={disabled || !active}
+            onBusyChange={setDictating} onText={text => controller.edit(state.draft + text)} />}
+          {remoteLayout ? <button type="button" className="chat-composer-submit" aria-busy={busy}
+            disabled={running ? busy : !canSend} aria-label={uiText(running ? 'client.cliGui.stop' : 'client.cliGui.send')}
+            onClick={submit}>{running ? <Square size={18} fill="currentColor" /> : <ArrowUp size={18} />}</button>
+            : <Button type="primary" shape="circle" className={local?.submitClassName}
+              icon={running ? <Square size={14} fill="currentColor" /> : <ArrowUp size={19} />}
+              loading={busy} disabled={running ? busy : !canSend}
+              aria-label={uiText(running ? 'client.cliGui.stop' : 'client.cliGui.send')} onClick={submit} />}
+        </div>
+      </div>
+    </div>
+    {remoteLayout ? <ComposerFooter desktop usage={usage.usage} connectionInfo={connectionInfo}
+      threadId={selected?.id} statusActive={active} /> : <div className={styles.composerHint + ' cs-usage-footer-container'}>
+      <EngineSelector active={active} />{local?.footer}
+    </div>}
+  </div></>;
+}

@@ -228,6 +228,13 @@ export class ChatController {
     this.eventListeners.add(listener);
     return () => { this.eventListeners.delete(listener); };
   };
+  readonly cliGui: import('../../cli-gui/types').CliTransport = {
+    subscribeAccountChange: listener => this.subscribeEvents(event => {
+      if (event.method === 'guiAccounts/selectionChanged') listener();
+    }),
+    request: request => this.connection.request('request', { operation: 'cliGui', request }),
+    subscribe: listener => this.subscribeEvents(event => { if (event.method === 'cliGui/changed') listener(); }),
+  };
   private emit() {
     const { selected, ready, historyOffline, selectedArchived } = this.state;
     if (ready && selected && !historyOffline && this.loadedThreadId === selected.id) {

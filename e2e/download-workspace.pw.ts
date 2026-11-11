@@ -17,6 +17,8 @@ test('only PC widths show the new workspace and filtering keeps mobile downloads
     return;
   }
   await expect(page.locator('.dw-ready-row')).toHaveCount(3);
+  await expect(page.getByRole('button', { name: '在资源管理器中打开', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '保存到设备', exact: true })).toHaveCount(3);
   await page.getByRole('searchbox').fill('sample.MD');
   await expect(page.getByRole('article')).toHaveCount(1);
   await page.getByRole('checkbox', { name: '全选', exact: true }).check();
