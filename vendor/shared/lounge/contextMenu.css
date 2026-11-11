@@ -4,3 +4,4 @@
 }
 .lounge-avatar-menu { display: inline-flex; align-self: flex-start; flex-shrink: 0; border-radius: 50%; }
 .lounge-copy-notice .ant-message-notice-content { max-width: min(400px, calc(100vw - 32px)); overflow-wrap: anywhere; }
+.lounge-preview-menu-target { position: absolute; inset: 0; }

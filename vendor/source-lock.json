@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai.git",
-  "revision": "9ef62e134a2f8a93e9b6a112d39ebac130da4ce8",
+  "revision": "ce8ec21fa62ec40f87e1955a78122771cd8b9643",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared.git",
-    "revision": "063d2d091bbfb4f4aa12b8c24276aebd8daaaefc"
+    "revision": "889e05c9ae9f7fb8c47507bf127830853bfb10f9"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -698,7 +698,7 @@
     "shared/lounge/LoungeAvatarSettings.tsx": "413f5c50cd646388c738170b23fd17aa6090631af118a086c0b8551f9aabb836",
     "shared/lounge/LoungeMessageBody.tsx": "c2a1cda572d7859de224e4a7e6286c77360fdbd72a16f98282638569c40d9add",
     "shared/lounge/LoungeHistory.tsx": "ecd132d78c2d8062399f05b492b1cd9f690335b6b7638bf84165d952eb035f0a",
-    "shared/lounge/LoungePreview.tsx": "f3e057594814c8930192ad4cffb23a3fc3a50dae06a0060c0f327303ba8b802e",
+    "shared/lounge/LoungePreview.tsx": "fb86963ff3a83e4239e17172c6c91aa902a098d54afdb7106078e041b11f9f66",
     "shared/lounge/reply.ts": "ac5d367eb0d062ec8334e804b351ae31a0ffd4a073aef8ddc6241c66a6856663",
     "shared/lounge/LoungePeople.tsx": "93252bb646b851725109e368c81a04831ca9c41db0b3ff2e60cf11cfdab851ca",
     "shared/lounge/LoungeNewChat.tsx": "30b01ac7802976144fcf968172662c27108a0a07e8dfb9d0c479ef8fd2401732",
@@ -1257,10 +1257,11 @@
     "shared/lounge/useGroupReadObserver.ts": "03ee0790ddc55a1b1a933f198056e82d7b388e6832d951db60d0eafed1c9fd68",
     "shared/lounge/MobileLoungeHistory.tsx": "e01158569f2652cd4781c1fb1a9fe530051facf6c65b950d02859a1a944a5b2c",
     "shared/lounge/DesktopLoungeHistory.tsx": "694baa1dec3379e625991a04a35050fc3c675eea1f67ebf797f3eadd8bb5f114",
-    "shared/chat/ImageViewerFrame.tsx": "55a85508320d33eba6cf336401e23c6e6d5c9a702f442d754f38d45db25e9043",
+    "shared/chat/ImageViewerFrame.tsx": "84cd872d27d1b081a2ea82d272a31e85775aa1400c3f7d0b37dd6deb16dc75eb",
     "shared/lounge/saveImage.ts": "7e4d300f5ee22b038407bbcb86c6acfabe6ae318142c05a9aabe4a7eacce93d3",
+    "shared/lounge/clipboard.ts": "9312c89830edc9a6fb408367175e16cbd7d55bc9102e7f745babec9ea417006b",
+    "shared/lounge/contextMenu.css": "ec5e835ca4370b2ae012b7f84eecea465e3893251fb9cb5e51678dd5fb327593",
     "shared/lounge/LoungeMyAccount.tsx": "58136200930ada2f4d0ca5f259d7d8ffd25318eb9cf4ba4b6c6eb04c29a8fc51",
-    "shared/lounge/contextMenu.css": "4c9d62783e61c065d00810bcbe98f6bf0fdf40f0f99dcaac9b7141333716f673",
     "shared/lounge/useLoungeNotificationSettings.ts": "029fa68f56e2fa36057aa96ead31175cb4a1c166edaec02fc47e41874309dc80",
     "shared/lounge/LoungeUnreadBadge.tsx": "7dc93804b032ac162bf36bf258f035704099c8b2a1e2729fdae81b68d58d8172",
     "shared/lounge/useNewLoungeChat.ts": "c847e97a7a7659497da426aa391e1773463d32b25cd5989aed084d896f04836e",
@@ -1612,7 +1613,7 @@
     "shared/conversation/ImagePreview.module.less": "df3e85b6944294b10d40449edce141b8307281c39655ca14eabef78a3e9a3a2f",
     "shared/chat/useImageGestures.ts": "ea1ad566185676953b36367303260eea7b1bc4f1e0a7eea22efddf0f16c513c6",
     "shared/file-preview/browserImagePreview.css": "8771c2c132b622a3962d923e25dd85059390f5a6787230efc711005a1231b7a5",
-    "apps/desktop/src/api/computerUse.ts": "123427a87164c83225a3a1b59a06301ce912b28cd0d77614b32eb6e139556164",
+    "apps/desktop/src/api/computerUse.ts": "ba5658045b83a9e70f5d8167899890d4bcbb52a4daecbbd7beceeb7ae405e88b",
     "shared/chat/groups/GroupEditor.tsx": "d5af8d67c11179495ed2aabd21ba3b07596a6920f2c38548d3f95de974973bcf",
     "shared/chat/groups/GroupMembers.tsx": "d6d2e3a456442144fbba532142d857bf0f31ec280d67129e4fb67cd766c670ce",
     "shared/chat/groups/PagedGroupMembers.tsx": "da588135ab0b523295b950fca41e3124a8e294c67937c919e1bb8a86dd39dc27",
@@ -1645,7 +1646,6 @@
     "shared/lounge/useLoungeImageEditor.ts": "fac7a7a50e97e55d993d1c3d5c6f53fbfb15bbe4781bf322cfdfb05af520ee68",
     "shared/lounge/imageAttachments.css": "4f24d1376d208d4854bbcaff800c77d05bbd22c0c4f9de8593406511234cdb14",
     "shared/lounge/LoungeFileCard.tsx": "d009931c70311279e2a0bc1150459eb046c4d61e0d2574cbfce5677a2ea5d69a",
-    "shared/lounge/clipboard.ts": "981a7e0b8b5e43d4de76305911d4b5822beafa03714fdf5b2bc0b501b82c8f45",
     "shared/lounge/MobileLoungeMessageMenu.tsx": "5ea64fed89ea742bcc93f763d94e8ce8ea49161e3aee69dc6996da39af9b0d87",
     "shared/lounge/messageMenuActions.ts": "c671f4bd591515ce972c140489f5f6c9dd91ead5e81ae7010f52b82ca3bf4365",
     "shared/lounge/LoungeGroupReadStatus.tsx": "e17e8fa4e5285ede6757dc2c7e34d662d90e6b99dba4774914e05e584970e51b",
