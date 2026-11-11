@@ -126,6 +126,8 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
   const installer = useRemoteCliInstaller(controller.guiTools,
     cliVersion === undefined && desktop && active && foreground && ready);
   const error = visibleChatError(state.error, state);
+  const connectionInfo = <ChatConnectionInfo state={state} controller={controller} device={device}
+    active={active && foreground} chooseDevice={() => setPickingDevice(true)} />;
   const cwd = state.selected?.cwd ?? state.draftProject?.cwd ?? '';
   const workspaceCwd = external && cli ? cli.state.selected?.cwd ?? cli.state.cwd : cwd;
   useEffect(() => { onWorkspaceChange?.(workspaceCwd); }, [workspaceCwd, onWorkspaceChange]);
@@ -164,8 +166,7 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
       serviceStatusConnected={state.mode === 'direct' || state.mode === 'relay'}
       recoveredEdit={controller.messageEditor.recoveredDrafts.get(state.selected?.id ?? '')}
       consumeRecoveredEdit={() => controller.messageEditor.recoveredDrafts.delete(state.selected?.id ?? '')}
-      connectionInfo={<ChatConnectionInfo state={state} controller={controller} device={device} active={active}
-        chooseDevice={() => setPickingDevice(true)} />}
+      connectionInfo={desktop ? connectionInfo : undefined}
       projectPicker={!composerHeader && <ChatProjectSwitch state={state} controller={controller}
         active={active && (desktop ? foreground : true)} />}
       queue={queueProps(state, controller)} readClipboardImages={readClipboardImages} nativeFileDrop={nativeFileDrop}
@@ -229,6 +230,7 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
         <h2 data-tauri-drag-region={draggableHeader || undefined}>
           {external && cli ? cli.state.selected?.title || t(engineNames[cli.state.engine]) : workspacePage?.title ?? (state.selected
             ? threadPresentation(state.selected, state.sidebar, displayText).title : t("client.chat.newChat"))}</h2>
+        {!desktop && connectionInfo}
         {headerConnectionActions}</div>
       {!external && !workspacePage && state.selected && state.selectedArchived && <button type="button" className="chat-button"
         disabled={!ready || running}
@@ -245,8 +247,7 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
         chooseDevice: () => setPickingDevice(true) }}
       active={active && foreground} scrollableComposer={scrollableComposer}
       composerHeader={composerHeader}
-      connectionInfo={<ChatConnectionInfo state={state} controller={controller} device={device} active={active}
-        chooseDevice={() => setPickingDevice(true)} />}
+      connectionInfo={desktop ? connectionInfo : undefined}
       projectPicker={composerHeader ? undefined : <ProjectBar active={active} scope={workspaceCwd}>
         <RemoteProjectPicker state={state} controller={controller} active={active} workspace={{
           cwd: workspaceCwd, disabled: Boolean(cli.state.selected) || cli.state.busy,

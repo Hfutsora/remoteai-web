@@ -8,7 +8,7 @@ import { ChatContextSettings } from './ChatContextSettings';
 import { ChatProfileMenu, type ChatConnectionProps } from './ChatProfileMenu';
 import { ModelRefreshButton } from './ModelRefreshButton';
 import { ChatSettingSegments } from './ChatSettingSegments';
-import './chatSettings.css';
+import { ChatSettingsSheet } from './ChatSettingsSheet';
 import type { ContextSettingsApi } from '../contextSettings';
 import type { ReadUsage } from '../usage';
 import type { ReadConversationMetrics } from '../conversationMetrics';
@@ -55,8 +55,7 @@ export function ChatSettings({ models, selection, saving, ready, error, updateSe
   const usage = <ChatUsage read={readUsage} active={!field && !contextOpen} ready={ready} tokenUsage={tokenUsage}
     card={!desktop} readConversationMetrics={readConversationMetrics} threadId={threadId}
     onContextSettings={threadId ? () => setContextOpen(true) : undefined} />;
-  return <AdaptiveSheet open hideMobileHeader className="chat-settings-sheet"
-    title={t("client.chat.chatSettings.1e06eb")} width={400} onClose={onClose}>
+  return <ChatSettingsSheet hideHeader onClose={onClose}>
     <div className={`chat-settings${desktop ? '' : ' chat-settings-mobile'}`} aria-hidden={field !== null || contextOpen}>
       {!desktop && usage}
       <ChatProfileMenu {...connection} variant="settings" compact={!desktop} ready={ready}
@@ -93,5 +92,5 @@ export function ChatSettings({ models, selection, saving, ready, error, updateSe
     </AdaptiveSheet>}
     {contextOpen && threadId && <ChatContextSettings threadId={threadId} api={contextSettings}
       onClose={() => setContextOpen(false)} />}
-  </AdaptiveSheet>;
+  </ChatSettingsSheet>;
 }

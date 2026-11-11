@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AdaptiveSheet } from '../layout/AdaptiveSheet';
+import { ChatSettingsSheet } from '../remote-chat/views/ChatSettingsSheet';
 import { t, useLanguage } from '../localization/browserClient';
 import { ChatProfileMenu, type ChatConnectionProps } from '../remote-chat/views/ChatProfileMenu';
 import { ModelRefreshButton } from '../remote-chat/views/ModelRefreshButton';
@@ -8,7 +8,6 @@ import { useCliGui } from './context';
 import { cliPickerModels } from './modelSelection';
 import { cliModeLabel } from './modeLabels';
 import { MobileEngineSelector } from './MobileEngineSelector';
-import '../remote-chat/views/chatSettings.css';
 
 function Choices({ label, value, options, disabled, choose }: {
   label: string; value: string; options: { id: string; label: string }[];
@@ -31,8 +30,7 @@ function Settings({ connection, connected, active, close }: {
   if (engine === 'codex') return null;
   const model = catalog?.models.find(entry => entry.id === state.model);
   const disabled = !connected || busy || selected?.status === 'running' || Boolean(selected?.archived);
-  return <AdaptiveSheet open className="chat-settings-sheet" title={t('client.chat.chatSettings.1e06eb')}
-    width={400} onClose={close} titleAction={<ModelRefreshButton ready={connected && !busy}
+  return <ChatSettingsSheet onClose={close} titleAction={<ModelRefreshButton ready={connected && !busy}
       refreshModels={async () => { await controller.refresh(); await controller.loadCatalog(); }} />}>
     <div className="chat-settings chat-settings-mobile">
       {connection ? <ChatProfileMenu {...connection} variant="settings" compact ready={connected} active={active} />
@@ -48,7 +46,7 @@ function Settings({ connection, connected, active, close }: {
       <button type="button" className="chat-button" disabled={disabled || Boolean(selected?.permissions.length)}
         onClick={() => { close(); void controller.install(); }}>{t('client.cliGui.update')}</button>
     </div>
-  </AdaptiveSheet>;
+  </ChatSettingsSheet>;
 }
 
 export function MobileCliSettings({ connection, connected = true, active = true }: {

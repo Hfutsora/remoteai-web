@@ -1,13 +1,13 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "f93aecc0d2d99ff7e2560f1fa1eddd92935c1951",
+  "revision": "975201ca82d1f291adf584c208685ae818502c43",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "cddcc8fbce8db3b3d80d52667ee59675e84d4b21"
+    "revision": "503b3729f40df32c52d5922e38e24aa5b458eaa1"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "1326f1ad483b0f99b2fae03f68b59718145ea8fc"
+    "revision": "74750c6ae6a296adc24631e8a6b9518d4a0c6f02"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.18/remoteai-i18n-0.1.18.tgz",
   "files": {
@@ -60,7 +60,7 @@
     "shared/chat/listAlignmentFixture.json": "cbe2fc46b93e27d045f18f16144ec489f1d6ffa1789495d6680ed182a754231b",
     "shared/chat/userMessageFixture.json": "2e3a1a1bc14467e6ce7341d154d9ac7e7be416d0f9932aa7cc24b44f16fa6d4d",
     "apps/desktop/e2e/demo-project-directories.ts": "1d5bad0d11e4b24ab132ca558735e6f7f2e993f27a82d0384aa757657cf87e07",
-    "shared/remote-chat/views/ChatSettings.tsx": "1499110372a9fb564ae06821cb445f391c0699e34820746e65f5cb33c148e840",
+    "shared/remote-chat/views/ChatSettings.tsx": "0a8480ed5653a8302cc6ef4fe8b40c3fc3a9af94f9213524df8641efcc1bba06",
     "shared/remote-chat/testing/settingsFixture.ts": "ef4fd197fe842662327eda1062d2a17ff8971995e80258abfd6eed37a51cf152",
     "shared/localization/interfaceLanguage.ts": "98119adb9b96f720c785ce6d9580d25b599c73c62ad4b988fad1f2e1c083de62",
     "shared/localization/browserClient.ts": "edfe67ee326418d475637a69159122443242e41d681a6b79b67cd023ef45d126",
@@ -188,7 +188,7 @@
     "shared/legal/AgreementConsent.tsx": "7f81c1bafb923942ae9ec23b70c7ad19fb6d79e10628887f91099e983c3f3e72",
     "shared/legal/useAgreementConsent.ts": "27e80e0c8b705249e25bc04a3c0a9280b7ab44cbf01f566d46769f9fe65eefd1",
     "shared/navigation/PageSwipeContext.ts": "7c84446bb0864d68c94d559cad8dfd686299b9a888a9827e385161130c7fca83",
-    "shared/remote-chat/views/ConnectedChat.tsx": "e3302ea3e38197258f701e02960c9984181f585c8e25bf0cde54768929141d51",
+    "shared/remote-chat/views/ConnectedChat.tsx": "09742a3a9fcee35899f8e47d4e98de2e29e16b14cc331c81328a4ed33ad6f975",
     "shared/downloads/useDownloadConnection.ts": "cd7adfa0388199962d2330b49d1c334bcc236ae9ce3d5da378e28e37b9380bad",
     "shared/remote-chat/useRetainedChatDevices.ts": "b9dfe82e83d0b5df3b10a7656bf3f5cd1310d54685d50093db1517f6945accaa",
     "shared/remote-chat/ComputerSearchBar.tsx": "b10e8f111c7974063ba49b5b406760aa5c2b98f124d5822a9210d268620e9801",
@@ -383,7 +383,7 @@
     "shared/remote-chat/views/ChatContextSettings.tsx": "6e667c6ef3c62e42e087f745ab0ac310f53324b1d071234abc1e9a90b9d5ff48",
     "shared/remote-chat/views/ModelRefreshButton.tsx": "495897fdbf215387fad632ccdbf621779cbcc8fda4703e39f1e632f512d69fb2",
     "shared/remote-chat/views/ChatSettingSegments.tsx": "3995ebbc5ca346dd39899d84d188a4f8078a5461ebd44835273e8ffc8dee77c7",
-    "shared/remote-chat/views/chatSettings.css": "dea219b586b0af975d23db5f2e0e2e7c61e28d32f77a1521d8629ed57e42a2af",
+    "shared/remote-chat/views/chatSettings.css": "22c5d55ed586d57762ba704347c8775d5d8fd2163c3340cab9bf2a710ff79c9a",
     "shared/remote-chat/contextSettings.ts": "91c9eefd9ada7bdab9478bfd3173977aa856a7af57ab22f46acf5b8287f1e365",
     "shared/remote-chat/conversationMetrics.ts": "2b9369318775ca345667be4504ee862d4351ee5edf86b53bc43e0658fd6d9f60",
     "shared/remote-chat/settingsMenu.ts": "34b94d1277a21a2f97aa97441cdbd46e34a26fc35960d7eedc76b4a432602b9b",
@@ -1009,7 +1009,7 @@
     "shared/remote-chat/client/useContextSettings.ts": "dfbd2fa9cc3bbd2b9d32136035ca8e0b020d1ef9b197898a058a3aa61d6e51eb",
     "shared/remote-chat/views/modelRefreshButton.css": "2cec0d71644d425b67d0c19b449edba14e1f1c239affe971d3a4459689c80bfe",
     "shared/remote-chat/settingSegments.ts": "ecde60e26dff9f105f79a74c76001f819ed02f0e164dc1f76e36839527f7f7e1",
-    "shared/remote-chat/settingsPresentation.ts": "0073fb3888078041addafd48bdf65ada639ebf2f27cdcceebb59c4bbe15dd278",
+    "shared/remote-chat/settingsPresentation.ts": "c4654f763c58829d0448b88f8e4b598820d85cc297a59ca3eb634a0301e74782",
     "shared/remote-chat/views/useSettingSegmentDrag.ts": "4b63877788c3a2accd18dd9df020784405f6e402abca3302fe9d0fca3118b5f6",
     "shared/remote-chat/views/chatSettingSegments.css": "90062c4b15e4029db4f41fa8da9ff4546467f0866e3ac299f5af299bb7c2475e",
     "shared/context-usage/settings.js": "55f03a6dccee8471f1921f35dfefc6e7ea2b0c47b065416c11bc35be18ea5557",
@@ -1855,6 +1855,7 @@
     "apps/native/vendor/shared/theme/mode.ts": "d27ddb4c18a6bdae69e82278457d225466f600bdf003be6e7c34ff9b79f83550",
     "shared/cli-gui/modelSelection.ts": "78e78bf039e9d15be9bf34adf880acaeb5d9070459333c78d4e39f311e0e0b97",
     "shared/cli-gui/MobileEngineSelector.tsx": "808b85bd56d6c057941fb9ad3bf5814d8e7f2c318bd096bfa9baa7c428cb2c98",
-    "shared/cli-gui/MobileCliSettings.tsx": "e4e5899862f44c919194323357fab8913986b4d5180514b7692c10f55f92a5ed"
+    "shared/cli-gui/MobileCliSettings.tsx": "960213149b8ff4522f416a8aae110bf3ad33f7cfd455b016c5d00c3964ca659d",
+    "shared/remote-chat/views/ChatSettingsSheet.tsx": "feace79b69f21771078118ff1c98f51f91f93b141cb0a6da44ca07c93738b58d"
   }
 }
