@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { Download, Monitor, User } from 'lucide-react';
 import { AdaptiveSheet } from '../../layout/AdaptiveSheet';
 import type { GuiAccountChoice, GuiAccountsClient } from '../guiAccounts';
+import { isGuiAccountSelected } from '../guiAccounts';
+import { useCliGui } from '../../cli-gui/context';
 import { guiAccountAvatar } from '../guiAccountAvatar';
 import { useGuiAccounts } from '../client/useGuiAccounts';
 import type { GuiToolsClient } from '../guiTools';
@@ -22,19 +24,22 @@ type Props = ChatConnectionProps & { ready: boolean; active?: boolean } & (
 export function ChatProfileMenu(props: Props) {
   const { client, deviceName, ready, chooseDevice, active = true } = props;
   const settings = props.variant === 'settings';
+  const cli = useCliGui();
   useLanguage();
   const [panel, setPanel] = useState<'profile' | 'accounts' | 'update' | null>(null);
   const [query, setQuery] = useState('');
   useEffect(() => { if (!active) setPanel(null); }, [active]);
   const accounts = useGuiAccounts(client, ready, panel === 'accounts' ? ACCOUNT_REFRESH_MS : 0);
   const selection = accounts.snapshot?.selection;
-  const current = accounts.snapshot?.choices.find(choice => selection?.kind === choice.kind && selection.id === choice.id);
+  const current = accounts.snapshot?.choices.find(choice => cli?.state.engine === 'claude'
+    ? choice.accountSource === 'claudeCode' && choice.active
+    : selection?.kind === choice.kind && selection.id === choice.id);
   const { initials } = guiAccountAvatar(accounts.snapshot, t("client.chat.me"));
   const disabled = accounts.loading || Boolean(accounts.saving) || !ready || !accounts.snapshot?.running;
   const choices = accounts.snapshot?.choices.filter(choice =>
     `${choice.name} ${choice.detail} ${choice.searchDetail ?? ''}`.toLowerCase().includes(query.trim().toLowerCase())) ?? [];
   const select = async (choice: GuiAccountChoice) => {
-    if (!disabled && choice.available && choice !== current
+    if (!disabled && choice.available && !isGuiAccountSelected(choice, selection)
       && await accounts.select({ kind: choice.kind, id: choice.id })) setPanel(settings ? null : 'profile');
   };
   const close = () => { if (!accounts.saving) setPanel(null); };
@@ -82,10 +87,12 @@ export function ChatProfileMenu(props: Props) {
             onClick={accounts.refresh}>{t("client.chat.reloadAccounts")}</button></>}
         <div className="chat-account-choices chat-scroll">{choices.map(choice => <button type="button"
           key={`${choice.kind}:${choice.id}`} className="chat-profile-option" aria-label={choice.name}
-          aria-pressed={choice === current} disabled={disabled || choice === current || !choice.available}
+          aria-pressed={isGuiAccountSelected(choice, selection)}
+          disabled={disabled || isGuiAccountSelected(choice, selection) || !choice.available}
           onClick={() => { void select(choice); }}><span className="chat-grow"><strong>{choice.name}</strong>
             <small>{choice.detail}</small>{!choice.available && <small>{t("client.chat.thisAccountIsUnavailable")}</small>}</span>
-          {accounts.saving === `${choice.kind}:${choice.id}` ? t("client.chat.switching") : choice === current && t("client.accounts.current")}</button>)}
+          {accounts.saving === `${choice.kind}:${choice.id}` ? t("client.chat.switching")
+            : isGuiAccountSelected(choice, selection) && t("client.accounts.current")}</button>)}
           {!choices.length && accounts.snapshot?.running && !accounts.loading && <p className="chat-muted">
             {accounts.snapshot.choices.length ? t("client.chat.noMatchingAccounts") : t("client.chat.noAccountsAvailableAddAnAccountOnYourComputerFirst")}</p>}
         </div>

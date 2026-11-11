@@ -17,6 +17,8 @@ export interface GuiAccountChoice {
   primaryRemainingPercent?: number | null;
   secondaryRemainingPercent?: number | null;
   available: boolean;
+  accountSource?: string;
+  active?: boolean;
 }
 export interface GuiAccountsSnapshot {
   selection: GuiAccountSelection;
@@ -64,5 +66,13 @@ function isChoice(value: unknown): value is GuiAccountChoice {
   return isAccountKind(choice.kind) && isAccountId(choice.id)
     && typeof choice.name === 'string' && typeof choice.detail === 'string'
     && typeof choice.available === 'boolean'
-    && [choice.searchDetail, choice.plan, choice.websiteUrl].every(text => text === undefined || typeof text === 'string');
+    && [choice.searchDetail, choice.plan, choice.websiteUrl, choice.accountSource]
+      .every(text => text === undefined || typeof text === 'string')
+    && (choice.active === undefined || typeof choice.active === 'boolean');
+}
+
+/** Claude's default is independent of the Codex conversation's routing selection. */
+export function isGuiAccountSelected(choice: GuiAccountChoice, selection?: GuiAccountSelection): boolean {
+  if (choice.kind === 'account' && choice.accountSource === 'claudeCode') return choice.active === true;
+  return selection?.kind === choice.kind && selection.id === choice.id;
 }
