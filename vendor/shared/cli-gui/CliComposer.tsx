@@ -1,10 +1,10 @@
-import { useContext, useEffect, useState, type ReactNode } from 'react';
+import { useContext, useMemo, useState, type ReactNode } from 'react';
 import { Button, Input } from 'antd';
 import { ArrowUp, Square } from 'lucide-react';
 import { uiText } from '../localization/uiText';
 import { ModelPicker } from '../conversation/ModelPicker';
-import type { Model } from '../conversation/types';
-import { resolveModelSelection } from '../conversation/modelSelection';
+import { modelSelectionError } from '../conversation/modelSelection';
+import { cliPickerModels } from './modelSelection';
 import { ComposerDictation } from '../chat/dictation/ComposerDictation';
 import type { DictationClient } from '../chat/dictation/client';
 import { useGuiFontSize, guiFontStyle } from '../appearance/fontSize';
@@ -22,36 +22,30 @@ import styles from '../conversation/styles.module.less';
 import '../remote-chat/views/composer.css';
 import '../remote-chat/views/composerDesktop.css';
 
-export interface CliModelSource {
-  models: Model[]; loading?: boolean; error?: string; refresh: () => Promise<void>;
-}
 export interface CliComposerProps {
   projectPicker?: ReactNode; composerHeader?: ReactNode; dictation?: DictationClient;
-  modelSource: CliModelSource; remoteLayout?: boolean; active?: boolean; connectionInfo?: ReactNode;
+  remoteLayout?: boolean; active?: boolean; connectionInfo?: ReactNode;
   local?: { inputClassName: string; submitClassName: string; modeClasses: CliModeClasses; addClasses: CliAddClasses;
     status: ReactNode; footer: ReactNode; chooseFiles: (directory: boolean) => Promise<string[]> };
 }
 
-export function CliComposer({ projectPicker, composerHeader, dictation, modelSource,
+export function CliComposer({ projectPicker, composerHeader, dictation,
   remoteLayout = false, active = true, connectionInfo, local }: CliComposerProps) {
   const { state, controller } = useCliGui()!;
   const { engine, selected, catalog, busy } = state;
   const [dictating, setDictating] = useState(false);
   const fontSize = useGuiFontSize();
   const usage = useContext(DesktopUsageContext);
-  const { models, loading, error, refresh } = modelSource;
-  useEffect(() => {
-    const selection = resolveModelSelection(models, { model: state.model, effort: state.effort });
-    if (selection.model !== state.model || selection.effort !== state.effort) controller.patch(selection);
-  }, [models, state.model, state.effort, controller]);
+  const models = useMemo(() => cliPickerModels(catalog?.models ?? []), [catalog]);
+  const loading = catalog?.status !== 'ready';
   if (engine === 'codex') return null;
   const running = selected?.status === 'running';
   const ready = state.runtime[engine]?.status === 'ready';
   const disabled = Boolean(busy || dictating || selected?.archived);
   const canSend = ready && !disabled && !running && !selected?.permissions.length && !loading
-    && models.some(model => model.model === state.model) && Boolean(state.draft.trim());
+    && !modelSelectionError(models, state) && Boolean(state.draft.trim());
   const refreshCatalog = async () => {
-    try { await refresh(); await controller.refresh(); await controller.loadCatalog(); }
+    try { await controller.refresh(); await controller.loadCatalog(); }
     catch (reason) { controller.report(reason); }
   };
   const submit = () => { void (running && selected
@@ -89,7 +83,7 @@ export function CliComposer({ projectPicker, composerHeader, dictation, modelSou
             updateSettings={async selection => controller.patch({
               model: selection.model ?? state.model, effort: selection.effort ?? state.effort,
             })} /> : <ModelPicker key={engine + ':' + selected?.id} models={models} model={state.model} effort={state.effort}
-              error={error} disabled={!ready || busy || Boolean(running) || Boolean(loading)} onRetry={refreshCatalog}
+              disabled={!ready || busy || Boolean(running) || loading} onRetry={refreshCatalog}
               onChange={selection => controller.patch(selection)} />}
           {dictation && <ComposerDictation client={dictation} active={active && ready} disabled={disabled || !active}
             onBusyChange={setDictating} onText={text => controller.edit(state.draft + text)} />}

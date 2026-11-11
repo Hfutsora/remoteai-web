@@ -7,6 +7,7 @@ const errors = {
   'client.cliGui.busy': true, 'client.cliGui.unavailable': true,
   'client.cliGui.historyFailed': true, 'client.cliGui.approvalExpired': true,
   'client.cliGui.requestFailed': true, 'client.cliGui.nodeRequired': true,
+  'client.chat.modelUnavailableForAccount': true, 'client.chat.effortUnavailableForAccount': true,
 };
 
 export function cliErrorText(code: string) {

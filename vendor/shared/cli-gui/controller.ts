@@ -1,5 +1,7 @@
 import type { CliCatalog, CliEntry, CliHistory, CliRequest, CliRuntimeStatus, CliSession,
   CliTransport, ExternalEngine, GuiEngine } from './types';
+import { modelSelectionError, resolveModelSelection } from '../conversation/modelSelection';
+import { cliPickerModels, cliRequestEffort } from './modelSelection';
 
 export interface CliState {
   engine: GuiEngine; selected: CliSession | null; sessions: CliSession[]; history: CliHistory | null;
@@ -44,7 +46,9 @@ export class CliController {
     this.active = true;
     if (this.transport.subscribeAccountChange) {
       void Promise.resolve(this.transport.subscribeAccountChange(() => {
-        this.catalogRevision++; this.patch({ catalog: null, model: '', effort: '' }); void this.loadCatalog();
+        this.catalogRevision++;
+        this.patch({ catalog: null, ...(!this.state.selected ? { model: '', effort: '' } : {}) });
+        void this.loadCatalog();
       })).then(stop => {
         if (this.active && generation === this.generation) this.unsubscribeAccount = stop; else stop();
       }).catch(this.report);
@@ -69,14 +73,14 @@ export class CliController {
   chooseEngine = (engine: GuiEngine) => {
     if (this.state.selected || this.state.busy || this.state.engine === engine) return;
     this.saveDraft(); this.revision++;
-    this.patch({ engine, history: null, catalog: null, model: '', mode: '', loading: false, error: '',
+    this.patch({ engine, history: null, catalog: null, model: '', effort: '', mode: '', loading: false, error: '',
       draft: this.drafts.get(`${engine}:draft`) ?? '' });
     if (engine !== 'codex') void this.refresh().then(this.loadCatalog);
   };
   newConversation = () => {
     if (this.state.busy) return;
     this.saveDraft(); this.revision++;
-    this.patch({ selected: null, history: null, loading: false, error: '',
+    this.patch({ selected: null, history: null, catalog: null, model: '', effort: '', loading: false, error: '',
       draft: this.drafts.get(`${this.state.engine}:draft`) ?? '' });
     if (this.state.engine !== 'codex') void this.loadCatalog();
   };
@@ -84,7 +88,7 @@ export class CliController {
     if (this.state.busy) return;
     this.saveDraft(); this.revision++;
     this.patch({ selected, engine: selected.engine, model: selected.model, effort: selected.effort ?? '',
-      history: null, loading: true, error: '',
+      history: null, catalog: null, loading: true, error: '',
       draft: this.drafts.get(`${selected.engine}:${selected.id}`) ?? '' });
     void this.refresh();
     void this.loadCatalog();
@@ -133,14 +137,13 @@ export class CliController {
     if (engine === 'codex' || this.state.runtime[engine]?.status !== 'ready') return;
     const revision = this.revision;
     const catalogRevision = ++this.catalogRevision;
+    this.patch({ catalog: null });
     try {
       const catalog = await this.read<CliCatalog>({ engine, action: 'catalog', cwd: cwd || undefined,
         id: this.state.selected?.id });
       if (revision !== this.revision || catalogRevision !== this.catalogRevision || cwd !== this.state.cwd) return;
-      const chosen = catalog.models.find(model => model.id === this.state.model)
-        ?? catalog.models.find(model => model.isDefault) ?? catalog.models[0];
-      this.patch({ catalog, model: chosen?.id ?? '', effort: chosen?.efforts?.some(item => item.id === this.state.effort)
-        ? this.state.effort : chosen?.defaultEffort ?? '',
+      const selection = resolveModelSelection(cliPickerModels(catalog.models), this.state);
+      this.patch({ catalog, ...selection,
         mode: catalog.modes.some(mode => mode.id === 'default') ? 'default' : catalog.defaultMode ?? '' });
     } catch (error) {
       if (revision === this.revision && catalogRevision === this.catalogRevision) this.report(error);
@@ -153,8 +156,15 @@ export class CliController {
     catch (error) { this.report(error); }
   };
   send = async () => {
-    const { engine, selected, cwd, model, effort, mode, draft } = this.state;
+    const { engine, selected, cwd, model, mode, draft, catalog } = this.state;
     if (engine === 'codex' || this.state.busy || !draft.trim() || selected?.archived) return;
+    if (catalog?.status !== 'ready' || this.state.runtime[engine]?.status !== 'ready'
+      || selected?.status === 'running' || selected?.permissions.length) return;
+    const error = modelSelectionError(cliPickerModels(catalog.models), this.state);
+    if (error) { this.report(error); return; }
+    const chosen = catalog.models.find(entry => entry.id === model);
+    if (!chosen) return;
+    const effort = cliRequestEffort(chosen, this.state.effort);
     const revision = this.revision;
     this.patch({ busy: true, error: '' });
     try {

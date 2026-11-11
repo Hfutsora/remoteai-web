@@ -244,8 +244,6 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
       composerHeader={composerHeader}
       connectionInfo={<ChatConnectionInfo state={state} controller={controller} device={device} active={active}
         chooseDevice={() => setPickingDevice(true)} />}
-      modelSource={{ models: state.models, loading: state.settingsBusy,
-        error: state.settingsError, refresh: controller.refreshModels }}
       projectPicker={composerHeader ? undefined : <ProjectBar active={active} scope={workspaceCwd}>
         <RemoteProjectPicker state={state} controller={controller} active={active} workspace={{
           cwd: workspaceCwd, disabled: Boolean(cli.state.selected) || cli.state.busy,
