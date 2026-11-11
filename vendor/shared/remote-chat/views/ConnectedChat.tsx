@@ -248,7 +248,11 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
       active={active && foreground} scrollableComposer={scrollableComposer}
       composerHeader={composerHeader}
       connectionInfo={desktop ? connectionInfo : undefined}
-      projectPicker={composerHeader ? undefined : <ProjectBar active={active} scope={workspaceCwd}>
+      projectPicker={composerHeader ? undefined : !desktop
+        ? <ChatProjectSwitch state={state} controller={controller} active={active && foreground} workspace={{
+          cwd: workspaceCwd, disabled: !ready || Boolean(cli.state.selected) || cli.state.busy,
+          choose: cwd => { cli.controller.patch({ cwd }); void cli.controller.loadCatalog(); },
+        }} /> : <ProjectBar active={active} scope={workspaceCwd}>
         <RemoteProjectPicker state={state} controller={controller} active={active} workspace={{
           cwd: workspaceCwd, disabled: Boolean(cli.state.selected) || cli.state.busy,
           choose: cwd => { cli.controller.patch({ cwd }); void cli.controller.loadCatalog(); },
