@@ -52,6 +52,7 @@
     "antd": "^5.29.3",
     "antd-mobile": "^5.41.1",
     "base64-js": "1.5.1",
+    "codex-switch": "file:../..",
     "dayjs": "^1.11.21",
     "echarts": "^6.1.0",
     "jsqr": "^1.4.0",

@@ -1850,6 +1850,8 @@
     "shared/accounts/ClaudeAccountsPanel.tsx": "ecf992c031808310b3e6720d024561617a4a34ed3bd795420d9ad3f5065d975b",
     "shared/accounts/claudeAccounts.ts": "c61cb324cf5946d674dc2f84ff1f88986d22728930af8dd5420984e37dc2d673",
     "shared/accounts/ClaudeAccountModal.tsx": "40ea7eeb96e8bc820152c501041a1e8ca0c0d080274e8fcf998f8e4a8caf8adf",
-    "shared/accounts/useClaudeLogin.ts": "b95df06ec57e88cbc921ae93d608cfbcbe5430a052eef5afd412d3039ad4d231"
+    "shared/accounts/useClaudeLogin.ts": "b95df06ec57e88cbc921ae93d608cfbcbe5430a052eef5afd412d3039ad4d231",
+    "shared/accounts/source.ts": "7405e05e417c8d21678cec3e9d637c1ac11f4c6762383af506439fb3c877a9ff",
+    "shared/accounts/AddOfficialAccountButton.tsx": "ecf5ce6993ca36b59cf06eb150b1b23aa59565673c8f017412a721f2b005afcc"
   }
 }

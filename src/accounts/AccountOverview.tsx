@@ -1,13 +1,15 @@
+import { AddOfficialAccountButton } from '../../../../shared/accounts/AddOfficialAccountButton';
+import type { OfficialAccountSource } from '../../../../shared/accounts/source';
 import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { Button } from 'antd-mobile';
-import { Clock3, Eye, EyeOff, Laptop, Plus, RefreshCw, Users, Zap } from 'lucide-react';
+import { Clock3, Eye, EyeOff, Laptop, RefreshCw, Users, Zap } from 'lucide-react';
 import { displayDate } from './formatters';
 
 export function AccountOverview({ count, online, privateMode, refreshing, consuming, busy,
   updatedAt, onPrivacy, onRefresh, onConsume, onAdd }: {
   count: number; online: number; privateMode: boolean; refreshing: boolean; updatedAt: number | null;
   consuming: boolean; busy: boolean;
-  onPrivacy: () => void; onRefresh: () => void; onConsume: () => void; onAdd: () => void;
+  onPrivacy: () => void; onRefresh: () => void; onConsume: () => void; onAdd: (source: OfficialAccountSource) => void;
 }) {
   useLanguage();
   return <>
@@ -28,7 +30,7 @@ export function AccountOverview({ count, online, privateMode, refreshing, consum
       </div>
     </section>
     <div className="accounts-toolbar"><span><Clock3 size={16} />{t("client.accounts.usageUpdated")}{updatedAt ? displayDate(new Date(updatedAt).toISOString()) : t("client.accounts.notRefreshed")}</span>
-      <Button fill="none" color="primary" onClick={onAdd}><Plus size={20} />{t("client.accounts.addAccount")}</Button>
+      <AddOfficialAccountButton className="official-account-add" label={t("client.accounts.addAccount")} onSelect={onAdd} />
     </div>
   </>;
 }

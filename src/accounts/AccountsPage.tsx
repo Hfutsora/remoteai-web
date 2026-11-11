@@ -1,3 +1,5 @@
+import type { AuthSession } from '../types';
+import { ClaudeAccounts } from './ClaudeAccounts';
 import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { useCallback, useState } from 'react';
 import { Empty, PullToRefresh, SpinLoading, Toast } from 'antd-mobile';
@@ -17,7 +19,7 @@ import './styles.css';
 
 const REFRESH_TEXT = { get pulling() { return t("client.accounts.pullToRefresh"); }, get canRelease() { return t("client.accounts.releaseToRefresh"); }, get refreshing() { return t("client.accounts.refreshing"); }, get complete() { return t("client.accounts.refreshed"); } };
 
-export function AccountsPage() {
+export function AccountsPage({ session }: { session: AuthSession }) {
   useLanguage();
   const dispatch = useAppDispatch();
   const { accounts, devices, loading, refreshing, switchingAccountId, lastRefreshAt } = useAppSelector(s => s.data);
@@ -28,6 +30,7 @@ export function AccountsPage() {
   const [detailId, setDetailId] = useState<string | null>(null);
   const [switchId, setSwitchId] = useState<string | null>(null);
   const [adding, setAdding] = useState(false);
+  const [addingClaude, setAddingClaude] = useState(false);
   const [consumeDeviceName, setConsumeDeviceName] = useState<string | null>(null);
   const detail = accounts.find(account => account.id === detailId);
   const target = accounts.find(account => account.id === switchId);
@@ -57,13 +60,15 @@ export function AccountsPage() {
         <AccountOverview count={accounts.length} online={online.length} privateMode={privateMode}
           refreshing={refreshing} consuming={consumingQuota} busy={usageBusy} onConsume={openConsumption}
           updatedAt={lastRefreshAt} onPrivacy={() => setPrivateMode(value => !value)}
-          onRefresh={() => void refresh()} onAdd={() => setAdding(true)} />
+          onRefresh={() => void refresh()} onAdd={source => source === 'codex' ? setAdding(true) : setAddingClaude(true)} />
         {loading ? <div className="page-loading"><SpinLoading /><span>{t("client.accounts.loadingAccounts")}</span></div>
           : !accounts.length ? <Empty description={t("client.accounts.noAccountsYetSelectAddAccountToGetStarted")} />
             : <div className="accounts-grid">{accounts.map(account => <AccountCard key={account.id}
               account={account} privateMode={privateMode} busy={Boolean(switchingAccountId)}
               switching={switchingAccountId === account.id} onOpen={() => setDetailId(account.id)}
               onSwitch={() => setSwitchId(account.id)} />)}</div>}
+        <ClaudeAccounts session={session} devices={devices} preferredDevice={selectedChatDeviceId}
+          privacyMode={privateMode} add={addingClaude} onAdded={() => setAddingClaude(false)} />
       </div>
     </PullToRefresh>
     {detail && <AccountDetails key={detail.id} account={detail} devices={devices} privateMode={privateMode}
