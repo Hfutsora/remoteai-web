@@ -43,7 +43,7 @@ export interface CliHistory {
 }
 export type CliRequest = { engine: ExternalEngine } & (
   | { action: 'status' | 'install' }
-  | { action: 'catalog'; cwd?: string }
+  | { action: 'catalog'; cwd?: string; id?: string }
   | { action: 'list'; archived: boolean }
   | { action: 'create'; cwd: string; model: string; mode?: string; effort?: string }
   | { action: 'read'; id: string; cursor?: CliCursor }

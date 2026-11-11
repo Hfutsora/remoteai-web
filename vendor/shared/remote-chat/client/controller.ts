@@ -221,10 +221,13 @@ export class ChatController {
   };
   readonly cliGui: import('../../cli-gui/types').CliTransport = {
     subscribeAccountChange: listener => this.subscribeEvents(event => {
-      if (event.method === 'guiAccounts/selectionChanged') listener();
+      if (event.method === 'guiAccounts/selectionChanged' || event.method === 'claudeAccounts/changed') listener();
     }),
     request: request => this.connection.request('request', { operation: 'cliGui', request }),
     subscribe: listener => this.subscribeEvents(event => { if (event.method === 'cliGui/changed') listener(); }),
+  };
+  readonly claudeAccounts: import('../../accounts/claudeAccounts').ClaudeAccountTransport = {
+    request: request => this.connection.request('request', { operation: 'claudeAccounts', request }),
   };
   private emit() {
     const { selected, ready, historyOffline, selectedArchived } = this.state;

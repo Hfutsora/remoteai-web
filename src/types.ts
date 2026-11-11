@@ -22,6 +22,7 @@ export interface AccountPrivateDetails {
 }
 
 export interface AccountSummary {
+  accountSource?: string;
   id: string;
   email: string;
   note: string;

@@ -160,3 +160,9 @@ button.account-info-row { cursor: pointer; }
   .accounts-toolbar > span { font-size: 10px; gap: 3px; }
   .accounts-toolbar .adm-button { font-size: 12px; }
 }
+
+.official-account-add { display: inline-flex; align-items: center; gap: 6px; border: 0; background: transparent;
+  color: var(--app-accent); font: inherit; cursor: pointer; }
+.claude-accounts-section { margin-top: 24px; padding: 20px; border-radius: 16px;
+  background: var(--app-surface); min-width: 0; }
+.account-row-identity > small { color: var(--app-muted); font-weight: normal; }

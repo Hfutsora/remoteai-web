@@ -370,7 +370,7 @@ function AppShell() {
     discover: discoveryPage, 'token-summary': discoveryPage, ssh: null,
     downloads: session && <><WebSyncDownloads session={session} devices={devices} />
       <DownloadManagerPage owner={downloadOwner(session)} onBack={() => dispatch(pageChanged('discover'))} /></>,
-    accounts: <AccountsPage />, devices: <DevicesPage />,
+    accounts: session && <AccountsPage session={session} />, devices: <DevicesPage />,
     totp: <TotpPage manager={totpManager} onBack={() => dispatch(pageChanged('discover'))} />,
     settings: <SettingsPage totpManager={totpManager} loungeController={lounge.controller} />,
   };

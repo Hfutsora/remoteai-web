@@ -124,7 +124,8 @@ export class CliController {
     const revision = this.revision;
     const catalogRevision = ++this.catalogRevision;
     try {
-      const catalog = await this.read<CliCatalog>({ engine, action: 'catalog', cwd: cwd || undefined });
+      const catalog = await this.read<CliCatalog>({ engine, action: 'catalog', cwd: cwd || undefined,
+        id: this.state.selected?.id });
       if (revision !== this.revision || catalogRevision !== this.catalogRevision || cwd !== this.state.cwd) return;
       const chosen = catalog.models.find(model => model.id === this.state.model)
         ?? catalog.models.find(model => model.isDefault) ?? catalog.models[0];

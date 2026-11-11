@@ -1,3 +1,4 @@
+import { accountSourceLabel } from '../../../../shared/accounts/source';
 import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { Button } from 'antd-mobile';
 import { Clock3, RefreshCw } from 'lucide-react';
@@ -14,7 +15,7 @@ export function AccountCard({ account, privateMode, switching, busy, onOpen, onS
   const plan = account.plan || 'ChatGPT';
   return <article className={`account-row plan-${plan.toLowerCase()} quota-${usageTone(remaining)}`}>
     <button type="button" className="account-row-main" onClick={onOpen} aria-label={t("client.accounts.accountDetailsFor", { value1: email })}>
-      <span className="account-row-identity"><span className="plan-badge">{plan}</span><strong>{email}</strong></span>
+      <span className="account-row-identity"><span className="plan-badge">{plan}</span><strong>{email}</strong><small>{t("client.officialAccounts.source")}: {accountSourceLabel(account)}</small></span>
       <span className="account-row-meter">
         <span className="quota-track" role="progressbar" aria-label={t("client.accounts.remainingQuota")} aria-valuemin={0}
           aria-valuemax={100} aria-valuenow={remaining ?? undefined}

@@ -1,3 +1,6 @@
+import { Modal } from 'antd';
+import { ClaudeAccountsPanel } from '../../accounts/ClaudeAccountsPanel';
+import type { ClaudeAccountTransport } from '../../accounts/claudeAccounts';
 import { uiText } from "../../localization/uiText";
 import { remoteErrorText } from "../../localization/errors";
 import { useEffect, useRef, useState, type ReactNode } from 'react';
@@ -13,11 +16,13 @@ import styles from '../ProxyAccountPicker.module.less';
 
 const ACCOUNT_REFRESH_MS = 60_000;
 
-export function RemoteAccountPicker({ active, ready, client, computers, privacyMode, renderSettings }: {
+export function RemoteAccountPicker({ active, ready, client, computers, privacyMode, renderSettings, claudeAccounts }: {
   active: boolean; ready: boolean; client: GuiAccountsClient; computers: GuiComputerNavigation; privacyMode: boolean;
+  claudeAccounts?: ClaudeAccountTransport;
   renderSettings?: (onClose: () => void) => ReactNode;
 }) {
   const [open, setOpen] = useState(false);
+  const [claudeOpen, setClaudeOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const accounts = useGuiAccounts(client, ready && active, ACCOUNT_REFRESH_MS);
@@ -26,7 +31,7 @@ export function RemoteAccountPicker({ active, ready, client, computers, privacyM
   const name = current ? privacyMode && current.kind === 'account' ? maskAccountEmail(current.name) : current.name
     : uiText("client.conversation.chooseGuiAccount");
   const disabled = !ready || accounts.loading || Boolean(accounts.saving) || !accounts.snapshot?.running;
-  useEffect(() => { if (!active) { setOpen(false); setSettingsOpen(false); } }, [active]);
+  useEffect(() => { if (!active) { setOpen(false); setSettingsOpen(false); setClaudeOpen(false); } }, [active]);
   const select = async (kind: SelectableGuiAccount['kind'], id: string) => {
     if (await accounts.select({ kind, id })) { setOpen(false); trigger.current?.focus(); }
   };
@@ -42,6 +47,9 @@ export function RemoteAccountPicker({ active, ready, client, computers, privacyM
     onSelectAccount={(id) => { void select('account', id); }}
     onSelectAggregate={(id) => { void select('aggregate', id); }}
     onSelectProvider={(id) => { void select('provider', id); }} footer={<>
+      {claudeAccounts && <button type="button" className={styles.settings} disabled={!ready}
+        onClick={() => { setOpen(false); setClaudeOpen(true); }}>
+        <Settings size={19} />{uiText('client.officialAccounts.manage')}</button>}
       {!ready && <p className={styles.hint}>{uiText("client.chat.connectToYourComputerToSwitchAccounts")}</p>}
       {ready && accounts.snapshot && !accounts.snapshot.running
         && <p className={styles.hint}>{uiText("client.workspaceActions.startTheLocalProxyOnThisComputerFirst")}</p>}
@@ -60,6 +68,10 @@ export function RemoteAccountPicker({ active, ready, client, computers, privacyM
     onOpenChange={(next) => { setOpen(next); if (next && ready) accounts.refresh(); }}
     summary={<RemoteAccountSummary name={name} current={current} ready={ready}
       running={accounts.snapshot?.running} />} />
+    {claudeOpen && active && claudeAccounts && <Modal open width={840} footer={null}
+      title={uiText('client.officialAccounts.manage')} onCancel={() => setClaudeOpen(false)}>
+      <ClaudeAccountsPanel transport={claudeAccounts} ready={ready} privacyMode={privacyMode} />
+    </Modal>}
     {settingsOpen && active && renderSettings?.(() => { setSettingsOpen(false); trigger.current?.focus(); })}
   </>;
 }
