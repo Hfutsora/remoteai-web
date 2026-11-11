@@ -21,10 +21,18 @@ export class CliController {
   private timer?: ReturnType<typeof setTimeout>;
   private unsubscribe?: () => void;
   private unsubscribeAccount?: () => void;
+  private older?: { revision: number; generation: number; history: CliHistory };
   constructor(private readonly transport: CliTransport) {}
   getSnapshot = () => this.state;
   subscribe = (listener: () => void) => { this.listeners.add(listener); return () => { this.listeners.delete(listener); }; };
-  patch = (patch: Partial<CliState>) => { this.state = { ...this.state, ...patch }; this.listeners.forEach(fn => fn()); };
+  patch = (patch: Partial<CliState>) => {
+    this.state = { ...this.state, ...patch };
+    if (this.older && !this.isOlderCurrent(this.older)) {
+      this.older = undefined;
+      this.state.loading = patch.loading ?? false;
+    } else if (this.older) this.state.loading = true;
+    this.listeners.forEach(fn => fn());
+  };
   private key() { return `${this.state.engine}:${this.state.selected?.id ?? 'draft'}`; }
   private saveDraft() { this.drafts.set(this.key(), this.state.draft); }
   edit = (draft: string) => { this.patch({ draft }); this.saveDraft(); };
@@ -45,7 +53,9 @@ export class CliController {
       if (this.active && generation === this.generation) this.unsubscribe = unsubscribe; else unsubscribe();
     }).catch(this.report);
     void this.refresh();
-    return () => { this.active = false; this.unsubscribe?.(); this.unsubscribeAccount?.();
+    return () => { if (generation !== this.generation) return;
+      ++this.generation; this.active = false; this.unsubscribe?.(); this.unsubscribeAccount?.();
+      if (this.older) { this.older = undefined; this.patch({ loading: false }); }
       clearTimeout(this.timer); this.timer = undefined; };
   }
   private schedule = () => {
@@ -174,15 +184,38 @@ export class CliController {
   loadOlder = async () => {
     const { selected, history } = this.state;
     if (!selected || !history?.cursor || this.state.loading) return;
-    const revision = this.revision;
-    this.patch({ loading: true });
+    const request = { revision: this.revision, generation: this.generation, history };
+    this.older = request;
+    this.patch({ loading: true, error: '' });
     try {
       const page = await this.read<CliHistory>({ engine: selected.engine, action: 'read', id: selected.id,
         cursor: history.cursor });
-      if (revision === this.revision) this.patch({ history: { ...page, entries: mergeEntries(page.entries, history.entries) } });
-    } catch (error) { this.report(error); }
-    finally { if (revision === this.revision) this.patch({ loading: false }); }
+      const latest = this.state.history;
+      const pageEpoch = page.cursor?.epoch ?? (!page.hasOlder && !page.entries.length ? history.cursor.epoch : undefined);
+      if (this.older !== request || !this.isOlderCurrent(request) || !latest
+        || page.session.id !== selected.id || page.session.engine !== selected.engine
+        || pageEpoch !== history.cursor.epoch) return;
+      // Only the older boundary belongs to this response; live replies and session state remain authoritative.
+      this.older = undefined;
+      this.patch({ history: { ...latest, cursor: page.cursor ?? latest.cursor, hasOlder: page.hasOlder,
+        entries: mergeEntries(page.entries, latest.entries) }, loading: false });
+    } catch (error) { if (this.older === request) this.report(error); }
+    finally {
+      if (this.older === request) { this.older = undefined; this.patch({ loading: false }); }
+    }
   };
+  private isOlderCurrent(request: NonNullable<CliController['older']>) {
+    const { selected, history } = this.state;
+    return request.revision === this.revision && request.generation === this.generation
+      && selected?.id === request.history.session.id && selected.engine === request.history.session.engine
+      && !!history && sameHistory(request.history, history)
+      && request.history.cursor?.seq === history.cursor?.seq;
+  }
+}
+
+function sameHistory(previous: CliHistory, next: CliHistory) {
+  return previous.session.id === next.session.id && previous.session.engine === next.session.engine
+    && previous.cursor?.epoch === next.cursor?.epoch;
 }
 
 export function mergeEntries(older: CliEntry[], newer: CliEntry[]) {
@@ -190,7 +223,7 @@ export function mergeEntries(older: CliEntry[], newer: CliEntry[]) {
   return [...older.filter(entry => entry.last < boundary), ...newer];
 }
 function preserveOlder(previous: CliHistory | null, next: CliHistory): CliHistory {
-  if (!previous || previous.session.id !== next.session.id || previous.cursor?.epoch !== next.cursor?.epoch) return next;
+  if (!previous || !sameHistory(previous, next)) return next;
   const entries = mergeEntries(previous.entries, next.entries);
   return entries.length > next.entries.length
     ? { ...next, entries, cursor: previous.cursor, hasOlder: previous.hasOlder } : next;

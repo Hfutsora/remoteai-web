@@ -3,7 +3,14 @@
   "revision": "9993f27c1faeefd9ffea9dc3347ab18df75dcb0d",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "427318d4f6b06b2dcc267451edf73ac8183e8a1f"
+    "revision": "b1c39cbf445cd667bd6d2ee4746e29d3be5e4ac3"
+  },
+  "retainedTestSources": {
+    "repository": "https://github.com/piperhex/remoteai",
+    "revision": "9993f27c1faeefd9ffea9dc3347ab18df75dcb0d",
+    "paths": [
+      "apps/desktop/e2e/"
+    ]
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -152,7 +159,7 @@
     "shared/remote-chat/views/ChatThreadFilter.tsx": "7d4e22d000903046c3739a77e538314b6194aab3c557e6cc563ad75fdb514943",
     "apps/desktop/src/pages/codexGui/remote/RemoteGuiSidebar.tsx": "22747f6b54c7a0518c2269dfa00e8c296cdcf764ab3b4ea2d83fd0ccff3e997e",
     "apps/desktop/src/pages/codexGui/ThreadSidebar.tsx": "dca0c31470c51584eaac1a7a2afaa303d9b35a0dbc4e458cde9d33279ded63de",
-    "apps/desktop/src/pages/codexGui/controller.ts": "78b9d20d79557fc93deb46b11ec9581bcd9c7768b96091416886f06e666d9b0b",
+    "apps/desktop/src/pages/codexGui/controller.ts": "34c239bdad526c23329d185413285ea955eb0e2386919d0c8a690dfcfcb8332b",
     "shared/conversation/api.ts": "58912e76a7c2ab479bcd48be9ee4a0bffa561252954feeb663857777507d97e7",
     "shared/conversation/styles.module.less": "bcac40fb69ab078a5438334d72fb2ec064c1a3472112d31bdac2e81a5fca17e2",
     "shared/testing/threadActivityFixture.ts": "ff5b7a65a00bfcf1779527d80f71ada0e0108c275ee0295a2f35a40781ca5e8a",
@@ -631,7 +638,7 @@
     "shared/conversation/capacityRetry.ts": "62af68f6fe4c7b62e63e38764176f7483b855fa9c4783d74c8404225be2d0894",
     "apps/desktop/src/pages/codexGui/conversationCache.ts": "9dac42a72075ec89347273763033eb360e1c09a462ca354ad06569cdce13c2a9",
     "apps/desktop/src/pages/codexGui/threadList.ts": "4d7bdf63fd6b4841f4c443f4b589e7144a81d540b4b78888598f9c1996c6cf9c",
-    "apps/desktop/src/pages/codexGui/conversationHistory.ts": "7cb0c6d359afb1c0e13f5a91aab88d2564a747c764a075e68ec6a4b68cf0c496",
+    "apps/desktop/src/pages/codexGui/conversationHistory.ts": "1f9ad2c4d652133c344a8e16b06336c559212ac54138669d5e5debef60c4c259",
     "apps/desktop/src/pages/codexGui/sendCapacityRetry.ts": "62063ca0deca2a550ac657c6293a4bf03264e4501bc494052926b0df4c45b41c",
     "apps/desktop/src/pages/codexGui/goals.ts": "b750064f40550aa5b256b5cec44ea6295e1ba57809b603e3a02585d929efd3e2",
     "apps/desktop/src/pages/codexGui/projectActions.ts": "412f75295ec84e2d44378a973abe3064dc73e3e032f378d1fa289e1cd5d2db63",
@@ -1178,7 +1185,7 @@
     "shared/chat/groups/groups.css": "d9c2a62acbd8580a1495ba5405aec9f38f409ebdd1871c1b01f8e037b61bcfa1",
     "shared/chat/groups/SidebarDrag.tsx": "31935c04b0d36d19c3d8ad31dbb1f0f7c868c93f83ce1692715425505605f393",
     "shared/conversation/ThreadStatus.tsx": "81cb28612412d3e70e237051c960c6d6f6d455e9979be3a68416986a072a3678",
-    "shared/cli-gui/controller.ts": "fbf1c5c4d490a52f363d85fae2f0293c81d249fcd8134ff115de143ac057d59e",
+    "shared/cli-gui/controller.ts": "5b7cea3734407d8f310b437e219712b501bf8875f2cbf2ad96ad9d1e182a3124",
     "apps/desktop/src/pages/codexGui/ThreadPagination.module.less": "a8067036007562d5fb0aaef64bfa793559571020eac9c15ceda3c6691d1206d0",
     "shared/chat/ThreadContextMenu.module.less": "edcedcf042fd5daa5869b338cb02b4125a07d68aafd98532a4d41c1e4d6a193d",
     "shared/chat/groups/useGroupMenu.tsx": "1a0fe98fe6c74950057494788b610b3535949661bac8e2264c335fe9c7c1c30f",
@@ -1830,16 +1837,6 @@
     "shared/conversation/recovery/TaskRecoveryPrompt.tsx": "5dfa481fa3648b73dfee4a9f032729ea38c5ad640ac10e7acb6250eb155ce3d1",
     "shared/conversation/recovery/useTaskRecovery.ts": "aa25dea0f8cfbc88fd6b6bf21c1deb73adea97e9f525af304bf8360cb1bb8252",
     "shared/testing/TaskRecoveryHarness.tsx": "806a03951772848cb8901d9f4b3978691a859e77dbe743bf616318a7bfc62008",
-    "apps/native/src/chat/markdownTree.ts": "c717f4481126195f1b542ac400c078a2eac6d6db4154030cf1fbbdc20659893c",
-    "apps/native/src/chat/mathDocument.ts": "d4b2d2e61220f574271a306211590b6d7332da61092b4706539c472c828c66fb",
-    "apps/native/assets/terminal.html": "163e393b9dff468ad4c539368f3f1d4a9b18521070d99b59764b884bb2775586",
-    "apps/native/src/chat/desktop/desktopImeHtml.generated.ts": "bf22260f2d23e16d4e0d8e119ad73bfe0c604416e04bb9de7ad447442ffa77e4",
-    "apps/native/e2e/pdf-touch.mjs": "bf0adf7508dfa9085fbb65cd89c9a398eeb21b5422e2836809caf44e1bf8e39f",
-    "apps/native/vendor/shared/chat/fileReference.ts": "12c41ad7ff3879dfca073d8226eac47a0124e6ec6c60b7d8c28717e953924448",
-    "apps/native/vendor/shared/chat/mathMarkdown.ts": "8c02442fbd0b4933273ca7bff39fca49a1f9fd9f8fbce8e24ef404327dcc4164",
-    "apps/native/assets/math-css.json": "44f4b553d7cf367cb99d91a93feb819dc6b2a79057d7342b1457d655eaeaf4ab",
-    "apps/native/assets/text-selection.json": "5c74dde463682191609cc4192b461e13750e506f2132d2946399c2cb2551426d",
-    "apps/native/vendor/shared/theme/mode.ts": "d27ddb4c18a6bdae69e82278457d225466f600bdf003be6e7c34ff9b79f83550",
     "shared/accounts/ClaudeAccountsPanel.tsx": "ecf992c031808310b3e6720d024561617a4a34ed3bd795420d9ad3f5065d975b",
     "shared/accounts/claudeAccounts.ts": "c61cb324cf5946d674dc2f84ff1f88986d22728930af8dd5420984e37dc2d673",
     "shared/accounts/ClaudeAccountModal.tsx": "d7eef9309802d8644a978186c71e19bd26dfe16936839ca65fdc1e1e6a1bd6a6",
@@ -1852,6 +1849,16 @@
     "shared/accounts/accountLogin.css": "36bb2b7b8511323be8a2f7c14c16468fa820fc2b43868b3720e24a62e9b0dbd0",
     "shared/accounts/accountSourceMenu.css": "79b903f3647082e9465f70cf45a7793cf59abc8d0d4f1cbfb94c9d4828b2d653",
     "shared/accounts/assets/openai.svg": "2b4a04ddc2395b20d168694d3850ce2050a702c4a0cdeb4d8b31b9a970481a8c",
-    "shared/accounts/assets/claude.svg": "2d6fda79eb18ddccca35b799eeb3cece0dfabc22520ce3b10abd25668df9fa93"
+    "shared/accounts/assets/claude.svg": "2d6fda79eb18ddccca35b799eeb3cece0dfabc22520ce3b10abd25668df9fa93",
+    "apps/native/src/chat/markdownTree.ts": "c717f4481126195f1b542ac400c078a2eac6d6db4154030cf1fbbdc20659893c",
+    "apps/native/src/chat/mathDocument.ts": "d4b2d2e61220f574271a306211590b6d7332da61092b4706539c472c828c66fb",
+    "apps/native/assets/terminal.html": "163e393b9dff468ad4c539368f3f1d4a9b18521070d99b59764b884bb2775586",
+    "apps/native/src/chat/desktop/desktopImeHtml.generated.ts": "bf22260f2d23e16d4e0d8e119ad73bfe0c604416e04bb9de7ad447442ffa77e4",
+    "apps/native/e2e/pdf-touch.mjs": "bf0adf7508dfa9085fbb65cd89c9a398eeb21b5422e2836809caf44e1bf8e39f",
+    "apps/native/vendor/shared/chat/fileReference.ts": "12c41ad7ff3879dfca073d8226eac47a0124e6ec6c60b7d8c28717e953924448",
+    "apps/native/vendor/shared/chat/mathMarkdown.ts": "8c02442fbd0b4933273ca7bff39fca49a1f9fd9f8fbce8e24ef404327dcc4164",
+    "apps/native/assets/math-css.json": "44f4b553d7cf367cb99d91a93feb819dc6b2a79057d7342b1457d655eaeaf4ab",
+    "apps/native/assets/text-selection.json": "5c74dde463682191609cc4192b461e13750e506f2132d2946399c2cb2551426d",
+    "apps/native/vendor/shared/theme/mode.ts": "d27ddb4c18a6bdae69e82278457d225466f600bdf003be6e7c34ff9b79f83550"
   }
 }
