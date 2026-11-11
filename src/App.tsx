@@ -277,7 +277,7 @@ function DevicesPage() {
 }
 
 const navItems: Array<{ key: AppPage; label: string; icon: typeof LayoutDashboard }> = [
-  { key: "chat", get label() { return t("client.app.chat"); }, icon: MessageSquare },
+  { key: "chat", get label() { return t("client.agentHub.title"); }, icon: MessageSquare },
   { key: "accounts", get label() { return t("client.app.accounts"); }, icon: LayoutDashboard },
   { key: "discover", get label() { return t("client.discovery.title"); }, icon: Compass },
   { key: "settings", get label() { return t("client.app.settings"); }, icon: Settings },

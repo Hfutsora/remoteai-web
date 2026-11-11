@@ -25,6 +25,7 @@ export async function operationCount(request: APIRequestContext, operation: stri
 export async function navigate(page: Page, label: string) {
   const mobile = (page.viewportSize()?.width ?? 0) <= 860;
   const language = (await page.locator('html').getAttribute('lang'))?.split('-')[0] ?? 'zh';
+  if (label === testText('client.app.chat', {}, language)) label = testText('client.agentHub.title', {}, language);
   const discoveryChild = label === testText('client.app.devices', {}, language) || label === '2FA';
   await click(page.locator(mobile ? '.mobile-tabbar' : '.desktop-sidebar nav')
     .getByText(discoveryChild ? testText('client.discovery.title', {}, language) : label, { exact: true }));
