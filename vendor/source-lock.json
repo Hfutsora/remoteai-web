@@ -1,6 +1,6 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "91f3c4d2332f7e35a1276b47e19aace159de7901",
+  "revision": "678304b7102404821f8edfd68536584d0796aa6f",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
     "revision": "c0907f20f416b4fc33e74a2d22718f4da0c601c4"
@@ -498,7 +498,7 @@
     "shared/conversation/sync/sync.module.less": "dd6d7e0c131524dc7611afbfcdbffb7a8f5705633884f0f39e9ba7c910022916",
     "apps/desktop/src/pages/codexGui/ActivityRow.tsx": "9af67fd7dad9a60b13c70fbe6ab86bd7c91b6a492e09d6f71583399f1464feb8",
     "shared/chat/DeferredToolDetails.tsx": "37fc36ba4a97d797e867e376a4af294c02e7d0649e90ddea97ae6ddda271e4db",
-    "apps/desktop/src/remoteChat/operations.ts": "99dad3f58746277f21eb414ec79929b455477c354f45e519cb355915f2475a74",
+    "apps/desktop/src/remoteChat/operations.ts": "f1961fccb2ddb3b63fe74222c1da1f8f4742dad57e391fa9e0790088edfb0c6d",
     "apps/desktop/e2e/remote-dictation-harness.tsx": "ca6aced55c9ea5efc10a8b00af4f4e5d3d92a0487b2a783569c6c847b26d7a60",
     "apps/desktop/src/pages/codexGui/DiffView.tsx": "4f5577f933a2650eb2a78a4cdf7356cd75c9eebfe9bd3d94d6b1bbf3ce971c9a",
     "apps/desktop/src/pages/codexGui/RunningChangesSummary.tsx": "5212b8c7bd32e5bbabd03f199ad0655c62e80efe199888cab61ff881c1534d49",
@@ -628,7 +628,7 @@
     "apps/desktop/src/pages/codexGui/threadRunning.ts": "ba2b3a538e88079c7abed26a0e8f853b8795877bcbcf7be39fd6975377950f52",
     "apps/desktop/src/pages/codexGui/forkConversation.ts": "11af59b6582d42806567411a7b392408a9ce7f8241a28bc5bdf5a8a9326be6c8",
     "apps/desktop/src/pages/codexGui/ProjectGroupMenu.tsx": "15c34c3ec34aeabb5ae8f08f0a61a33e1cdfab75739a87c9b35e5b50619166c5",
-    "apps/desktop/src/api/backend.ts": "305a9dc6420aaafbc3cd8323260e5366eebbb07a3dd286593360247259d362bf",
+    "apps/desktop/src/api/backend.ts": "2c00cb005d4b804253d341807b80b513b7418ff64ddfb70f848e9b63066d9d9b",
     "shared/chat/useOpenProjectFolder.ts": "34ba550826af2daceae431882480c7ca5cbbb3c8ec6050e77fad8bca6eb29f9e",
     "apps/desktop/src/pages/codexGui/GuiNavigation.tsx": "081c8189eb46e13321c8f0312a365c0b2532243e1620e8c8b8258465491f6c97",
     "shared/chat/groups/tree.ts": "ccccfcb92e33fa6a163a1f1d2de732908e67432a0929d4c3be1b4b19df3fc094",
@@ -1191,7 +1191,7 @@
     "shared/chat/groups/useGroupMenu.tsx": "1a0fe98fe6c74950057494788b610b3535949661bac8e2264c335fe9c7c1c30f",
     "apps/desktop/src/pages/codexGui/threadSearch.module.less": "be8086837ca7b8193ff4b75d366c05478d807989a433eb7a34a5b13fa292cd78",
     "shared/clipboard.ts": "429c5188ade57a898a426106c1b7f88334a1b45624ead68633f3fc64cf633118",
-    "apps/desktop/src/types.ts": "afda66070a0f2ce99c5c233772158b2ae73ff8206e5eabae68cabfcfce9e8e0e",
+    "apps/desktop/src/types.ts": "8646b18a7d75ec5ce47f81f0964efe43c161f8cb7cd1f10d0404a8caafa8ad8a",
     "apps/desktop/src/types/conversationMigration.ts": "23863a5fef8ecff081139956a4caa814c08d16b379d1c891c527a7d9031e0854",
     "apps/desktop/src/utils/currencyDisplay.ts": "26273b0c5e9d42a40139dd38513050b09d02155251eac6131f1ea85365fb439d",
     "apps/desktop/src/api/appUpdateCheck.ts": "842ada174b5d1664a27e3c11857bb06e9cda7f56720f06b2bcd7b2af80abc541",
