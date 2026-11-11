@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { Download, Monitor, User } from 'lucide-react';
 import { AdaptiveSheet } from '../../layout/AdaptiveSheet';
 import type { GuiAccountChoice, GuiAccountsClient } from '../guiAccounts';
-import { isGuiAccountSelected } from '../guiAccounts';
+import { guiAccountSelectionForEngine, isGuiAccountSelected } from '../guiAccounts';
 import { useCliGui } from '../../cli-gui/context';
 import { guiAccountAvatar } from '../guiAccountAvatar';
 import { useGuiAccounts } from '../client/useGuiAccounts';
@@ -30,17 +30,17 @@ export function ChatProfileMenu(props: Props) {
   const [query, setQuery] = useState('');
   useEffect(() => { if (!active) setPanel(null); }, [active]);
   const accounts = useGuiAccounts(client, ready, panel === 'accounts' ? ACCOUNT_REFRESH_MS : 0);
-  const selection = accounts.snapshot?.selection;
-  const current = accounts.snapshot?.choices.find(choice => cli?.state.engine === 'claude'
-    ? choice.accountSource === 'claudeCode' && choice.active
-    : selection?.kind === choice.kind && selection.id === choice.id);
-  const { initials } = guiAccountAvatar(accounts.snapshot, t("client.chat.me"));
+  const selection = guiAccountSelectionForEngine(accounts.snapshot?.selection,
+    accounts.snapshot?.choices ?? [], cli?.state.engine);
+  const current = accounts.snapshot?.choices.find(choice => isGuiAccountSelected(choice, selection));
+  const { initials } = guiAccountAvatar(accounts.snapshot, t("client.chat.me"), cli?.state.engine);
   const disabled = accounts.loading || Boolean(accounts.saving) || !ready || !accounts.snapshot?.running;
   const choices = accounts.snapshot?.choices.filter(choice =>
     `${choice.name} ${choice.detail} ${choice.searchDetail ?? ''}`.toLowerCase().includes(query.trim().toLowerCase())) ?? [];
   const select = async (choice: GuiAccountChoice) => {
     if (!disabled && choice.available && !isGuiAccountSelected(choice, selection)
-      && await accounts.select({ kind: choice.kind, id: choice.id })) setPanel(settings ? null : 'profile');
+      && await accounts.select({ kind: choice.kind, id: choice.id,
+        ...(cli ? { engine: cli.state.engine } : {}) })) setPanel(settings ? null : 'profile');
   };
   const close = () => { if (!accounts.saving) setPanel(null); };
   const connectionOptions = <>

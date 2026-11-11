@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { claudeAccountError } from '../../accounts/claudeAccounts';
 import { parseGuiAccountsSnapshot, type GuiAccountsClient, type GuiAccountsSnapshot,
-  type SelectableGuiAccount } from '../guiAccounts';
+  type GuiAccountSwitchRequest } from '../guiAccounts';
 
 function readError(error: unknown) {
   if (error instanceof Error && error.message.includes('暂不支持')) return '请更新电脑端 Remote AI 后重试。';
@@ -58,7 +58,7 @@ export function useGuiAccounts(client: GuiAccountsClient, active: boolean, refre
     return () => clearInterval(timer);
   }, [active, refreshIntervalMs]);
 
-  const select = async (selection: SelectableGuiAccount) => {
+  const select = async (selection: GuiAccountSwitchRequest) => {
     if (!active || !snapshot?.running || switching.current || loading) return false;
     const choice = snapshot.choices.find((entry) => entry.kind === selection.kind && entry.id === selection.id);
     if (!choice?.available) return false;

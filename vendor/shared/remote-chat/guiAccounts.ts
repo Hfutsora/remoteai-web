@@ -1,4 +1,5 @@
 import { object } from './protocol';
+import type { GuiEngine } from '../cli-gui/types';
 
 export const GUI_ACCOUNTS_EVENT = 'guiAccounts/changed';
 // Account list updates also include balance refreshes; only this event invalidates pinned recordings.
@@ -6,6 +7,7 @@ export const GUI_ACCOUNT_SELECTION_EVENT = 'guiAccounts/selectionChanged';
 
 export type GuiAccountSelection = { kind: 'none' } | { kind: 'account' | 'provider' | 'aggregate'; id: string };
 export type SelectableGuiAccount = Exclude<GuiAccountSelection, { kind: 'none' }>;
+export type GuiAccountSwitchRequest = SelectableGuiAccount & { engine?: GuiEngine };
 export interface GuiAccountChoice {
   kind: SelectableGuiAccount['kind'];
   id: string;
@@ -27,7 +29,7 @@ export interface GuiAccountsSnapshot {
 }
 export interface GuiAccountsClient {
   read: () => Promise<GuiAccountsSnapshot>;
-  select: (selection: SelectableGuiAccount) => Promise<GuiAccountSelection>;
+  select: (selection: GuiAccountSwitchRequest) => Promise<GuiAccountSelection>;
   subscribe: (changed: () => void) => () => void;
 }
 
@@ -71,8 +73,18 @@ function isChoice(value: unknown): value is GuiAccountChoice {
     && (choice.active === undefined || typeof choice.active === 'boolean');
 }
 
-/** Claude's default is independent of the Codex conversation's routing selection. */
-export function isGuiAccountSelected(choice: GuiAccountChoice, selection?: GuiAccountSelection): boolean {
-  if (choice.kind === 'account' && choice.accountSource === 'claudeCode') return choice.active === true;
+/** Claude uses its native default when set; otherwise all engines use the proxy selection. */
+export function guiAccountSelectionForEngine(
+  selection: GuiAccountSelection | undefined,
+  choices: ReadonlyArray<Pick<GuiAccountChoice, 'id' | 'accountSource' | 'active'>>,
+  engine: GuiEngine = 'codex',
+): GuiAccountSelection {
+  const native = engine === 'claude' && choices.find(choice => choice.accountSource === 'claudeCode' && choice.active);
+  return native ? { kind: 'account', id: native.id } : selection ?? { kind: 'none' };
+}
+
+export function isGuiAccountSelected(
+  choice: Pick<GuiAccountChoice, 'kind' | 'id'>, selection?: GuiAccountSelection,
+): boolean {
   return selection?.kind === choice.kind && selection.id === choice.id;
 }

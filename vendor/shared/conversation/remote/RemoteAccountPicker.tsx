@@ -1,6 +1,6 @@
 import { message } from 'antd';
 import { useCliGui } from '../../cli-gui/context';
-import { isGuiAccountSelected } from '../../remote-chat/guiAccounts';
+import { guiAccountSelectionForEngine, isGuiAccountSelected } from '../../remote-chat/guiAccounts';
 import { uiText } from "../../localization/uiText";
 import { remoteErrorText } from "../../localization/errors";
 import { useEffect, useRef, useState, type ReactNode } from 'react';
@@ -26,10 +26,9 @@ export function RemoteAccountPicker({ active, ready, client, computers, privacyM
   const [settingsOpen, setSettingsOpen] = useState(false);
   const trigger = useRef<HTMLButtonElement>(null);
   const accounts = useGuiAccounts(client, ready && active, ACCOUNT_REFRESH_MS);
-  const selection = accounts.snapshot?.selection;
-  const current = accounts.snapshot?.choices.find(choice => cli?.state.engine === 'claude'
-    ? choice.accountSource === 'claudeCode' && choice.active
-    : choice.kind === selection?.kind && choice.id === selection.id);
+  const selection = guiAccountSelectionForEngine(accounts.snapshot?.selection,
+    accounts.snapshot?.choices ?? [], cli?.state.engine);
+  const current = accounts.snapshot?.choices.find(choice => isGuiAccountSelected(choice, selection));
   const name = current ? privacyMode && current.kind === 'account' ? maskAccountEmail(current.name) : current.name
     : uiText("client.conversation.chooseGuiAccount");
   const disabled = !ready || accounts.loading || Boolean(accounts.saving) || !accounts.snapshot?.running;
@@ -37,7 +36,7 @@ export function RemoteAccountPicker({ active, ready, client, computers, privacyM
   const select = async (kind: SelectableGuiAccount['kind'], id: string) => {
     const claude = accounts.snapshot?.choices.some(choice => choice.id === id && choice.kind === kind
       && choice.accountSource === 'claudeCode');
-    if (await accounts.select({ kind, id })) {
+    if (await accounts.select({ kind, id, ...(cli ? { engine: cli.state.engine } : {}) })) {
       setOpen(false); trigger.current?.focus();
       if (claude) void notice.success({ content: uiText('client.officialAccounts.switched'),
         style: { maxWidth: 400, margin: '0 auto' } });
