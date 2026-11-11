@@ -12,6 +12,19 @@ export const engineNames = {
   codex: 'client.cliGui.codex', claude: 'client.cliGui.claude', gemini: 'client.cliGui.gemini',
 } as const satisfies Record<GuiEngine, string>;
 
+function engineItem(id: GuiEngine, selected: GuiEngine, fixed: boolean) {
+  const disabled = fixed && id !== selected;
+  const name = uiText(engineNames[id]);
+  return {
+    key: id, disabled, className: disabled ? 'cli-gui-disabled-engine-option' : undefined,
+    label: disabled ? <Tooltip placement="right" title={uiText('client.cliGui.fixedEngine')}
+      styles={{ root: { maxWidth: 400 } }}>
+      <span className="cli-gui-disabled-engine-label">{name}</span>
+    </Tooltip> : name,
+    icon: id === selected ? <Check size={14} /> : <span />,
+  };
+}
+
 export function EngineSelector({ version, locked = false, read, active = true, connected = true }: {
   version?: string | null; locked?: boolean; read?: ReadCodexServiceStatus; active?: boolean; connected?: boolean;
 }) {
@@ -23,19 +36,14 @@ export function EngineSelector({ version, locked = false, read, active = true, c
   if (!context) return <CodexVersionStatus version={version} read={read} active={active} connected={connected} t={uiText} />;
   const selector = <Dropdown trigger={['click']} placement="topLeft" menu={{
     selectedKeys: [engine], selectable: true,
-    items: (Object.keys(engineNames) as GuiEngine[]).map(id => ({
-      key: id, label: uiText(engineNames[id]), disabled: Boolean(fixed && id !== engine),
-      icon: id === engine ? <Check size={14} /> : <span />,
-    })),
+    items: (Object.keys(engineNames) as GuiEngine[]).map(id => engineItem(id, engine, Boolean(fixed))),
     onClick: ({ key }) => context.controller.chooseEngine(key as GuiEngine),
   }}>
-    <Tooltip title={fixed ? uiText('client.cliGui.fixedEngine') : undefined} styles={{ root: { maxWidth: 400 } }}>
     <button type="button" className="cli-gui-engine"
       aria-label={uiText('client.cliGui.choose')} aria-haspopup="menu">
       <span>{uiText(engineNames[engine])} · {cliVersion || uiText('client.cliGui.versionUnknown')}</span>
       <ChevronDown size={13} aria-hidden="true" />
     </button>
-    </Tooltip>
   </Dropdown>;
   return engine === 'codex' ? <CodexVersionStatus label={selector} read={read}
     active={active} connected={connected} t={uiText} /> : selector;

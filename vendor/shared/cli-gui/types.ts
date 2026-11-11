@@ -1,4 +1,5 @@
 import type { InstallationProgress } from '../cli/installProgressTypes';
+import type { FileChange } from '../conversation/types';
 
 export type GuiEngine = 'codex' | 'claude' | 'gemini';
 export type ExternalEngine = Exclude<GuiEngine, 'codex'>;
@@ -36,6 +37,7 @@ export interface CliEntry {
   id: string; first: number; last: number;
   role: 'user' | 'assistant' | 'reasoning' | 'tool' | 'error' | 'notice';
   text: string; title?: string; status?: string;
+  changes?: FileChange[];
 }
 export interface CliCursor { epoch: string; seq: number }
 export interface CliHistory {
