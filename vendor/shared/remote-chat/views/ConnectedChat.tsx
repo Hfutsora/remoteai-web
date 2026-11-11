@@ -56,6 +56,7 @@ import './chat.css';
 import { ToolDetailsContext } from '../../chat/DeferredToolDetails';
 import { CliGuiProvider, useCliGui } from '../../cli-gui/context';
 import { CliConversationPane } from '../../cli-gui/CliConversationPane';
+import { CliChangesButton } from '../../cli-gui/CliChangesButton';
 import { RemoteProjectPicker } from '../../conversation/remote/RemoteProjectPicker';
 import { ProjectBar } from '../../conversation/ProjectBar';
 import { GuiToolbox } from '../../conversation/GuiToolbox';
@@ -233,8 +234,8 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
         onClick={() => { void controller.archive().then(drawerMotion.openDrawer); }}>
         {t("client.chat.restore")}</button>}
       {headerActions}
-      {!workspacePage && showDesktopDiffs && <ConversationChangesButton
-        value={!external && state.selected?.turns ? { turns: state.selected.turns } : undefined} />}
+      {!workspacePage && showDesktopDiffs && (external ? <CliChangesButton /> : <ConversationChangesButton
+        value={state.selected?.turns ? { turns: state.selected.turns } : undefined} />)}
       {headerEnd}
     </header>
     {external && cli && <CliConversationPane cwd={cwd} dictation={controller.dictation} remoteLayout
