@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, type ChangeEvent, type KeyboardEvent } from 'react';
+import { useLayoutEffect, useRef, type ChangeEvent, type ClipboardEvent, type KeyboardEvent } from 'react';
 import { ComposerInput } from '../remote-chat/views/ComposerInput';
 import { ComposerContextMenu } from '../chat/ComposerContextMenu';
 import { uiText } from '../localization/uiText';
@@ -10,9 +10,12 @@ function resize(input: HTMLTextAreaElement | null) {
   input.style.height = `${input.scrollHeight}px`;
 }
 
-export function CliComposerInput({ value, scope, active, disabled, canSend, onChange, onSend, remote, className }: {
+export function CliComposerInput({ value, scope, active, disabled, canSend, onChange, onSend, remote, className,
+  onPaste, onPasteKeyDown }: {
   value: string; scope: string; active: boolean; disabled: boolean; canSend: boolean; remote: boolean;
   className?: string; onChange: (text: string) => void; onSend: () => void;
+  onPaste: (event: ClipboardEvent<HTMLTextAreaElement>) => void;
+  onPasteKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
 }) {
   const input = useRef<HTMLTextAreaElement>(null);
   const fontSize = useGuiFontSize();
@@ -28,11 +31,12 @@ export function CliComposerInput({ value, scope, active, disabled, canSend, onCh
     observer.observe(element);
     return () => observer.disconnect();
   }, [scope]);
-  const props = { value, disabled, rows: 1, 'aria-label': uiText('client.cliGui.message'),
+  const props = { value, disabled, onPaste, rows: 1, 'aria-label': uiText('client.cliGui.message'),
     placeholder: uiText('client.cliGui.messageHint'),
     onChange: (event: ChangeEvent<HTMLTextAreaElement>) => onChange(event.target.value),
     onKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => {
       if (event.defaultPrevented || event.nativeEvent.isComposing || event.keyCode === 229) return;
+      onPasteKeyDown(event);
       if (event.key === 'Enter' && !event.shiftKey && !event.altKey && canSend) {
         event.preventDefault(); onSend();
       }

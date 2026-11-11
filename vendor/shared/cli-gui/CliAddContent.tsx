@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Button, Input, Modal, Popover, Segmented } from 'antd';
-import { Paperclip, Plus } from 'lucide-react';
+import { ImagePlus, Paperclip, Plus } from 'lucide-react';
 import { uiText } from '../localization/uiText';
 import { useCliGui } from './context';
 
 export interface CliAddClasses { trigger: string; panel: string; heading?: string; option?: string }
-export function CliAddContent({ disabled, classes, chooseFiles }: {
+export function CliAddContent({ disabled, classes, chooseFiles, chooseImages }: {
   disabled: boolean; classes?: CliAddClasses; chooseFiles?: (directory: boolean) => Promise<string[]>;
+  chooseImages: () => void;
 }) {
   const cli = useCliGui()!;
   const [open, setOpen] = useState(false);
@@ -33,6 +34,10 @@ export function CliAddContent({ disabled, classes, chooseFiles }: {
   const menu = <div className={classes?.panel ?? 'chat-add-menu'} role="menu" aria-label={addLabel}
     onKeyDown={event => { if (event.key === 'Escape') { event.stopPropagation(); setOpen(false); } }}>
     {classes?.heading && <div className={classes.heading}>{uiText('client.shared.add')}</div>}
+    <button type="button" role="menuitem" className={classes?.option}
+      onClick={() => { setOpen(false); chooseImages(); }}>
+      <ImagePlus size={19} /><span>{uiText('client.composer.chooseImages')}</span>
+    </button>
     <button type="button" role="menuitem" className={classes?.option}
       onClick={() => { setOpen(false); setDialog(true); }}>
       <Paperclip size={19} /><span>{uiText('client.composer.filesAndFolders')}</span>

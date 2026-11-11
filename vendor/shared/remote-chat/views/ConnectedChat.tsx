@@ -242,6 +242,7 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
       {headerEnd}
     </header>
     {external && cli && <CliConversationPane cwd={cwd} dictation={controller.dictation} remoteLayout
+      readClipboardImages={readClipboardImages} nativeFileDrop={nativeFileDrop}
       connected={ready}
       connection={{ client: controller.guiAccounts, deviceName: device?.name ?? t('client.settings.chooseAComputer'),
         chooseDevice: () => setPickingDevice(true) }}

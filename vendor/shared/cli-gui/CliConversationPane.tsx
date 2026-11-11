@@ -12,6 +12,8 @@ import { cliErrorText } from './errors';
 import { useGuiFontSize, guiFontStyle } from '../appearance/fontSize';
 import styles from '../conversation/styles.module.less';
 import type { ChatConnectionProps } from '../remote-chat/views/ChatProfileMenu';
+import type { CliImageInput } from './useCliImages';
+import { CliImageProvider } from './CliImageProvider';
 
 function InstallationConversation({ footer }: { footer: ReactNode }) {
   return <div className={styles.messageArea}>
@@ -26,7 +28,8 @@ function InstallationConversation({ footer }: { footer: ReactNode }) {
 
 export function CliConversationPane({ cwd = '', projectPicker, dictation, active = true,
   renderMessages = props => <CliMessages {...props} />, scrollableComposer, remoteLayout = false,
-  composerHeader, connectionInfo, connection, connected, renderComposer = props => <CliComposer {...props} /> }: {
+  composerHeader, connectionInfo, connection, connected, readClipboardImages, nativeFileDrop,
+  renderComposer = props => <CliComposer {...props} /> }: CliImageInput & {
   cwd?: string; projectPicker?: ReactNode; dictation?: DictationClient;
   active?: boolean; scrollableComposer?: boolean; remoteLayout?: boolean;
   composerHeader?: ReactNode; connectionInfo?: ReactNode;
@@ -45,13 +48,15 @@ export function CliConversationPane({ cwd = '', projectPicker, dictation, active
   const footer = <>
     {state.selected && <CliPermissions session={state.selected} busy={state.busy || !ready}
       respond={controller.act} remoteLayout={remoteLayout} />}
-    {renderComposer({ projectPicker, dictation, remoteLayout, active, composerHeader, connectionInfo, connection, connected })}
+    {renderComposer({ projectPicker, dictation, remoteLayout, active, composerHeader, connectionInfo,
+      connection, connected, readClipboardImages, nativeFileDrop })}
   </>;
-  return <section className="cli-gui-pane" style={guiFontStyle(fontSize)} aria-label={uiText('client.cliGui.conversation')}>
+  return <CliImageProvider ready={connected ?? true}><section className="cli-gui-pane" style={guiFontStyle(fontSize)}
+    aria-label={uiText('client.cliGui.conversation')}>
     {state.error && <Alert type="error" showIcon message={cliErrorText(state.error)} closable
       onClose={() => controller.patch({ error: '' })} />}
     {!ready ? <InstallationConversation footer={footer} /> : renderMessages({ history: state.history,
       selected: state.selected?.id ?? null, loading: state.loading, loadOlder: controller.loadOlder,
       footer, active, scrollableComposer })}
-  </section>;
+  </section></CliImageProvider>;
 }
