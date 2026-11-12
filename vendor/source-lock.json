@@ -3,7 +3,7 @@
   "revision": "d5990e2ca017e8a2e48b6cf131c255f168c7ec3f",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "0927961e3b90822352608da96ddba4203be8068f"
+    "revision": "c308bed3d0d8b14b3e1b915aff47f7f402541f81"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -1869,11 +1869,11 @@
     "shared/browser/browserPage.css": "53cb5761e3fab72b361d660ccecfcc7fbe7c61b106764f70760fb7d2ad262f29",
     "shared/browser/bookmarks/channel.ts": "d33b4976ef91e127560b3246c61dd306bd9474d558f1fb5687f6b1eae39aa48d",
     "shared/browser/bookmarks/store.ts": "c9501be61d70ff74e07d2f89a79c25fa807cb1bead8a307b208ff6643202403e",
-    "shared/browser/bookmarks/useBrowserBookmarks.tsx": "cbdfe5577c1e42868237d3bc55620d8e1dfa045aa42fa62b10a53bd0b59eb6bc",
+    "shared/browser/bookmarks/useBrowserBookmarks.tsx": "a9c965181962de43d9d5ed50fa9ab2d1f445d10d71056895bbee88ced0d60629",
     "shared/browser/bookmarks/model.ts": "a7fda5c0828d5dfe778fcfa7ac5a9caec898a81ecb0024221aab1ba8d95b8116",
     "shared/browser/bookmarks/BookmarkBar.tsx": "89c068ba2b472957ad90bce822ba95654e312324f7ae824503faf41435b28418",
     "shared/browser/bookmarks/BookmarkEditor.tsx": "da29c03c84cabfdc98e9995e16b9ae48a1b3d4eac6ba9a8e732cb5a3299055cd",
-    "shared/browser/bookmarks/BookmarkManager.tsx": "c61a1db4f37a753a38fef41c0254f685d2ca6d3c2dbb39872cda50d6c3f467ab",
+    "shared/browser/bookmarks/BookmarkManager.tsx": "9751f8bfd7d38d76c68c6089a79c72f368221b5a218e5dd67f0e3f21e95e9c21",
     "shared/browser/bookmarks/bookmarks.css": "c372f4106362bc0782579427d8adee17dc64143628c2dfdce6c885ed949e43ce",
     "apps/desktop/e2e/nested-scroll-checks.ts": "d069d4904859fd6d130d21f6d8169cdd17e45e65c6ffa7d443d3dbfd8f06dbb4",
     "shared/chat/canScrollWithin.ts": "8d95c7965ce767bd659b54250f5d97462b6337596f5ad87930bf6fc00004318d",

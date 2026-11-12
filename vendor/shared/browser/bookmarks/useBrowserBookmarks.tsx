@@ -63,10 +63,11 @@ export function useBrowserBookmarks(options: {
     bar: showBar && <BookmarkBar entries={entries} t={t} visit={visit} edit={edit} remove={remove}
       manage={manage} menuChanged={setMenu} dragChanged={setDragging} />,
     overlays: <>{manager && <BookmarkManager t={t} close={() => setManager(false)} edit={edit} create={create} visit={visit} />}
-      {deleting && <Modal open width={400} zIndex={1850} title={t('market.bookmarkDeleteConfirm')}
+      {deleting && <Modal open width={400} zIndex={1850} title={t('market.bookmarkDelete')}
         okText={t('market.bookmarkDelete')} cancelText={t('market.cancel')} okButtonProps={{ danger: true }}
         onCancel={() => setDeleting(undefined)} onOk={() => { store.remove(deleting.id); setDeleting(undefined); }}>
-        <span style={{ overflowWrap: 'anywhere' }}>{deleting.title}</span>
+        <p>{t('market.bookmarkDeleteConfirm')}</p>
+        <span style={{ overflowWrap: 'anywhere', color: token.colorTextSecondary }}>{deleting.title}</span>
       </Modal>}
       {editor && <BookmarkEditor key={editor.id} entry={editor} t={t} close={() => setEditor(undefined)} />}</>,
   };

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Button, Empty, Input, Modal, Popconfirm } from 'antd';
+import { useState, type CSSProperties } from 'react';
+import { Button, Empty, Input, Modal, Popconfirm, theme } from 'antd';
 import { ArrowDown, ArrowUp, Folder, Pencil, Trash2 } from 'lucide-react';
 import type { MarketText } from '../../provider-market/i18n';
 import { ProviderWebsiteIcon } from '../../provider-market/ProviderWebsiteIcon';
@@ -12,6 +12,7 @@ export function BookmarkManager({ t, close, edit, create, visit }: {
   create: (kind: Bookmark['kind']) => void; visit: (entry: Bookmark) => void;
 }) {
   const { entries, store } = useBookmarks();
+  const { token } = theme.useToken();
   const [query, setQuery] = useState('');
   const drag = useBookmarkDrag({ entries, axis: 'y', reorder: store.reorder });
   const filtered = entries.filter(entry => `${entry.title} ${entry.url}`.toLocaleLowerCase().includes(query.toLocaleLowerCase()));
@@ -22,7 +23,10 @@ export function BookmarkManager({ t, close, edit, create, visit }: {
     if (target < 0 || target >= siblings.length) return;
     store.reorder(entry.id, siblings[target].id, direction > 0);
   };
-  return <Modal open title={t('market.bookmarkManage')} onCancel={close} footer={null} width={680} zIndex={1750}>
+  const colors = { '--border': token.colorBorderSecondary,
+    '--text-secondary': token.colorTextSecondary } as CSSProperties;
+  return <Modal open title={t('market.bookmarkManage')} onCancel={close} footer={null} width={680} zIndex={1750}
+    styles={{ body: colors }}>
     <div className="browser-bookmark-manager-tools">
       <Input value={query} aria-label={t('market.bookmarkSearch')} placeholder={t('market.bookmarkSearch')}
         onChange={event => setQuery(event.target.value)} />

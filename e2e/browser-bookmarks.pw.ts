@@ -60,7 +60,7 @@ for (const enlarged of [false, true]) {
     await page.getByRole('menuitem', { name: '删除', exact: true }).click();
     await expect(page.locator('.ant-modal:visible')).not.toHaveClass(/-appear|-enter/);
     await page.screenshot({ path: info.outputPath(`web-${enlarged ? 'dark-20px' : 'light-14px'}-delete.png`) });
-    await page.getByRole('dialog', { name: /删除此书签/ }).getByRole('button', { name: /删\s*除/ }).click();
+    await page.getByRole('dialog', { name: '删除', exact: true }).getByRole('button', { name: /删\s*除/ }).click();
     await expect(bookmarks).toHaveText(['使用指南']);
     await page.screenshot({ path: info.outputPath(`web-${enlarged ? 'dark-20px' : 'light-14px'}-sidebar.png`) });
   });
