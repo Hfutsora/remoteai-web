@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Button, Drawer, Empty, Input } from 'antd';
+import { useState, type CSSProperties } from 'react';
+import { Button, Drawer, Empty, Input, theme } from 'antd';
 import { ChevronLeft, ChevronRight, Folder, Globe } from 'lucide-react';
 import type { Bookmark } from './model';
 import type { MarketText } from '../../provider-market/i18n';
@@ -10,6 +10,7 @@ export function BookmarkDrawer({ t, close, visit, add }: {
   t: MarketText; close: () => void; visit: (entry: Bookmark) => void; add: () => void;
 }) {
   const { entries, status, store } = useBookmarks();
+  const { token } = theme.useToken();
   const [folder, setFolder] = useState('');
   const [query, setQuery] = useState('');
   const parent = entries.find(entry => entry.id === folder && entry.kind === 'folder');
@@ -17,7 +18,9 @@ export function BookmarkDrawer({ t, close, visit, add }: {
     ? `${entry.title} ${entry.url}`.toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())
     : entry.parentId === (parent?.id ?? ''));
   return <Drawer open placement="bottom" height="75vh" zIndex={1750} title={parent?.title ?? t('market.bookmarkAll')}
-    onClose={close} rootClassName="browser-bookmark-drawer">
+    onClose={close} rootClassName="browser-bookmark-drawer" styles={{ body: {
+      '--border': token.colorBorderSecondary, '--text-secondary': token.colorTextSecondary,
+    } as CSSProperties }}>
     <div className="browser-bookmark-manager-tools">
       {parent && <Button aria-label={t('market.browserBack')} icon={<ChevronLeft size={16} />}
         onClick={() => setFolder(parent.parentId)} />}
