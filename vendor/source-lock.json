@@ -1,22 +1,15 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "362e0b0948a8bfb46f77281781044f99b26377a5",
+  "revision": "2dc492460968b35d1c1b219625b6455fd35e7099",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "99f6a2700bd898a7bbcff5ae2ddd8ed6d3d9c013"
-  },
-  "retainedTestSources": {
-    "repository": "https://github.com/piperhex/remoteai",
-    "revision": "e45886fa2661a49516ef71d74b012ac7ffe5ca00",
-    "paths": [
-      "apps/desktop/e2e/"
-    ]
+    "revision": "09bbd217d9e25c6a968e8107840b16a71fb30671"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "29ed069e35440f801cbb1cd8e880fb76b918b2c8"
+    "revision": "3af0b6abb5986f6a5979bb4d17588d696d09633f"
   },
-  "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.18/remoteai-i18n-0.1.18.tgz",
+  "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.19/remoteai-i18n-0.1.19.tgz",
   "files": {
     "scripts/test-browser.mjs": "456d5b867ac937a571630f4a01cd37ded9380d519bee3011e8807480c0739733",
     "scripts/test-browser.d.mts": "0f13ced709be8e097af7d4038400129b64e5d400f62e9bea2a0371125ec4f70f",
@@ -27,7 +20,7 @@
     "apps/desktop/e2e/mobile-fixture.mjs": "7bdefc5f3b02a3c6da056e2a3226da6ad57c9705ac0e09e90bfebdb953f0b8a0",
     "apps/desktop/src-tauri/icons/32x32.png": "7f5310d2f4b466d841479766ddf28a8b1003e167bfbc2e723d6de7ee967f4466",
     "apps/desktop/src-tauri/icons/128x128.png": "c6e11f099d213c5e3b81dc9264403858841e130f07e6f832069cac8eae47db02",
-    "apps/desktop/src-tauri/tauri.conf.json": "977ff1eff6294f575537ecbaeb1a17d44c3f762d4aa8a69176d674b40132bad0",
+    "apps/desktop/src-tauri/tauri.conf.json": "922a8592a1523cebd2cbc8f37ada4772965e19f2955073e471b2463754507dc2",
     "shared/localization/testLocale.ts": "6ca4daa3a6a5d9442013a8b5861803edfafebf20d2bd875d6a2608158dc53e35",
     "apps/desktop/e2e/browser-chrome-checks.ts": "ffb5e29d72a5b938cdea6adbe30bead71f221aecc1ef3f49e8a1890d88fd231e",
     "apps/desktop/e2e/browser-loading-checks.ts": "75711e132895ee135d1a2f1b54396cd0a114f2722169001434a7e15aec364118",
@@ -418,7 +411,7 @@
     "shared/remote-chat/views/ComposerGoal.tsx": "7c36ef874b71cf9ba3cc8c0840e4c6ac5ade7b4d7e92c2adad0036ecbff8e601",
     "shared/remote-chat/views/ChatAttachments.tsx": "e64ba3d05adae5cc8276d5bc1177d0f04fd7e74d6e2634bac244c1694fa1c959",
     "shared/remote-chat/views/pickChatImages.ts": "bf190dbd0423a171aa32fb28267d7fccc7455bba38349cad21c2808a0e19763a",
-    "shared/remote-chat/views/ComposerAttachments.tsx": "30d4b89a91d06336f9345df014cffd4a3d8b35424edb3fdb1d5a0e26ca79df6d",
+    "shared/remote-chat/views/ComposerAttachments.tsx": "9159c270c08345ff6a920f3aea221320f37e0e0c702ebf64c5a8632e8a2cfbea",
     "shared/remote-chat/views/ChatQueue.tsx": "56407a46658fd2d1e462617a5df336435ae32ba633d8343c1509ce7b199a35bd",
     "shared/remote-chat/views/ComposerMenus.tsx": "7e0a9d8160592c76c042dd5437bb8a30c94dc53560b780fbe3f4e09cd01a136e",
     "shared/remote-chat/views/ComposerProjectFiles.tsx": "5b8855e70a27a7182b4ae91a8d29bdea019a1d8f5dd62f27621757199b895849",
@@ -677,7 +670,7 @@
     "apps/desktop/e2e/git-repositories-fixture.ts": "aa3128687f1ca5fa2d71cd0eff585c11dc9b06e78738911e1c7259704ca64d41",
     "apps/desktop/e2e/git-large-fixture.ts": "1f6480956cee3a4ee985fc51cf63234cef8df49b717c9796b237a98b9592a3a9",
     "shared/remote-chat/testing/gitFixture.ts": "ed48011ce762e99c65d44d6ae825b84ef19457f34adc02d012da204f61b69fd2",
-    "apps/desktop/e2e/ssh-mentions-harness.tsx": "ddd9ebd631174161975e26e54c29a306b0149914057f9a44303da666a244d3de",
+    "apps/desktop/e2e/ssh-mentions-harness.tsx": "c7f3e623193cb7f1238d71d5cc93275ef8bf1a5267123a5febd36f86986b9251",
     "shared/chat/imageEditorAsset.ts": "f56ccb341888de7484fdd5a4b230aa1f7b8aee2fee1572d72f18e5ba6d7accac",
     "shared/chat/imageEditorScript.ts": "4f3f2f66482026d000f785fb0dc5e13a59ffb5b65794ed299410671e3461202f",
     "shared/chat/WorkspaceDrawerTab.tsx": "69c9e8509a5f386089cd5e59a7662d75c624f7c51bde48db90528112ca8d7643",
@@ -1031,7 +1024,7 @@
     "shared/remote-chat/client/useGoalMode.ts": "e12cc381abb74c7453e45051127c8384a8adb1f09679cbf2e0caee9df421db08",
     "apps/desktop/src/pages/codexGui/ComposerAddMenu.tsx": "7cb578d6d51032ea41f0f051194e5e9b4e262afa9fdd6fb453280c9e55e6c7f3",
     "apps/desktop/src/pages/codexGui/ComposerFilesDialog.tsx": "3f6ebbb09c7300520b9533511d417a59c85667b3b8d814334848c58868b6b3a7",
-    "apps/desktop/src/pages/codexGui/ComposerReferences.tsx": "08fe7fa7d322f23197982b5b88cbd90ea4b5981a72c62caa8862b91c84426937",
+    "apps/desktop/src/pages/codexGui/ComposerReferences.tsx": "fe6843e1753100b91d09c56820001d5cfe837a61a58ee9f2e42c8a05952bdaaa",
     "apps/desktop/src/pages/codexGui/ComposerQuotes.tsx": "88e8bc5f173a3546d014fe07435cd5fb33d33bee888a7bd6783b8796e80be007",
     "apps/desktop/src/pages/codexGui/GoalDialog.tsx": "ee0b76de28b73fc7d7ff7018aff0e2ae0e516c8784a73505136b3290f45f2de2",
     "apps/desktop/src/pages/codexGui/ComposerExtras.module.less": "c2b07eaf5c1f34ead919a467a654a94a597c544b34fbc714e5b21659e4373fc7",
@@ -1221,7 +1214,7 @@
     "shared/chat/groups/mutations.ts": "e52dd878299430f43652032a910f743e9f16566aff5a95d739beeaa04a1edd01",
     "apps/desktop/src/pages/codexGui/queueSendError.ts": "021cc2722c8d25bb53bb6953b1f64b8d6c9aff217e34eb154f970cd26fca59c1",
     "shared/conversation/contextUsage.ts": "df8b3b0df12201a3e9c5feb4d4e098e2798807dbb2a6502d2069064ab48ca5be",
-    "apps/desktop/src/pages/codexGui/skillEditorDom.ts": "0c1743ac4e3e33f59b3cff5dbfe7947564e9ede32cf2031e59de0958ee2bc13f",
+    "apps/desktop/src/pages/codexGui/skillEditorDom.ts": "591aaf7f39f4ebfe48c8408577b69e02197ab4d4b3e6c109f9f8fc947c3fcb86",
     "apps/desktop/src/pages/codexGui/liveModelNotice.ts": "4293f214fd28c3b0a266948980c96b674e365b4116668eea68059e399a90c8b1",
     "apps/desktop/src/pages/codexGui/modelCatalogTimeout.ts": "3cc32254be45174267d520df9d1d8bf9193ac7a01b7f83922ce3fb9b72f337fe",
     "apps/desktop/src/pages/codexGui/providerCatalogSync.ts": "af8aa3b9814deb192c362671339701a2f47d732736ccbd95b427e3789599681e",
@@ -1545,7 +1538,7 @@
     "shared/remote-chat/views/composerContext.css": "1fc67e5ca6ea929f40ae705a0817dcc6c9caceba3b74cb8ec881c6f85b4fe41c",
     "shared/remote-chat/requestSpeedButton.css": "49d71e05ca0f5898405a71ad7a3e323441be5920192a61c9798e150d6fc87228",
     "shared/remote-chat/views/uploadProgress.css": "934a2621eae32c99c0bf43bd8b480c8c17315eb3c1ea192d91aad199fb6565bc",
-    "shared/chat/composerTrigger.ts": "134d27da154e0f4053b2d7d87489a2d6fba3f55ef03bfef84a442f62b4860a78",
+    "shared/chat/composerTrigger.ts": "6d4b8d2864392aae53d062ad1aab305d90f6ff516baf0698f2f0003dd0e0eca7",
     "shared/chat/pastedText.ts": "241edce8e9f48b34cf784976dcf4b4232a7ffa04a7e3853a020f3577e2468bdb",
     "shared/codex-status/useCodexServiceStatus.ts": "2380a44656c449b2a70c0b35388ec88a130cf1c8b420ca72a1619260bba8828b",
     "shared/codex-status/StatusBrowser.tsx": "7cecce61bfee0d5d37d471a301864715e249983e756f74e603d6e47c35c37833",
@@ -1849,16 +1842,6 @@
     "shared/accounts/accountSourceMenu.css": "79b903f3647082e9465f70cf45a7793cf59abc8d0d4f1cbfb94c9d4828b2d653",
     "shared/accounts/assets/openai.svg": "2b4a04ddc2395b20d168694d3850ce2050a702c4a0cdeb4d8b31b9a970481a8c",
     "shared/accounts/assets/claude.svg": "2d6fda79eb18ddccca35b799eeb3cece0dfabc22520ce3b10abd25668df9fa93",
-    "apps/native/src/chat/markdownTree.ts": "c717f4481126195f1b542ac400c078a2eac6d6db4154030cf1fbbdc20659893c",
-    "apps/native/src/chat/mathDocument.ts": "d4b2d2e61220f574271a306211590b6d7332da61092b4706539c472c828c66fb",
-    "apps/native/assets/terminal.html": "163e393b9dff468ad4c539368f3f1d4a9b18521070d99b59764b884bb2775586",
-    "apps/native/src/chat/desktop/desktopImeHtml.generated.ts": "bf22260f2d23e16d4e0d8e119ad73bfe0c604416e04bb9de7ad447442ffa77e4",
-    "apps/native/e2e/pdf-touch.mjs": "bf0adf7508dfa9085fbb65cd89c9a398eeb21b5422e2836809caf44e1bf8e39f",
-    "apps/native/vendor/shared/chat/fileReference.ts": "12c41ad7ff3879dfca073d8226eac47a0124e6ec6c60b7d8c28717e953924448",
-    "apps/native/vendor/shared/chat/mathMarkdown.ts": "8c02442fbd0b4933273ca7bff39fca49a1f9fd9f8fbce8e24ef404327dcc4164",
-    "apps/native/assets/math-css.json": "44f4b553d7cf367cb99d91a93feb819dc6b2a79057d7342b1457d655eaeaf4ab",
-    "apps/native/assets/text-selection.json": "5c74dde463682191609cc4192b461e13750e506f2132d2946399c2cb2551426d",
-    "apps/native/vendor/shared/theme/mode.ts": "d27ddb4c18a6bdae69e82278457d225466f600bdf003be6e7c34ff9b79f83550",
     "shared/cli-gui/modelSelection.ts": "78e78bf039e9d15be9bf34adf880acaeb5d9070459333c78d4e39f311e0e0b97",
     "shared/cli-gui/MobileEngineSelector.tsx": "808b85bd56d6c057941fb9ad3bf5814d8e7f2c318bd096bfa9baa7c428cb2c98",
     "shared/cli-gui/MobileCliSettings.tsx": "2420cd7aca253aa4727b4995fe3b565f8d251dcf95cf3f773f756c57103fe005",
@@ -1868,6 +1851,16 @@
     "shared/cli-gui/useCliImages.ts": "ed8518004b91d5cc058ea990e0e4619a6acecd97b1c1acb1eb62a6b26baf6438",
     "shared/cli-gui/CliImageProvider.tsx": "55af1f51fcb850887018ecc1a22d1105807698fcca7b000a24732dc0da866575",
     "shared/chat/ImageAttachments.tsx": "6c43ef2d718b69a877693c55790c17a2743be18f70b616689429d4a2dd17df35",
-    "shared/chat/ImageAttachments.module.less": "f48693662f819616adeccb766be1a2b06079dbeb6b38a7a1774b7340626de28a"
+    "shared/chat/ImageAttachments.module.less": "f48693662f819616adeccb766be1a2b06079dbeb6b38a7a1774b7340626de28a",
+    "apps/native/src/chat/markdownTree.ts": "c717f4481126195f1b542ac400c078a2eac6d6db4154030cf1fbbdc20659893c",
+    "apps/native/src/chat/mathDocument.ts": "d4b2d2e61220f574271a306211590b6d7332da61092b4706539c472c828c66fb",
+    "apps/native/assets/terminal.html": "163e393b9dff468ad4c539368f3f1d4a9b18521070d99b59764b884bb2775586",
+    "apps/native/src/chat/desktop/desktopImeHtml.generated.ts": "bf22260f2d23e16d4e0d8e119ad73bfe0c604416e04bb9de7ad447442ffa77e4",
+    "apps/native/vendor/shared/chat/fileReference.ts": "12c41ad7ff3879dfca073d8226eac47a0124e6ec6c60b7d8c28717e953924448",
+    "apps/native/vendor/shared/chat/mathMarkdown.ts": "8c02442fbd0b4933273ca7bff39fca49a1f9fd9f8fbce8e24ef404327dcc4164",
+    "apps/native/assets/math-css.json": "44f4b553d7cf367cb99d91a93feb819dc6b2a79057d7342b1457d655eaeaf4ab",
+    "apps/native/assets/text-selection.json": "5c74dde463682191609cc4192b461e13750e506f2132d2946399c2cb2551426d",
+    "apps/native/vendor/shared/theme/mode.ts": "d27ddb4c18a6bdae69e82278457d225466f600bdf003be6e7c34ff9b79f83550",
+    "apps/native/e2e/pdf-touch.mjs": "bf0adf7508dfa9085fbb65cd89c9a398eeb21b5422e2836809caf44e1bf8e39f"
   }
 }

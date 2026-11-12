@@ -3,13 +3,15 @@ import { RemoteSshComposerFixture } from '../../../shared/testing/sshComposerFix
 import { saveGlobalFontSize } from '../../../shared/appearance/fontSize';
 import { ApplicationTypography } from '../../../shared/appearance/ApplicationTypography';
 import { setGuiLanguage } from '../../../shared/localization/uiText';
+import { isLanguage } from '../../../shared/localization/language';
 import { WebLocaleProvider } from '../src/i18n/WebLocaleProvider';
 import { setThemeMode } from '../src/theme/preference';
 import '../src/styles.css';
 import 'antd-mobile/es/global';
 
 const params = new URLSearchParams(location.search);
-setGuiLanguage(params.get('lang') === 'en' ? 'en' : 'zh');
+const language = params.get('lang');
+setGuiLanguage(isLanguage(language) ? language : 'zh');
 setThemeMode(params.has('dark') ? 'dark' : 'light');
 saveGlobalFontSize(params.has('large') ? 20 : 14);
 createRoot(document.getElementById('root')!).render(<ApplicationTypography><WebLocaleProvider>

@@ -18,7 +18,7 @@ export function ComposerAttachments({ items, busy, active, ready, uploadProgress
     return <span className="chat-capsule" key={`${item.path}:${index}`}>
       {item.kind === 'ssh' ? <Terminal size={14} />
         : item.kind === 'conversation' ? <MessageSquare size={14} /> : <File size={14} />}
-      <span title={item.name}>{item.kind === 'conversation' && '@'}{item.kind === 'ssh' && '!'}{item.name}</span>
+      <span title={item.name}>{item.kind === 'conversation' && '@'}{item.kind === 'ssh' && '#'}{item.name}</span>
       <button type="button" aria-label={t('client.chat.remove', { value1: item.name })}
         disabled={busy} onClick={() => remove(item)}><X size={14} /></button></span>;
   })}</div>;
