@@ -3,7 +3,7 @@
   "revision": "2dc492460968b35d1c1b219625b6455fd35e7099",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "09bbd217d9e25c6a968e8107840b16a71fb30671"
+    "revision": "70d524ff050da0fa849815493b6f7036587bcf24"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -814,7 +814,7 @@
     "shared/file-preview/projectLoader.ts": "c3ec283deaadbd63de0e4eb2422424af1fe6f5bd9b57843be4153992fa0362af",
     "shared/chat/conversationContext.ts": "7b9e50f4929faffbadb52a114842e82860be58331e9767e899e37023a02671d6",
     "shared/conversation/messageEditContent.ts": "f90af714797b0f191e65ba6b29d13c07ad345b42148e273f0227ffd75e7654fd",
-    "shared/conversation/MessageEditor.tsx": "2656ba910d575f53419bec536e7a50ca241b230037ea51ec5f1b7d52e881f855",
+    "shared/conversation/MessageEditor.tsx": "344be17f04d4dd52170b2151dba07f4cc661c63c273e6565ff53ac8e70b4e324",
     "shared/remote-chat/views/MessageEditInput.tsx": "f83bfa62df5ba31753a083b15b6b8e6dc814ec2cd1206db1ebd25c4910e435a2",
     "shared/conversation/MessageEditor.module.less": "0ea201fe7cc44081788a37d04a4df4ccae998df5cd126efcae4d79e91d0d1e46",
     "shared/token-usage/chartUtils.ts": "b1d12b173d5e01bd68708603c4b78239c49a9f07af45f9e001cfb5209830c4cc",

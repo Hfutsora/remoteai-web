@@ -1,5 +1,6 @@
 import { useRef, useState, type ClipboardEvent, type ReactNode } from 'react';
 import { Button, Popconfirm } from 'antd';
+import { Trash2 } from 'lucide-react';
 import { uiText } from '../localization/uiText';
 import { remoteErrorText } from '../localization/errors';
 import type { ComposerText, Content, SkillReference } from './types';
@@ -64,8 +65,9 @@ export function MessageEditor(props: Props) {
         cancelText={uiText('client.accounts.cancel')} okButtonProps={{ danger: true, autoInsertSpace: false }}
         cancelButtonProps={{ autoInsertSpace: false }} disabled={saving || unavailable}
         onConfirm={() => change(true)}>
-        <Button danger className={styles.deleteButton} autoInsertSpace={false}
-          disabled={saving || unavailable}>{uiText('client.messageEditing.deleteMessage')}</Button>
+        <Button danger type="text" className={styles.deleteButton}
+          icon={<Trash2 size="1.25em" aria-hidden="true" />}
+          aria-label={uiText('client.messageEditing.deleteMessage')} disabled={saving || unavailable} />
       </Popconfirm>}
       <Button className={styles.cancelButton} autoInsertSpace={false}
         aria-label={uiText('client.workspaceActions.cancelEditing')} disabled={saving}
