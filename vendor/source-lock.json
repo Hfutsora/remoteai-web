@@ -1,13 +1,20 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "3bbbe077d1346d5d1e18508b83bf2f774460aaba",
+  "revision": "501647adc9234ccb89cfe8623aba38e702e0c1e0",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
     "revision": "d28de0d3221f50f82771681216adbb748c7fd3ce"
   },
+  "retainedTestSources": {
+    "repository": "https://github.com/piperhex/remoteai",
+    "revision": "3bbbe077d1346d5d1e18508b83bf2f774460aaba",
+    "paths": [
+      "apps/desktop/e2e/"
+    ]
+  },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "8495bb3fdac6cb73eb20c83cc5e47610b834b617"
+    "revision": "fdf748bbb824d4acf568397e84ab469c1ef1f30b"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.20/remoteai-i18n-0.1.20.tgz",
   "files": {
@@ -17,7 +24,7 @@
     "apps/desktop/scripts/vite.config.ts": "3f818472f3caa4d9f7509693496bc48617daaac7e1af0715cac287ea46af4030",
     "apps/desktop/e2e/chat-harness.html": "4da5133597619c5631f9eba960aef812fc49f402907f8da357c63f8a3f095bc8",
     "apps/desktop/e2e/chat-harness.ts": "baa18c5e3535c749c4ef9774b4fa7ab0f6d184ee863cd2c2a9022373e12329b4",
-    "apps/desktop/e2e/mobile-fixture.mjs": "841b9a12320c8e07627cd3999a28cd6e02f837bfdc9b139c933c91f10ed1ca62",
+    "apps/desktop/e2e/mobile-fixture.mjs": "7bdefc5f3b02a3c6da056e2a3226da6ad57c9705ac0e09e90bfebdb953f0b8a0",
     "apps/desktop/src-tauri/icons/32x32.png": "7f5310d2f4b466d841479766ddf28a8b1003e167bfbc2e723d6de7ee967f4466",
     "apps/desktop/src-tauri/icons/128x128.png": "c6e11f099d213c5e3b81dc9264403858841e130f07e6f832069cac8eae47db02",
     "apps/desktop/src-tauri/tauri.conf.json": "922a8592a1523cebd2cbc8f37ada4772965e19f2955073e471b2463754507dc2",
