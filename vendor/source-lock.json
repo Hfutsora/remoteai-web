@@ -3,7 +3,7 @@
   "revision": "d5990e2ca017e8a2e48b6cf131c255f168c7ec3f",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "5b46b9b026a543b34e27515b13f62cb9077f8dbd"
+    "revision": "0927961e3b90822352608da96ddba4203be8068f"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -1879,6 +1879,6 @@
     "shared/chat/canScrollWithin.ts": "8d95c7965ce767bd659b54250f5d97462b6337596f5ad87930bf6fc00004318d",
     "shared/browser/bookmarks/BookmarkContextMenu.tsx": "82d4a7b62ca0893e94c346bf28a48bc8f8d98166f0335732a65c62b260b910e1",
     "shared/browser/bookmarks/useBookmarkDrag.ts": "ac9c7d29b5a28b877762e6017b210b26767f925d55ef7b55593b3fdf196aee8d",
-    "shared/chat/useScrollChain.ts": "94665837e54cba8b563ff12cda72c6d7f434598e199fbb3b79b5b8f4b52dadfc"
+    "shared/chat/useScrollChain.ts": "18175cb18ec0015543c5075fe1866cdcd37600d709e301c6be5cd1fb3a354404"
   }
 }

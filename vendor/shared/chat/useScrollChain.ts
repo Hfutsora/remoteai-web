@@ -26,9 +26,13 @@ function wheelPixels(event: WheelEvent, first: { node: HTMLElement; style: CSSSt
   return event.deltaY;
 }
 
+function shouldChainWheel(event: WheelEvent) {
+  return event.cancelable && !event.defaultPrevented && !event.ctrlKey && !event.metaKey && !event.shiftKey
+    && event.deltaY !== 0 && Math.abs(event.deltaX) <= Math.abs(event.deltaY);
+}
+
 function scrollWheel(event: WheelEvent) {
-  if (event.defaultPrevented || !event.cancelable || event.ctrlKey || event.metaKey || event.shiftKey
-    || event.deltaY === 0 || Math.abs(event.deltaX) > Math.abs(event.deltaY)) return;
+  if (!shouldChainWheel(event)) return;
   const containers = scrollContainers(event.target);
   if (!containers.length) return;
   const delta = wheelPixels(event, containers[0]);
