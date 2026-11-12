@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "a1021fa7d4960c32205f6b16847149a5a5cd453c",
+  "revision": "cd5b69acabdb861ece6f45d5b52522ad99b69232",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "0f5a950cdd6eceee296f40a96198d7c21f8345c4"
+    "revision": "b556b59d8422889b39cca660c2595a57c5867175"
   },
   "retainedTestSources": {
     "repository": "https://github.com/piperhex/remoteai",
@@ -14,9 +14,9 @@
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "fdf748bbb824d4acf568397e84ab469c1ef1f30b"
+    "revision": "867bfa8d67e8cc93e7275ea273881e4a7ae45d6d"
   },
-  "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.21/remoteai-i18n-0.1.21.tgz",
+  "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.23/remoteai-i18n-0.1.23.tgz",
   "files": {
     "scripts/test-browser.mjs": "456d5b867ac937a571630f4a01cd37ded9380d519bee3011e8807480c0739733",
     "scripts/test-browser.d.mts": "0f13ced709be8e097af7d4038400129b64e5d400f62e9bea2a0371125ec4f70f",
@@ -268,7 +268,7 @@
     "shared/browser/installBrowserDefaultsGuard.ts": "5ea7c9ee7685f144a879f9c3d7ff318d53ab67198c1e65f86ef9b3949fa03a36",
     "shared/navigation/usePageTransition.ts": "6cb31e3b350c2c95999cccd2cfda3348ab721b8f9a29bd4cbd54908e5c2d67b3",
     "shared/RetainedView.tsx": "d473e46c1719410de2ee6ca0514659e2e7c1a88b2b76c9d20ef9592b45228ce9",
-    "shared/navigation/swipeSurface.ts": "29bf556e91431c9b80e0d13b4829e8d23e60c00852c80c5315ded7b97b469001",
+    "shared/navigation/swipeSurface.ts": "27ebf0061ed4afe1f26b32f11c27271c1590bb3e43dcc28aa2a92ccfadea84ca",
     "shared/navigation/useHorizontalSwipe.ts": "d7be0aac8fc1d39a968b5109c55b86e55297c4e50e154cdf917f7f680837f2f1",
     "shared/desktop-update/useDesktopUpdate.ts": "2c69ee33fe61b5191ecb78c2cca517cde151fd118ac4efb045c8a48ef9505705",
     "shared/desktop-update/connection.ts": "37dda5337274346e219d960364461613ced2f7ac6fcd452e009e5e6c70907201",
@@ -929,7 +929,7 @@
     "shared/provider-market/i18n.ts": "99dda5e97e45baf4e6a78c6db8ecf6df1dae0d66356af9647cfe4264dd9413b2",
     "shared/file-preview/workspace/preview.module.less": "ab254b31294a88ac66379927c40523f47cf90756c44da0f2670b9509890d8701",
     "shared/remote-chat/views/remoteFilePreview.css": "fabb7a21c444c886f938711c288702b314d08dcc3e4ca38bbb198229cf700080",
-    "shared/provider-market/ProviderBrowser.tsx": "76eb3e273885377dd43c1f20d289cd6faf6d49ad72a3dc63dfe79dff2f390cbe",
+    "shared/provider-market/ProviderBrowser.tsx": "1873325c88483077141574e8a66a30d3aaa2bf4b2958268825e4dbeffe96c56b",
     "shared/file-preview/workspace/ManagedBrowserSurface.tsx": "84d5bc4c9425be2e4c59330ec904e4c116796fb2a3fcf96c158cfa388b028cbd",
     "shared/remote-chat/views/ChatBinaryFilePreview.tsx": "d18d95c89fcd05ddd62ce5d23297c65dede1f4712cb97af8f641650b0818ad97",
     "shared/remote-chat/filePreview.ts": "8d369c8a09c5a195afe36a072b33eba610baf26717f370c0a7911d6457314096",
@@ -1894,6 +1894,10 @@
     "shared/browser/useSearchEngine.ts": "2cafdc9368d73008726547fa3b2e8e455d8e0a9352f6f5dcfb004071e3d74904",
     "shared/browser/BrowserSearchSetting.tsx": "f47828e13458b0bc2908e43ce96742500d0e5a3ca71b4484791c6e4f2819fd59",
     "shared/browser/searchEngine.ts": "6f3d67eabc3cb333ca29447b9e96c10f8740c58dd00ce9f357ac2194e6291bd4",
-    "shared/browser/searchPreference.ts": "e735f5fd02aa753eaa37018d75d3baeb6fcdb0ba6e84c2535af4e2b5b2c8e4da"
+    "shared/browser/searchPreference.ts": "e735f5fd02aa753eaa37018d75d3baeb6fcdb0ba6e84c2535af4e2b5b2c8e4da",
+    "shared/browser/MobileBrowserToolbar.tsx": "cbd573d22430b73b18bec2fe3657a493a8b48321d654cd1aa186b4e7be68ecbb",
+    "shared/browser/BrowserPages.tsx": "74e9377eba31f8975b88852875d6d855d353bd5045d4fa22007615e91c3d39d7",
+    "shared/browser/BrowserEdgeGestures.tsx": "5e4ff2ed3bf1d025f85f8a38014877fbb87bb70fa33b0bae3932e63de5aa99a6",
+    "shared/browser/mobileBrowser.css": "b1a6b5592924a12262ed89972537b27c7cc6ee9e87789b5c98afc0e19883fa84"
   }
 }

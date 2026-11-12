@@ -42,7 +42,7 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-bookmarks.png`),
     animations: 'disabled' });
   await drawer.getByRole('button', { name: /PC bookmark/ }).click();
-  const frame = browser.locator('iframe');
+  const frame = browser.locator('iframe').first();
   await expect(frame.contentFrame().getByRole('heading', { name: 'Retained browser page' })).toBeVisible();
   await frame.contentFrame().locator('input').fill('unsaved-draft');
   const retained = await frame.elementHandle();
@@ -52,6 +52,51 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   expect(await frame.evaluate((node, previous) => node === previous, retained)).toBe(true);
   await expect(frame.contentFrame().locator('input')).toHaveValue('unsaved-draft');
   expect(await frame.evaluate(node => node.contentWindow?.sessionStorage.saved)).toBe('retained');
+  await page.route('**/second-tab', route => route.fulfill({ contentType: 'text/html',
+    body: '<h1>Second retained tab</h1><input value="second-draft">' }));
+  await browser.getByRole('button', { name: '新标签页', exact: true }).click();
+  const tabAddress = browser.getByRole('textbox', { name: '页面地址', exact: true });
+  await tabAddress.fill(`${new URL(info.project.use.baseURL!).origin}/second-tab`);
+  await tabAddress.press('Enter');
+  await expect(browser.locator('iframe').last().contentFrame().getByRole('heading')).toHaveText('Second retained tab');
+  await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-page.png`),
+    animations: 'disabled' });
+  await expect(browser.getByRole('button', { name: '刷新', exact: true })).toHaveCount(0);
+  await browser.getByRole('button', { name: '管理标签页（2）', exact: true }).click();
+  const grid = browser.locator('.browser-tab-grid');
+  await expect(grid.locator('.pm-browser-page:visible')).toHaveCount(2);
+  await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-tabs.png`),
+    animations: 'disabled' });
+  await browser.getByRole('textbox', { name: '搜索标签页' }).fill('missing-tab');
+  await expect(browser.getByText('没有匹配的标签页')).toBeVisible();
+  await browser.getByRole('textbox', { name: '搜索标签页' }).fill('session-fixture');
+  await expect(grid.locator('.pm-browser-page:visible')).toHaveCount(1);
+  await grid.locator('.browser-tab-select:visible').click();
+  expect(await frame.evaluate((node, previous) => node === previous, retained)).toBe(true);
+  await expect(frame.contentFrame().locator('input')).toHaveValue('unsaved-draft');
+  await tabAddress.fill(`${new URL(info.project.use.baseURL!).origin}/second-tab`); await tabAddress.press('Enter');
+  const cdp = await page.context().newCDPSession(page);
+  const swipe = async (side: 'left' | 'right', distance = 125) => {
+    const bounds = await browser.locator(`.browser-gesture-${side}`).boundingBox();
+    const startX = side === 'left' ? bounds!.x + 2 : bounds!.x + bounds!.width - 2;
+    const y = bounds!.y + 150;
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: startX, y }] });
+    for (let index = 1; index <= 5; index++) await cdp.send('Input.dispatchTouchEvent', {
+      type: 'touchMove', touchPoints: [{ x: startX + (side === 'left' ? 1 : -1) * index * distance / 5, y }],
+    });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  };
+  await swipe('left', 10); await expect(tabAddress).toHaveValue(/\/second-tab$/);
+  await swipe('left'); await expect(tabAddress).toHaveValue(/\/session-fixture$/);
+  await swipe('right'); await expect(tabAddress).toHaveValue(/\/second-tab$/);
+  await expect(browser).toBeVisible(); await cdp.detach();
+  await browser.getByRole('button', { name: '管理标签页（2）' }).click();
+  await grid.locator('.browser-tab-card-header button').last().click();
+  await expect(grid.locator('.pm-browser-page')).toHaveCount(1);
+  await grid.locator('.browser-tab-card-header button').click();
+  await expect(grid.locator('.pm-browser-page')).toHaveCount(1);
+  await browser.getByRole('button', { name: '返回网页' }).click();
+  await expect(tabAddress).toHaveValue('');
   await page.route(/^https:\/\/(www\.google\.com|www\.baidu\.com)/,
     route => route.fulfill({ contentType: 'text/html', body: '<h1>Search result fixture</h1>' }));
   const address = browser.getByRole('textbox', { name: '页面地址', exact: true });

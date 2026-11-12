@@ -12,6 +12,11 @@ import { BrowserTabs } from './BrowserTabs';
 import { ProviderWebsiteIcon } from './ProviderWebsiteIcon';
 import { useBrowserBookmarks } from '../browser/bookmarks/useBrowserBookmarks';
 import './providerBrowser.css';
+import { isTauri } from '@tauri-apps/api/core';
+import { useCompactBrowser } from '../browser/bookmarks/useCompactBrowser';
+import { MobileBrowserToolbar, MobileTabManagerToolbar } from '../browser/MobileBrowserToolbar';
+import { BrowserPages } from '../browser/BrowserPages';
+import { uiText } from '../localization/uiText';
 
 export interface BrowserSurfaceProps {
   tab: BrowserTab; active: boolean; command: { sequence: number; action: BrowserAction } | null;
@@ -79,12 +84,30 @@ export function BrowserContents(props: BrowserWindowProps & {
   fullscreen: boolean; toggleFullscreen: () => void; embedded?: boolean; actions?: ReactNode;
   onPageNavigate?: (id: string, url: string) => void; history?: ReactNode;
 }) {
-  const { tabs, activeId, open, Surface, commands } = props;
+  const { tabs, activeId, open } = props;
   const t = marketText(props.language);
   const tab = tabs.find((entry) => entry.id === activeId);
   const search = useSearchEngine();
+  const narrow = useCompactBrowser();
+  const compact = narrow && !isTauri();
+  const [manager, setManager] = useState(false);
+  const [query, setQuery] = useState('');
+  const showManager = compact && manager;
+  const add = () => { props.onNewTab(); setManager(false); setQuery(''); };
+  useEffect(() => { if (!open) setManager(false); }, [open]);
+  useEffect(() => {
+    if (!compact || !open) return;
+    const previous = document.documentElement.style.overscrollBehaviorX;
+    document.documentElement.style.overscrollBehaviorX = 'none';
+    return () => { document.documentElement.style.overscrollBehaviorX = previous; };
+  }, [compact, open]);
   const bookmarks = useBrowserBookmarks({ tab, t,
-    settingsContent: <BrowserSearchSetting t={t} search={search} />,
+    settingsContent: <>
+      {compact && <button disabled={!tab?.url} onClick={() => {
+        if (tab?.url) window.open(tab.url, '_blank', 'noopener,noreferrer');
+      }}>{uiText('client.workspaceActions.openInBrowser', {}, props.language)}</button>}
+      <BrowserSearchSetting t={t} search={search} />
+    </>,
     close: props.onClose,
     navigate: url => { if (tab) props.onNavigate(tab.id, url); },
     newTab: url => { if (tab) props.onPopup(tab.id, url); },
@@ -106,28 +129,29 @@ export function BrowserContents(props: BrowserWindowProps & {
     });
   }, [tabs]);
   return <>
-    <div className="pm-browser-titlebar">{props.history}
+    {!compact && <div className="pm-browser-titlebar">{props.history}
     <BrowserTabs tabs={tabs} activeId={activeId} visible={open} t={t}
       select={props.onSelect} close={props.onCloseTab} closeTabs={props.onCloseTabs} menuChanged={setMenuOpen} />
     <button aria-label={t('market.browserNewTab')} title={t('market.browserNewTab')}
       onClick={props.onNewTab}><Plus size={17} /></button>
     {!props.embedded && <button className="pm-browser-close" aria-label={t('market.close')} title={t('market.close')}
-      onClick={props.onClose}><X size={19} /></button>}</div>
-    <BrowserToolbar tab={tab} loading={Boolean(tab && loadingTabs.has(tab.id))}
+      onClick={props.onClose}><X size={19} /></button>}</div>}
+    {showManager ? <MobileTabManagerToolbar t={t} count={tabs.length} query={query} setQuery={setQuery}
+      close={() => setManager(false)} add={add} /> : compact
+      ? <MobileBrowserToolbar tab={tab} t={t} engine={search.engine} count={tabs.length}
+        newTab={add} manage={() => { setQuery(''); setManager(true); }} settings={bookmarks.settings}
+        navigate={url => { if (tab) props.onNavigate(tab.id, url); }}
+        action={action => { if (tab) props.onAction(tab.id, action); }} />
+      : <BrowserToolbar tab={tab} loading={Boolean(tab && loadingTabs.has(tab.id))}
       searchEngine={search.engine}
       fullscreen={props.fullscreen} toggleFullscreen={props.toggleFullscreen}
       navigate={(url) => { if (tab) props.onNavigate(tab.id, url); }}
       action={(action) => { if (tab) props.onAction(tab.id, action); }} t={t} actions={props.actions}
-      star={bookmarks.star} settings={bookmarks.settings} />
-    {bookmarks.bar}{bookmarks.overlays}
-    <div className="pm-browser-pages">{tabs.map((entry) => <div key={entry.id} id={`page-${entry.id}`}
-      role="tabpanel" className="pm-browser-page" hidden={entry.id !== activeId}>
-      <Surface tab={entry} active={open && entry.id === activeId && !menuOpen && !bookmarks.overlayOpen}
-        command={commands[entry.id] ?? null}
-        hideForModal={props.embedded} onNavigate={(url) => (props.onPageNavigate ?? props.onNavigate)(entry.id, url)}
-        onPopup={(url) => props.onPopup(entry.id, url)}
-        onLoadingChange={loading => loadingChanged(entry.id, loading)} t={t} />
-    </div>)}</div>
+      star={bookmarks.star} settings={bookmarks.settings} />}
+    {!showManager && bookmarks.bar}{bookmarks.overlays}
+    <BrowserPages key="pages" browser={props} t={t} manager={showManager} compact={compact} query={query}
+      blocked={menuOpen || bookmarks.overlayOpen} loadingChanged={loadingChanged}
+      select={id => { props.onSelect(id); setManager(false); }} />
   </>;
 }
 
