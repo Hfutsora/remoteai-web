@@ -7,6 +7,7 @@ import { browserAddress } from './browserAddress';
 import type { BrowserAction, BrowserTab } from './browserState';
 import { BrowserTabs } from './BrowserTabs';
 import { ProviderWebsiteIcon } from './ProviderWebsiteIcon';
+import { useBrowserBookmarks } from '../browser/bookmarks/useBrowserBookmarks';
 import './providerBrowser.css';
 
 export interface BrowserSurfaceProps {
@@ -26,10 +27,11 @@ export interface BrowserWindowProps {
   commands: Record<string, BrowserSurfaceProps['command']>; Surface: ComponentType<BrowserSurfaceProps>;
 }
 
-function BrowserToolbar({ tab, loading, fullscreen, toggleFullscreen, navigate, action, t, actions }: {
+function BrowserToolbar({ tab, loading, fullscreen, toggleFullscreen, navigate, action, t, actions, star, settings }: {
   loading: boolean;
   tab?: BrowserTab; fullscreen: boolean; toggleFullscreen: () => void;
   navigate: (url: string) => void; action: (action: BrowserAction) => void; t: MarketText; actions?: ReactNode;
+  star?: ReactNode; settings?: ReactNode;
 }) {
   const [address, setAddress] = useState(tab?.url ?? '');
   const [invalid, setInvalid] = useState(false);
@@ -56,12 +58,13 @@ function BrowserToolbar({ tab, loading, fullscreen, toggleFullscreen, navigate, 
       <input aria-label={t('market.browserAddress')} aria-invalid={invalid}
         value={address} onChange={(event) => { setAddress(event.target.value); setInvalid(false); }}
         placeholder="https://example.com" spellCheck={false} autoComplete="off" />
-      <button type="submit" aria-label={t('market.visitPage')}><ArrowRight size={16} /></button>
+      {star}<button type="submit" aria-label={t('market.visitPage')}><ArrowRight size={16} /></button>
     </form>
     {actions}
     <button aria-label={t(fullscreen ? 'market.browserRestore' : 'market.browserFullscreen')}
       title={t(fullscreen ? 'market.browserRestore' : 'market.browserFullscreen')} onClick={toggleFullscreen}>
       {fullscreen ? <Minimize2 size={17} /> : <Maximize2 size={17} />}</button>
+    {settings}
     {invalid && <span className="pm-browser-address-error" role="alert">{t('market.browserInvalidUrl')}</span>}
   </div>;
 }
@@ -74,6 +77,10 @@ export function BrowserContents(props: BrowserWindowProps & {
   const { tabs, activeId, open, Surface, commands } = props;
   const t = marketText(props.language);
   const tab = tabs.find((entry) => entry.id === activeId);
+  const bookmarks = useBrowserBookmarks({ tab, t,
+    navigate: url => { if (tab) props.onNavigate(tab.id, url); },
+    newTab: url => { if (tab) props.onPopup(tab.id, url); },
+  });
   const [menuOpen, setMenuOpen] = useState(false);
   const [loadingTabs, setLoadingTabs] = useState<ReadonlySet<string>>(() => new Set());
   const loadingChanged = useCallback((id: string, loading: boolean) => {
@@ -101,10 +108,13 @@ export function BrowserContents(props: BrowserWindowProps & {
     <BrowserToolbar tab={tab} loading={Boolean(tab && loadingTabs.has(tab.id))}
       fullscreen={props.fullscreen} toggleFullscreen={props.toggleFullscreen}
       navigate={(url) => { if (tab) props.onNavigate(tab.id, url); }}
-      action={(action) => { if (tab) props.onAction(tab.id, action); }} t={t} actions={props.actions} />
+      action={(action) => { if (tab) props.onAction(tab.id, action); }} t={t} actions={props.actions}
+      star={bookmarks.star} settings={bookmarks.settings} />
+    {bookmarks.bar}{bookmarks.overlays}
     <div className="pm-browser-pages">{tabs.map((entry) => <div key={entry.id} id={`page-${entry.id}`}
       role="tabpanel" className="pm-browser-page" hidden={entry.id !== activeId}>
-      <Surface tab={entry} active={open && entry.id === activeId && !menuOpen} command={commands[entry.id] ?? null}
+      <Surface tab={entry} active={open && entry.id === activeId && !menuOpen && !bookmarks.overlayOpen}
+        command={commands[entry.id] ?? null}
         hideForModal={props.embedded} onNavigate={(url) => (props.onPageNavigate ?? props.onNavigate)(entry.id, url)}
         onPopup={(url) => props.onPopup(entry.id, url)}
         onLoadingChange={loading => loadingChanged(entry.id, loading)} t={t} />

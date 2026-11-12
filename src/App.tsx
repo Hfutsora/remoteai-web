@@ -34,6 +34,11 @@ import { DownloadManagerPage } from './downloads/DownloadManagerPage';
 import { LoungePage } from '../../../shared/lounge/LoungePage';
 import { LoungeIcon } from '../../../shared/lounge/LoungeIcon';
 import { useWebLounge } from './lounge/useWebLounge';
+import { BookmarkProvider } from '../../../shared/browser/bookmarks/context';
+import { BrowserPage } from '../../../shared/browser/BrowserPage';
+import { marketText } from '../../../shared/provider-market/i18n';
+import { RetainedView } from '../../../shared/RetainedView';
+import { Globe } from 'lucide-react';
 import { LoungeAvatar } from '../../../shared/lounge/LoungeAvatar';
 import { accountLabel } from '../../../shared/lounge/accountLabel';
 import { downloadOwner } from '../../../shared/downloads/manager';
@@ -284,7 +289,7 @@ const navItems: Array<{ key: AppPage; label: string; icon: typeof LayoutDashboar
 ];
 
 function AppShell() {
-  useLanguage();
+  const language = useLanguage();
   const [menuVisible, setMenuVisible] = usePanelVisibility('main-menu');
   const dispatch = useAppDispatch();
   const { session } = useAppSelector((state) => state.auth);
@@ -295,7 +300,7 @@ function AppShell() {
   useChatViewport(page === 'lounge' && !desktopLayout);
   const lastRefreshRef = useRef(Date.now());
   const totpManager = useTotpVault(session);
-  const activeNavigationPage = desktopLayout && page === 'lounge' ? page : primaryNavigationPage(page);
+  const activeNavigationPage = desktopLayout && (page === 'lounge' || page === 'browser') ? page : primaryNavigationPage(page);
   const changePrimaryPage = useCallback((next: PrimaryPage) => { dispatch(pageChanged(next)); }, [dispatch]);
   const openAccounts = useCallback(() => changePrimaryPage('accounts'), [changePrimaryPage]);
 
@@ -356,7 +361,7 @@ function AppShell() {
     { key: "logout", label: t("client.app.signOut"), danger: true, icon: <LogOut size={16} />, onClick: () => void dispatch(signOut()) },
   ];
 
-  const pageDescriptions: Record<Exclude<AppPage, 'chat' | 'downloads' | 'lounge' | 'token-summary' | 'ssh'>, string> = {
+  const pageDescriptions: Record<Exclude<AppPage, 'chat' | 'downloads' | 'lounge' | 'browser' | 'token-summary' | 'ssh'>, string> = {
     accounts: t("client.app.welcomeBackYourAccountsAtAGlance"),
     discover: t('client.discovery.title'),
     devices: t("client.app.viewAndControlYourDesktopDevices"), totp: t("client.app.manageAndSyncYour2faCodes"), settings: t("client.app.managePreferencesAndAccountSecurity"),
@@ -365,6 +370,7 @@ function AppShell() {
   const discoveryPage = <DiscoveryPage owner={downloadScope} loungeUnread={lounge.state.unread}
     onOpen={destination => dispatch(pageChanged(destination))} />;
   const otherPages = {
+    browser: null,
     lounge: <LoungePage controller={lounge.controller} mobile={!desktopLayout}
       onBack={() => dispatch(pageChanged('discover'))} />,
     discover: discoveryPage, 'token-summary': discoveryPage, ssh: null,
@@ -377,11 +383,12 @@ function AppShell() {
   const pageTitle = page === 'devices' ? t('client.app.devices')
     : page === 'totp' ? t('client.discovery.twoFactor') : navItems.find(item => item.key === page)?.label;
   const shellClass = ['app-shell', (page === 'chat' || page === 'ssh') && 'chat-active',
-    page === 'lounge' && 'lounge-active',
+    page === 'lounge' && 'lounge-active', page === 'browser' && 'browser-active',
     (page === 'discover' || page === 'token-summary') && 'discovery-active',
     !menuVisible && 'main-menu-collapsed'].filter(Boolean).join(' ');
   const MenuToggleIcon = menuVisible ? PanelLeftClose : PanelLeftOpen;
-  return <div className={shellClass}>
+  return <BookmarkProvider scope={session ? JSON.stringify([session.baseUrl, session.email]) : 'guest'}
+    channel={session ? lounge.controller.bookmarks : undefined}><div className={shellClass}>
     <aside className="desktop-sidebar">
       <div className="desktop-sidebar-heading">
         <div className="brand-lockup"><BrandMark />
@@ -400,6 +407,13 @@ function AppShell() {
             : <item.icon size={19} />}<span>{item.label}</span>
         </button>
       </Tooltip>)}
+        <Tooltip placement="right" title={menuVisible ? undefined : marketText(language)('market.browserNavigation')}>
+          <button type="button" aria-label={marketText(language)('market.browserNavigation')}
+            aria-current={page === 'browser' ? 'page' : undefined}
+            className={page === 'browser' ? 'active' : ''} onClick={() => dispatch(pageChanged('browser'))}>
+            <Globe size={19} /><span>{marketText(language)('market.browserNavigation')}</span>
+          </button>
+        </Tooltip>
         <Tooltip placement="right" title={menuVisible ? undefined : t('client.lounge.title')}>
           <button type="button" aria-label={t('client.lounge.title')}
             aria-current={page === 'lounge' ? 'page' : undefined}
@@ -428,7 +442,7 @@ function AppShell() {
       </Tooltip>
     </aside>
     <div className="content-shell">
-      {page !== 'chat' && page !== 'downloads' && page !== 'lounge' && page !== 'token-summary' && page !== 'ssh'
+      {page !== 'chat' && page !== 'downloads' && page !== 'lounge' && page !== 'browser' && page !== 'token-summary' && page !== 'ssh'
         && <header className="desktop-topbar"><div>
         <span>{pageTitle}</span><strong>{pageDescriptions[page]}</strong></div>
         <div>{page === 'totp' && <TotpSyncSwitch enabled={totpManager.cloudSyncEnabled}
@@ -451,6 +465,9 @@ function AppShell() {
         {isDiscoveryPage(page)
           && !['downloads', 'token-summary', 'lounge', 'totp', 'devices', 'ssh'].includes(page)
           && <DiscoveryBackButton onBack={() => dispatch(pageChanged('discover'))} />}
+        <RetainedView active={page === 'browser'}>
+          <BrowserPage language={language} active={page === 'browser'} />
+        </RetainedView>
         {page !== 'chat' && page !== 'accounts' && page !== 'discover' && page !== 'settings' && otherPages[page]}
         </PrimaryPagePager>
       </main>
@@ -464,7 +481,7 @@ function AppShell() {
           onClick={() => dispatch(pageChanged(item.key))} />)}
       </TabBar><SafeArea position="bottom" />
     </div>
-  </div>;
+  </div></BookmarkProvider>;
 }
 
 export default function App() {

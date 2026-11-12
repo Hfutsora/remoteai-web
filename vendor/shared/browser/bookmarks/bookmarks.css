@@ -1,0 +1,44 @@
+.browser-bookmark-bar { display: flex; align-items: center; gap: 6px; min-width: 0; padding: 3px 10px;
+  border-bottom: 1px solid var(--border, #dce1e8); }
+.browser-bookmark-items { display: flex; align-items: center; gap: 3px; flex: 1; min-width: 0; overflow-x: auto;
+  scrollbar-width: thin; }
+.browser-bookmark-context { display: inline-flex; min-width: 0; }
+.browser-bookmark-items > .browser-bookmark-context { flex-shrink: 0; }
+.browser-bookmark-menu .browser-bookmark-context { display: flex; }
+[data-bookmark-drag] { user-select: none; }
+.bookmark-dragging { opacity: .45; cursor: grabbing !important; }
+.browser-bookmark-item.bookmark-drop-before { box-shadow: -2px 0 0 var(--accent, #6175db); }
+.browser-bookmark-item.bookmark-drop-after { box-shadow: 2px 0 0 var(--accent, #6175db); }
+.browser-bookmark-row.bookmark-drop-before { box-shadow: 0 -2px 0 var(--accent, #6175db); }
+.browser-bookmark-row.bookmark-drop-after { box-shadow: 0 2px 0 var(--accent, #6175db); }
+.pm-browser .browser-bookmark-item { min-width: 0; max-width: 180px; gap: 6px; padding: 4px 7px; }
+.browser-bookmark-item > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.browser-bookmark-item svg { flex-shrink: 0; }
+.browser-bookmark-all { border-left: 1px solid var(--border, #dce1e8) !important; border-radius: 0 !important; }
+.browser-bookmark-empty { padding: 5px; color: var(--text-secondary, #667085); white-space: nowrap; }
+.browser-bookmark-star[aria-pressed=true] { color: var(--accent, #6175db); }
+.browser-bookmark-menu { z-index: 1700; max-width: min(400px, calc(100vw - 16px)); }
+.browser-bookmark-menu .ant-dropdown-menu { max-height: 60vh; overflow-y: auto; }
+.browser-bookmark-menu .ant-dropdown-menu-title-content { overflow-wrap: anywhere; }
+.browser-bookmark-settings-popup { max-width: min(400px, calc(100vw - 16px)); }
+.browser-bookmark-settings { display: grid; gap: 12px; width: 280px; max-width: calc(100vw - 48px); }
+.browser-bookmark-settings label { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.browser-bookmark-settings [role=status] { color: var(--text-secondary, #667085); overflow-wrap: anywhere; }
+.browser-bookmark-form { display: grid; gap: 14px; }
+.browser-bookmark-form label { display: grid; gap: 6px; }
+.browser-bookmark-manager-tools { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+.browser-bookmark-manager-tools > input { flex: 1; min-width: 160px; }
+.browser-bookmark-list { max-height: 55vh; overflow: auto; }
+.browser-bookmark-row { display: flex; align-items: center; gap: 4px; padding: 6px 0;
+  border-bottom: 1px solid var(--border, #dce1e8); }
+.browser-bookmark-row-name { flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px;
+  border: 0; background: transparent; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+.browser-bookmark-row-name > span { display: grid; min-width: 0; }
+.browser-bookmark-row-name strong { font-weight: 500; }
+.browser-bookmark-row-name strong, .browser-bookmark-row-name small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.browser-bookmark-row-name small { color: var(--text-secondary, #667085); }
+.browser-bookmark-row-name svg { flex-shrink: 0; }
+@media (max-width: 600px) {
+  .browser-bookmark-all span { display: none; }
+  .browser-bookmark-bar { padding-inline: 6px; }
+}

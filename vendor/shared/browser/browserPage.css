@@ -1,0 +1,8 @@
+.pm-browser.browser-main-page { width: 100%; height: 100%; min-height: 0; flex: 1;
+  border: 0; border-radius: 0; box-shadow: none; }
+.pm-browser.browser-main-expanded { position: fixed; inset: 0; z-index: 1600; width: 100vw; height: 100vh; }
+.pm-browser.browser-main-page[hidden] { display: none; }
+.browser-desktop-main { display: flex; flex-direction: column; min-height: 0; overflow: hidden; padding: 0 !important; }
+.browser-active .content-shell { height: 100vh; display: flex; flex-direction: column; }
+.browser-active .main-content { flex: 1; padding: 0; min-height: 0; display: flex; flex-direction: column; }
+.browser-active .primary-page-viewport, .browser-active .primary-page-track { flex: 1; min-height: 0; height: 100%; }
