@@ -13,6 +13,8 @@ for (const enlarged of [false, true]) {
     await browser.getByRole('button', { name: '添加书签', exact: true }).click();
     const editor = page.getByRole('dialog', { name: '编辑书签', exact: true });
     await editor.getByRole('textbox', { name: '名称' }).fill('使用指南');
+    await expect(page.locator('.ant-modal:visible')).not.toHaveClass(/-appear|-enter/);
+    await page.screenshot({ path: info.outputPath(`web-${enlarged ? 'dark-20px' : 'light-14px'}-editor.png`) });
     await editor.getByRole('button', { name: /保\s*存/ }).click();
     await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
     const toggle = page.getByRole('switch', { name: '显示书签栏' });
@@ -56,6 +58,8 @@ for (const enlarged of [false, true]) {
       await expect(page.locator('.browser-bookmark-menu:visible')).not.toHaveClass(/-appear|-enter/);
     await bookmarks.first().dispatchEvent('pointerup', { pointerType: 'touch', pointerId: 1, isPrimary: true, button: 0 });
     await page.getByRole('menuitem', { name: '删除', exact: true }).click();
+    await expect(page.locator('.ant-modal:visible')).not.toHaveClass(/-appear|-enter/);
+    await page.screenshot({ path: info.outputPath(`web-${enlarged ? 'dark-20px' : 'light-14px'}-delete.png`) });
     await page.getByRole('dialog', { name: /删除此书签/ }).getByRole('button', { name: /删\s*除/ }).click();
     await expect(bookmarks).toHaveText(['使用指南']);
     await page.screenshot({ path: info.outputPath(`web-${enlarged ? 'dark-20px' : 'light-14px'}-sidebar.png`) });
