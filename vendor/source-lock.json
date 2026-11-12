@@ -3,7 +3,7 @@
   "revision": "d5990e2ca017e8a2e48b6cf131c255f168c7ec3f",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "bae21ce223d671c07faa76dc79f389607a21d667"
+    "revision": "5b46b9b026a543b34e27515b13f62cb9077f8dbd"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
@@ -358,7 +358,7 @@
     "shared/conversation/turnTiming.ts": "de8270c15839dc02c294bc320184590c05e390d63a316945cbeb82e1ac4ec034",
     "shared/remote-chat/views/formatters.ts": "08d5df888b77a41286d60632e70a4b0bc5d835a9bd611597709ff721aa0509d1",
     "shared/remote-chat/views/ChatWorkDrawer.tsx": "4697ae7e10fc0ada355e3fceefcdff5fd09037e99f804811eeca08c24e02f789",
-    "shared/remote-chat/views/useHistoryScroll.ts": "e408d5cfcc435a074c06f32fe429cdedddecd846a9e58857c26f726e968f1728",
+    "shared/remote-chat/views/useHistoryScroll.ts": "25cafd4b2341fee8258cd6afdc20d9f920baeeffb46cc47dba02e00a37e7f281",
     "shared/remote-chat/views/ChatMessage.tsx": "4bf48025a06a3c23b19bc9e5279a4efa5d97518759e9aefe1939311d1bf9e24b",
     "shared/remote-chat/views/ChatTurnDetails.tsx": "1022150def5a585fb05477ac84f3571f11417a93ebf17114f3b2c81d70935e33",
     "shared/remote-chat/views/ChatTurnSummary.tsx": "e8ba91c3f9b59a1301720edb1b76e1bac1d70b6f615a0e6afe95674a86aae691",
@@ -947,7 +947,7 @@
     "shared/conversation/modelChangeHistory.ts": "44e7e5254ad183e34c58da36c1ce073808249a9abf9b23d1e1b24254e0456056",
     "apps/desktop/src/pages/codexGui/TurnMessage.tsx": "87a08d80b1cbacc9cea96c2526d83ae18c5adbfa72d23b60bdaddea23428d5ea",
     "apps/desktop/src/pages/codexGui/useFollowScroll.ts": "75b47e3f2e74f178d240fc6a9a9a5fa7bc04632e4654307829dcf5ad4d1268e8",
-    "apps/desktop/src/pages/codexGui/useMessageWindow.ts": "4ccb23d00a338ccee982275a6b101aae78cb222daace09bb9b535e043d69131c",
+    "apps/desktop/src/pages/codexGui/useMessageWindow.ts": "d4b083d7ad11c4e41fafcbc209d1c5b6f268f31af8ab0240e89ac2a090ccffbb",
     "apps/desktop/src/pages/codexGui/WorkingStatus.tsx": "6a44dc0b77085a7d316539aa20d0fe6912083cb57593faad7953df2971e1e67f",
     "shared/conversation/useQuoteSelection.ts": "01f0db25bd6aaad6633d63348fe5e13e75dc451a3f8234cb8e833f13c79c5738",
     "apps/desktop/src/pages/codexGui/QuoteSelectionButton.tsx": "0e0b8919568e432cc2f46de697a2be170818b648ee97c1bdf3eeb710fece2d8e",
@@ -978,7 +978,7 @@
     "shared/chat/turnGroups.ts": "db997f471bb8d6b3ac2c7e6ad1c205680caaabcc1163b05ab171b6501b4269a4",
     "shared/chat/processContent.ts": "108093f38c7245747fa8ce539e83cde76c8ba02e4a732df6363e70caaa9ab8f5",
     "shared/conversation/activityGroups.ts": "e7fc642542f504c4a82b2d3ca186a472cee46d7f53aeed6c2fa208d42b1576b7",
-    "shared/chat/ActivityList.tsx": "9ff4da5cdbc8671d4d1a6763619787286447073f2a494cc3dc7566ff3e3fab59",
+    "shared/chat/ActivityList.tsx": "d142b3275d74a06c6e8c03187be2f1ea39bace1c1d7dac46cd518b0eec86e4a2",
     "shared/chat/commandPreview.ts": "bf69bfed6601ff7210b2b743fedfd6ebf0bddab8ec5c7ccd7aab5857b91f844b",
     "shared/chat/activityPreview.ts": "11959bee6ec03075e84b95e333ec861a247474ce459f525217fde354cb00acfb",
     "shared/chat/useToolSummary.ts": "01f69f54d0863ecec70a25240a4f690d23328a9bac63e7a79c004aab1a7aa3f6",
@@ -1220,7 +1220,7 @@
     "apps/desktop/src/pages/codexGui/providerCatalogSync.ts": "af8aa3b9814deb192c362671339701a2f47d732736ccbd95b427e3789599681e",
     "apps/desktop/src/pages/codexGui/titleSettings.ts": "ba124fb64344b4a819769d1991077d3a3f322391ca9fa4735845d0ce6081805c",
     "shared/remote-chat/views/ChatToolResult.tsx": "47e60c9d228198b2cc19c58af1c9145861512f8777b24502a342c52c4e1cdf56",
-    "shared/chat/CommandOutput.tsx": "18708f5d782a52939c18ec2da5f7e0e89b1e952d49e8479f80bc83e741cf972c",
+    "shared/chat/CommandOutput.tsx": "24198c4c066ae7805e766ca0205216c22379edf2fbacb0866a60534daee23fc0",
     "shared/remote-chat/views/VirtualCommandText.tsx": "ebd90c4ed9ddb38656bc28f2588436830ec5c8e2c486fd68c5493f826aad6e05",
     "shared/remote-chat/testing/gitRepositoriesFixture.ts": "e23506999c139dcfa08ac587171c95826c2efa35a95766f55cfd9eaed59465f2",
     "apps/desktop/e2e/ssh-mentions-harness.css": "e9547fc972b9e7baaad92f710a02f02ea50b89a6986c35c2b443bb00f19de5ac",
@@ -1477,7 +1477,7 @@
     "shared/port-mapping/target.ts": "33a84374b85115e9085c75f481149e27839ff7acfae25f25cc216851c4d35a40",
     "shared/port-mapping/streamBudget.ts": "5f0005d0141da79ac2f68115c081f2c58c116da0f0065f3e4facb6d282538f02",
     "shared/remote-chat/views/useMobileHistoryVisibility.ts": "2925fa60285dcc2b5b01e3312fe1aa4b184fc0f228a42081c18a36d4520a8e62",
-    "shared/chat/activityList.less": "469ef84144fc9d6e9114cf7c46af27d56933d2ab8ebe47415f822c7784c93b57",
+    "shared/chat/activityList.less": "43e674cf5d2087fea15f0b621a906e11b1a2a128671933d6ef32e3a1af8a19f8",
     "shared/context-usage/format.ts": "591f5e3a1dc48be689c77e285c18e3914c46a2db35c0342340c56816943c0ac1",
     "shared/remote-chat/views/messageReferences.css": "61f02bc6fb2e51dcb6f67c99a83724f2bb731b38155b036de707ddaa25ee9179",
     "shared/chat/messageAttachments.css": "86a96352bae313e6dbe76c09b029d72dbaaa0f65a7111d7fde3295f9cb385997",
@@ -1875,7 +1875,10 @@
     "shared/browser/bookmarks/BookmarkEditor.tsx": "da29c03c84cabfdc98e9995e16b9ae48a1b3d4eac6ba9a8e732cb5a3299055cd",
     "shared/browser/bookmarks/BookmarkManager.tsx": "c61a1db4f37a753a38fef41c0254f685d2ca6d3c2dbb39872cda50d6c3f467ab",
     "shared/browser/bookmarks/bookmarks.css": "c372f4106362bc0782579427d8adee17dc64143628c2dfdce6c885ed949e43ce",
+    "apps/desktop/e2e/nested-scroll-checks.ts": "d069d4904859fd6d130d21f6d8169cdd17e45e65c6ffa7d443d3dbfd8f06dbb4",
+    "shared/chat/canScrollWithin.ts": "8d95c7965ce767bd659b54250f5d97462b6337596f5ad87930bf6fc00004318d",
     "shared/browser/bookmarks/BookmarkContextMenu.tsx": "82d4a7b62ca0893e94c346bf28a48bc8f8d98166f0335732a65c62b260b910e1",
-    "shared/browser/bookmarks/useBookmarkDrag.ts": "ac9c7d29b5a28b877762e6017b210b26767f925d55ef7b55593b3fdf196aee8d"
+    "shared/browser/bookmarks/useBookmarkDrag.ts": "ac9c7d29b5a28b877762e6017b210b26767f925d55ef7b55593b3fdf196aee8d",
+    "shared/chat/useScrollChain.ts": "94665837e54cba8b563ff12cda72c6d7f434598e199fbb3b79b5b8f4b52dadfc"
   }
 }
