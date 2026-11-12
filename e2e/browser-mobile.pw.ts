@@ -52,4 +52,24 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   expect(await frame.evaluate((node, previous) => node === previous, retained)).toBe(true);
   await expect(frame.contentFrame().locator('input')).toHaveValue('unsaved-draft');
   expect(await frame.evaluate(node => node.contentWindow?.sessionStorage.saved)).toBe('retained');
+  await page.route(/^https:\/\/(www\.google\.com|www\.baidu\.com)/,
+    route => route.fulfill({ contentType: 'text/html', body: '<h1>Search result fixture</h1>' }));
+  const address = browser.getByRole('textbox', { name: '页面地址', exact: true });
+  await address.fill('mobile search'); await address.press('Enter');
+  await expect(address).toHaveValue('https://www.google.com/search?q=mobile+search');
+  await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
+  await page.locator('.browser-bookmark-settings-popup .ant-select-selector').click();
+  await page.getByTitle('百度', { exact: true }).last().click();
+  await expect(page.locator('.browser-bookmark-settings-popup .ant-select-dropdown:visible')).toHaveCount(0);
+  expect(await page.evaluate(() => localStorage.getItem('remoteai:browser-search-engine'))).toBe('baidu');
+  await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-search-settings.png`),
+    animations: 'disabled' });
+  await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
+  await address.fill('手机搜索'); await address.press('Enter');
+  await expect(address).toHaveValue('https://www.baidu.com/s?wd=%E6%89%8B%E6%9C%BA%E6%90%9C%E7%B4%A2');
+  await page.reload();
+  await page.locator('.mobile-tabbar').getByText('发现', { exact: true }).click();
+  await page.locator('.discovery-page').getByRole('button', { name: '浏览器', exact: true }).click();
+  await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
+  await expect(page.locator('.browser-bookmark-settings-popup')).toContainText('百度');
 });

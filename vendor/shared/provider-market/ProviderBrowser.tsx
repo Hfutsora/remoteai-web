@@ -3,7 +3,10 @@ import { createPortal } from 'react-dom';
 import { ArrowLeft, ArrowRight, Globe, Maximize2, Minimize2, Plus, RotateCw, X } from 'lucide-react';
 import { marketText, type MarketText } from './i18n';
 import type { Language } from '@remoteai/i18n';
-import { browserAddress } from './browserAddress';
+import { browserInput } from '../browser/addressInput';
+import { useSearchEngine } from '../browser/useSearchEngine';
+import { BrowserSearchSetting } from '../browser/BrowserSearchSetting';
+import type { SearchEngine } from '../browser/searchEngine';
 import type { BrowserAction, BrowserTab } from './browserState';
 import { BrowserTabs } from './BrowserTabs';
 import { ProviderWebsiteIcon } from './ProviderWebsiteIcon';
@@ -27,11 +30,13 @@ export interface BrowserWindowProps {
   commands: Record<string, BrowserSurfaceProps['command']>; Surface: ComponentType<BrowserSurfaceProps>;
 }
 
-function BrowserToolbar({ tab, loading, fullscreen, toggleFullscreen, navigate, action, t, actions, star, settings }: {
+function BrowserToolbar({ tab, loading, fullscreen, toggleFullscreen, navigate, action, t, actions, star, settings,
+  searchEngine }: {
   loading: boolean;
   tab?: BrowserTab; fullscreen: boolean; toggleFullscreen: () => void;
   navigate: (url: string) => void; action: (action: BrowserAction) => void; t: MarketText; actions?: ReactNode;
   star?: ReactNode; settings?: ReactNode;
+  searchEngine: SearchEngine;
 }) {
   const [address, setAddress] = useState(tab?.url ?? '');
   const [invalid, setInvalid] = useState(false);
@@ -50,14 +55,14 @@ function BrowserToolbar({ tab, loading, fullscreen, toggleFullscreen, navigate, 
       if (tab?.url.startsWith('file:') && address.trim() === tab.url) {
         setInvalid(false); action('reload'); return;
       }
-      const url = browserAddress(address);
+      const url = browserInput(address, searchEngine);
       setInvalid(!url);
       if (url) { setAddress(url.href); navigate(url.href); }
     }}>
       <ProviderWebsiteIcon url={tab?.url} size={15} fallback={<Globe size={15} />} />
       <input aria-label={t('market.browserAddress')} aria-invalid={invalid}
         value={address} onChange={(event) => { setAddress(event.target.value); setInvalid(false); }}
-        placeholder="https://example.com" spellCheck={false} autoComplete="off" />
+        placeholder={t('market.browserSearchOrAddress')} spellCheck={false} autoComplete="off" />
       {star}<button type="submit" aria-label={t('market.visitPage')}><ArrowRight size={16} /></button>
     </form>
     {actions}
@@ -77,7 +82,9 @@ export function BrowserContents(props: BrowserWindowProps & {
   const { tabs, activeId, open, Surface, commands } = props;
   const t = marketText(props.language);
   const tab = tabs.find((entry) => entry.id === activeId);
+  const search = useSearchEngine();
   const bookmarks = useBrowserBookmarks({ tab, t,
+    settingsContent: <BrowserSearchSetting t={t} search={search} />,
     close: props.onClose,
     navigate: url => { if (tab) props.onNavigate(tab.id, url); },
     newTab: url => { if (tab) props.onPopup(tab.id, url); },
@@ -107,6 +114,7 @@ export function BrowserContents(props: BrowserWindowProps & {
     {!props.embedded && <button className="pm-browser-close" aria-label={t('market.close')} title={t('market.close')}
       onClick={props.onClose}><X size={19} /></button>}</div>
     <BrowserToolbar tab={tab} loading={Boolean(tab && loadingTabs.has(tab.id))}
+      searchEngine={search.engine}
       fullscreen={props.fullscreen} toggleFullscreen={props.toggleFullscreen}
       navigate={(url) => { if (tab) props.onNavigate(tab.id, url); }}
       action={(action) => { if (tab) props.onAction(tab.id, action); }} t={t} actions={props.actions}

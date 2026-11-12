@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { Button, Modal, Popover, Switch, theme } from 'antd';
 import { Settings, Star } from 'lucide-react';
 import type { BrowserTab } from '../../provider-market/browserState';
@@ -17,6 +17,7 @@ import './bookmarks.css';
 export function useBrowserBookmarks(options: {
   tab?: BrowserTab; t: MarketText; navigate: (url: string) => void; newTab: (url: string) => void;
   close?: () => void;
+  settingsContent?: ReactNode;
 }) {
   const { tab, t } = options;
   const compact = useCompactBrowser();
@@ -50,6 +51,7 @@ export function useBrowserBookmarks(options: {
     settings: <Popover trigger="click" placement="bottomRight" open={settings} onOpenChange={setSettings}
       overlayClassName="browser-bookmark-settings-popup" zIndex={1700} title={t('market.browserSettings')}
       content={<div className="browser-bookmark-settings">
+        {options.settingsContent}
         <label><span>{t('market.bookmarkShowBar')}</span><Switch checked={showBar}
           aria-label={t('market.bookmarkShowBar')} onChange={store.setShowBar} /></label>
         <Button block onClick={manage}>{t(compact ? 'market.bookmarkAll' : 'market.bookmarkManage')}</Button>
