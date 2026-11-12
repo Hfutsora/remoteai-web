@@ -32,3 +32,36 @@ test('keeps reply errors inside the conversation and out of a new chat', async (
   await expect(page.locator('body')).not.toContainText(error.message);
   await screenshot(page, info, `${info.project.name}-new-chat-clean`);
 });
+
+test('shows capacity failures outside work and before summaries until real recovery', async ({ page, request }, info) => {
+  await request.post(`${fixtureUrl}/test/reset`);
+  await login(page);
+  await connect(page);
+  await openChatList(page);
+  await page.getByText('移动端聊天体验', { exact: true }).click();
+  await expect(page.getByRole('heading', { name: '移动端聊天体验', exact: true })).toBeVisible();
+  const emit = (method: string, params: Record<string, unknown>) =>
+    request.post(`${fixtureUrl}/test/chat-event`, { data: { method, params: { threadId, ...params } } });
+  await emit('turn/started', { turn: { id: turnId, status: 'inProgress', items: [
+    { id: 'question', type: 'userMessage', text: '检查项目修改。' },
+    { id: 'before', type: 'agentMessage', phase: 'commentary', text: '这是报错前的处理过程。' },
+    { id: 'command', type: 'commandExecution', command: 'git status', status: 'completed', exitCode: 0 },
+  ], plan: [{ step: '检查项目修改', status: 'inProgress' }] } });
+  await emit('error', { turnId, willRetry: true,
+    error: { message: 'Selected model is at capacity. Please try a different model.' } });
+  await emit('item/started', { turnId, item: { id: 'reasoning', type: 'reasoning', summary: [] } });
+  const notice = page.getByText('当前模型繁忙，请换个模型重试。', { exact: true });
+  await expect(notice).toBeVisible();
+  await expect(notice).toHaveCount(1);
+  expect(await notice.evaluate(element => element.closest('.chat-entry-error')?.parentElement
+    ?.classList.contains('chat-message-content'))).toBe(true);
+  const plan = page.getByRole('button', { name: '查看任务计划', exact: true });
+  await expect(plan).toBeVisible();
+  expect((await notice.boundingBox())!.y).toBeLessThan((await plan.boundingBox())!.y);
+  expect(await notice.evaluate(element => Boolean(element.closest('details, .chat-turn-summary')))).toBe(false);
+  await screenshot(page, info, `${info.project.name}-capacity-at-process-boundary`);
+  await emit('item/completed', { turnId,
+    item: { id: 'reasoning', type: 'reasoning', summary: ['连接恢复，继续检查。'] } });
+  await expect(notice).toHaveCount(0);
+  await screenshot(page, info, `${info.project.name}-capacity-recovered`);
+});
