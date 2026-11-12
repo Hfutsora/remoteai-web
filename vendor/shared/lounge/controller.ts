@@ -73,7 +73,7 @@ export class LoungeController {
   private restoringLocal = false;
   readonly attachments: LoungeAttachmentManager;
   readonly bookmarks = new BookmarkChannel(frame => this.state.status === 'connected'
-    && this.transport.send(this.socket, frame));
+    && this.transport.send(this.socket, frame), () => this.runtime.randomId());
 
   constructor(private readonly session?: LoungeSession, private readonly runtime: LoungeRuntime = browserLoungeRuntime) {
     this.backoff = new ReconnectBackoff({ maximumMs: 15_000, random: runtime.retryRandom });

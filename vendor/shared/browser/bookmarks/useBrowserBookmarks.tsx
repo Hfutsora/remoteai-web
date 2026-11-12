@@ -2,24 +2,24 @@ import { useState } from 'react';
 import { Button, Modal, Popover, Switch, theme } from 'antd';
 import { Settings, Star } from 'lucide-react';
 import type { BrowserTab } from '../../provider-market/browserState';
-import type { MarketKey, MarketText } from '../../provider-market/i18n';
+import type { MarketText } from '../../provider-market/i18n';
 import { bookmarkUrl, type Bookmark } from './model';
 import { useBookmarks } from './context';
 import { BookmarkBar } from './BookmarkBar';
 import { BookmarkEditor } from './BookmarkEditor';
 import { BookmarkManager } from './BookmarkManager';
-import type { BookmarkStatus } from './store';
+import { bookmarkStatusKeys } from './status';
+import { BookmarkDrawer } from './BookmarkDrawer';
+import { useCompactBrowser } from './useCompactBrowser';
 import './bookmarks.css';
 
-const statuses: Record<BookmarkStatus, MarketKey> = {
-  local: 'market.bookmarkLocal', syncing: 'market.bookmarkSyncing', synced: 'market.bookmarkSynced',
-  offline: 'market.bookmarkSyncFailed', 'storage-error': 'market.bookmarkStorageFailed', capacity: 'market.bookmarkCapacity',
-};
 
 export function useBrowserBookmarks(options: {
   tab?: BrowserTab; t: MarketText; navigate: (url: string) => void; newTab: (url: string) => void;
+  close?: () => void;
 }) {
   const { tab, t } = options;
+  const compact = useCompactBrowser();
   const { token } = theme.useToken();
   const { entries, showBar, status, store } = useBookmarks();
   const [settings, setSettings] = useState(false);
@@ -52,8 +52,11 @@ export function useBrowserBookmarks(options: {
       content={<div className="browser-bookmark-settings">
         <label><span>{t('market.bookmarkShowBar')}</span><Switch checked={showBar}
           aria-label={t('market.bookmarkShowBar')} onChange={store.setShowBar} /></label>
-        <Button block onClick={manage}>{t('market.bookmarkManage')}</Button>
-        <span role="status" style={{ color: token.colorTextSecondary }}>{t(statuses[status])}</span>
+        <Button block onClick={manage}>{t(compact ? 'market.bookmarkAll' : 'market.bookmarkManage')}</Button>
+        {compact && options.close && <Button block onClick={() => {
+          setSettings(false); options.close?.();
+        }}>{t('market.close')}</Button>}
+        <span role="status" style={{ color: token.colorTextSecondary }}>{t(bookmarkStatusKeys[status])}</span>
         {(status === 'offline' || status === 'storage-error') && <Button size="small" onClick={store.refresh}>
           {t('market.retry')}</Button>}
       </div>}>
@@ -62,7 +65,9 @@ export function useBrowserBookmarks(options: {
     </Popover>,
     bar: showBar && <BookmarkBar entries={entries} t={t} visit={visit} edit={edit} remove={remove}
       manage={manage} menuChanged={setMenu} dragChanged={setDragging} />,
-    overlays: <>{manager && <BookmarkManager t={t} close={() => setManager(false)} edit={edit} create={create} visit={visit} />}
+    overlays: <>{manager && (compact
+      ? <BookmarkDrawer t={t} close={() => setManager(false)} visit={visit} add={() => create('link', true)} />
+      : <BookmarkManager t={t} close={() => setManager(false)} edit={edit} create={create} visit={visit} />)}
       {deleting && <Modal open width={400} zIndex={1850} title={t('market.bookmarkDelete')}
         okText={t('market.bookmarkDelete')} cancelText={t('market.cancel')} okButtonProps={{ danger: true }}
         onCancel={() => setDeleting(undefined)} onOk={() => { store.remove(deleting.id); setDeleting(undefined); }}>

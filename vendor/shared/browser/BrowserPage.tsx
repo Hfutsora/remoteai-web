@@ -7,7 +7,9 @@ import { marketText } from '../provider-market/i18n';
 import './browserPage.css';
 
 /** Reuse the established engine and tabs without tying the main browser to a conversation. */
-export function BrowserPage({ language, active = true }: { language: Language; active?: boolean }) {
+export function BrowserPage({ language, active = true, onClose }: {
+  language: Language; active?: boolean; onClose?: () => void;
+}) {
   const browser = useWebsiteTabs();
   const [expanded, setExpanded] = useState(false);
   const initialized = useRef(false);
@@ -22,7 +24,8 @@ export function BrowserPage({ language, active = true }: { language: Language; a
   return <section hidden={!active} className={`pm-browser browser-main-page${expanded ? ' browser-main-expanded' : ''}`}
     aria-label={marketText(language)('market.browserNavigation')}>
     <BrowserContents {...browser} embedded language={language} open={active} Surface={ProviderBrowserSurface}
-      onCloseTab={id => closeTabs([id])} onCloseTabs={closeTabs} onClose={() => setExpanded(false)}
+      onCloseTab={id => closeTabs([id])} onCloseTabs={closeTabs}
+      onClose={() => { setExpanded(false); onClose?.(); }}
       fullscreen={expanded} toggleFullscreen={() => setExpanded(value => !value)} />
   </section>;
 }

@@ -463,10 +463,11 @@ function AppShell() {
           accounts: otherPages.accounts, discover: discoveryPage, settings: otherPages.settings,
         }}>
         {isDiscoveryPage(page)
-          && !['downloads', 'token-summary', 'lounge', 'totp', 'devices', 'ssh'].includes(page)
+          && !['downloads', 'token-summary', 'lounge', 'totp', 'devices', 'ssh', 'browser'].includes(page)
           && <DiscoveryBackButton onBack={() => dispatch(pageChanged('discover'))} />}
         <RetainedView active={page === 'browser'}>
-          <BrowserPage language={language} active={page === 'browser'} />
+          <BrowserPage language={language} active={page === 'browser'}
+            onClose={() => dispatch(pageChanged('discover'))} />
         </RetainedView>
         {page !== 'chat' && page !== 'accounts' && page !== 'discover' && page !== 'settings' && otherPages[page]}
         </PrimaryPagePager>

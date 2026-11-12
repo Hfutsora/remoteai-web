@@ -78,6 +78,7 @@ export function BrowserContents(props: BrowserWindowProps & {
   const t = marketText(props.language);
   const tab = tabs.find((entry) => entry.id === activeId);
   const bookmarks = useBrowserBookmarks({ tab, t,
+    close: props.onClose,
     navigate: url => { if (tab) props.onNavigate(tab.id, url); },
     newTab: url => { if (tab) props.onPopup(tab.id, url); },
   });

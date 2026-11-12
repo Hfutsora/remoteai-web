@@ -38,6 +38,10 @@
 .browser-bookmark-row-name strong, .browser-bookmark-row-name small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .browser-bookmark-row-name small { color: var(--text-secondary, #667085); }
 .browser-bookmark-row-name svg { flex-shrink: 0; }
+.browser-bookmark-drawer .ant-drawer-content { border-radius: 20px 20px 0 0; }
+.browser-bookmark-drawer .browser-bookmark-row-name { min-height: 48px; }
+.browser-bookmark-drawer .browser-bookmark-row-name > span { flex: 1; }
+.browser-bookmark-drawer [role=status] { max-width: 400px; color: var(--text-secondary, #667085); }
 @media (max-width: 600px) {
   .browser-bookmark-all span { display: none; }
   .browser-bookmark-bar { padding-inline: 6px; }
