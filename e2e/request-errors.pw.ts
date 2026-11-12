@@ -33,7 +33,11 @@ test('keeps reply errors inside the conversation and out of a new chat', async (
   await screenshot(page, info, `${info.project.name}-new-chat-clean`);
 });
 
-test('shows capacity failures outside work and before summaries until real recovery', async ({ page, request }, info) => {
+for (const failure of [
+  { name: 'connection', message: error.message, notice: '连接暂时中断，Codex 正在重试…' },
+  { name: 'capacity', message: 'Selected model is at capacity. Please try a different model.',
+    notice: '当前模型繁忙，请换个模型重试。' },
+]) test(`shows ${failure.name} failures outside work and before summaries until recovery`, async ({ page, request }, info) => {
   await request.post(`${fixtureUrl}/test/reset`);
   await login(page);
   await connect(page);
@@ -48,9 +52,9 @@ test('shows capacity failures outside work and before summaries until real recov
     { id: 'command', type: 'commandExecution', command: 'git status', status: 'completed', exitCode: 0 },
   ], plan: [{ step: '检查项目修改', status: 'inProgress' }] } });
   await emit('error', { turnId, willRetry: true,
-    error: { message: 'Selected model is at capacity. Please try a different model.' } });
+    error: { message: failure.message } });
   await emit('item/started', { turnId, item: { id: 'reasoning', type: 'reasoning', summary: [] } });
-  const notice = page.getByText('当前模型繁忙，请换个模型重试。', { exact: true });
+  const notice = page.getByText(failure.notice, { exact: true });
   await expect(notice).toBeVisible();
   await expect(notice).toHaveCount(1);
   expect(await notice.evaluate(element => element.closest('.chat-entry-error')?.parentElement
@@ -59,9 +63,15 @@ test('shows capacity failures outside work and before summaries until real recov
   await expect(plan).toBeVisible();
   expect((await notice.boundingBox())!.y).toBeLessThan((await plan.boundingBox())!.y);
   expect(await notice.evaluate(element => Boolean(element.closest('details, .chat-turn-summary')))).toBe(false);
-  await screenshot(page, info, `${info.project.name}-capacity-at-process-boundary`);
+  await screenshot(page, info, `${info.project.name}-${failure.name}-at-process-boundary`);
+  if (failure.name === 'connection') {
+    await page.getByRole('button', { name: '查看报错详情', exact: true }).click();
+    await expect(page.locator('.chat-detail-stack')).toContainText(failure.message);
+    await screenshot(page, info, `${info.project.name}-connection-details`);
+  }
   await emit('item/completed', { turnId,
     item: { id: 'reasoning', type: 'reasoning', summary: ['连接恢复，继续检查。'] } });
   await expect(notice).toHaveCount(0);
-  await screenshot(page, info, `${info.project.name}-capacity-recovered`);
+  await expect(page.locator('.chat-detail-stack')).toHaveCount(0);
+  await screenshot(page, info, `${info.project.name}-${failure.name}-recovered`);
 });
