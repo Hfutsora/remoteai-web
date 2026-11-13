@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Button, Modal, Popover, Switch, theme } from 'antd';
-import { Check, Settings, Star } from 'lucide-react';
+import { BookMarked, Check, ChevronRight, Cloud, PanelTop, Settings, Star, X } from 'lucide-react';
 import type { BrowserTab } from '../../provider-market/browserState';
 import type { MarketText } from '../../provider-market/i18n';
 import { bookmarkUrl, type Bookmark } from './model';
@@ -12,13 +12,13 @@ import { bookmarkStatusKeys } from './status';
 import { BookmarkDrawer } from './BookmarkDrawer';
 import { useCompactBrowser } from './useCompactBrowser';
 import { useCurrentBookmark } from './useCurrentBookmark';
+import { BrowserSettingsAction, BrowserSettingsPanel } from '../BrowserSettings';
 import './bookmarks.css';
 
 
 export function useBrowserBookmarks(options: {
   tab?: BrowserTab; t: MarketText; navigate: (url: string) => void; newTab: (url: string) => void;
   close?: () => void;
-  closeOnDesktop?: boolean;
   settingsContent?: (dismiss: () => void) => ReactNode;
 }) {
   const { tab, t } = options;
@@ -53,23 +53,31 @@ export function useBrowserBookmarks(options: {
       className="browser-bookmark-star" onClick={() => saved ? edit(saved) : create('link', true)}>
       <Star size={17} fill={saved ? 'currentColor' : 'none'} /></button>,
     settings: <Popover trigger="click" placement="bottomRight" open={settings} onOpenChange={setSettings}
-      overlayClassName="browser-bookmark-settings-popup" zIndex={1700} title={t('market.browserSettings')}
-      content={<div className="browser-bookmark-settings">
-        <Button block disabled={!current.available || current.saved} aria-pressed={current.saved}
-          icon={current.saved ? <Check size={16} /> : <Star size={16} />} onClick={current.add}>
-          {t('market.bookmarkAdd')}</Button>
+      overlayClassName="browser-bookmark-settings-popup" zIndex={1700} arrow={false}
+      styles={{ body: { padding: 6, borderRadius: 12, border: `1px solid ${token.colorBorderSecondary}` } }}
+      content={<BrowserSettingsPanel title={t('market.browserSettings')} footer={<>
+        <Cloud size="1.2em" /><div style={{ fontSize: token.fontSizeSM }}>
+          <span role="status">{t(bookmarkStatusKeys[status])}</span>
+          {(status === 'offline' || status === 'storage-error') && <Button size="small" onClick={store.refresh}>
+            {t('market.retry')}</Button>}
+        </div>
+      </>}>
+        <BrowserSettingsAction disabled={!current.available || current.saved} pressed={current.saved}
+          icon={current.saved ? Check : Star} onClick={current.add}>
+          {t('market.bookmarkAdd')}</BrowserSettingsAction>
         {current.invalid && <span role="alert">{t('market.bookmarkInvalid')}</span>}
         {options.settingsContent?.(() => setSettings(false))}
-        <label><span>{t('market.bookmarkShowBar')}</span><Switch checked={showBar}
-          aria-label={t('market.bookmarkShowBar')} onChange={store.setShowBar} /></label>
-        <Button block onClick={manage}>{t(compact ? 'market.bookmarkAll' : 'market.bookmarkManage')}</Button>
-        {(compact || options.closeOnDesktop) && options.close && <Button block aria-label={t('market.close')} onClick={() => {
+        <div className="browser-settings-divider" />
+        <div className="browser-settings-row"><PanelTop size="1.25em" />
+          <span className="browser-settings-label">{t('market.bookmarkShowBar')}</span>
+          <Switch size="small" checked={showBar} aria-label={t('market.bookmarkShowBar')} onChange={store.setShowBar} />
+        </div>
+        <BrowserSettingsAction icon={BookMarked} onClick={manage} trailing={<ChevronRight size="1.1em" />}>
+          {t(compact ? 'market.bookmarkAll' : 'market.bookmarkManage')}</BrowserSettingsAction>
+        {compact && options.close && <BrowserSettingsAction icon={X} onClick={() => {
           setSettings(false); options.close?.();
-        }}>{t('market.close')}</Button>}
-        <span role="status" style={{ color: token.colorTextSecondary }}>{t(bookmarkStatusKeys[status])}</span>
-        {(status === 'offline' || status === 'storage-error') && <Button size="small" onClick={store.refresh}>
-          {t('market.retry')}</Button>}
-      </div>}>
+        }}>{t('market.close')}</BrowserSettingsAction>}
+      </BrowserSettingsPanel>}>
       <button type="button" aria-label={t('market.browserSettings')} title={t('market.browserSettings')}>
         <Settings size={17} /></button>
     </Popover>,

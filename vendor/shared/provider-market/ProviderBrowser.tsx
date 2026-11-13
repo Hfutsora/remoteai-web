@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { Button } from 'antd';
-import { ArrowLeft, ArrowLeftRight, ArrowRight, ExternalLink, Globe, Maximize2, Minimize2, Plus, RotateCw, X } from 'lucide-react';
+import { ArrowLeft, ArrowLeftRight, ArrowRight, ChevronRight, ExternalLink,
+  Globe, Maximize2, Minimize2, Plus, RotateCw, X } from 'lucide-react';
 import { marketText, type MarketText } from './i18n';
 import type { Language } from '@remoteai/i18n';
 import { browserInput } from '../browser/addressInput';
@@ -23,6 +23,7 @@ import { useMobileBrowserHome } from '../browser/useMobileBrowserHome';
 import { BrowserPortMappings } from '../browser/BrowserPortMappings';
 import { bookmarkUrl } from '../browser/bookmarks/model';
 import { openWebsiteInBrowser } from '../conversation/WebsiteLinkMenu';
+import { BrowserSettingsAction } from '../browser/BrowserSettings';
 
 export interface BrowserSurfaceProps {
   tab: BrowserTab; active: boolean; command: { sequence: number; action: BrowserAction } | null;
@@ -118,18 +119,19 @@ export function BrowserContents(props: BrowserWindowProps & {
       {(compact || props.mainBrowser) && <BrowserSiteModeSetting desktop={!compact || !!desktopTabs[activeId]} t={t}
         disabled={!compact}
         change={desktop => setDesktopTabs(current => ({ ...current, [activeId]: desktop }))} />}
-      {(compact || props.mainBrowser) && <Button block disabled={!externalUrl} icon={<ExternalLink size={16} />}
+      {(compact || props.mainBrowser) && <BrowserSettingsAction disabled={!externalUrl} icon={ExternalLink}
         onClick={() => {
         if (externalUrl) void openWebsiteInBrowser(externalUrl);
-      }}>{uiText('client.workspaceActions.openInBrowser', {}, props.language)}</Button>}
+      }}>{uiText('client.workspaceActions.openInBrowser', {}, props.language)}</BrowserSettingsAction>}
+      <div className="browser-settings-divider" />
       <BrowserSearchSetting t={t} search={search} />
-      {props.mainBrowser && <Button block icon={<ArrowLeftRight size={16} />} onClick={() => {
+      {props.mainBrowser && <BrowserSettingsAction icon={ArrowLeftRight} trailing={<ChevronRight size="1.1em" />}
+        onClick={() => {
         dismiss(); setMappingsOpen(true);
       }}>
-        {uiText('client.portForwarding.portMapping', {}, props.language)}</Button>}
+        {uiText('client.portForwarding.portMapping', {}, props.language)}</BrowserSettingsAction>}
     </>,
-    close: props.onClose,
-    closeOnDesktop: props.mainBrowser,
+    close: compact ? props.onClose : undefined,
     navigate: url => { if (tab) home.navigate(tab.id, url); },
     newTab: url => { if (tab) props.onPopup(tab.id, url); },
   });

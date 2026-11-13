@@ -1,0 +1,34 @@
+.browser-bookmark-settings { width: 300px; max-width: calc(100vw - 40px); }
+.browser-settings-heading { display: flex; align-items: center; gap: 9px; padding: 10px 12px 12px; }
+.browser-settings-heading > svg { color: var(--browser-settings-accent); }
+.browser-settings-heading > strong { font-weight: 600; }
+.browser-settings-list { display: grid; gap: 2px; }
+.browser-settings-action, .browser-settings-row { display: flex; align-items: center; gap: 10px;
+  width: 100%; min-height: 38px; padding: 9px 12px; border: 0; border-radius: 8px;
+  color: inherit; background: transparent; font: inherit; line-height: inherit; text-align: start; }
+.browser-settings-action { cursor: pointer; transition: background-color .15s ease; }
+.browser-settings-action:hover:not(:disabled) { background: var(--browser-settings-hover); }
+.browser-settings-action:focus-visible { outline: 2px solid var(--browser-settings-accent); outline-offset: -2px; }
+.browser-settings-action > span, .browser-settings-label { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.browser-settings-action > svg, .browser-settings-row > svg { flex-shrink: 0; color: var(--browser-settings-muted); }
+.browser-settings-action:disabled { color: var(--browser-settings-disabled); cursor: default; }
+.browser-settings-action:disabled > svg { color: inherit; }
+.browser-settings-action[aria-pressed=true] > svg { color: var(--browser-settings-accent); }
+.browser-settings-divider { height: 1px; margin: 6px 12px; background: var(--browser-settings-border); }
+.browser-settings-search .ant-select { flex: 0 0 8.5em; min-width: 0; }
+.browser-settings-search .ant-select-selector { text-align: end; }
+.browser-settings-row > .ant-switch { flex-shrink: 0; }
+.browser-bookmark-settings .browser-site-mode-setting { width: 100%; margin: 0; min-height: 38px;
+  padding: 9px 12px; border-radius: 8px; gap: 10px; align-items: center; }
+.browser-bookmark-settings .browser-site-mode-setting.ant-checkbox-wrapper-disabled { cursor: default; }
+.browser-bookmark-settings .browser-site-mode-setting > span:not(.ant-checkbox) { gap: 10px; }
+.browser-bookmark-settings .browser-site-mode-setting svg { width: 1.25em; height: 1.25em; flex-shrink: 0; }
+.browser-bookmark-settings .browser-site-mode-setting:not(.ant-checkbox-wrapper-disabled):hover {
+  background: var(--browser-settings-hover); }
+.browser-settings-footer { display: flex; align-items: flex-start; gap: 8px; padding: 11px 12px;
+  margin-top: 8px; border-top: 1px solid var(--browser-settings-border); border-radius: 0 0 8px 8px;
+  background: var(--browser-settings-surface); color: var(--browser-settings-muted); line-height: 1.6; }
+.browser-settings-footer > svg { flex-shrink: 0; margin-top: .2em; }
+.browser-settings-footer > div { display: grid; gap: 6px; min-width: 0; overflow-wrap: anywhere; }
+.browser-settings-footer .ant-btn { justify-self: start; }
+@media (prefers-reduced-motion: reduce) { .browser-settings-action { transition: none; } }

@@ -14,6 +14,7 @@ for (const enlarged of [false, true]) test(`web desktop browser ${enlarged ? 'da
     await expect(browser.locator('iframe').contentFrame().getByRole('heading')).toHaveText('Website preview');
     await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
     const settings = page.locator('.browser-bookmark-settings-popup');
+    await expect(settings.getByRole('button', { name: '关闭', exact: true })).toHaveCount(0);
     await expect(settings.getByRole('checkbox', { name: '桌面版网站', exact: true })).toBeChecked();
     await expect(settings.getByRole('checkbox', { name: '桌面版网站', exact: true })).toBeDisabled();
     await settings.getByRole('button', { name: '添加书签', exact: true }).click();
