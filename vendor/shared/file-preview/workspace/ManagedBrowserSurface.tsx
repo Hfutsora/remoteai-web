@@ -8,6 +8,7 @@ import { BrowserClientContext } from './browserClient';
 import { placeBrowser } from './nativeBrowserPlacement';
 import { nativeSurfaceSession } from '../../browser/managed/nativeSurfaceSession';
 import { useNativeBrowserPreview } from '../../browser/managed/useNativeBrowserPreview';
+import { BrowserInspector } from '../../browser/managed/BrowserInspector';
 
 export function WebsiteBrowserSurface(props: BrowserSurfaceProps) {
   return props.tab.automationThread ? <ManagedBrowserSurface {...props} /> : <ProviderBrowserSurface {...props} />;
@@ -109,10 +110,11 @@ function ManagedBrowserSurface({ tab, active, onNavigate, onLoadingChange, t, ob
     void read();
     return () => { stopped = true; clearTimeout(timer); };
   }, [client, tab.id, tab.automationThread, active]);
-  return <div ref={host} className="pm-browser-surface">
+  return <BrowserInspector id={tab.id} kind="conversation" enabled={client.native} active={active && !obscured} t={t}>
+    <div ref={host} className="pm-browser-surface">
     {client.native && overlayImage && !failed && <img className="native-browser-overlay-preview" src={overlayImage}
       alt="" aria-hidden draggable={false} />}
     {failed && <div className="pm-browser-feedback" role="status"><Globe size={32} /><p>{t('market.browserFailed')}</p></div>}
     {!client.native && image && !failed && <img className="website-browser-stream" src={image} alt={tab.title} />}
-  </div>;
+  </div></BrowserInspector>;
 }

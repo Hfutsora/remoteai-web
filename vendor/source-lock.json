@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "60d5df369b84cff74ed8c8498e46f8b1e3a87e17",
+  "revision": "9c504534f4c1683ebeb1941434cc65b279d4d085",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "b41bd3ca2512373f7716dd64171e0752781abbf2"
+    "revision": "62c2e5d993cb62781fc6caeb30ec062a5aaf4799"
   },
   "retainedTestSources": {
     "repository": "https://github.com/piperhex/remoteai",
@@ -16,7 +16,7 @@
     "repository": "https://github.com/piperhex/remoteai-native.git",
     "revision": "c0564cb7dadf0730f7eb5d357162403241029cbf"
   },
-  "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.25/remoteai-i18n-0.1.25.tgz",
+  "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.26/remoteai-i18n-0.1.26.tgz",
   "files": {
     "scripts/test-browser.mjs": "456d5b867ac937a571630f4a01cd37ded9380d519bee3011e8807480c0739733",
     "scripts/test-browser.d.mts": "0f13ced709be8e097af7d4038400129b64e5d400f62e9bea2a0371125ec4f70f",
@@ -930,7 +930,7 @@
     "shared/file-preview/workspace/preview.module.less": "ab254b31294a88ac66379927c40523f47cf90756c44da0f2670b9509890d8701",
     "shared/remote-chat/views/remoteFilePreview.css": "fabb7a21c444c886f938711c288702b314d08dcc3e4ca38bbb198229cf700080",
     "shared/provider-market/ProviderBrowser.tsx": "364b5cbd74c60accb7ab0966d36761efc9281cbe5d03fd4f56f160d8a15e9e41",
-    "shared/file-preview/workspace/ManagedBrowserSurface.tsx": "5d914461c5c5601f7e2968eb847768749e50e0a94516caf3ad6b9de44b691406",
+    "shared/file-preview/workspace/ManagedBrowserSurface.tsx": "96ddcdf5183176fd582b03f8a9a167056736f15575e94eafe04df4e93604c530",
     "shared/remote-chat/views/ChatBinaryFilePreview.tsx": "d18d95c89fcd05ddd62ce5d23297c65dede1f4712cb97af8f641650b0818ad97",
     "shared/remote-chat/filePreview.ts": "8d369c8a09c5a195afe36a072b33eba610baf26717f370c0a7911d6457314096",
     "shared/file-preview/ResourceDownloadCard.tsx": "0b82b12a2fd3c2ac7149abcec77059a6a3b878f5515cc9efd5f890425d6b5387",
@@ -1448,7 +1448,7 @@
     "shared/provider-market/BrowserTabs.tsx": "90874a196ab2aba78a9885505d326e95bf42d1334b7ac71c53be78d1c331a082",
     "shared/provider-market/ProviderWebsiteIcon.tsx": "b6bb81a2b332d3a60123a00dd36624a2e3ac728e87a992b0a7e8f41a06a3b0da",
     "shared/provider-market/providerBrowser.css": "4a6ab710911ba88307d1f377fa5fbd8c005abd5ecebc82a183f650d26d8c4ff1",
-    "shared/browser/managed/ProviderBrowserSurface.tsx": "36378c9e509f4b4c33ab482a73ff42c14af44a1993780099d0e1b34759ac17c9",
+    "shared/browser/managed/ProviderBrowserSurface.tsx": "1ab8bd5d450bf3e6c862f4ad2a926d41a035b2c71aef6020958adc5fa1eee9e2",
     "shared/browser/managed/browserOverlays.ts": "7049ab695b456b6b81304be6a4d09ee9f789c3e20e5762799c86a3f56c507a4f",
     "shared/file-preview/workspace/nativeBrowserPlacement.ts": "1c92017b8a513a44853dc406d12c1213895a66842db6a3c82259dc8d81336967",
     "shared/file-preview/resourceDownloadCard.css": "814b092087b2377aab8e9e883a629d8743671980e2c3e87b44af5dff1345a3ce",
@@ -1920,6 +1920,10 @@
     "shared/browser/browserChrome.css": "07d55ac9dbed42b48c1ea2fbf61467d33d73438c913ba57522da3e1b1d53a2a0",
     "shared/browser/managed/nativeSurfaceSession.ts": "eb777bfeaefa03ede243ef182748b21a78d921b9e05f2fababfa827ff126a67a",
     "shared/browser/managed/useNativeBrowserPreview.ts": "9fbc6be08de4a4e3df85a5a040f118d870dfe6eef95a8afc83e3a94ec2e188e9",
-    "shared/browser/managed/nativeBrowserPreview.css": "8992184a0f5abd3f0a298d8a2692ba2a3b6f9597db8372ad5a49b3658e316401"
+    "shared/browser/managed/nativeBrowserPreview.css": "8992184a0f5abd3f0a298d8a2692ba2a3b6f9597db8372ad5a49b3658e316401",
+    "shared/browser/managed/BrowserInspector.tsx": "7ea72b5698f8a4fc91fc17d8a5729725fc826913c30d1d887f26a67e4a902c20",
+    "shared/browser/managed/useInspector.ts": "190ed76050c7e224586651a08d7997978cbd94fb2e2190bf0667952ced83c952",
+    "shared/browser/managed/inspectorSession.ts": "9afbceecadd58b079e2386c15b766b2af314e8a817ac714d21f132151595d2b7",
+    "shared/browser/managed/browserInspector.css": "5968db6fc3ceb970d9cf419521dbc24c5432698b3738056234c9e8723b4d1179"
   }
 }

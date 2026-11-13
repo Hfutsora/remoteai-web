@@ -7,6 +7,7 @@ import { nativeBrowserSession } from './providerBrowserSession';
 import { browserOverlayAttributes, hasBrowserOverlay } from './browserOverlays';
 import { BrowserFrame } from './BrowserFrame';
 import { useNativeBrowserPreview } from './useNativeBrowserPreview';
+import { BrowserInspector } from './BrowserInspector';
 
 function browserFeedback(state: { url: string; unsupported: boolean; needsDesktop: boolean; failed: boolean }) {
   if (!state.url) return 'market.browserBlank';
@@ -98,7 +99,8 @@ export function ProviderBrowserSurface(props: BrowserSurfaceProps) {
       .catch(() => { state.current.onLoadingChange?.(false); setFailed(true); });
   }, [command, desktop, tab.id]);
   const feedback = browserFeedback({ url: tab.url, unsupported, needsDesktop, failed });
-  return <div className="pm-browser-surface" ref={host}>
+  return <BrowserInspector id={tab.id} kind="provider" enabled={desktop} active={active && !obscured} t={t}>
+    <div className="pm-browser-surface" ref={host}>
     {desktop && image && !feedback && <img className="native-browser-overlay-preview" src={image}
       alt="" aria-hidden draggable={false} />}
     {feedback && <div className="pm-browser-feedback" role="status"><Globe size={32} /><p>{t(feedback)}</p>
@@ -106,5 +108,5 @@ export function ProviderBrowserSurface(props: BrowserSurfaceProps) {
         {t('market.retry')}</button>}</div>}
     {!feedback && !desktop && <BrowserFrame {...props} key={attempt} onError={() => setFailed(true)} />}
     {!desktop && !feedback && <div className="pm-browser-web-notice">{t('market.browserWebNotice')}</div>}
-  </div>;
+  </div></BrowserInspector>;
 }
