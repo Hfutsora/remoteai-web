@@ -45,6 +45,7 @@ export function useBrowserBookmarks(options: {
   const edit = (entry: Bookmark) => { setMenu(false); setEditor(entry); };
   const remove = (entry: Bookmark) => { setMenu(false); setDeleting(entry); };
   return {
+    manage,
     overlayOpen: settings || menu || manager || !!editor || !!deleting || dragging,
     star: <button type="button" aria-label={t(saved ? 'market.bookmarkEdit' : 'market.bookmarkAdd')}
       title={t(saved ? 'market.bookmarkEdit' : 'market.bookmarkAdd')} disabled={!address} aria-pressed={!!saved}

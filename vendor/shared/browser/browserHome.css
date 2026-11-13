@@ -1,0 +1,18 @@
+.browser-home { flex: 1; min-height: 0; overflow: auto; padding: 20px; overscroll-behavior: contain;
+  background: var(--surface-secondary, #f6f8f7); color: inherit; }
+.browser-home > header { padding: 12px 0 20px; }
+.browser-home svg { flex-shrink: 0; color: var(--accent, #0b8065); }
+.browser-home h2 { font-size: 1.55em; line-height: 1.5; margin: 10px 0; font-weight: 600; }
+.browser-home p { margin: 0; line-height: 1.65; color: var(--text-secondary, #718078); overflow-wrap: anywhere; }
+.browser-home-card { margin-bottom: 20px; padding: 16px; border-radius: 16px;
+  border: 1px solid var(--border, #e7ece8); background: var(--panel-bg, #fff); }
+.pm-browser .browser-home-heading { display: flex; width: 100%; min-height: 40px; gap: 10px; align-items: center;
+  padding: 0; margin: 0 0 8px; font: inherit; font-weight: 600; text-align: left; }
+.browser-home-heading strong { flex: 1; }
+.pm-browser .browser-home-link { display: flex; width: 100%; gap: 12px; padding: 14px 0; min-height: 48px;
+  border-radius: 0; border-bottom: 1px solid var(--border, #e7ece8); text-align: left; }
+.browser-home-link > span { flex: 1; min-width: 0; }
+.browser-home-link strong { display: block; font-weight: 400; overflow-wrap: anywhere; }
+.browser-home-link small { display: block; font-size: .9em; color: var(--text-secondary, #718078);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.browser-tab-canvas.browser-home-covered { display: none; }

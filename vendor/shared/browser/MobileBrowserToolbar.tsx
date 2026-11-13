@@ -1,23 +1,20 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { ArrowLeft, ArrowRight, Plus } from 'lucide-react';
-import type { BrowserAction, BrowserTab } from '../provider-market/browserState';
+import { ArrowLeft, Home, Plus } from 'lucide-react';
+import type { BrowserTab } from '../provider-market/browserState';
 import type { MarketText } from '../provider-market/i18n';
 import { browserInput } from './addressInput';
 import type { SearchEngine } from './searchEngine';
 
-export function MobileBrowserToolbar({ tab, t, engine, navigate, action, count, newTab, manage, settings }: {
+export function MobileBrowserToolbar({ tab, t, engine, navigate, home, count, newTab, manage, settings }: {
   tab?: BrowserTab; t: MarketText; engine: SearchEngine; navigate: (url: string) => void;
-  action: (action: BrowserAction) => void; count: number; newTab: () => void; manage: () => void;
+  home: () => void; count: number; newTab: () => void; manage: () => void;
   settings: ReactNode;
 }) {
   const [address, setAddress] = useState(tab?.url ?? '');
   const [invalid, setInvalid] = useState(false);
   useEffect(() => { setAddress(tab?.url ?? ''); setInvalid(false); }, [tab?.id, tab?.url]);
   return <div className="pm-browser-toolbar browser-mobile-toolbar">
-    <button aria-label={t('market.browserBack')} disabled={!tab || tab.historyIndex <= 0}
-      onClick={() => action('back')}><ArrowLeft size={18} /></button>
-    <button aria-label={t('market.browserForward')} disabled={!tab || tab.historyIndex >= tab.history.length - 1}
-      onClick={() => action('forward')}><ArrowRight size={18} /></button>
+    <button aria-label={t('market.browserHome')} onClick={home}><Home size={20} /></button>
     <form onSubmit={event => {
       event.preventDefault();
       const url = browserInput(address, engine);

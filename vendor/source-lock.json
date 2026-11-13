@@ -1,15 +1,15 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "5756d7848a9f745acfbfd27ae1825178f85e7080",
+  "revision": "854e77e6e9a11c2f2ceaa73d2f895b92bf372b49",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "9f30f94d2434f4d66254911b43caab91af012bd1"
+    "revision": "6ff6139a73c40ba300771c5e87dc90f8252c0263"
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "152212142837a259c96bc89453aafe0dbeec38ac"
+    "revision": "9be24fcf855195eaa429f83c31d23e6b9c83a640"
   },
-  "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.24/remoteai-i18n-0.1.24.tgz",
+  "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.25/remoteai-i18n-0.1.25.tgz",
   "files": {
     "scripts/test-browser.mjs": "456d5b867ac937a571630f4a01cd37ded9380d519bee3011e8807480c0739733",
     "scripts/test-browser.d.mts": "0f13ced709be8e097af7d4038400129b64e5d400f62e9bea2a0371125ec4f70f",
@@ -922,7 +922,7 @@
     "shared/provider-market/i18n.ts": "99dda5e97e45baf4e6a78c6db8ecf6df1dae0d66356af9647cfe4264dd9413b2",
     "shared/file-preview/workspace/preview.module.less": "ab254b31294a88ac66379927c40523f47cf90756c44da0f2670b9509890d8701",
     "shared/remote-chat/views/remoteFilePreview.css": "fabb7a21c444c886f938711c288702b314d08dcc3e4ca38bbb198229cf700080",
-    "shared/provider-market/ProviderBrowser.tsx": "9fd1abfa7e36ffb3e7bc4adf69fe4afb75cbcc2aacf08910988978f0ea0feb4f",
+    "shared/provider-market/ProviderBrowser.tsx": "379b1466638270972dcbaa19a1f54c458ee266495e94d1b67a52368f52c4a8b0",
     "shared/file-preview/workspace/ManagedBrowserSurface.tsx": "84d5bc4c9425be2e4c59330ec904e4c116796fb2a3fcf96c158cfa388b028cbd",
     "shared/remote-chat/views/ChatBinaryFilePreview.tsx": "d18d95c89fcd05ddd62ce5d23297c65dede1f4712cb97af8f641650b0818ad97",
     "shared/remote-chat/filePreview.ts": "8d369c8a09c5a195afe36a072b33eba610baf26717f370c0a7911d6457314096",
@@ -1869,7 +1869,7 @@
     "shared/browser/browserPage.css": "53cb5761e3fab72b361d660ccecfcc7fbe7c61b106764f70760fb7d2ad262f29",
     "shared/browser/bookmarks/channel.ts": "a9e9dfbc8f666317dae072dc058a227e34f7825c3e90ce76c86f15696ecb4411",
     "shared/browser/bookmarks/store.ts": "c9501be61d70ff74e07d2f89a79c25fa807cb1bead8a307b208ff6643202403e",
-    "shared/browser/bookmarks/useBrowserBookmarks.tsx": "61798be177767f8292d19635b4c1fa259ba0d6deafe7283afc4694f20e56a656",
+    "shared/browser/bookmarks/useBrowserBookmarks.tsx": "47068b437d3578e64bf3aa7c4a941c7a7ed1d4ad2e44d3ff9c313340203c74f7",
     "shared/browser/bookmarks/model.ts": "a7fda5c0828d5dfe778fcfa7ac5a9caec898a81ecb0024221aab1ba8d95b8116",
     "shared/browser/bookmarks/BookmarkBar.tsx": "89c068ba2b472957ad90bce822ba95654e312324f7ae824503faf41435b28418",
     "shared/browser/bookmarks/BookmarkEditor.tsx": "da29c03c84cabfdc98e9995e16b9ae48a1b3d4eac6ba9a8e732cb5a3299055cd",
@@ -1888,8 +1888,8 @@
     "shared/browser/BrowserSearchSetting.tsx": "f47828e13458b0bc2908e43ce96742500d0e5a3ca71b4484791c6e4f2819fd59",
     "shared/browser/searchEngine.ts": "6f3d67eabc3cb333ca29447b9e96c10f8740c58dd00ce9f357ac2194e6291bd4",
     "shared/browser/searchPreference.ts": "e735f5fd02aa753eaa37018d75d3baeb6fcdb0ba6e84c2535af4e2b5b2c8e4da",
-    "shared/browser/MobileBrowserToolbar.tsx": "cbd573d22430b73b18bec2fe3657a493a8b48321d654cd1aa186b4e7be68ecbb",
-    "shared/browser/BrowserPages.tsx": "34a066d58d9b7c38a55fa559f43a4e4c27b157ebdf9bcbcbdb4b94c52432bd17",
+    "shared/browser/MobileBrowserToolbar.tsx": "57db723ecd16c874c147187eceb97d3b5b790eeb8ce5d38a748cf50b1078036b",
+    "shared/browser/BrowserPages.tsx": "228358da05596634b0152470451b20a33b6fa432eb1bf9e8e3c7a82187efc737",
     "shared/browser/BrowserEdgeGestures.tsx": "5e4ff2ed3bf1d025f85f8a38014877fbb87bb70fa33b0bae3932e63de5aa99a6",
     "shared/browser/mobileBrowser.css": "b9cc77b2dcec03c9e06f39f5b7ffb504ce6ed571226046bc27e23c2aa76c497f",
     "shared/browser/BrowserSiteModeSetting.tsx": "840fef1be981ef5d591fb28934fec268c657f30a82e03cdbe8b29f61bcbdd9be",
@@ -1898,6 +1898,9 @@
     "shared/browser/siteMode.ts": "f3a8bde3b6066ec266fa8191ab3a4976c164696eabc915b7001d49cc7072be62",
     "shared/browser/BrowserNavigationProvider.tsx": "35c6be06d899e745c499d64a37593014087907418a766d53eab76921416025fb",
     "shared/remote-chat/views/MobileChatBrowser.tsx": "17e09d907c16d3fa9a06d02bb381e94bb37366cd18c3013bc364250a7347919b",
-    "shared/file-preview/resourceAddress.ts": "b97db5217dccfdd72237e939c50adcc4eeba9e52cf8286a4b0d3d873dbaa7b38"
+    "shared/file-preview/resourceAddress.ts": "b97db5217dccfdd72237e939c50adcc4eeba9e52cf8286a4b0d3d873dbaa7b38",
+    "shared/browser/useMobileBrowserHome.ts": "3e23fe819f562bced80b4b801d9523480019b44c6af0a8ee7ffb370fd51e48aa",
+    "shared/browser/BrowserHome.tsx": "d1d36e0ce38512f8a162f839825330e770485d8084db5b04ff84c887abcdd838",
+    "shared/browser/browserHome.css": "1734ca821077f2e9cc9b3093c7efcdc96d792c68b43b94555bf1313466f7d84b"
   }
 }

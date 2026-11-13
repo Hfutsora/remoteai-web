@@ -19,6 +19,7 @@ import { MobileBrowserToolbar, MobileTabManagerToolbar } from '../browser/Mobile
 import { BrowserPages } from '../browser/BrowserPages';
 import { BrowserSiteModeSetting } from '../browser/BrowserSiteModeSetting';
 import { uiText } from '../localization/uiText';
+import { useMobileBrowserHome } from '../browser/useMobileBrowserHome';
 
 export interface BrowserSurfaceProps {
   tab: BrowserTab; active: boolean; command: { sequence: number; action: BrowserAction } | null;
@@ -92,6 +93,8 @@ export function BrowserContents(props: BrowserWindowProps & {
   const search = useSearchEngine();
   const narrow = useCompactBrowser();
   const compact = narrow && !isTauri();
+  const home = useMobileBrowserHome(props, compact);
+  const displayTab = tab && home.isHome(tab.id) ? { ...tab, url: '', title: '' } : tab;
   const [manager, setManager] = useState(false);
   const [query, setQuery] = useState('');
   const [desktopTabs, setDesktopTabs] = useState<Record<string, boolean>>({});
@@ -104,7 +107,7 @@ export function BrowserContents(props: BrowserWindowProps & {
     document.documentElement.style.overscrollBehaviorX = 'none';
     return () => { document.documentElement.style.overscrollBehaviorX = previous; };
   }, [compact, open]);
-  const bookmarks = useBrowserBookmarks({ tab, t,
+  const bookmarks = useBrowserBookmarks({ tab: displayTab, t,
     settingsContent: <>
       {compact && <BrowserSiteModeSetting desktop={!!desktopTabs[activeId]} t={t}
         change={desktop => setDesktopTabs(current => ({ ...current, [activeId]: desktop }))} />}
@@ -114,7 +117,7 @@ export function BrowserContents(props: BrowserWindowProps & {
       <BrowserSearchSetting t={t} search={search} />
     </>,
     close: props.onClose,
-    navigate: url => { if (tab) props.onNavigate(tab.id, url); },
+    navigate: url => { if (tab) home.navigate(tab.id, url); },
     newTab: url => { if (tab) props.onPopup(tab.id, url); },
   });
   const [menuOpen, setMenuOpen] = useState(false);
@@ -143,18 +146,19 @@ export function BrowserContents(props: BrowserWindowProps & {
       onClick={props.onClose}><X size={19} /></button>}</div>}
     {showManager ? <MobileTabManagerToolbar t={t} count={tabs.length} query={query} setQuery={setQuery}
       close={() => setManager(false)} add={add} /> : compact
-      ? <MobileBrowserToolbar tab={tab} t={t} engine={search.engine} count={tabs.length}
+      ? <MobileBrowserToolbar tab={displayTab} t={t} engine={search.engine} count={tabs.length}
         newTab={add} manage={() => { setQuery(''); setManager(true); }} settings={bookmarks.settings}
-        navigate={url => { if (tab) props.onNavigate(tab.id, url); }}
-        action={action => { if (tab) props.onAction(tab.id, action); }} />
+        navigate={url => { if (tab) home.navigate(tab.id, url); }}
+        home={() => { if (tab) home.show(tab.id); }} />
       : <BrowserToolbar tab={tab} loading={Boolean(tab && loadingTabs.has(tab.id))}
       searchEngine={search.engine}
       fullscreen={props.fullscreen} toggleFullscreen={props.toggleFullscreen}
       navigate={(url) => { if (tab) props.onNavigate(tab.id, url); }}
       action={(action) => { if (tab) props.onAction(tab.id, action); }} t={t} actions={props.actions}
       star={bookmarks.star} settings={bookmarks.settings} />}
-    {!showManager && bookmarks.bar}{bookmarks.overlays}
-    <BrowserPages key="pages" browser={props} t={t} manager={showManager} compact={compact} query={query}
+    {!showManager && !(tab && home.isHome(tab.id)) && bookmarks.bar}{bookmarks.overlays}
+    <BrowserPages key="pages" browser={{ ...props, onAction: home.action, onNavigate: home.navigate }}
+      home={home.isHome} bookmarks={bookmarks.manage} t={t} manager={showManager} compact={compact} query={query}
       desktopTabs={desktopTabs}
       blocked={menuOpen || bookmarks.overlayOpen} loadingChanged={loadingChanged}
       select={id => { props.onSelect(id); setManager(false); }} />
