@@ -6,7 +6,7 @@
   width: 44px; height: 44px; padding: 0; border: 1px solid var(--border, #dce1e8); border-radius: 50%;
   background: var(--panel-bg, #fff); color: inherit; box-shadow: 0 2px 8px #0002; cursor: grab; }
 .pm-browser .browser-fullscreen-button:active { cursor: grabbing; }
-.browser-fullscreen-button > svg { pointer-events: none; }
+.browser-fullscreen-button > svg { pointer-events: none; color: #b8bec6; }
 .browser-fullscreen-dismiss { position: absolute; inset: 0; pointer-events: auto; }
 .browser-fullscreen-popover { pointer-events: auto; max-width: min(400px, calc(100vw - 24px)); }
 .pm-browser .browser-fullscreen-menu-item { font: inherit; min-height: 44px; gap: 10px;

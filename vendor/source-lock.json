@@ -3,7 +3,7 @@
   "revision": "6c4509f031dd1f9e221ca99b575d8c9954327850",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "2fe0227147486374cdf7639185a36af8cc978852"
+    "revision": "907b8ef5bba6c3ae7e3b4cb8a4a2b7e132bb9dcd"
   },
   "retainedTestSources": {
     "repository": "https://github.com/piperhex/remoteai",
@@ -14,7 +14,7 @@
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "24e97c71439402a46026d08bb92aa6080bd7956a"
+    "revision": "f38b8ba53b7cbd8d8ed52d7da763c29e067cc30a"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.26/remoteai-i18n-0.1.26.tgz",
   "files": {
@@ -1927,6 +1927,6 @@
     "shared/browser/managed/browserInspector.css": "5968db6fc3ceb970d9cf419521dbc24c5432698b3738056234c9e8723b4d1179",
     "shared/browser/BrowserFullscreenControl.tsx": "ae09e0409f5429329f519e2dd0d16b555159fbe75132a2552405dd8fa7063f3d",
     "shared/browser/useFullscreenControl.ts": "11d6cfd8855b21c1486c2ced59c4be5cc0b34b9dd9436b7c7c4c7069a51d6974",
-    "shared/browser/browserFullscreenControl.css": "3532571fa55098d9590a8e2756da028de30a8e53355c0cc1e2a3526d4cd3aed5"
+    "shared/browser/browserFullscreenControl.css": "a852c8755d91b3feb7c700d57f68839f562c39f02f7e27e9a79063f1b51f41fe"
   }
 }
