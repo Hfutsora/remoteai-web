@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { verifyFullscreenControl } from './browser-fullscreen-checks';
 
 for (const dark of [false, true]) test(`mobile browser retains pages and opens bookmark drawer ${dark}`, async ({ page }, info) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -80,14 +81,14 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
     animations: 'disabled' });
   await popup.getByRole('button', { name: '全屏展示', exact: true }).click();
   await expect(browser.getByRole('textbox', { name: '页面地址', exact: true })).toBeHidden();
-  await expect(browser.getByRole('button', { name: '退出全屏', exact: true })).toBeVisible();
+  await expect(browser.getByRole('button', { name: '更多操作', exact: true })).toBeVisible();
   await expect(second.contentFrame().locator('input')).toHaveValue('mode-draft');
   await expect.poll(() => browser.evaluate(element => element.matches(':popover-open'))).toBe(true);
   const fullscreenBounds = await browser.boundingBox();
   expect(fullscreenBounds).toMatchObject({ x: 0, y: 0, width: 390, height: 844 });
   await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-fullscreen.png`),
     animations: 'disabled' });
-  await browser.getByRole('button', { name: '退出全屏', exact: true }).click();
+  await verifyFullscreenControl({ page, browser, info, label: `web-mobile-${dark ? 'dark-20px' : 'light-14px'}` });
   await expect(browser.getByRole('textbox', { name: '页面地址', exact: true })).toBeVisible();
   await expect(second.contentFrame().locator('input')).toHaveValue('mode-draft');
   await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
@@ -153,9 +154,19 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-swipe-removed.png`),
     animations: 'disabled' });
   await grid.locator('.browser-tab-card-header button').click();
-  await expect(grid.locator('.pm-browser-page')).toHaveCount(1);
-  await browser.getByRole('button', { name: '返回网页' }).click();
+  await expect(grid).toBeHidden();
+  await expect(browser.getByRole('button', { name: '管理标签页（1）' })).toBeVisible();
   await expect(tabAddress).toHaveValue('');
+  await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
+  await popup.getByRole('button', { name: '全屏展示', exact: true }).click();
+  await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-home-circle.png`),
+    animations: 'disabled' });
+  await browser.getByRole('button', { name: '更多操作', exact: true }).tap();
+  await expect(browser.locator('.browser-fullscreen-popover')).toHaveCSS('opacity', '1');
+  await expect(browser.locator('.browser-fullscreen-popover')).not.toHaveClass(/zoom-big-(enter|appear|leave)/);
+  await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-home-menu.png`),
+    animations: 'disabled' });
+  await browser.getByRole('menuitem', { name: '退出全屏', exact: true }).click();
   await page.route(/^https:\/\/(www\.google\.com|www\.baidu\.com)/,
     route => route.fulfill({ contentType: 'text/html', body: '<h1>Search result fixture</h1>' }));
   const address = browser.getByRole('textbox', { name: '页面地址', exact: true });

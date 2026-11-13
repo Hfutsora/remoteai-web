@@ -25,6 +25,7 @@ import { BrowserPortMappings } from '../browser/BrowserPortMappings';
 import { bookmarkUrl } from '../browser/bookmarks/model';
 import { openWebsiteInBrowser } from '../conversation/WebsiteLinkMenu';
 import { BrowserSettingsAction } from '../browser/BrowserSettings';
+import { BrowserFullscreenControl } from '../browser/BrowserFullscreenControl';
 
 export interface BrowserSurfaceProps {
   tab: BrowserTab; active: boolean; command: { sequence: number; action: BrowserAction } | null;
@@ -169,9 +170,7 @@ export function BrowserContents(props: BrowserWindowProps & {
       onClick={props.onNewTab}><Plus size={17} /></button>
     {!props.embedded && <button className="pm-browser-close" aria-label={t('market.close')} title={t('market.close')}
       onClick={props.onClose}><X size={19} /></button>}</div>}
-    {mobileFullscreen ? <button type="button" className="browser-mobile-fullscreen-exit"
-      aria-label={t('market.browserRestore')} onClick={props.toggleFullscreen}>
-      <Minimize2 size="1.2em" /><span>{t('market.browserRestore')}</span></button>
+    {mobileFullscreen ? <BrowserFullscreenControl t={t} exit={props.toggleFullscreen} />
       : showManager ? <MobileTabManagerToolbar t={t} count={tabs.length} query={query} setQuery={setQuery}
       close={() => setManager(false)} add={add} closeAll={() => closeTabs(tabs.map(tab => tab.id))} /> : compact
       ? <MobileBrowserToolbar tab={displayTab} t={t} engine={search.engine} count={tabs.length}
