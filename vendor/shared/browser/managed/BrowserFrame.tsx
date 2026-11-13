@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { BrowserSurfaceProps } from '../../provider-market/ProviderBrowser';
 
 /** Browser-hosted previews cannot retain a cross-origin document when cancelling its navigation. */
-export function BrowserFrame({ tab, command, onLoadingChange, t, onError }: BrowserSurfaceProps & {
+export function BrowserFrame({ tab, command, onLoadingChange, onVisit, t, onError }: BrowserSurfaceProps & {
   onError: () => void;
 }) {
   const frame = useRef<HTMLIFrameElement>(null);
@@ -27,7 +27,14 @@ export function BrowserFrame({ tab, command, onLoadingChange, t, onError }: Brow
   }, [command]);
   return <iframe ref={frame} key={attempt} src={tab.url} title={tab.title || t('market.browserNewTab')}
     sandbox="allow-scripts allow-forms allow-same-origin" referrerPolicy="no-referrer"
-    onLoad={() => current.current.onLoadingChange?.(false)} onError={() => {
+    onLoad={() => {
+      current.current.onLoadingChange?.(false);
+      try {
+        const page = frame.current?.contentWindow;
+        if (page?.location.href !== 'about:blank') onVisit?.({ url: page?.location.href ?? tab.url,
+          title: page?.document.title ?? tab.title });
+      } catch { onVisit?.({ url: tab.url, title: tab.title }); }
+    }} onError={() => {
       current.current.onLoadingChange?.(false); onError();
     }} />;
 }

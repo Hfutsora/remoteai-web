@@ -25,8 +25,8 @@ export function ProviderBrowserSurface(props: BrowserSurfaceProps) {
   const [attempt, setAttempt] = useState(0);
   const desktop = isTauri();
   const { image, preview } = useNativeBrowserPreview();
-  const state = useRef({ tab, active, onNavigate, onPopup, onLoadingChange, obscured });
-  state.current = { tab, active, onNavigate, onPopup, onLoadingChange, obscured };
+  const state = useRef({ tab, active, onNavigate, onPopup, onLoadingChange, obscured, onVisit: props.onVisit });
+  state.current = { tab, active, onNavigate, onPopup, onLoadingChange, obscured, onVisit: props.onVisit };
   const refresh = useRef<() => void>();
   const nativeNavigation = useRef('');
   const lastCommand = useRef(0);
@@ -55,10 +55,11 @@ export function ProviderBrowserSurface(props: BrowserSurfaceProps) {
       });
     };
     refresh.current = sync;
-    const unlisten = listen<{ url?: string; popup?: boolean; loading?: boolean }>(
+    const unlisten = listen<{ url?: string; title?: string; popup?: boolean; loading?: boolean; visited?: boolean }>(
       `provider-browser-${tab.id}`, ({ payload }) => {
         if (payload.popup && payload.url) { state.current.onPopup(payload.url); return; }
         if (typeof payload.loading === 'boolean') state.current.onLoadingChange?.(payload.loading);
+        if (payload.visited && payload.url) state.current.onVisit?.({ url: payload.url, title: payload.title ?? '' });
         if (!payload.url) return;
         nativeNavigation.current = payload.url;
         state.current.onNavigate(payload.url);

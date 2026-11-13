@@ -11,12 +11,13 @@ import { BrowserHome } from './BrowserHome';
 
 /** Change the layout around the existing surfaces so previews never remount a tab's iframe. */
 export function BrowserPages({ browser, t, manager, compact, query, blocked, select, loadingChanged, desktopTabs,
-  home, bookmarks }: {
+  home, bookmarks, recordVisit }: {
   browser: BrowserWindowProps & { embedded?: boolean; onPageNavigate?: (id: string, url: string) => void };
   t: MarketText; manager: boolean; compact: boolean; query: string; blocked: boolean;
   select: (id: string) => void; loadingChanged: (id: string, loading: boolean) => void;
   desktopTabs: Readonly<Record<string, boolean>>;
   home: (id: string) => boolean; bookmarks: () => void;
+  recordVisit?: (id: string, page: { url: string; title: string }) => void;
 }) {
   const { tabs, activeId, Surface, commands, open } = browser;
   const host = useRef<HTMLDivElement>(null);
@@ -56,6 +57,7 @@ export function BrowserPages({ browser, t, manager, compact, query, blocked, sel
             command={commands[entry.id] ?? null} hideForModal={browser.embedded} obscured={blocked}
             onNavigate={url => (browser.onPageNavigate ?? browser.onNavigate)(entry.id, url)}
             onPopup={url => browser.onPopup(entry.id, url)}
+            onVisit={page => recordVisit?.(entry.id, page)}
             onLoadingChange={loading => loadingChanged(entry.id, loading)} t={t} />
         </div>
         {home(entry.id) && <BrowserHome t={t} visit={url => browser.onNavigate(entry.id, url)} bookmarks={bookmarks} />}

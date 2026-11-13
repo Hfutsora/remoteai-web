@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowLeft, ArrowLeftRight, ArrowRight, ChevronRight, ExternalLink,
-  Globe, Maximize2, Minimize2, Plus, RotateCw, X } from 'lucide-react';
+  Globe, History, KeyRound, Maximize2, Minimize2, Plus, RotateCw, X } from 'lucide-react';
 import { marketText, type MarketText } from './i18n';
 import type { Language } from '@remoteai/i18n';
 import { browserInput } from '../browser/addressInput';
@@ -25,6 +25,10 @@ import { BrowserPortMappings } from '../browser/BrowserPortMappings';
 import { bookmarkUrl } from '../browser/bookmarks/model';
 import { openWebsiteInBrowser } from '../conversation/WebsiteLinkMenu';
 import { BrowserSettingsAction } from '../browser/BrowserSettings';
+import { BrowserHistory } from '../browser/data/BrowserDataPanel';
+import { PasswordManager } from '../browser/data/PasswordManager';
+import { PasswordCapture } from '../browser/data/PasswordCapture';
+import { useBrowserRecords } from '../browser/data/useBrowserRecords';
 import { BrowserFullscreenControl } from '../browser/BrowserFullscreenControl';
 
 export interface BrowserSurfaceProps {
@@ -32,6 +36,7 @@ export interface BrowserSurfaceProps {
   onNavigate: (url: string) => void; t: MarketText;
   onPopup: (url: string) => void;
   onLoadingChange?: (loading: boolean) => void;
+  onVisit?: (page: { url: string; title: string }) => void;
   hideForModal?: boolean;
   obscured?: boolean;
 }
@@ -108,6 +113,7 @@ export function BrowserContents(props: BrowserWindowProps & {
   const [query, setQuery] = useState('');
   const [desktopTabs, setDesktopTabs] = useState<Record<string, boolean>>({});
   const [mappingsOpen, setMappingsOpen] = useState(false);
+  const [dataPanel, setDataPanel] = useState<'history' | 'passwords'>();
   const externalUrl = bookmarkUrl(displayTab?.url ?? '');
   const showManager = compact && manager;
   const add = () => { props.onNewTab(); setManager(false); setQuery(''); };
@@ -115,6 +121,8 @@ export function BrowserContents(props: BrowserWindowProps & {
     if (tabs.every(tab => ids.includes(tab.id))) { setManager(false); setQuery(''); }
     props.onCloseTabs(ids);
   };
+  const records = useBrowserRecords({ tabs, activeId, active: open, closeTabs });
+  useEffect(() => { if (!open) setDataPanel(undefined); }, [open]);
   useEffect(() => { if (!open) { setManager(false); setMappingsOpen(false); } }, [open]);
   useEffect(() => {
     if (!compact || !open) return;
@@ -135,6 +143,10 @@ export function BrowserContents(props: BrowserWindowProps & {
         if (externalUrl) void openWebsiteInBrowser(externalUrl);
       }}>{uiText('client.workspaceActions.openInBrowser', {}, props.language)}</BrowserSettingsAction>}
       <div className="browser-settings-divider" />
+      <BrowserSettingsAction icon={History} onClick={() => { dismiss(); setDataPanel('history'); }}>
+        {t('market.browserHistory')}</BrowserSettingsAction>
+      <BrowserSettingsAction icon={KeyRound} onClick={() => { dismiss(); setDataPanel('passwords'); }}>
+        {t('market.browserPasswords')}</BrowserSettingsAction>
       <BrowserSearchSetting t={t} search={search} />
       {props.mainBrowser && <BrowserSettingsAction icon={ArrowLeftRight} trailing={<ChevronRight size="1.1em" />}
         onClick={() => {
@@ -186,11 +198,18 @@ export function BrowserContents(props: BrowserWindowProps & {
     {!mobileFullscreen && !showManager && !(tab && home.isHome(tab.id)) && bookmarks.bar}{bookmarks.overlays}
     {mappingsOpen && <BrowserPortMappings language={props.language} close={() => setMappingsOpen(false)}
       visit={url => { if (tab) home.navigate(tab.id, url); }} />}
+    {dataPanel === 'history' && <BrowserHistory language={props.language} controls={records.controls}
+      close={() => setDataPanel(undefined)} visit={url => { if (tab) home.navigate(tab.id, url); }} />}
+    {dataPanel === 'passwords' && <PasswordManager language={props.language} currentUrl={displayTab?.url ?? ''}
+      fill={records.fill} close={() => setDataPanel(undefined)} />}
+    {open && records.candidate && <PasswordCapture login={records.candidate} t={t} close={records.closeCapture} />}
     <BrowserPages key="pages" browser={{ ...props, onAction: home.action, onNavigate: home.navigate,
       onCloseTab: id => closeTabs([id]) }}
       home={home.isHome} bookmarks={bookmarks.manage} t={t} manager={showManager} compact={compact} query={query}
       desktopTabs={desktopTabs}
-      blocked={menuOpen || bookmarks.overlayOpen || mappingsOpen} loadingChanged={loadingChanged}
+      blocked={menuOpen || bookmarks.overlayOpen || mappingsOpen || !!dataPanel || !!records.candidate}
+      loadingChanged={loadingChanged}
+      recordVisit={records.recordVisit}
       select={id => { props.onSelect(id); setManager(false); }} />
   </>;
 }

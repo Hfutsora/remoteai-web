@@ -1,0 +1,31 @@
+.browser-data-tools { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-block: 16px; }
+.browser-data-tools > .ant-input-affix-wrapper { flex: 1 1 200px; }
+.browser-data-scroll { max-height: 60dvh; overflow: auto; overscroll-behavior: contain; }
+.browser-data-day { display: flex; gap: 8px; align-items: center; font-size: inherit; font-weight: 500; margin: 20px 0 10px; }
+.browser-data-row { display: flex; align-items: center; gap: 12px; padding-block: 12px; }
+.browser-data-visit { display: flex; gap: 16px; align-items: center; flex: 1; min-width: 0;
+  padding: 6px 0; background: none; border: 0; color: inherit; font: inherit; text-align: start; cursor: pointer; }
+.browser-data-visit > svg { flex-shrink: 0; }
+.browser-data-visit span { min-width: 0; }
+.browser-data-visit strong, .browser-data-visit small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.browser-data-visit strong { font-weight: 500; }
+.browser-data-visit small { font-size: inherit; margin-top: 4px; }
+.browser-data-range { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-block: 20px; }
+.browser-data-range .ant-select { min-width: 160px; }
+.browser-data-choice { display: flex; align-items: center; gap: 18px; padding: 18px; border-radius: 12px; margin-block: 5px; }
+.browser-data-choice > svg { flex-shrink: 0; }
+.browser-data-choice > span:not(.ant-checkbox) { flex: 1; min-width: 0; }
+.browser-data-choice strong { font-weight: 500; }
+.browser-data-choice small { display: block; font-size: inherit; margin-top: 6px; overflow-wrap: anywhere; }
+.browser-password-fields { display: grid; gap: 14px; margin-block: 16px; }
+.browser-password-fields label { display: grid; gap: 6px; }
+.browser-password-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 14px; }
+.browser-password-row > span { min-width: 0; overflow-wrap: anywhere; }
+.browser-password-row small { display: block; }
+.browser-data-modal .ant-modal-body { overflow-wrap: anywhere; }
+@media (max-width: 600px) {
+  .browser-data-modal { max-width: calc(100vw - 16px); top: 8px; padding-bottom: 8px; }
+  .browser-data-modal .ant-modal-content { padding: 18px 16px; }
+  .browser-data-scroll { max-height: 65dvh; }
+  .browser-data-choice { gap: 12px; padding: 16px 12px; }
+}
