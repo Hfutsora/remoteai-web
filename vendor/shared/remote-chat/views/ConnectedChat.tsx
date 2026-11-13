@@ -279,7 +279,7 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
     </div></div>
       <TaskReviewProvider controller={controller} state={state} active={conversationActive && foreground}>
       <ChatRetryProvider controller={controller} state={state}>
-      <ChatMessages thread={state.selected} offline={!ready}
+      <ChatMessages thread={state.selected} offline={!ready} active={conversationActive && foreground}
         footer={scrollableComposer ? composer : undefined}
         renderUserMessage={renderUserMessage ?? (desktop ? props => <EditableChatMessage {...props}
           state={state} controller={controller} active={conversationActive && foreground} /> : undefined)}

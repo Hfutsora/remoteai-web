@@ -1,13 +1,20 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "0308df9b2f8e1db8222dba32c8cab97189d39607",
+  "revision": "79a09ac21f190ba155b947583d3001436f1bccfa",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "0cb12ba72827b927e4048d57828456c4184b1197"
+    "revision": "ea76eaffd6d7132bc28cfcf181e7db3a36916790"
+  },
+  "retainedTestSources": {
+    "repository": "https://github.com/piperhex/remoteai",
+    "revision": "0308df9b2f8e1db8222dba32c8cab97189d39607",
+    "paths": [
+      "apps/desktop/e2e/"
+    ]
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "954e01c4e407f74c193368d374767d42a6bd2aa2"
+    "revision": "11de4bfbf99947fc8eddf8da729379dadbf4d0b0"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.24/remoteai-i18n-0.1.24.tgz",
   "files": {
@@ -45,7 +52,7 @@
     "shared/remote-chat/guiAccounts.ts": "a07487fd77f43e45cc53942d1f14bb99902ebac9243775d99aaeb816bd9a339f",
     "shared/remote-chat/guiTools.ts": "9ea3ad96d33cace8f51ef19cac22556faa1fbde98d7ec5589d1af813a72dbf6d",
     "shared/remote-chat/views/types.ts": "85fca8c9b14d01b430c2449021140c149a733a291ab2af7047f77d83901971be",
-    "shared/remote-chat/views/ChatMessages.tsx": "b6d1b61539733e0dd700b9d451f5c046327c5679df0f62e22c72f471f0f55d95",
+    "shared/remote-chat/views/ChatMessages.tsx": "7f7f210da03abab3392a453bc483674fa15c7749b0a3afc024aca7c83c1cfc47",
     "shared/remote-chat/views/ChatProcessing.tsx": "11608c8edbb7dddbdefaa520ace75e855fbd82609c846e68c78c6206e412f682",
     "shared/remote-chat/views/ChatQuotes.tsx": "e719d22dc3ef4dd237941a245803f41ae17096ae5c9f1fc8f18eb82397bb0b14",
     "shared/conversation/ConversationChangesButton.tsx": "5bc481bf7603eac42369ae0900a8592ae338fa845d94cfdb871f5a09e98f182b",
@@ -188,7 +195,7 @@
     "shared/legal/AgreementConsent.tsx": "7f81c1bafb923942ae9ec23b70c7ad19fb6d79e10628887f91099e983c3f3e72",
     "shared/legal/useAgreementConsent.ts": "27e80e0c8b705249e25bc04a3c0a9280b7ab44cbf01f566d46769f9fe65eefd1",
     "shared/navigation/PageSwipeContext.ts": "7c84446bb0864d68c94d559cad8dfd686299b9a888a9827e385161130c7fca83",
-    "shared/remote-chat/views/ConnectedChat.tsx": "4916c1b7ade11edc9a40a9b53f68e8fde4cc984a6ee9370b10650849b8261d39",
+    "shared/remote-chat/views/ConnectedChat.tsx": "51009947cb3c32e7d7b9fbd91f77bbbc5fec6ff36bacf1ffe77eafe707eed92e",
     "shared/downloads/useDownloadConnection.ts": "cd7adfa0388199962d2330b49d1c334bcc236ae9ce3d5da378e28e37b9380bad",
     "shared/remote-chat/useRetainedChatDevices.ts": "b9dfe82e83d0b5df3b10a7656bf3f5cd1310d54685d50093db1517f6945accaa",
     "shared/remote-chat/ComputerSearchBar.tsx": "b10e8f111c7974063ba49b5b406760aa5c2b98f124d5822a9210d268620e9801",
@@ -1276,7 +1283,7 @@
     "shared/conversation/questionKeyboard.ts": "82e65e6561d846b213da4d190d79e6f8cf8fb7f422e3b29e89e98129e1d572b9",
     "shared/remote-chat/views/useDismissedQuestions.ts": "9b857871e26d63ce8fef39259a4e517cfc62814636cc5eef6811036f1057f101",
     "shared/remote-chat/views/asyncQuestions.css": "e3915bd0cfec318fb4093c9dba1a79e83f6c52b3e39894f6b8a76f9d34c4ce11",
-    "shared/cli-gui/CliMessages.tsx": "18f795a29daf4a0d8ee61a2716d90734681062114ec6ebc4ac4fa7a3616ac41d",
+    "shared/cli-gui/CliMessages.tsx": "d2ae6102b7de33bda7092bbc229cb5c71337731266abd20f5cddaece7c33c1c9",
     "shared/cli-gui/CliPermissions.tsx": "07307bf0bea1c88705b123a6c81d7d596c457349acc4754ebe9f8d21449e52c3",
     "shared/cli-gui/CliComposer.tsx": "2d919797eb526a6d8d7202dc1b71ee4f6bf8765746e0970bd06af64075b208e7",
     "shared/cli-gui/CliInstaller.tsx": "0dc7d5c839ba1ea902ec3b843a1d31bfdbfd4043a9f866c05402d371eeabb962",

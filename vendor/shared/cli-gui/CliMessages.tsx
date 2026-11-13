@@ -8,9 +8,9 @@ export interface CliMessagesProps {
   selected: string | null; active?: boolean; scrollableComposer?: boolean;
 }
 
-export function CliMessages({ history, loading, loadOlder, footer, scrollableComposer }: CliMessagesProps) {
+export function CliMessages({ history, loading, loadOlder, footer, scrollableComposer, active }: CliMessagesProps) {
   const thread = useMemo(() => cliThread(history), [history]);
-  return <><ChatMessages thread={thread} loading={loading} loadingMore={loading && Boolean(history)}
+  return <><ChatMessages thread={thread} loading={loading} loadingMore={loading && Boolean(history)} active={active}
     hasMore={history?.hasOlder} loadOlder={loadOlder} footer={scrollableComposer ? footer : undefined} />
     {!scrollableComposer && footer}</>;
 }

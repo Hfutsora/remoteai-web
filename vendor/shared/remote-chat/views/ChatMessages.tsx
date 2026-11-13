@@ -106,7 +106,7 @@ const TimelineEntry = memo(function TimelineEntry({ entry, open, inline, desktop
 });
 
 type MessageProps = ChatMessagesProps & {
-  processing?: ReactNode; renderUserMessage?: RenderUserMessage;
+  processing?: ReactNode; renderUserMessage?: RenderUserMessage; active?: boolean;
 };
 
 export function ChatMessages(props: MessageProps & { footer?: ReactNode }) {
@@ -146,13 +146,16 @@ function ChatMessageHistory({ props, scroll }: {
   const timeline = useMemo(() => activityTimeline(desktop ? desktopTimeline(entries) : entries), [desktop, entries]);
   const runningTurn = currentRunningTurn(turns);
   const runningSummary = timeline.find(entry => entry.kind === 'summary' && entry.turn.id === runningTurn?.id);
-  const [selection, setSelection] = useState<Selection | null>(null);
+  const active = props.active ?? true;
+  const [selected, setSelection] = useState<Selection | null>(null);
+  const selection = active ? selected : null;
   const drawers = useHistoryDrawers(turns);
   const open = useCommittedCallback((next: Selection) => {
+    if (!active) return;
     setSelection(drawers.open(next) ? null : next);
   });
-  // Dismiss the previous layout's sheets before switching to inline work and docked reviews.
-  useEffect(() => { setSelection(null); }, [desktop]);
+  // Portal sheets outlive a hidden page unless its transient selection is cleared as well.
+  useEffect(() => { setSelection(null); }, [desktop, active]);
   const work = selection?.type === 'work' ? findWorkEntry(entries, selection.id)
     : selection?.type === 'activities' ? findActivityEntry(entries, selection.id) : undefined;
   const item = selection?.type === 'item'
