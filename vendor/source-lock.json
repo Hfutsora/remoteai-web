@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "9c504534f4c1683ebeb1941434cc65b279d4d085",
+  "revision": "91511a2420c803a4f56e9501c10eea1db08a3a31",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "b9e89937ef1a527c2e0270b69221938df960d9dd"
+    "revision": "185ecd1c4a031f0ef65d18bc62ef9b30eeb94ee9"
   },
   "retainedTestSources": {
     "repository": "https://github.com/piperhex/remoteai",
@@ -14,7 +14,7 @@
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "c0564cb7dadf0730f7eb5d357162403241029cbf"
+    "revision": "c0acbd209109109785bc3a3f243f7c1b83b17a95"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.26/remoteai-i18n-0.1.26.tgz",
   "files": {
@@ -1890,7 +1890,7 @@
     "shared/browser/bookmarks/status.ts": "003546ca89e4a6cf202165b03127402770046146fde1abc3d29b64169dcfea9e",
     "shared/browser/bookmarks/BookmarkDrawer.tsx": "82197d41bf07721f65efb5ffa1f279cac660840faafe8219fab50ca05c57d7f8",
     "shared/browser/bookmarks/useCompactBrowser.ts": "127b120f5524b77415438181bc685705c4124138f40aae2864cd2476c72a0157",
-    "shared/browser/addressInput.ts": "b809825ba42ff12c5ce7bb99db3aee310f8851ea7f9343b374abab7a856ec817",
+    "shared/browser/addressInput.ts": "20e6c460b07f6204b31486e3cd458eb4f5ffbdf89f4a0d1789a25fb7acfd5f8d",
     "shared/browser/useSearchEngine.ts": "2cafdc9368d73008726547fa3b2e8e455d8e0a9352f6f5dcfb004071e3d74904",
     "shared/browser/BrowserSearchSetting.tsx": "4ce09c834fc5cac414d466cf49a00e5763993e94df3275288206e2f9de7ee99a",
     "shared/browser/searchEngine.ts": "6f3d67eabc3cb333ca29447b9e96c10f8740c58dd00ce9f357ac2194e6291bd4",
