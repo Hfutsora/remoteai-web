@@ -11,9 +11,11 @@ import { setLanguage } from '../../../shared/localization/browserLanguage';
 import { WebLocaleProvider } from '../src/i18n/WebLocaleProvider';
 import { initializeTheme } from '../src/theme/preference';
 import 'antd/dist/reset.css';
+import 'antd-mobile/es/global';
 import '../src/styles.css';
 import '../../../shared/remote-chat/views/chat.css';
 import '../../../shared/remote-chat/views/messages.css';
+import { bindBrowserDownloads } from './browser-download-fixture';
 
 initializeTheme(); setLanguage('zh');
 const files: Record<string, string> = {
@@ -26,6 +28,7 @@ const context = { threadId: 'fixture', ready: true,
   client: { open: async () => { throw new Error('Unavailable fixture file'); },
     read: async () => { throw new Error('Unavailable fixture file'); }, close: async () => {} },
 };
+bindBrowserDownloads(context.client);
 function Fixture() {
   const [browser, setBrowser] = useState(false);
   return <ApplicationTypography><WebLocaleProvider><BookmarkProvider scope="chat-browser-fixture">

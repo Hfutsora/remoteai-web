@@ -1,0 +1,17 @@
+@media (max-width: 860px) {
+  .browser-main-page .resource-download-page {
+    --panel: var(--app-surface, #ffffff);
+    --green-soft: var(--app-accentSoft, #e7f6f0);
+  }
+
+  .browser-main-page .resource-download-card .file-download-action,
+  .browser-main-page .resource-download-card .resource-download-button {
+    color: var(--green-dark);
+    background: var(--green-soft);
+  }
+
+  .browser-main-page .resource-download-card .file-download-action:hover:not(:disabled),
+  .browser-main-page .resource-download-card .resource-download-button:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--green) 15%, var(--panel));
+  }
+}

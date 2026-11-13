@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap");
 @import url("./chat/mobileSettings.css");
 @import url("./chat/mobileSidebar.css");
+@import url("./browser/downloadPreview.css");
 
 :root {
   font-family: "DM Sans", "PingFang SC", "Microsoft YaHei", sans-serif;
