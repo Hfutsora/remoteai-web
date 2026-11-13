@@ -63,6 +63,8 @@ import { ProjectBar } from '../../conversation/ProjectBar';
 import { GuiToolbox } from '../../conversation/GuiToolbox';
 import { ProjectBrowserButton } from '../../project-browser/views/ProjectBrowserButton';
 import { engineNames } from '../../cli-gui/EngineSelector';
+import { RunningConversations } from '../../conversation/RunningConversations';
+import { remoteRunningConversations } from '../../conversation/runningConversationEntries';
 
 export interface ConnectedChatProps {
   chat: { state: ChatState; controller: ChatController; foreground: boolean };
@@ -218,7 +220,7 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
     <ChatQuotesProvider scope={state.draftScope ?? state.selected?.id ?? null} sending={state.sending}
     enabled={conversationActive && !state.selectedArchived}>
     <ChatTerminalLayout>
-    <header className={`chat-header${showDesktopDiffs ? ' workspace-toolbar' : ''}`}
+    <header className={`chat-header${showDesktopDiffs ? ' workspace-toolbar' : ''}`} data-running-conversations-host
       data-tauri-drag-region={draggableHeader || undefined}>
       {desktop ? <button type="button" className="chat-back"
         aria-label={listOpen ? t("client.chat.collapseChatList") : t("client.chat.openChatList")}
@@ -240,6 +242,12 @@ function ConnectedChatContent({ chat, device, devices, active, scope, email, cho
       {!workspacePage && showDesktopDiffs && (external ? <CliChangesButton /> : <ConversationChangesButton
         value={state.selected?.turns ? { turns: state.selected.turns } : undefined} />)}
       {headerEnd}
+      {(desktop || draggableHeader) && <RunningConversations entries={remoteRunningConversations(state)}
+        selected={state.selected?.id ?? null} disabled={state.sending || !ready}
+        onSelect={id => {
+          if (state.archived || state.search) void controller.list({ archived: false, search: '' });
+          void controller.openRecoveryThread(id);
+        }} onOpen={selectedFromList} />}
     </header>
     {external && cli && <CliConversationPane cwd={cwd} dictation={controller.dictation} remoteLayout
       readClipboardImages={readClipboardImages} nativeFileDrop={nativeFileDrop}

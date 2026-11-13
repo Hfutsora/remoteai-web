@@ -1,0 +1,43 @@
+@import (reference) '../chat/threadScrollbar.less';
+
+:global([data-running-conversations-host]) { position: relative; }
+.panel {
+  position: absolute; z-index: 5; inset-block-start: calc(100% + 16px); inset-inline-end: 16px;
+  width: 280px; max-width: calc(100% - 32px); padding: 6px;
+  color: var(--ink); background: color-mix(in srgb, var(--panel) 92%, transparent);
+  border: 1px solid var(--line); border-radius: 14px;
+  box-shadow: 0 4px 18px #0000000c; backdrop-filter: blur(14px);
+  user-select: none;
+  button { font: inherit; color: inherit; cursor: pointer; }
+  button:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
+}
+.collapsed { width: auto; padding: 3px; }
+.heading { display: flex; align-items: center; gap: 8px; padding-inline-start: 8px; min-height: 2.5em;
+  > svg { color: var(--green); flex-shrink: 0; }
+  > strong { font-weight: 600; }
+  .toggle { margin-inline-start: auto; }
+}
+.count { color: var(--muted); font-variant-numeric: tabular-nums; }
+.toggle { display: grid; place-items: center; padding: 0; border: 0; border-radius: 9px;
+  width: 2.5em; height: 2.5em; background: transparent;
+  &:hover { background: var(--green-selection-hover, var(--chat-pale)); }
+}
+:global(:root) .panel .list {
+  .thread-scrollbar(var(--muted));
+  max-height: calc(5 * var(--running-row-height)); overflow-y: auto; overflow-x: hidden;
+  overscroll-behavior: contain;
+}
+.row { display: flex; align-items: center; gap: 10px; width: 100%; height: var(--running-row-height);
+  box-sizing: border-box; text-align: start; padding: 0 8px; border: 0; border-radius: 8px; background: transparent;
+  > svg { flex-shrink: 0; color: var(--green); }
+  &:hover { background: var(--green-selection-hover, var(--chat-pale)); }
+  &[aria-current='page'] { background: var(--green-selection, var(--chat-pale)); }
+  &:disabled { cursor: default; opacity: .6; }
+  > .attention { color: var(--warning, #d99020); }
+}
+.text { display: flex; flex-direction: column; min-width: 0; gap: 2px; }
+.title, .project { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.project { color: var(--muted); font-size: .85em; }
+.spinner { animation: running-spin 1.2s linear infinite; }
+@keyframes running-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spinner { animation: none; } }

@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "674d6f9766bbcaaf8f28dce8ecb179cd329e5b4c",
+  "revision": "36539f77d1ab02968504c2e1a960acd4c9b907cb",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "3f9261a3428c9b7f9d81d8778db275c3e18d511e"
+    "revision": "123eac75c516587eeca524e244488eb72f9460a9"
   },
   "retainedTestSources": {
     "repository": "https://github.com/piperhex/remoteai",
@@ -195,7 +195,7 @@
     "shared/legal/AgreementConsent.tsx": "7f81c1bafb923942ae9ec23b70c7ad19fb6d79e10628887f91099e983c3f3e72",
     "shared/legal/useAgreementConsent.ts": "27e80e0c8b705249e25bc04a3c0a9280b7ab44cbf01f566d46769f9fe65eefd1",
     "shared/navigation/PageSwipeContext.ts": "7c84446bb0864d68c94d559cad8dfd686299b9a888a9827e385161130c7fca83",
-    "shared/remote-chat/views/ConnectedChat.tsx": "51009947cb3c32e7d7b9fbd91f77bbbc5fec6ff36bacf1ffe77eafe707eed92e",
+    "shared/remote-chat/views/ConnectedChat.tsx": "b200f739519e5288f773c0c62b49ec213a07984c7133d10326789ec6aa2b5786",
     "shared/downloads/useDownloadConnection.ts": "cd7adfa0388199962d2330b49d1c334bcc236ae9ce3d5da378e28e37b9380bad",
     "shared/remote-chat/useRetainedChatDevices.ts": "b9dfe82e83d0b5df3b10a7656bf3f5cd1310d54685d50093db1517f6945accaa",
     "shared/remote-chat/ComputerSearchBar.tsx": "b10e8f111c7974063ba49b5b406760aa5c2b98f124d5822a9210d268620e9801",
@@ -1913,6 +1913,9 @@
     "shared/port-mapping/browserMappings.ts": "f216713cb828fcde40656c1a06b7f0c1041ed47e83fdb9c6986a1333b1a3771a",
     "shared/browser/browserPortMappings.css": "432a5ff2ae3d48c6a01b82ccdef1397ee1b35cd45a2f14627a30aa7229646f6a",
     "shared/browser/BrowserSettings.tsx": "be66f1e19fe44faf0353f14076cc9b528ff07b3dad86feb2a417da4e272771a6",
-    "shared/browser/browserSettings.css": "91d056c98cb53ae6ecae1ce18d5ed3407eccc291425c44c2406695673eb6b369"
+    "shared/browser/browserSettings.css": "91d056c98cb53ae6ecae1ce18d5ed3407eccc291425c44c2406695673eb6b369",
+    "shared/conversation/RunningConversations.tsx": "23150fa54dd82237fdad0655d24ee5922bd9e47a6c4c99e62ce8baf9f0955d09",
+    "shared/conversation/runningConversationEntries.ts": "6908d8764060b6b1853cf3640bfe4308de711d46120852441a4002a6ef688306",
+    "shared/conversation/RunningConversations.module.less": "2592e16f5d09ae9ca6d22b99b19ca98b77ecd31a5bc2c29fec88e0cd807ad7f2"
   }
 }
