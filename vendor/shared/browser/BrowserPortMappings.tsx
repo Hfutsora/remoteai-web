@@ -14,7 +14,7 @@ export function BrowserPortMappings({ language, close, visit }: {
   const entries = useSyncExternalStore(browserMappings.subscribe, browserMappings.snapshot);
   const t = marketText(language);
   const { token } = theme.useToken();
-  return <Modal open width={480} zIndex={1800} footer={null} onCancel={close}
+  return <Modal open className="browser-chrome" width={480} zIndex={1800} footer={null} onCancel={close}
     title={uiText('client.portForwarding.portMapping', {}, language)}>
     <p style={{ color: token.colorTextSecondary }}>{t('market.browserActiveMappingsHint')}</p>
     {!isTauri() && <p style={{ color: token.colorTextSecondary }}>

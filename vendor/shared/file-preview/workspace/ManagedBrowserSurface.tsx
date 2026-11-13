@@ -6,16 +6,19 @@ import { ProviderBrowserSurface } from '../../browser/managed/ProviderBrowserSur
 import { browserOverlayAttributes, hasBrowserOverlay } from '../../browser/managed/browserOverlays';
 import { BrowserClientContext } from './browserClient';
 import { placeBrowser } from './nativeBrowserPlacement';
+import { nativeSurfaceSession } from '../../browser/managed/nativeSurfaceSession';
+import { useNativeBrowserPreview } from '../../browser/managed/useNativeBrowserPreview';
 
 export function WebsiteBrowserSurface(props: BrowserSurfaceProps) {
   return props.tab.automationThread ? <ManagedBrowserSurface {...props} /> : <ProviderBrowserSurface {...props} />;
 }
 
-function ManagedBrowserSurface({ tab, active, onNavigate, onLoadingChange, t }: BrowserSurfaceProps) {
+function ManagedBrowserSurface({ tab, active, onNavigate, onLoadingChange, t, obscured }: BrowserSurfaceProps) {
   const client = useContext(BrowserClientContext);
   const host = useRef<HTMLDivElement>(null);
-  const current = useRef({ active, onNavigate, onLoadingChange });
-  current.current = { active, onNavigate, onLoadingChange };
+  const current = useRef({ active, onNavigate, onLoadingChange, obscured });
+  current.current = { active, onNavigate, onLoadingChange, obscured };
+  const { image: overlayImage, preview } = useNativeBrowserPreview();
   const [image, setImage] = useState('');
   const [failed, setFailed] = useState(false);
   const refresh = useRef<() => void>();
@@ -42,24 +45,29 @@ function ManagedBrowserSurface({ tab, active, onNavigate, onLoadingChange, t }: 
     if (!client.native || !host.current) return;
     const element = host.current;
     let stopped = false;
-    let flight = false;
-    let pending = false;
-    const place = async () => {
-      if (flight) { pending = true; return; }
-      if (stopped) return;
-      flight = true;
+    const session = nativeSurfaceSession<Parameters<typeof placeBrowser>[0] & { preservePreview: boolean }>({
+      apply: async ({ preservePreview: _preview, ...request }) => {
+        await placeBrowser(request);
+        if (!stopped) setFailed(false);
+      },
+      capture: async () => {
+        const reply = await client.request({ threadId: tab.automationThread!, tabId: tab.id,
+          command: { action: 'screenshot' } });
+        const image = reply.result?.image;
+        if (!image) throw new Error('Browser preview unavailable');
+        return `data:${image.mimeType};base64,${image.data}`;
+      },
+      preview, failed: () => { if (!stopped) setFailed(true); },
+    });
+    const sync = () => {
       const bounds = element.getBoundingClientRect();
       const modal = hasBrowserOverlay(element);
       const visible = current.current.active && !document.hidden && !modal && bounds.width > 0 && bounds.height > 0;
-      try {
-        await placeBrowser({ threadId: tab.automationThread, tabId: tab.id,
-          visible, bounds: { x: Math.max(0, bounds.x), y: Math.max(0, bounds.y),
-            width: bounds.width, height: bounds.height } });
-        if (!stopped) setFailed(false);
-      } catch { if (!stopped) setFailed(true); }
-      finally { flight = false; if (pending) { pending = false; void place(); } }
+      session.update({ threadId: tab.automationThread, tabId: tab.id,
+        visible, preservePreview: Boolean(current.current.obscured || modal),
+        bounds: { x: Math.max(0, bounds.x), y: Math.max(0, bounds.y), width: bounds.width, height: bounds.height } });
     };
-    const sync = () => { void place(); }; refresh.current = sync;
+    refresh.current = sync;
     const observer = new ResizeObserver(sync); observer.observe(element);
     const overlays = new MutationObserver(sync);
     overlays.observe(document.body, { childList: true, subtree: true, attributes: true,
@@ -76,12 +84,12 @@ function ManagedBrowserSurface({ tab, active, onNavigate, onLoadingChange, t }: 
       document.removeEventListener('visibilitychange', sync);
       void listener.then(stop => stop()).catch(() => {});
       // Preserve the model's tab when the user switches conversations; only release its screen placement.
-      void placeBrowser({ threadId: tab.automationThread, tabId: tab.id,
-        visible: false, bounds: { x: 0, y: 0, width: 1, height: 1 } })
+      void session.close().then(() => placeBrowser({ threadId: tab.automationThread, tabId: tab.id,
+        visible: false, bounds: { x: 0, y: 0, width: 1, height: 1 } }))
         .catch(error => console.debug('Browser preview already closed', error));
     };
-  }, [client.native, tab.id, tab.automationThread]);
-  useEffect(() => { refresh.current?.(); }, [active]);
+  }, [client, tab.id, tab.automationThread, preview]);
+  useEffect(() => { refresh.current?.(); }, [active, obscured]);
   useEffect(() => {
     if (client.native || !active || !tab.automationThread) return;
     let stopped = false;
@@ -102,6 +110,8 @@ function ManagedBrowserSurface({ tab, active, onNavigate, onLoadingChange, t }: 
     return () => { stopped = true; clearTimeout(timer); };
   }, [client, tab.id, tab.automationThread, active]);
   return <div ref={host} className="pm-browser-surface">
+    {client.native && overlayImage && !failed && <img className="native-browser-overlay-preview" src={overlayImage}
+      alt="" aria-hidden draggable={false} />}
     {failed && <div className="pm-browser-feedback" role="status"><Globe size={32} /><p>{t('market.browserFailed')}</p></div>}
     {!client.native && image && !failed && <img className="website-browser-stream" src={image} alt={tab.title} />}
   </div>;

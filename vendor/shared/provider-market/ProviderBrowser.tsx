@@ -13,6 +13,7 @@ import { BrowserTabs } from './BrowserTabs';
 import { ProviderWebsiteIcon } from './ProviderWebsiteIcon';
 import { useBrowserBookmarks } from '../browser/bookmarks/useBrowserBookmarks';
 import './providerBrowser.css';
+import '../browser/browserChrome.css';
 import { isTauri } from '@tauri-apps/api/core';
 import { useCompactBrowser } from '../browser/bookmarks/useCompactBrowser';
 import { MobileBrowserToolbar, MobileTabManagerToolbar } from '../browser/MobileBrowserToolbar';
@@ -31,6 +32,7 @@ export interface BrowserSurfaceProps {
   onPopup: (url: string) => void;
   onLoadingChange?: (loading: boolean) => void;
   hideForModal?: boolean;
+  obscured?: boolean;
 }
 export interface BrowserWindowProps {
   title?: string;

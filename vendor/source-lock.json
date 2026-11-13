@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "36539f77d1ab02968504c2e1a960acd4c9b907cb",
+  "revision": "60d5df369b84cff74ed8c8498e46f8b1e3a87e17",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "123eac75c516587eeca524e244488eb72f9460a9"
+    "revision": "b41bd3ca2512373f7716dd64171e0752781abbf2"
   },
   "retainedTestSources": {
     "repository": "https://github.com/piperhex/remoteai",
@@ -14,7 +14,7 @@
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "87bad66af6850fea29b63427cc901927a7400941"
+    "revision": "c0564cb7dadf0730f7eb5d357162403241029cbf"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.25/remoteai-i18n-0.1.25.tgz",
   "files": {
@@ -929,8 +929,8 @@
     "shared/provider-market/i18n.ts": "99dda5e97e45baf4e6a78c6db8ecf6df1dae0d66356af9647cfe4264dd9413b2",
     "shared/file-preview/workspace/preview.module.less": "ab254b31294a88ac66379927c40523f47cf90756c44da0f2670b9509890d8701",
     "shared/remote-chat/views/remoteFilePreview.css": "fabb7a21c444c886f938711c288702b314d08dcc3e4ca38bbb198229cf700080",
-    "shared/provider-market/ProviderBrowser.tsx": "071c57a4e41c3df8b99a8f2137125a3fa799277fa70d544e5615076561287ca3",
-    "shared/file-preview/workspace/ManagedBrowserSurface.tsx": "84d5bc4c9425be2e4c59330ec904e4c116796fb2a3fcf96c158cfa388b028cbd",
+    "shared/provider-market/ProviderBrowser.tsx": "364b5cbd74c60accb7ab0966d36761efc9281cbe5d03fd4f56f160d8a15e9e41",
+    "shared/file-preview/workspace/ManagedBrowserSurface.tsx": "5d914461c5c5601f7e2968eb847768749e50e0a94516caf3ad6b9de44b691406",
     "shared/remote-chat/views/ChatBinaryFilePreview.tsx": "d18d95c89fcd05ddd62ce5d23297c65dede1f4712cb97af8f641650b0818ad97",
     "shared/remote-chat/filePreview.ts": "8d369c8a09c5a195afe36a072b33eba610baf26717f370c0a7911d6457314096",
     "shared/file-preview/ResourceDownloadCard.tsx": "0b82b12a2fd3c2ac7149abcec77059a6a3b878f5515cc9efd5f890425d6b5387",
@@ -1448,7 +1448,7 @@
     "shared/provider-market/BrowserTabs.tsx": "90874a196ab2aba78a9885505d326e95bf42d1334b7ac71c53be78d1c331a082",
     "shared/provider-market/ProviderWebsiteIcon.tsx": "b6bb81a2b332d3a60123a00dd36624a2e3ac728e87a992b0a7e8f41a06a3b0da",
     "shared/provider-market/providerBrowser.css": "4a6ab710911ba88307d1f377fa5fbd8c005abd5ecebc82a183f650d26d8c4ff1",
-    "shared/browser/managed/ProviderBrowserSurface.tsx": "ac58581dfd7b94a8dbd09eb6a40b39f886a9b51be5804a5c08ea573c2f43365a",
+    "shared/browser/managed/ProviderBrowserSurface.tsx": "36378c9e509f4b4c33ab482a73ff42c14af44a1993780099d0e1b34759ac17c9",
     "shared/browser/managed/browserOverlays.ts": "7049ab695b456b6b81304be6a4d09ee9f789c3e20e5762799c86a3f56c507a4f",
     "shared/file-preview/workspace/nativeBrowserPlacement.ts": "1c92017b8a513a44853dc406d12c1213895a66842db6a3c82259dc8d81336967",
     "shared/file-preview/resourceDownloadCard.css": "814b092087b2377aab8e9e883a629d8743671980e2c3e87b44af5dff1345a3ce",
@@ -1721,7 +1721,7 @@
     "shared/provider-market/BrowserTabItem.tsx": "5a250a11fe293fa254a2b8c5ecd0990f2fffcefa650b93ebf6bb144a3e4964c9",
     "shared/provider-market/BrowserTabIcon.tsx": "45aceb99594df9d210f588fa028e77ce03699434f154c1e01b1c6b0ec453a315",
     "shared/provider-market/providerWebsiteIcon.css": "9b13173df3c427d0f6dece11252ad7cdc1f76f4017c4d4e4ac279d5f5bb3d515",
-    "shared/browser/managed/providerBrowserSession.ts": "c7da873da2be38ce3830688c7b720fe7c03fbcb8cd2c13e18c76554b88e06a0e",
+    "shared/browser/managed/providerBrowserSession.ts": "1d09ead472cd5b3e8857e2168bde7b63e3a8e5ccc091be30ccd0d88e7a69ac2d",
     "shared/browser/managed/BrowserFrame.tsx": "824aa2b31edec39bf383e383d6ccebd8600d16e6c96e392cd6dae0951c299e1c",
     "shared/chat/mermaidCache.ts": "07da621d1ffd2fc48e1d2d54420e804035cda107ae66a5fff73a4b67c7214dfb",
     "apps/desktop/src/pages/codexGui/ModelChangeNotice.tsx": "9e3306197887961c70103eca28bac9e276d20fceb1dc518e01c9d849fc37b17d",
@@ -1876,11 +1876,11 @@
     "shared/browser/browserPage.css": "53cb5761e3fab72b361d660ccecfcc7fbe7c61b106764f70760fb7d2ad262f29",
     "shared/browser/bookmarks/channel.ts": "a9e9dfbc8f666317dae072dc058a227e34f7825c3e90ce76c86f15696ecb4411",
     "shared/browser/bookmarks/store.ts": "c9501be61d70ff74e07d2f89a79c25fa807cb1bead8a307b208ff6643202403e",
-    "shared/browser/bookmarks/useBrowserBookmarks.tsx": "f6befcc504d4f792e572b4a0a16f16a2088a3fe62177415c31315fa0e663eb53",
+    "shared/browser/bookmarks/useBrowserBookmarks.tsx": "3ac35faedd1a96ef7d594af2adebbab2fe3369ac51d1a9985d8bdb59b9a83695",
     "shared/browser/bookmarks/model.ts": "a7fda5c0828d5dfe778fcfa7ac5a9caec898a81ecb0024221aab1ba8d95b8116",
     "shared/browser/bookmarks/BookmarkBar.tsx": "89c068ba2b472957ad90bce822ba95654e312324f7ae824503faf41435b28418",
-    "shared/browser/bookmarks/BookmarkEditor.tsx": "da29c03c84cabfdc98e9995e16b9ae48a1b3d4eac6ba9a8e732cb5a3299055cd",
-    "shared/browser/bookmarks/BookmarkManager.tsx": "9751f8bfd7d38d76c68c6089a79c72f368221b5a218e5dd67f0e3f21e95e9c21",
+    "shared/browser/bookmarks/BookmarkEditor.tsx": "a0f00afc1b5d0c1480e880cf734e56c07dc4a93e7afed3237f034ba1c6a4786f",
+    "shared/browser/bookmarks/BookmarkManager.tsx": "709dee68831f2be8703612b95c65182518181dda2da30ded4453e29a5a5511bb",
     "shared/browser/bookmarks/bookmarks.css": "d5b8c4a28ab401cafcae82ff64a666ca9318cf1f0c53f960f8bea17033aa5c5d",
     "apps/desktop/e2e/nested-scroll-checks.ts": "d069d4904859fd6d130d21f6d8169cdd17e45e65c6ffa7d443d3dbfd8f06dbb4",
     "shared/chat/canScrollWithin.ts": "8d95c7965ce767bd659b54250f5d97462b6337596f5ad87930bf6fc00004318d",
@@ -1896,7 +1896,7 @@
     "shared/browser/searchEngine.ts": "6f3d67eabc3cb333ca29447b9e96c10f8740c58dd00ce9f357ac2194e6291bd4",
     "shared/browser/searchPreference.ts": "e735f5fd02aa753eaa37018d75d3baeb6fcdb0ba6e84c2535af4e2b5b2c8e4da",
     "shared/browser/MobileBrowserToolbar.tsx": "57db723ecd16c874c147187eceb97d3b5b790eeb8ce5d38a748cf50b1078036b",
-    "shared/browser/BrowserPages.tsx": "228358da05596634b0152470451b20a33b6fa432eb1bf9e8e3c7a82187efc737",
+    "shared/browser/BrowserPages.tsx": "6a56ed20cbfa2c67379392dfd748e3e160e17daf54255a83236e7a80cc080c44",
     "shared/browser/BrowserEdgeGestures.tsx": "5e4ff2ed3bf1d025f85f8a38014877fbb87bb70fa33b0bae3932e63de5aa99a6",
     "shared/browser/mobileBrowser.css": "b9cc77b2dcec03c9e06f39f5b7ffb504ce6ed571226046bc27e23c2aa76c497f",
     "shared/browser/BrowserSiteModeSetting.tsx": "83bbe064d816a63907e6c7fb43e36972b0f86d7dd39a3c67252be3420b29ba4e",
@@ -1909,13 +1909,17 @@
     "shared/browser/useMobileBrowserHome.ts": "3e23fe819f562bced80b4b801d9523480019b44c6af0a8ee7ffb370fd51e48aa",
     "shared/browser/BrowserHome.tsx": "d1d36e0ce38512f8a162f839825330e770485d8084db5b04ff84c887abcdd838",
     "shared/browser/browserHome.css": "1734ca821077f2e9cc9b3093c7efcdc96d792c68b43b94555bf1313466f7d84b",
-    "shared/browser/BrowserPortMappings.tsx": "b18ec05bffe054910cd1f6dabee4a92602f1fce722219d31a44c576aeb3f2aac",
+    "shared/browser/BrowserPortMappings.tsx": "bbd77cd81a1cd0cba9b6a48472a9d115a18fa3ef80d02cc27094bd311722cc69",
     "shared/port-mapping/browserMappings.ts": "f216713cb828fcde40656c1a06b7f0c1041ed47e83fdb9c6986a1333b1a3771a",
     "shared/browser/browserPortMappings.css": "432a5ff2ae3d48c6a01b82ccdef1397ee1b35cd45a2f14627a30aa7229646f6a",
     "shared/browser/BrowserSettings.tsx": "be66f1e19fe44faf0353f14076cc9b528ff07b3dad86feb2a417da4e272771a6",
     "shared/browser/browserSettings.css": "91d056c98cb53ae6ecae1ce18d5ed3407eccc291425c44c2406695673eb6b369",
     "shared/conversation/RunningConversations.tsx": "23150fa54dd82237fdad0655d24ee5922bd9e47a6c4c99e62ce8baf9f0955d09",
     "shared/conversation/runningConversationEntries.ts": "6908d8764060b6b1853cf3640bfe4308de711d46120852441a4002a6ef688306",
-    "shared/conversation/RunningConversations.module.less": "2592e16f5d09ae9ca6d22b99b19ca98b77ecd31a5bc2c29fec88e0cd807ad7f2"
+    "shared/conversation/RunningConversations.module.less": "2592e16f5d09ae9ca6d22b99b19ca98b77ecd31a5bc2c29fec88e0cd807ad7f2",
+    "shared/browser/browserChrome.css": "07d55ac9dbed42b48c1ea2fbf61467d33d73438c913ba57522da3e1b1d53a2a0",
+    "shared/browser/managed/nativeSurfaceSession.ts": "eb777bfeaefa03ede243ef182748b21a78d921b9e05f2fababfa827ff126a67a",
+    "shared/browser/managed/useNativeBrowserPreview.ts": "9fbc6be08de4a4e3df85a5a040f118d870dfe6eef95a8afc83e3a94ec2e188e9",
+    "shared/browser/managed/nativeBrowserPreview.css": "8992184a0f5abd3f0a298d8a2692ba2a3b6f9597db8372ad5a49b3658e316401"
   }
 }

@@ -26,7 +26,7 @@ export function BookmarkManager({ t, close, edit, create, visit }: {
   const colors = { '--border': token.colorBorderSecondary,
     '--text-secondary': token.colorTextSecondary } as CSSProperties;
   return <Modal open title={t('market.bookmarkManage')} onCancel={close} footer={null} width={680} zIndex={1750}
-    styles={{ body: colors }}>
+    className="browser-chrome" styles={{ body: colors }}>
     <div className="browser-bookmark-manager-tools">
       <Input value={query} aria-label={t('market.bookmarkSearch')} placeholder={t('market.bookmarkSearch')}
         onChange={event => setQuery(event.target.value)} />
@@ -49,6 +49,7 @@ export function BookmarkManager({ t, close, edit, create, visit }: {
           onClick={() => move(entry, 1)} />
         <Button type="text" aria-label={t('market.bookmarkEdit')} icon={<Pencil size={15} />} onClick={() => edit(entry)} />
         <Popconfirm title={t('market.bookmarkDeleteConfirm')} overlayStyle={{ maxWidth: 400 }} zIndex={1900}
+          overlayClassName="browser-chrome"
           onConfirm={() => store.remove(entry.id)} okText={t('market.bookmarkDelete')} cancelText={t('market.cancel')}>
           <Button type="text" danger aria-label={t('market.bookmarkDelete')} icon={<Trash2 size={15} />} />
         </Popconfirm>

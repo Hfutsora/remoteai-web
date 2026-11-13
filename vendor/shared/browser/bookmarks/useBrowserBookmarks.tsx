@@ -86,7 +86,7 @@ export function useBrowserBookmarks(options: {
     overlays: <>{manager && (compact
       ? <BookmarkDrawer t={t} close={() => setManager(false)} visit={visit} add={() => create('link', true)} />
       : <BookmarkManager t={t} close={() => setManager(false)} edit={edit} create={create} visit={visit} />)}
-      {deleting && <Modal open width={400} zIndex={1850} title={t('market.bookmarkDelete')}
+      {deleting && <Modal open className="browser-chrome" width={400} zIndex={1850} title={t('market.bookmarkDelete')}
         okText={t('market.bookmarkDelete')} cancelText={t('market.cancel')} okButtonProps={{ danger: true }}
         onCancel={() => setDeleting(undefined)} onOk={() => { store.remove(deleting.id); setDeleting(undefined); }}>
         <p>{t('market.bookmarkDeleteConfirm')}</p>

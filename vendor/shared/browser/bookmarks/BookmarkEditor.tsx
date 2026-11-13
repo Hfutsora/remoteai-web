@@ -18,7 +18,8 @@ export function BookmarkEditor({ entry, t, close }: { entry: Bookmark; t: Market
       title: title.trim(), url: address ?? '', parentId })) { setError(true); return; }
     close();
   };
-  return <Modal open title={t(entry.kind === 'folder' ? 'market.bookmarkFolder' : 'market.bookmarkEdit')}
+  return <Modal open className="browser-chrome"
+    title={t(entry.kind === 'folder' ? 'market.bookmarkFolder' : 'market.bookmarkEdit')}
     onCancel={close} width={400} zIndex={1800} footer={<>
       {existing && <Button danger onClick={() => { store.remove(entry.id); close(); }}>{t('market.bookmarkDelete')}</Button>}
       <Button onClick={close}>{t('market.cancel')}</Button><Button type="primary" onClick={submit}>{t('market.save')}</Button>

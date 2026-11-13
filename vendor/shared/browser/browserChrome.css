@@ -1,0 +1,29 @@
+/* Browser controls must not place a text caret when caret browsing is enabled. */
+.pm-browser, .browser-chrome, .pm-browser-tab-menu, .pm-browser-tabs-menu,
+.browser-bookmark-menu, .browser-bookmark-settings-popup.ant-popover, .browser-bookmark-drawer,
+.browser-chrome.ant-popover, .pm-browser-feedback, .pm-browser-web-notice {
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  caret-color: transparent;
+}
+
+/* Keep document previews and embedded pages outside the browser control policy. */
+.pm-browser .browser-tab-canvas {
+  cursor: auto;
+  user-select: text;
+  -webkit-user-select: text;
+  caret-color: auto;
+}
+
+:where(.pm-browser, .browser-chrome, .browser-bookmark-drawer)
+  :where(input, textarea, [contenteditable=''], [contenteditable='true'], [contenteditable='plaintext-only']) {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+:where(.pm-browser, .browser-chrome, .browser-bookmark-drawer)
+  :where(input:not(:disabled):not([readonly]), textarea:not(:disabled):not([readonly]),
+    [contenteditable=''], [contenteditable='true'], [contenteditable='plaintext-only']) {
+  caret-color: auto;
+}

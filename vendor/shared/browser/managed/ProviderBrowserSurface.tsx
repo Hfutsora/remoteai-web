@@ -6,6 +6,7 @@ import type { BrowserSurfaceProps } from '../../provider-market/ProviderBrowser'
 import { nativeBrowserSession } from './providerBrowserSession';
 import { browserOverlayAttributes, hasBrowserOverlay } from './browserOverlays';
 import { BrowserFrame } from './BrowserFrame';
+import { useNativeBrowserPreview } from './useNativeBrowserPreview';
 
 function browserFeedback(state: { url: string; unsupported: boolean; needsDesktop: boolean; failed: boolean }) {
   if (!state.url) return 'market.browserBlank';
@@ -16,14 +17,15 @@ function browserFeedback(state: { url: string; unsupported: boolean; needsDeskto
 }
 
 export function ProviderBrowserSurface(props: BrowserSurfaceProps) {
-  const { tab, active, command, onNavigate, onPopup, onLoadingChange, t, hideForModal } = props;
+  const { tab, active, command, onNavigate, onPopup, onLoadingChange, t, hideForModal, obscured } = props;
   const host = useRef<HTMLDivElement>(null);
   const [failed, setFailed] = useState(false);
   const [unsupported, setUnsupported] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const desktop = isTauri();
-  const state = useRef({ tab, active, onNavigate, onPopup, onLoadingChange });
-  state.current = { tab, active, onNavigate, onPopup, onLoadingChange };
+  const { image, preview } = useNativeBrowserPreview();
+  const state = useRef({ tab, active, onNavigate, onPopup, onLoadingChange, obscured });
+  state.current = { tab, active, onNavigate, onPopup, onLoadingChange, obscured };
   const refresh = useRef<() => void>();
   const nativeNavigation = useRef('');
   const lastCommand = useRef(0);
@@ -34,7 +36,7 @@ export function ProviderBrowserSurface(props: BrowserSurfaceProps) {
     const session = nativeBrowserSession(tab.id, (reason) => {
       setUnsupported(String(reason).includes('market.browserHeadersUnsupported')); setFailed(true);
       state.current.onLoadingChange?.(false);
-    });
+    }, preview);
     let frame = 0;
     let modalVisible = false;
     const sync = () => {
@@ -45,7 +47,7 @@ export function ProviderBrowserSurface(props: BrowserSurfaceProps) {
         const visible = current.active && !modalVisible && !document.hidden && bounds.width > 0 && bounds.height > 0;
         if (!current.tab.url) return;
         session.update({ url: current.tab.url, headers: current.tab.headers,
-          headerOrigin: current.tab.headerOrigin, visible,
+          headerOrigin: current.tab.headerOrigin, visible, preservePreview: current.obscured || modalVisible,
           navigate: nativeNavigation.current !== current.tab.url,
           bounds: { x: Math.max(0, bounds.x), y: Math.max(0, bounds.y),
             width: bounds.width, height: bounds.height } });
@@ -83,8 +85,8 @@ export function ProviderBrowserSurface(props: BrowserSurfaceProps) {
       void unlisten.then((stop) => stop()).catch(() => {});
       void session.close().catch((error) => console.error('Provider browser close failed', error));
     };
-  }, [desktop, tab.id, attempt, hideForModal]);
-  useEffect(() => { refresh.current?.(); }, [active, tab.url]);
+  }, [desktop, tab.id, attempt, hideForModal, preview]);
+  useEffect(() => { refresh.current?.(); }, [active, tab.url, obscured]);
   useEffect(() => {
     if (!command || command.sequence === lastCommand.current) return;
     lastCommand.current = command.sequence;
@@ -97,6 +99,8 @@ export function ProviderBrowserSurface(props: BrowserSurfaceProps) {
   }, [command, desktop, tab.id]);
   const feedback = browserFeedback({ url: tab.url, unsupported, needsDesktop, failed });
   return <div className="pm-browser-surface" ref={host}>
+    {desktop && image && !feedback && <img className="native-browser-overlay-preview" src={image}
+      alt="" aria-hidden draggable={false} />}
     {feedback && <div className="pm-browser-feedback" role="status"><Globe size={32} /><p>{t(feedback)}</p>
       {failed && <button onClick={() => { setFailed(false); setAttempt((value) => value + 1); }}>
         {t('market.retry')}</button>}</div>}

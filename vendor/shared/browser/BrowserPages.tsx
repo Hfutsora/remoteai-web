@@ -53,7 +53,7 @@ export function BrowserPages({ browser, t, manager, compact, query, blocked, sel
           aria-hidden={manager || home(entry.id) || undefined}
           ref={element => { if (element) element.inert = manager || home(entry.id); }}>
           <Surface tab={entry} active={open && entry.id === activeId && !blocked && !manager && !home(entry.id)}
-            command={commands[entry.id] ?? null} hideForModal={browser.embedded}
+            command={commands[entry.id] ?? null} hideForModal={browser.embedded} obscured={blocked}
             onNavigate={url => (browser.onPageNavigate ?? browser.onNavigate)(entry.id, url)}
             onPopup={url => browser.onPopup(entry.id, url)}
             onLoadingChange={loading => loadingChanged(entry.id, loading)} t={t} />
