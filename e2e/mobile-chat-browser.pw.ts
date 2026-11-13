@@ -62,7 +62,11 @@ for (const enlarged of [false, true]) test(`chat previews allocate retained brow
       await cdp.detach();
     }
     await page.getByRole('menuitem', { name: '在内置浏览器中打开' }).click();
-    await expect(browser.locator('.pm-browser-page').last().getByRole('img')).toBeVisible();
+    const image = browser.locator('.pm-browser-page').last().getByRole('img');
+    await expect(image).toBeVisible();
+    await image.tap();
+    await expect(browser).toBeVisible();
+    await expect(image).toBeVisible();
   }
   await expect(browser.locator('.pm-browser-page')).toHaveCount(10);
   await page.screenshot({ path: info.outputPath(`web-mobile-${enlarged ? 'dark-20px' : 'light-14px'}-image.png`) });
