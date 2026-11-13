@@ -100,6 +100,7 @@ export function BrowserContents(props: BrowserWindowProps & {
   const search = useSearchEngine();
   const narrow = useCompactBrowser();
   const compact = narrow && !isTauri();
+  const mobileFullscreen = compact && props.fullscreen;
   const home = useMobileBrowserHome(props, compact);
   const displayTab = tab && home.isHome(tab.id) ? { ...tab, url: '', title: '' } : tab;
   const [manager, setManager] = useState(false);
@@ -121,6 +122,9 @@ export function BrowserContents(props: BrowserWindowProps & {
       {(compact || props.mainBrowser) && <BrowserSiteModeSetting desktop={!compact || !!desktopTabs[activeId]} t={t}
         disabled={!compact}
         change={desktop => setDesktopTabs(current => ({ ...current, [activeId]: desktop }))} />}
+      {compact && <BrowserSettingsAction icon={Maximize2} onClick={() => {
+        dismiss(); props.toggleFullscreen();
+      }}>{t('market.browserFullscreen')}</BrowserSettingsAction>}
       {(compact || props.mainBrowser) && <BrowserSettingsAction disabled={!externalUrl} icon={ExternalLink}
         onClick={() => {
         if (externalUrl) void openWebsiteInBrowser(externalUrl);
@@ -133,7 +137,7 @@ export function BrowserContents(props: BrowserWindowProps & {
       }}>
         {uiText('client.portForwarding.portMapping', {}, props.language)}</BrowserSettingsAction>}
     </>,
-    close: compact ? props.onClose : undefined,
+    reload: compact ? () => home.action(activeId, 'reload') : undefined,
     navigate: url => { if (tab) home.navigate(tab.id, url); },
     newTab: url => { if (tab) props.onPopup(tab.id, url); },
   });
@@ -161,7 +165,10 @@ export function BrowserContents(props: BrowserWindowProps & {
       onClick={props.onNewTab}><Plus size={17} /></button>
     {!props.embedded && <button className="pm-browser-close" aria-label={t('market.close')} title={t('market.close')}
       onClick={props.onClose}><X size={19} /></button>}</div>}
-    {showManager ? <MobileTabManagerToolbar t={t} count={tabs.length} query={query} setQuery={setQuery}
+    {mobileFullscreen ? <button type="button" className="browser-mobile-fullscreen-exit"
+      aria-label={t('market.browserRestore')} onClick={props.toggleFullscreen}>
+      <Minimize2 size="1.2em" /><span>{t('market.browserRestore')}</span></button>
+      : showManager ? <MobileTabManagerToolbar t={t} count={tabs.length} query={query} setQuery={setQuery}
       close={() => setManager(false)} add={add} /> : compact
       ? <MobileBrowserToolbar tab={displayTab} t={t} engine={search.engine} count={tabs.length}
         newTab={add} manage={() => { setQuery(''); setManager(true); }} settings={bookmarks.settings}
@@ -173,7 +180,7 @@ export function BrowserContents(props: BrowserWindowProps & {
       navigate={(url) => { if (tab) props.onNavigate(tab.id, url); }}
       action={(action) => { if (tab) props.onAction(tab.id, action); }} t={t} actions={props.actions}
       star={bookmarks.star} settings={bookmarks.settings} />}
-    {!showManager && !(tab && home.isHome(tab.id)) && bookmarks.bar}{bookmarks.overlays}
+    {!mobileFullscreen && !showManager && !(tab && home.isHome(tab.id)) && bookmarks.bar}{bookmarks.overlays}
     {mappingsOpen && <BrowserPortMappings language={props.language} close={() => setMappingsOpen(false)}
       visit={url => { if (tab) home.navigate(tab.id, url); }} />}
     <BrowserPages key="pages" browser={{ ...props, onAction: home.action, onNavigate: home.navigate }}

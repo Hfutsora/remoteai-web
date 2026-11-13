@@ -46,8 +46,7 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   await expect(frame.contentFrame().getByRole('heading', { name: 'Retained browser page' })).toBeVisible();
   await frame.contentFrame().locator('input').fill('unsaved-draft');
   const retained = await frame.elementHandle();
-  await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
-  await page.getByRole('button', { name: /^关\s*闭$/ }).last().click();
+  await page.locator('.mobile-tabbar').getByRole('tab', { name: '发现', exact: true }).click();
   await page.locator('.mobile-tabbar').getByRole('tab', { name: '浏览器', exact: true }).click();
   expect(await frame.evaluate((node, previous) => node === previous, retained)).toBe(true);
   await expect(frame.contentFrame().locator('input')).toHaveValue('unsaved-draft');
@@ -74,7 +73,36 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   await desktopSite.uncheck();
   await expect.poll(() => second.evaluate(node => node.contentWindow?.innerWidth)).toBeLessThan(500);
   await expect(second.contentFrame().locator('input')).toHaveValue('mode-draft');
+  const reload = popup.getByRole('button', { name: '刷新', exact: true });
+  await expect(popup.getByRole('button', { name: /^关\s*闭$/ })).toHaveCount(0);
+  expect((await reload.boundingBox())!.y).toBeLessThan((await quickAdd.boundingBox())!.y);
+  await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-refresh-menu.png`),
+    animations: 'disabled' });
+  await popup.getByRole('button', { name: '全屏展示', exact: true }).click();
+  await expect(browser.getByRole('textbox', { name: '页面地址', exact: true })).toBeHidden();
+  await expect(browser.getByRole('button', { name: '退出全屏', exact: true })).toBeVisible();
+  await expect(second.contentFrame().locator('input')).toHaveValue('mode-draft');
+  await expect.poll(() => browser.evaluate(element => element.matches(':popover-open'))).toBe(true);
+  const fullscreenBounds = await browser.boundingBox();
+  expect(fullscreenBounds).toMatchObject({ x: 0, y: 0, width: 390, height: 844 });
+  await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-fullscreen.png`),
+    animations: 'disabled' });
+  await browser.getByRole('button', { name: '退出全屏', exact: true }).click();
+  await expect(browser.getByRole('textbox', { name: '页面地址', exact: true })).toBeVisible();
+  await expect(second.contentFrame().locator('input')).toHaveValue('mode-draft');
   await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
+  await popup.getByRole('button', { name: '全屏展示', exact: true }).click();
+  await page.keyboard.press('Escape');
+  await expect(browser.getByRole('textbox', { name: '页面地址', exact: true })).toBeVisible();
+  await expect(second.contentFrame().locator('input')).toHaveValue('mode-draft');
+  await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
+  await reload.click();
+  await expect(popup).toBeHidden();
+  await expect(second.contentFrame().locator('input')).toHaveValue('second-draft');
+  await expect(frame.contentFrame().locator('input')).toHaveValue('unsaved-draft');
+  await expect(browser.getByRole('button', { name: '管理标签页（2）' })).toBeVisible();
+  await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-refreshed.png`),
+    animations: 'disabled' });
   await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-page.png`),
     animations: 'disabled' });
   await expect(browser.getByRole('button', { name: '刷新', exact: true })).toHaveCount(0);

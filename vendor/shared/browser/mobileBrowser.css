@@ -3,6 +3,11 @@
 .browser-mobile-toolbar > button { min-width: 34px; min-height: 44px; padding: 5px; }
 .browser-mobile-toolbar form { border-radius: 18px; padding: 0 10px; }
 .browser-mobile-toolbar input { width: 0; height: 42px; }
+.pm-browser .browser-mobile-fullscreen-exit { position: absolute; z-index: 3;
+  top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right));
+  display: flex; align-items: center; gap: 6px; min-height: 44px; max-width: 240px; padding: 6px 12px;
+  font: inherit; border: 1px solid var(--border, #dce1e8); border-radius: 12px;
+  background: var(--panel-bg, #fff); color: inherit; }
 .browser-tab-count { min-width: 21px; padding: 1px 3px; border: 1.5px solid currentColor; border-radius: 5px;
   font-size: .8em; font-weight: 600; line-height: 1.3; text-align: center; }
 .browser-tab-manager-toolbar { padding: 8px 16px 16px; background: var(--surface-secondary, #eef1f6); }

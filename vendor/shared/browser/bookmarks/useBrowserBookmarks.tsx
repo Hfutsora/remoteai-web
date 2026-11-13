@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Button, Modal, Popover, Switch, theme } from 'antd';
-import { BookMarked, Check, ChevronRight, Cloud, PanelTop, Settings, Star, X } from 'lucide-react';
+import { BookMarked, Check, ChevronRight, Cloud, PanelTop, RotateCw, Settings, Star } from 'lucide-react';
 import type { BrowserTab } from '../../provider-market/browserState';
 import type { MarketText } from '../../provider-market/i18n';
 import { bookmarkUrl, type Bookmark } from './model';
@@ -18,7 +18,7 @@ import './bookmarks.css';
 
 export function useBrowserBookmarks(options: {
   tab?: BrowserTab; t: MarketText; navigate: (url: string) => void; newTab: (url: string) => void;
-  close?: () => void;
+  reload?: () => void;
   settingsContent?: (dismiss: () => void) => ReactNode;
 }) {
   const { tab, t } = options;
@@ -62,6 +62,9 @@ export function useBrowserBookmarks(options: {
             {t('market.retry')}</Button>}
         </div>
       </>}>
+        {options.reload && <BrowserSettingsAction icon={RotateCw} disabled={!tab?.url} onClick={() => {
+          setSettings(false); options.reload?.();
+        }}>{t('market.browserReload')}</BrowserSettingsAction>}
         <BrowserSettingsAction disabled={!current.available || current.saved} pressed={current.saved}
           icon={current.saved ? Check : Star} onClick={current.add}>
           {t('market.bookmarkAdd')}</BrowserSettingsAction>
@@ -74,9 +77,6 @@ export function useBrowserBookmarks(options: {
         </div>
         <BrowserSettingsAction icon={BookMarked} onClick={manage} trailing={<ChevronRight size="1.1em" />}>
           {t(compact ? 'market.bookmarkAll' : 'market.bookmarkManage')}</BrowserSettingsAction>
-        {compact && options.close && <BrowserSettingsAction icon={X} onClick={() => {
-          setSettings(false); options.close?.();
-        }}>{t('market.close')}</BrowserSettingsAction>}
       </BrowserSettingsPanel>}>
       <button type="button" aria-label={t('market.browserSettings')} title={t('market.browserSettings')}>
         <Settings size={17} /></button>

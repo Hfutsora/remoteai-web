@@ -1,10 +1,12 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { Language } from '@remoteai/i18n';
+import { isTauri } from '@tauri-apps/api/core';
 import { BrowserContents } from '../provider-market/ProviderBrowser';
 import { BrowserResourcesContext, ResourceBrowserSurface } from '../file-preview/workspace/browserResources';
 import { BrowserNavigationContext } from './BrowserNavigationProvider';
 import { useWebsiteTabs } from '../file-preview/workspace/useWebsiteTabs';
 import { marketText } from '../provider-market/i18n';
+import { useCompactBrowser } from './bookmarks/useCompactBrowser';
 import './browserPage.css';
 
 /** Reuse the established engine and tabs without tying the main browser to a conversation. */
@@ -15,6 +17,23 @@ export function BrowserPage({ language, active = true, onClose }: {
   const standalone = useWebsiteTabs();
   const browser = navigation?.browser ?? standalone;
   const [expanded, setExpanded] = useState(false);
+  const host = useRef<HTMLElement>(null);
+  const compact = useCompactBrowser() && !isTauri();
+  useEffect(() => { if (!active) setExpanded(false); }, [active]);
+  useLayoutEffect(() => {
+    const element = host.current;
+    if (!expanded || !compact || !active || !element) return;
+    // The top layer fills the viewport without moving the retained page out of its transformed tab track.
+    const escape = (event: KeyboardEvent) => { if (event.key === 'Escape') setExpanded(false); };
+    document.addEventListener('keydown', escape);
+    if (typeof element.showPopover === 'function') {
+      element.setAttribute('popover', 'manual'); element.showPopover();
+    }
+    return () => {
+      document.removeEventListener('keydown', escape);
+      if (element.hasAttribute('popover')) { element.hidePopover(); element.removeAttribute('popover'); }
+    };
+  }, [active, compact, expanded]);
   const initialized = useRef(false);
   useEffect(() => {
     if (initialized.current) return;
@@ -26,7 +45,7 @@ export function BrowserPage({ language, active = true, onClose }: {
     if (browser.tabs.every(tab => ids.includes(tab.id))) browser.onNewTab();
   };
   return <BrowserResourcesContext.Provider value={browser.resources}>
-    <section hidden={!active} className={`pm-browser browser-main-page${expanded ? ' browser-main-expanded' : ''}`}
+    <section ref={host} hidden={!active} className={`pm-browser browser-main-page${expanded ? ' browser-main-expanded' : ''}`}
     aria-label={marketText(language)('market.browserNavigation')}>
     <BrowserContents {...browser} embedded mainBrowser language={language} open={active} Surface={ResourceBrowserSurface}
       onCloseTab={id => closeTabs([id])} onCloseTabs={closeTabs}
