@@ -32,7 +32,7 @@ for (const dark of [false, true]) test(`icon navigation retains the browser ${da
   expect(await navigation.innerText()).toBe('');
   expect((await navigation.boundingBox())?.height).toBe(45);
   expect(await tabs.locator('svg').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().width)))
-    .toEqual([21, 21, 21, 21, 21]);
+    .toEqual([23, 23, 23, 23, 23]);
   await navigation.getByRole('tab', { name: '发现' }).click();
   await expect(page.locator('.discovery-page')).toBeVisible();
   await expect(page.locator('.discovery-page').getByRole('button', { name: '浏览器', exact: true })).toHaveCount(0);

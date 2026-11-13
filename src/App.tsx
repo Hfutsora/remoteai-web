@@ -288,6 +288,7 @@ const navItems: Array<{ key: AppPage; label: string; icon: typeof LayoutDashboar
   { key: "discover", get label() { return t("client.discovery.title"); }, icon: Compass },
   { key: "settings", get label() { return t("client.app.settings"); }, icon: Settings },
 ];
+const MOBILE_NAVIGATION_ICON_SIZE = 23;
 const mobileNavItems = [navItems[0],
   { key: 'browser' as const, get label() { return t('client.configLabels.browser'); }, icon: Globe },
   ...navItems.slice(1),
@@ -486,8 +487,8 @@ function AppShell() {
           className="mobile-tab" aria-label={item.label} aria-selected={item.key === activeNavigationPage}
           onClick={() => dispatch(pageChanged(item.key))}>
           {item.key === 'discover'
-            ? <DiscoveryIcon owner={downloadScope} unread={lounge.state.unread} />
-            : <item.icon size={21} aria-hidden="true" />}
+            ? <DiscoveryIcon owner={downloadScope} unread={lounge.state.unread} size={MOBILE_NAVIGATION_ICON_SIZE} />
+            : <item.icon size={MOBILE_NAVIGATION_ICON_SIZE} aria-hidden="true" />}
         </button>)}
       </div><SafeArea position="bottom" />
     </div>
