@@ -38,3 +38,11 @@
   touch-action: pan-y; overscroll-behavior-x: none; }
 .browser-gesture-left { left: 0; }
 .browser-gesture-right { right: 0; }
+.browser-site-desktop .pm-browser-surface { overflow: hidden; }
+.browser-site-desktop .pm-browser-surface iframe { width: var(--browser-desktop-width);
+  height: calc(100% / var(--browser-desktop-scale)); transform: scale(var(--browser-desktop-scale));
+  transform-origin: top left; }
+.browser-bookmark-settings .browser-site-mode-setting { cursor: pointer; min-height: 44px; gap: 12px; }
+.browser-site-mode-setting > span:not(.ant-checkbox) { display: flex; align-items: center; gap: 12px; flex: 1; padding: 0; }
+.browser-site-mode-setting > .ant-checkbox { order: 2; }
+.browser-site-mode-setting .ant-checkbox-inner { border-radius: 3px; }

@@ -1,6 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Button, Modal, Popover, Switch, theme } from 'antd';
-import { Settings, Star } from 'lucide-react';
+import { Check, Settings, Star } from 'lucide-react';
 import type { BrowserTab } from '../../provider-market/browserState';
 import type { MarketText } from '../../provider-market/i18n';
 import { bookmarkUrl, type Bookmark } from './model';
@@ -11,6 +11,7 @@ import { BookmarkManager } from './BookmarkManager';
 import { bookmarkStatusKeys } from './status';
 import { BookmarkDrawer } from './BookmarkDrawer';
 import { useCompactBrowser } from './useCompactBrowser';
+import { useCurrentBookmark } from './useCurrentBookmark';
 import './bookmarks.css';
 
 
@@ -31,6 +32,7 @@ export function useBrowserBookmarks(options: {
   const [dragging, setDragging] = useState(false);
   const address = tab && bookmarkUrl(tab.url);
   const saved = address && entries.find(entry => entry.kind === 'link' && entry.url === address);
+  const current = useCurrentBookmark({ url: tab?.url ?? '', title: tab?.title ?? '', newId: () => crypto.randomUUID() });
   const create = (kind: Bookmark['kind'], current = false) => {
     setEditor({ id: crypto.randomUUID(), kind, title: current ? tab?.title || (address ? new URL(address).hostname : '') : '',
       url: current ? address ?? '' : '', parentId: '', position: Math.max(-1, ...entries.map(entry => entry.position)) + 1 });
@@ -52,6 +54,10 @@ export function useBrowserBookmarks(options: {
       overlayClassName="browser-bookmark-settings-popup" zIndex={1700} title={t('market.browserSettings')}
       content={<div className="browser-bookmark-settings">
         {options.settingsContent}
+        <Button block disabled={!current.available || current.saved} aria-pressed={current.saved}
+          icon={current.saved ? <Check size={16} /> : <Star size={16} />} onClick={current.add}>
+          {t('market.bookmarkAdd')}</Button>
+        {current.invalid && <span role="alert">{t('market.bookmarkInvalid')}</span>}
         <label><span>{t('market.bookmarkShowBar')}</span><Switch checked={showBar}
           aria-label={t('market.bookmarkShowBar')} onChange={store.setShowBar} /></label>
         <Button block onClick={manage}>{t(compact ? 'market.bookmarkAll' : 'market.bookmarkManage')}</Button>

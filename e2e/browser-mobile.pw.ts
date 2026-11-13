@@ -59,6 +59,22 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   await tabAddress.fill(`${new URL(info.project.use.baseURL!).origin}/second-tab`);
   await tabAddress.press('Enter');
   await expect(browser.locator('iframe').last().contentFrame().getByRole('heading')).toHaveText('Second retained tab');
+  const second = browser.locator('iframe').last();
+  await second.contentFrame().locator('input').fill('mode-draft');
+  await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
+  const popup = page.locator('.browser-bookmark-settings-popup');
+  const quickAdd = popup.getByRole('button', { name: '添加书签', exact: true });
+  await quickAdd.click(); await expect(quickAdd).toBeDisabled();
+  await expect(page.getByRole('dialog', { name: '添加书签' })).toHaveCount(0);
+  const desktopSite = popup.getByRole('checkbox', { name: '桌面版网站' });
+  await desktopSite.check();
+  await expect.poll(() => second.evaluate(node => node.contentWindow?.innerWidth)).toBe(980);
+  await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-desktop-settings.png`),
+    animations: 'disabled' });
+  await desktopSite.uncheck();
+  await expect.poll(() => second.evaluate(node => node.contentWindow?.innerWidth)).toBeLessThan(500);
+  await expect(second.contentFrame().locator('input')).toHaveValue('mode-draft');
+  await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
   await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-page.png`),
     animations: 'disabled' });
   await expect(browser.getByRole('button', { name: '刷新', exact: true })).toHaveCount(0);
@@ -89,10 +105,25 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   await swipe('left', 10); await expect(tabAddress).toHaveValue(/\/second-tab$/);
   await swipe('left'); await expect(tabAddress).toHaveValue(/\/session-fixture$/);
   await swipe('right'); await expect(tabAddress).toHaveValue(/\/second-tab$/);
-  await expect(browser).toBeVisible(); await cdp.detach();
+  await expect(browser).toBeVisible();
   await browser.getByRole('button', { name: '管理标签页（2）' }).click();
-  await grid.locator('.browser-tab-card-header button').last().click();
+  const swipeCard = async (dx: number, dy = 0) => {
+    const bounds = await grid.locator('.browser-tab-select').first().boundingBox();
+    const x = bounds!.x + bounds!.width / 2; const y = bounds!.y + 70;
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x, y }] });
+    for (let step = 1; step <= 5; step++) await cdp.send('Input.dispatchTouchEvent', {
+      type: 'touchMove', touchPoints: [{ x: x + dx * step / 5, y: y + dy * step / 5 }],
+    });
+    await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+  };
+  for (const [dx, dy] of [[30, 0], [-70, 0], [5, 100]]) {
+    await swipeCard(dx, dy); await expect(grid).toBeVisible();
+    await expect(grid.locator('.pm-browser-page')).toHaveCount(2);
+  }
+  await swipeCard(120); await expect(grid).toBeVisible(); await cdp.detach();
   await expect(grid.locator('.pm-browser-page')).toHaveCount(1);
+  await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-swipe-removed.png`),
+    animations: 'disabled' });
   await grid.locator('.browser-tab-card-header button').click();
   await expect(grid.locator('.pm-browser-page')).toHaveCount(1);
   await browser.getByRole('button', { name: '返回网页' }).click();

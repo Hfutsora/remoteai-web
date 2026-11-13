@@ -4,13 +4,16 @@ import type { BrowserWindowProps } from '../provider-market/ProviderBrowser';
 import type { MarketText } from '../provider-market/i18n';
 import { ProviderWebsiteIcon } from '../provider-market/ProviderWebsiteIcon';
 import { BrowserEdgeGestures } from './BrowserEdgeGestures';
+import { SwipeableBrowserPage } from './SwipeableBrowserPage';
+import { DESKTOP_SITE_WIDTH } from './siteMode';
 import './mobileBrowser.css';
 
 /** Change the layout around the existing surfaces so previews never remount a tab's iframe. */
-export function BrowserPages({ browser, t, manager, compact, query, blocked, select, loadingChanged }: {
+export function BrowserPages({ browser, t, manager, compact, query, blocked, select, loadingChanged, desktopTabs }: {
   browser: BrowserWindowProps & { embedded?: boolean; onPageNavigate?: (id: string, url: string) => void };
   t: MarketText; manager: boolean; compact: boolean; query: string; blocked: boolean;
   select: (id: string) => void; loadingChanged: (id: string, loading: boolean) => void;
+  desktopTabs: Readonly<Record<string, boolean>>;
 }) {
   const { tabs, activeId, Surface, commands, open } = browser;
   const host = useRef<HTMLDivElement>(null);
@@ -28,13 +31,17 @@ export function BrowserPages({ browser, t, manager, compact, query, blocked, sel
   }, [manager, open]);
   const match = (title: string, url: string) => `${title} ${url}`.toLocaleLowerCase().includes(query.toLocaleLowerCase());
   const previewStyle = { '--browser-preview-width': `${viewport.width}px`,
+    '--browser-desktop-width': `${DESKTOP_SITE_WIDTH}px`,
+    '--browser-desktop-scale': Math.min(1, viewport.width / DESKTOP_SITE_WIDTH),
     '--browser-preview-height': `${viewport.height}px`,
     '--browser-preview-scale': Math.max(0.1, (viewport.width - 48) / 2 / viewport.width) } as CSSProperties;
   return <div ref={host} className={`pm-browser-pages${manager ? ' browser-tab-grid' : ''}`} style={previewStyle}>
     {tabs.map(entry => {
       const title = entry.title || entry.url || t('market.browserNewTab');
-      return <div key={entry.id} id={`page-${entry.id}`} role={manager ? 'group' : 'tabpanel'}
-        className={`pm-browser-page${entry.id === activeId ? ' browser-tab-selected' : ''}`}
+      return <SwipeableBrowserPage key={entry.id} id={`page-${entry.id}`} role={manager ? 'group' : 'tabpanel'}
+        enabled={manager} dismiss={() => browser.onCloseTab(entry.id)}
+        className={`pm-browser-page${entry.id === activeId ? ' browser-tab-selected' : ''}`
+          + (compact && desktopTabs[entry.id] ? ' browser-site-desktop' : '')}
         hidden={manager ? !match(title, entry.url) : entry.id !== activeId}>
         {manager && <div className="browser-tab-card-header"><ProviderWebsiteIcon url={entry.url} size={16} />
           <span>{title}</span><button aria-label={t('market.browserCloseTab', { name: title })}
@@ -49,7 +56,7 @@ export function BrowserPages({ browser, t, manager, compact, query, blocked, sel
         </div>
         {manager && <><button className="browser-tab-select" aria-label={title} aria-pressed={entry.id === activeId}
           onClick={() => select(entry.id)} /><span className="browser-tab-card-url">{entry.url || title}</span></>}
-      </div>;
+      </SwipeableBrowserPage>;
     })}
     {manager && !tabs.some(entry => match(entry.title || t('market.browserNewTab'), entry.url))
       && <p className="browser-tab-empty">{t('market.browserNoMatchingTabs')}</p>}

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+import { Button } from 'antd';
 import { ArrowLeft, ArrowRight, Globe, Maximize2, Minimize2, Plus, RotateCw, X } from 'lucide-react';
 import { marketText, type MarketText } from './i18n';
 import type { Language } from '@remoteai/i18n';
@@ -16,6 +17,7 @@ import { isTauri } from '@tauri-apps/api/core';
 import { useCompactBrowser } from '../browser/bookmarks/useCompactBrowser';
 import { MobileBrowserToolbar, MobileTabManagerToolbar } from '../browser/MobileBrowserToolbar';
 import { BrowserPages } from '../browser/BrowserPages';
+import { BrowserSiteModeSetting } from '../browser/BrowserSiteModeSetting';
 import { uiText } from '../localization/uiText';
 
 export interface BrowserSurfaceProps {
@@ -92,6 +94,7 @@ export function BrowserContents(props: BrowserWindowProps & {
   const compact = narrow && !isTauri();
   const [manager, setManager] = useState(false);
   const [query, setQuery] = useState('');
+  const [desktopTabs, setDesktopTabs] = useState<Record<string, boolean>>({});
   const showManager = compact && manager;
   const add = () => { props.onNewTab(); setManager(false); setQuery(''); };
   useEffect(() => { if (!open) setManager(false); }, [open]);
@@ -103,9 +106,11 @@ export function BrowserContents(props: BrowserWindowProps & {
   }, [compact, open]);
   const bookmarks = useBrowserBookmarks({ tab, t,
     settingsContent: <>
-      {compact && <button disabled={!tab?.url} onClick={() => {
+      {compact && <BrowserSiteModeSetting desktop={!!desktopTabs[activeId]} t={t}
+        change={desktop => setDesktopTabs(current => ({ ...current, [activeId]: desktop }))} />}
+      {compact && <Button block disabled={!tab?.url} onClick={() => {
         if (tab?.url) window.open(tab.url, '_blank', 'noopener,noreferrer');
-      }}>{uiText('client.workspaceActions.openInBrowser', {}, props.language)}</button>}
+      }}>{uiText('client.workspaceActions.openInBrowser', {}, props.language)}</Button>}
       <BrowserSearchSetting t={t} search={search} />
     </>,
     close: props.onClose,
@@ -150,6 +155,7 @@ export function BrowserContents(props: BrowserWindowProps & {
       star={bookmarks.star} settings={bookmarks.settings} />}
     {!showManager && bookmarks.bar}{bookmarks.overlays}
     <BrowserPages key="pages" browser={props} t={t} manager={showManager} compact={compact} query={query}
+      desktopTabs={desktopTabs}
       blocked={menuOpen || bookmarks.overlayOpen} loadingChanged={loadingChanged}
       select={id => { props.onSelect(id); setManager(false); }} />
   </>;
