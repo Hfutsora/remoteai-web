@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useMemo, type ReactNode } from 'r
 import type { BrowserSurfaceProps } from '../../provider-market/ProviderBrowser';
 import { WebsiteBrowserSurface } from './ManagedBrowserSurface';
 import type { FilePreviewTarget } from './usePreviewHistory';
+export { fileResourceUrl } from '../resourceAddress';
 
 export interface BrowserResource {
   key: string;
@@ -38,10 +39,4 @@ export function browserResourcePage(resource: BrowserResource | undefined, url: 
 
 export function fileResourceKey(target: { path: string; threadId: string | null; line?: number; column?: number }) {
   return JSON.stringify([target.threadId, target.path, target.line, target.column]);
-}
-
-export function fileResourceUrl(path: string) {
-  const normalized = path.replace(/\\/g, '/');
-  const encoded = normalized.split('/').map(encodeURIComponent).join('/').replace(/^([a-z])%3A/i, '$1:');
-  return `file://${normalized.startsWith('/') ? '' : '/'}${encoded}`;
 }

@@ -9,6 +9,7 @@ import './detailsWorkspace.css';
 import { RemoteBrowserResourceContext } from '../../file-preview/workspace/browserResources';
 import { chatBrowserResource } from './chatBrowserResource';
 import type { FilePreviewTarget } from '../../file-preview/workspace/usePreviewHistory';
+import { MobileChatBrowser } from './MobileChatBrowser';
 
 /** Keep one layout tree across viewport changes so composer drafts and terminal sessions survive. */
 export function ChatDetailsWorkspace({ selected, active, enabled, children }: {
@@ -25,7 +26,8 @@ export function ChatDetailsWorkspace({ selected, active, enabled, children }: {
     <DetailsWorkspace selected={selected} active={active} enabled={enabled}
       renderRemoteFile={files ? props => <ChatRemoteFilePreview {...props} context={files}
         key={`${props.target.threadId}:${props.target.path}:${props.target.line ?? ''}`} /> : undefined}
-      className="chat-diff-workspace" contentClassName="chat-diff-layout">{children}</DetailsWorkspace>
+      className="chat-diff-workspace" contentClassName="chat-diff-layout">
+      <MobileChatBrowser>{children}</MobileChatBrowser></DetailsWorkspace>
     </RemoteBrowserResourceContext.Provider>
   </DiffTextContext.Provider>;
 }

@@ -30,7 +30,7 @@ function visitResource(tab: BrowserTab, resource: BrowserResource): BrowserTab {
 }
 
 /** Reserve tabs before resolving remote URLs, so rapid clicks cannot replace or reorder pages. */
-export function useWebsiteTabs() {
+export function useWebsiteTabs({ reuseTabs = true }: { reuseTabs?: boolean } = {}) {
   const environment = useContext(FileEnvironmentContext);
   const client = useContext(BrowserClientContext);
   const [state, setState] = useState<BrowserState>(emptyState);
@@ -58,12 +58,15 @@ export function useWebsiteTabs() {
       return resource ? visitResource(tab, resource) : { ...navigateTab(tab, url), title: pageTitle(url) };
     }) }));
   }, [resources]);
-  const navigate = useCallback(async (id: string, url: string, resolved = false) => {
+  const navigate = useCallback(async (id: string, url: string, options: {
+    resolved?: boolean; resolve?: (url: string) => Promise<string>;
+  } = {}) => {
     if (!pageUrl(url)) return;
     if (managedCommand(id, { action: 'navigate', url })) return;
     const request = Symbol(); requests.current.set(id, request);
     try {
-      const address = environment && !resolved ? await environment.resolveWebsite(url) : url;
+      const resolve = options.resolve ?? environment?.resolveWebsite;
+      const address = resolve && !options.resolved ? await resolve(url) : url;
       if (requests.current.get(id) === request) pageNavigate(id, address);
     } catch {
       if (requests.current.get(id) === request) void message.error({
@@ -74,19 +77,19 @@ export function useWebsiteTabs() {
       if (requests.current.get(id) === request) requests.current.delete(id);
     }
   }, [environment, pageNavigate, managedCommand]);
-  const add = useCallback((url = '', resolved = false) => {
+  const add = useCallback((url = '', resolved = false, resolve?: (url: string) => Promise<string>) => {
     const tab = { ...createBrowserTab(), title: pageTitle(url) };
     setState(current => ({ ...current, tabs: [...current.tabs, tab], activeId: tab.id }));
-    if (url) void navigate(tab.id, url, resolved);
+    if (url) void navigate(tab.id, url, { resolved, resolve });
     return tab.id;
   }, [navigate]);
-  const open = useCallback((url: string, resolved = false) => {
+  const open = useCallback((url: string, resolved = false, resolve?: (url: string) => Promise<string>) => {
     if (!pageUrl(url)) return;
     const source = `${resolved}:${url}`;
-    const existing = sources.current.get(source);
+    const existing = reuseTabs ? sources.current.get(source) : undefined;
     if (existing) { setState(current => ({ ...current, activeId: existing })); return; }
-    sources.current.set(source, add(url, resolved));
-  }, [add]);
+    sources.current.set(source, add(url, resolved, resolve));
+  }, [add, reuseTabs]);
   const selectResource = useCallback((key: string) => {
     const entry = [...resources].find(([, resource]) => resource.key === key);
     if (!entry) return undefined;
@@ -100,7 +103,7 @@ export function useWebsiteTabs() {
     return resource.url;
   }, [resources]);
   const openResource = useCallback((resource: BrowserResource) => {
-    if (selectResource(resource.key)) {
+    if (reuseTabs && selectResource(resource.key)) {
       if (![...resources.values()].includes(resource)) resource.release?.();
       return;
     }
@@ -108,7 +111,7 @@ export function useWebsiteTabs() {
       history: [resource.url], historyIndex: 0 };
     resources.set(tab.id, resource);
     setState(current => ({ ...current, tabs: [...current.tabs, tab], activeId: tab.id }));
-  }, [resources, selectResource]);
+  }, [resources, selectResource, reuseTabs]);
   const removeTabs = useCallback((ids: string[]) => {
     const closed = new Set(ids);
     closed.forEach(id => {

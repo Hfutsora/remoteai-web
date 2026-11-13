@@ -2,12 +2,13 @@ import { useMemo, useState } from 'react';
 import { HtmlPreviewFrame } from '../../file-preview/HtmlPreviewFrame';
 import { chatPreviewLoader } from '../../file-preview/chatLoader';
 import type { FileClient } from '../fileDownload';
+import { filePreviewKind } from '../../file-preview/kinds';
 import { t } from '../../localization/browserClient';
 import { ChatCodeBlock } from './ChatCodeBlock';
 import { ChatCopyButton } from './ChatCopyButton';
 import './markdownPreview.css';
 
-export function isHtmlPath(path: string) { return /\.html?$/i.test(path); }
+export function isHtmlPath(path: string) { return filePreviewKind(path) === 'html'; }
 
 export function ChatHtmlPreview({ text, path, client, threadId, source: controlledSource }: {
   text: string; path: string; client: FileClient; threadId: string; source?: boolean;

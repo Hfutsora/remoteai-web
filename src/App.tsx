@@ -36,6 +36,7 @@ import { LoungeIcon } from '../../../shared/lounge/LoungeIcon';
 import { useWebLounge } from './lounge/useWebLounge';
 import { BookmarkProvider } from '../../../shared/browser/bookmarks/context';
 import { BrowserPage } from '../../../shared/browser/BrowserPage';
+import { BrowserNavigationProvider } from '../../../shared/browser/BrowserNavigationProvider';
 import { marketText } from '../../../shared/provider-market/i18n';
 import { RetainedView } from '../../../shared/RetainedView';
 import { Globe } from 'lucide-react';
@@ -393,7 +394,8 @@ function AppShell() {
     !menuVisible && 'main-menu-collapsed'].filter(Boolean).join(' ');
   const MenuToggleIcon = menuVisible ? PanelLeftClose : PanelLeftOpen;
   return <BookmarkProvider scope={session ? JSON.stringify([session.baseUrl, session.email]) : 'guest'}
-    channel={session ? lounge.controller.bookmarks : undefined}><div className={shellClass}>
+    channel={session ? lounge.controller.bookmarks : undefined}>
+    <BrowserNavigationProvider onOpen={() => dispatch(pageChanged('browser'))}><div className={shellClass}>
     <aside className="desktop-sidebar">
       <div className="desktop-sidebar-heading">
         <div className="brand-lockup"><BrandMark />
@@ -489,7 +491,7 @@ function AppShell() {
         </button>)}
       </div><SafeArea position="bottom" />
     </div>
-  </div></BookmarkProvider>;
+  </div></BrowserNavigationProvider></BookmarkProvider>;
 }
 
 export default function App() {
