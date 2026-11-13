@@ -4,7 +4,7 @@ import { getLocale, t, useLanguage } from '../../../shared/localization/browserC
 import type { RemoteModelTarget } from '../../../shared/remote-chat/modelTarget';
 import { profileRole } from './i18n/profile';
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button, Dialog, Form, Input, PullToRefresh, SafeArea, SpinLoading, TabBar, Toast } from "antd-mobile";
+import { Button, Dialog, Form, Input, PullToRefresh, SafeArea, SpinLoading, Toast } from "antd-mobile";
 import { Dropdown, Tooltip, type MenuProps } from "antd";
 import { ChevronRight, CircleGauge, Compass, LayoutDashboard, LogOut, Menu, MonitorCog,
   Download, MessageSquare, PanelLeftClose, PanelLeftOpen, RefreshCw, Server, Settings, ShieldCheck, Sparkles } from "lucide-react";
@@ -287,6 +287,10 @@ const navItems: Array<{ key: AppPage; label: string; icon: typeof LayoutDashboar
   { key: "discover", get label() { return t("client.discovery.title"); }, icon: Compass },
   { key: "settings", get label() { return t("client.app.settings"); }, icon: Settings },
 ];
+const mobileNavItems = [navItems[0],
+  { key: 'browser' as const, get label() { return t('client.configLabels.browser'); }, icon: Globe },
+  ...navItems.slice(1),
+];
 
 function AppShell() {
   const language = useLanguage();
@@ -300,7 +304,8 @@ function AppShell() {
   useChatViewport(page === 'lounge' && !desktopLayout);
   const lastRefreshRef = useRef(Date.now());
   const totpManager = useTotpVault(session);
-  const activeNavigationPage = desktopLayout && (page === 'lounge' || page === 'browser') ? page : primaryNavigationPage(page);
+  const activeNavigationPage = page === 'browser' || desktopLayout && page === 'lounge'
+    ? page : primaryNavigationPage(page);
   const changePrimaryPage = useCallback((next: PrimaryPage) => { dispatch(pageChanged(next)); }, [dispatch]);
   const openAccounts = useCallback(() => changePrimaryPage('accounts'), [changePrimaryPage]);
 
@@ -474,13 +479,15 @@ function AppShell() {
       </main>
     </div>
     <div className="mobile-tabbar">
-      <TabBar activeKey={activeNavigationPage}>
-        {navItems.map(item => <TabBar.Item key={item.key} title={item.label}
-          icon={item.key === 'discover'
+      <div className="mobile-tabbar-items" role="tablist">
+        {mobileNavItems.map(item => <button key={item.key} type="button" role="tab"
+          className="mobile-tab" aria-label={item.label} aria-selected={item.key === activeNavigationPage}
+          onClick={() => dispatch(pageChanged(item.key))}>
+          {item.key === 'discover'
             ? <DiscoveryIcon owner={downloadScope} unread={lounge.state.unread} />
-            : <item.icon size={21} />}
-          onClick={() => dispatch(pageChanged(item.key))} />)}
-      </TabBar><SafeArea position="bottom" />
+            : <item.icon size={21} aria-hidden="true" />}
+        </button>)}
+      </div><SafeArea position="bottom" />
     </div>
   </div></BookmarkProvider>;
 }

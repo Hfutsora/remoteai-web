@@ -24,12 +24,12 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   await page.route('**/session-fixture', route => route.fulfill({ contentType: 'text/html',
     body: '<h1>Retained browser page</h1><input value="draft-kept"><script>sessionStorage.saved="retained"</script>' }));
   await page.goto('./', { waitUntil: 'domcontentloaded' });
-  await page.locator('.mobile-tabbar').getByText('发现', { exact: true }).click();
+  await page.locator('.mobile-tabbar').getByRole('tab', { name: '发现', exact: true }).click();
   await expect(page.locator('.discovery-page')).toBeVisible();
   await expect(page.locator('.adm-toast-mask')).toHaveCount(0);
   await page.screenshot({ path: info.outputPath(`web-mobile-${dark ? 'dark-20px' : 'light-14px'}-discovery.png`),
     animations: 'disabled' });
-  await page.locator('.discovery-page').getByRole('button', { name: '浏览器', exact: true }).click();
+  await page.locator('.mobile-tabbar').getByRole('tab', { name: '浏览器', exact: true }).click();
   const browser = page.locator('.browser-main-page');
   await expect(browser).toBeVisible();
   await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
@@ -48,7 +48,7 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   const retained = await frame.elementHandle();
   await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
   await page.getByRole('button', { name: /^关\s*闭$/ }).last().click();
-  await page.locator('.discovery-page').getByRole('button', { name: '浏览器', exact: true }).click();
+  await page.locator('.mobile-tabbar').getByRole('tab', { name: '浏览器', exact: true }).click();
   expect(await frame.evaluate((node, previous) => node === previous, retained)).toBe(true);
   await expect(frame.contentFrame().locator('input')).toHaveValue('unsaved-draft');
   expect(await frame.evaluate(node => node.contentWindow?.sessionStorage.saved)).toBe('retained');
@@ -144,8 +144,8 @@ for (const dark of [false, true]) test(`mobile browser retains pages and opens b
   await address.fill('手机搜索'); await address.press('Enter');
   await expect(address).toHaveValue('https://www.baidu.com/s?wd=%E6%89%8B%E6%9C%BA%E6%90%9C%E7%B4%A2');
   await page.reload();
-  await page.locator('.mobile-tabbar').getByText('发现', { exact: true }).click();
-  await page.locator('.discovery-page').getByRole('button', { name: '浏览器', exact: true }).click();
+  await page.locator('.mobile-tabbar').getByRole('tab', { name: '发现', exact: true }).click();
+  await page.locator('.mobile-tabbar').getByRole('tab', { name: '浏览器', exact: true }).click();
   await browser.getByRole('button', { name: '浏览器设置', exact: true }).click();
   await expect(page.locator('.browser-bookmark-settings-popup')).toContainText('百度');
 });

@@ -1,5 +1,6 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { connect, fixtureUrl, login, screenshot, send, settled } from './chat-helpers';
+import { testText } from '../../../scripts/i18n-fixture.mjs';
 
 type Point = { x: number; y: number };
 async function swipe(page: Page, points: Point[], cancel = false) {
@@ -16,7 +17,12 @@ async function swipe(page: Page, points: Point[], cancel = false) {
 const drawer = (page: Page) => page.locator('.chat-drawer .ant-drawer-content');
 const right = [{ x: 90, y: 300 }, { x: 115, y: 302 }, { x: 170, y: 306 }, { x: 240, y: 310 }];
 const left = [{ x: 280, y: 300 }, { x: 250, y: 302 }, { x: 190, y: 306 }, { x: 100, y: 310 }];
-const activeTab = (page: Page) => page.locator('.mobile-tabbar .adm-tab-bar-item-active');
+const activeTab = (page: Page) => page.locator('.mobile-tabbar [aria-selected="true"]');
+
+async function expectActiveTab(page: Page, label: string) {
+  const chat = testText('client.app.chat');
+  await expect(activeTab(page)).toHaveAccessibleName(label === chat ? testText('client.agentHub.title') : label);
+}
 
 async function trackSettling(page: Page, key: string) {
   return page.locator(`[data-primary-page="${key}"]`).evaluate(node => new Promise<number[]>(resolve => {
@@ -57,57 +63,57 @@ test('swipes through adjacent main pages in both directions and retains the chat
     await page.getByRole('textbox', { name: '聊天消息' }).fill('保留切页草稿');
     for (const label of ['账号', '发现', '设置', '设置']) {
       await swipe(page, left);
-      await expect(activeTab(page)).toHaveText(label);
+      await expectActiveTab(page, label);
       await expect(drawer(page)).toHaveCount(0);
     }
     await screenshot(page, info, 'swipe-to-settings');
     for (const label of ['发现', '账号', '聊天']) {
       await swipe(page, right);
-      await expect(activeTab(page)).toHaveText(label);
+      await expectActiveTab(page, label);
     }
     await expect(page.getByRole('textbox', { name: '聊天消息' })).toHaveValue('保留切页草稿');
     await swipe(page, right);
     await expect(drawer(page)).toBeVisible();
     await swipe(page, left);
     await expect(drawer(page)).toHaveCount(0);
-    await expect(activeTab(page)).toHaveText('聊天');
+    await expectActiveTab(page, '聊天');
   });
 
 test('keeps short, cancelled, vertical-first and input gestures on the current page',
   async ({ page, isMobile }) => {
     test.skip(!isMobile, 'Touch navigation belongs to the mobile layout.');
     await swipe(page, left.slice(0, 2));
-    await expect(activeTab(page)).toHaveText('聊天');
+    await expectActiveTab(page, '聊天');
     await swipe(page, left, true);
-    await expect(activeTab(page)).toHaveText('聊天');
-    await page.locator('.mobile-tabbar').getByText('账号', { exact: true }).click();
+    await expectActiveTab(page, '聊天');
+    await page.locator('.mobile-tabbar').getByRole('tab', { name: '账号', exact: true }).click();
     await swipe(page, [{ x: 280, y: 300 }, { x: 280, y: 340 }, { x: 100, y: 360 }]);
-    await expect(activeTab(page)).toHaveText('账号');
-    await page.locator('.mobile-tabbar').getByText('聊天', { exact: true }).click();
+    await expectActiveTab(page, '账号');
+    await page.locator('.mobile-tabbar').getByRole('tab', { name: testText('client.agentHub.title'), exact: true }).click();
     const input = page.getByRole('textbox', { name: '聊天消息' });
     await input.fill('正在编辑的草稿');
     const bounds = (await input.boundingBox())!;
     const y = bounds.y + bounds.height / 2;
     await swipe(page, [{ x: 250, y }, { x: 220, y }, { x: 150, y }]);
-    await expect(activeTab(page)).toHaveText('聊天');
+    await expectActiveTab(page, '聊天');
     await expect(input).toHaveValue('正在编辑的草稿');
   });
 
 test('swiping discovery rows changes tabs without opening them and leaves subpages alone',
   async ({ page, isMobile }) => {
     test.skip(!isMobile, 'Touch navigation belongs to the mobile layout.');
-    await page.locator('.mobile-tabbar').getByText('发现', { exact: true }).click();
+    await page.locator('.mobile-tabbar').getByRole('tab', { name: '发现', exact: true }).click();
     const row = page.locator('.discovery-list').getByRole('button', { name: '设备', exact: true });
     const bounds = (await row.boundingBox())!;
     const y = bounds.y + bounds.height / 2;
     await swipe(page, [{ x: 280, y }, { x: 250, y }, { x: 190, y }, { x: 100, y }]);
-    await expect(activeTab(page)).toHaveText('设置');
-    await page.locator('.mobile-tabbar').getByText('发现', { exact: true }).click();
+    await expectActiveTab(page, '设置');
+    await page.locator('.mobile-tabbar').getByRole('tab', { name: '发现', exact: true }).click();
     await row.click();
     await expect(row).toHaveCount(0);
     await swipe(page, left);
     await swipe(page, right);
-    await expect(activeTab(page)).toHaveText('发现');
+    await expectActiveTab(page, '发现');
     await expect(row).toHaveCount(0);
   });
 
@@ -147,12 +153,12 @@ test('shows both real pages under the finger before committing and keeps the tab
         const incomingBox = (await incoming.boundingBox())!;
         expect(outgoingBox.x).toBeCloseTo(direction * 100, 0);
         expect(incomingBox.x - outgoingBox.x).toBeCloseTo(-direction * outgoingBox.width, 0);
-        await expect(activeTab(page)).toHaveText(label);
+        await expectActiveTab(page, label);
         expect(await page.locator('.mobile-tabbar').boundingBox()).toEqual(tabs);
         await screenshot(page, info, `mid-swipe-${from}-${to}`);
         const settling = trackSettling(page, to);
         await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
-        await expect(activeTab(page)).toHaveText(targetLabel);
+        await expectActiveTab(page, targetLabel);
         await expect(incoming).not.toHaveClass(/is-preview/);
         const positions = await settling;
         for (let index = 1; index < positions.length; index++) {
@@ -165,7 +171,7 @@ test('shows both real pages under the finger before committing and keeps the tab
 
 test('keeps the selected page onscreen when changing between phone and desktop widths', async ({ page, isMobile }) => {
   test.skip(!isMobile, 'Exercise both responsive layouts in one session.');
-  await page.locator('.mobile-tabbar').getByText('设置', { exact: true }).click();
+  await page.locator('.mobile-tabbar').getByRole('tab', { name: '设置', exact: true }).click();
   const pane = page.locator('[data-primary-page="settings"]');
   for (const width of [1280, 390, 861, 860]) {
     await page.setViewportSize({ width, height: 900 });
@@ -180,14 +186,14 @@ test('keeps the selected page onscreen when changing between phone and desktop w
 test('returns partial and cancelled previews to their original position without opening a row',
   async ({ page, isMobile }) => {
     test.skip(!isMobile, 'Page previews belong to the mobile layout.');
-    await page.locator('.mobile-tabbar').getByText('发现', { exact: true }).click();
+    await page.locator('.mobile-tabbar').getByRole('tab', { name: '发现', exact: true }).click();
     const pane = page.locator('[data-primary-page="discover"]');
     const original = await pane.boundingBox();
     for (const cancel of [false, true]) {
       await swipe(page, cancel ? left : left.slice(0, 2), cancel);
       await expect(page.locator('.primary-page-pane.is-preview')).toHaveCount(0);
       expect(await pane.boundingBox()).toEqual(original);
-      await expect(activeTab(page)).toHaveText('发现');
+      await expectActiveTab(page, '发现');
       await expect(page.locator('.discovery-list')).toBeVisible();
     }
   });
@@ -227,7 +233,7 @@ test('drawer follows held drags and settles or cancels without jumping or changi
       await touch('touchStart', 90);
       await touch('touchMove', 190);
       await expect.poll(exposedWidth).toBeCloseTo(100, 0);
-      await expect(activeTab(page)).toHaveText('聊天');
+      await expectActiveTab(page, '聊天');
       expect(await page.locator('.mobile-tabbar').boundingBox()).toEqual(tabs);
       await screenshot(page, info, 'drawer-held-open');
       await touch('touchMove', 230);
@@ -252,7 +258,7 @@ test('drawer follows held drags and settles or cancels without jumping or changi
       await expect.poll(exposedWidth).toBeCloseTo(100, 0);
       await touch('touchCancel');
       await expect(drawer(page)).toHaveCount(0);
-      await expect(activeTab(page)).toHaveText('聊天');
+      await expectActiveTab(page, '聊天');
     } finally { await session.detach(); }
   });
 

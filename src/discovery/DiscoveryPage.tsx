@@ -3,6 +3,7 @@ import { discoveryEntries, type DiscoveryPage as DiscoveryDestination } from '..
 import { t, useLanguage } from '../../../../shared/localization/browserClient';
 import { DownloadCountIcon } from '../../../../shared/downloads/DownloadCountIcon';
 import { LoungeIcon } from '../../../../shared/lounge/LoungeIcon';
+import { useDesktopLayout } from '../../../../shared/layout/useDesktopLayout';
 import './styles.css';
 
 const entryIcons = {
@@ -16,10 +17,12 @@ export function DiscoveryPage({ owner, loungeUnread = 0, onOpen }: {
   onOpen: (page: Exclude<DiscoveryDestination, 'port-mappings'>) => void;
 }) {
   useLanguage();
+  const desktop = useDesktopLayout();
   return <section className="discovery-page" aria-labelledby="discovery-title">
     <header className="discovery-header"><h1 id="discovery-title">{t('client.discovery.title')}</h1></header>
     <div className="discovery-list">
-      {discoveryEntries.filter(entry => entry.page !== 'port-mappings').map(entry => {
+      {discoveryEntries.filter(entry => entry.page !== 'port-mappings')
+        .filter(entry => entry.page !== 'browser' || desktop).map(entry => {
         const Icon = entryIcons[entry.page];
         return <button key={entry.page} type="button" className={`discovery-row discovery-${entry.page}`}
           onClick={() => onOpen(entry.page)}>

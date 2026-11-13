@@ -7,18 +7,19 @@
 .chat-active .primary-page-viewport, .chat-active .primary-page-track { display: flex; }
 
 @media (max-width: 860px) {
-  .app-shell:has(.primary-page-viewport.is-primary) {
+  .app-shell:has(.primary-page-viewport.is-primary), .app-shell.browser-active {
     position: fixed; inset: var(--chat-top, 0) 0 auto;
     height: var(--chat-height, 100dvh); min-height: 0;
     display: flex; flex-direction: column; overflow: hidden;
   }
-  .app-shell:has(.primary-page-viewport.is-primary) .content-shell {
+  .app-shell:has(.primary-page-viewport.is-primary) .content-shell, .app-shell.browser-active .content-shell {
     flex: 1; min-height: 0; display: flex; flex-direction: column; padding-bottom: 0;
   }
-  .app-shell:has(.primary-page-viewport.is-primary) .main-content {
+  .app-shell:has(.primary-page-viewport.is-primary) .main-content, .app-shell.browser-active .main-content {
     flex: 1; min-height: 0; display: flex;
   }
-  .app-shell:has(.primary-page-viewport.is-primary) .mobile-tabbar { position: static; flex-shrink: 0; }
+  .app-shell:has(.primary-page-viewport.is-primary) .mobile-tabbar,
+  .app-shell.browser-active .mobile-tabbar { position: static; flex-shrink: 0; }
   .primary-page-viewport.is-primary { position: relative; overflow: hidden; }
   .is-primary > .primary-page-track { position: absolute; inset: 0; }
   .is-primary > .primary-page-track > .primary-page-pane {

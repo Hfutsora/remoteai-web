@@ -27,8 +27,10 @@ export async function navigate(page: Page, label: string) {
   const language = (await page.locator('html').getAttribute('lang'))?.split('-')[0] ?? 'zh';
   if (label === testText('client.app.chat', {}, language)) label = testText('client.agentHub.title', {}, language);
   const discoveryChild = label === testText('client.app.devices', {}, language) || label === '2FA';
-  await click(page.locator(mobile ? '.mobile-tabbar' : '.desktop-sidebar nav')
-    .getByText(discoveryChild ? testText('client.discovery.title', {}, language) : label, { exact: true }));
+  const destination = discoveryChild ? testText('client.discovery.title', {}, language) : label;
+  await click(mobile
+    ? page.locator('.mobile-tabbar').getByRole('tab', { name: destination, exact: true })
+    : page.locator('.desktop-sidebar nav').getByText(destination, { exact: true }));
   if (discoveryChild) await click(page.locator('.discovery-list').getByRole('button', { name: label, exact: true }));
 }
 export async function openChatList(page: Page) {

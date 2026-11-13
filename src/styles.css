@@ -293,17 +293,18 @@ h1, h2, h3, .brand-lockup { font-family: "Manrope", "PingFang SC", "Microsoft Ya
   .login-security { justify-content: center; margin-top: 22px; font-size: 12px; }
   .login-form .form-error { max-width: 400px; overflow-wrap: anywhere; }
   .desktop-sidebar, .desktop-topbar { display: none; }
-  .content-shell { margin-left: 0; padding-bottom: calc(67px + env(safe-area-inset-bottom)); }
+  .app-shell { --mobile-tabbar-height: 45px; }
+  .content-shell { margin-left: 0; padding-bottom: calc(var(--mobile-tabbar-height) + env(safe-area-inset-bottom)); }
   .main-content { min-height: 100vh; }
   .page-body { padding: max(20px, env(safe-area-inset-top)) 16px 34px; }
   .mobile-only { display: flex; }
   .mobile-tabbar { position: fixed; z-index: 30; right: 0; bottom: 0; left: 0; display: block; border-top: 1px solid var(--app-border, #dfe7e3); background: color-mix(in srgb, var(--app-surface, #ffffff) 96%, transparent); box-shadow: 0 -10px 30px rgba(37,66,54,.06); backdrop-filter: blur(16px); }
-  .mobile-tabbar .adm-tab-bar-wrap { min-height: 61px; }
-  /* Reserve space for floating badges even when larger text grows the tab contents. */
-  .mobile-tabbar .adm-tab-bar-item { padding: 12px 8px 8px; color: var(--app-muted, #85918b); }
-  .mobile-tabbar .adm-tab-bar-item-icon { display: flex; align-items: center; justify-content: center; }
-  .mobile-tabbar .adm-tab-bar-item-active { color: var(--green); }
-  .mobile-tabbar .adm-tab-bar-item-title { font-size: 10px; }
+  .mobile-tabbar-items { display: flex; }
+  .mobile-tab { flex: 1; min-width: 0; min-height: 44px; display: flex; align-items: center;
+    justify-content: center; padding: 0; border: 0; background: transparent;
+    color: var(--app-muted, #85918b); cursor: pointer; }
+  .mobile-tab[aria-selected="true"] { color: var(--green); }
+  .mobile-tab:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; }
   .page-heading { margin-bottom: 20px; }.page-heading h1 { font-size: 25px; }.devices-page .page-heading, .settings-page .page-heading { display: flex; }
 }
 

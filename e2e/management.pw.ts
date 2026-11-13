@@ -106,7 +106,8 @@ test('2FA search, sorting, eight digits, editing and failed clipboard', async ({
   await page.getByRole('button', { name: '返回发现', exact: true }).click();
   await expect(page.getByRole('heading', { name: '发现', exact: true })).toBeVisible();
   await navigate(page, '2FA');
-  await expect(navigation.locator('.active, .adm-tab-bar-item-active')).toHaveText('发现');
+  if (info.project.name === 'desktop') await expect(navigation.locator('.active')).toHaveText('发现');
+  else await expect(navigation.getByRole('tab', { selected: true })).toHaveAccessibleName('发现');
   await page.getByRole('button', { name: '返回发现', exact: true }).click();
   await expect(page.getByRole('heading', { name: '发现', exact: true })).toBeVisible();
   await navigate(page, '2FA');
