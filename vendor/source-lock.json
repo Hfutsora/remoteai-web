@@ -1,9 +1,9 @@
 {
   "repository": "https://github.com/piperhex/remoteai",
-  "revision": "91511a2420c803a4f56e9501c10eea1db08a3a31",
+  "revision": "7386f639c88ed47411447805da849aec22878e6e",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "185ecd1c4a031f0ef65d18bc62ef9b30eeb94ee9"
+    "revision": "310d89000e30cac753d0ea693b9ab8b961b6008c"
   },
   "retainedTestSources": {
     "repository": "https://github.com/piperhex/remoteai",
@@ -14,7 +14,7 @@
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "c0acbd209109109785bc3a3f243f7c1b83b17a95"
+    "revision": "566f2c04ab9a8e58ab9ebf785c11e3884accc07d"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.26/remoteai-i18n-0.1.26.tgz",
   "files": {
@@ -929,7 +929,7 @@
     "shared/provider-market/i18n.ts": "99dda5e97e45baf4e6a78c6db8ecf6df1dae0d66356af9647cfe4264dd9413b2",
     "shared/file-preview/workspace/preview.module.less": "ab254b31294a88ac66379927c40523f47cf90756c44da0f2670b9509890d8701",
     "shared/remote-chat/views/remoteFilePreview.css": "fabb7a21c444c886f938711c288702b314d08dcc3e4ca38bbb198229cf700080",
-    "shared/provider-market/ProviderBrowser.tsx": "5ea0177d766aed23fc50a50276f25d6a73e2b14ea8b1fd8be9b873d446097c01",
+    "shared/provider-market/ProviderBrowser.tsx": "bdaa1d2a6dd1172db0f83e588a93477da58bd64c3b07f4428038eb19531d5493",
     "shared/file-preview/workspace/ManagedBrowserSurface.tsx": "96ddcdf5183176fd582b03f8a9a167056736f15575e94eafe04df4e93604c530",
     "shared/remote-chat/views/ChatBinaryFilePreview.tsx": "d18d95c89fcd05ddd62ce5d23297c65dede1f4712cb97af8f641650b0818ad97",
     "shared/remote-chat/filePreview.ts": "8d369c8a09c5a195afe36a072b33eba610baf26717f370c0a7911d6457314096",
@@ -1895,10 +1895,10 @@
     "shared/browser/BrowserSearchSetting.tsx": "4ce09c834fc5cac414d466cf49a00e5763993e94df3275288206e2f9de7ee99a",
     "shared/browser/searchEngine.ts": "6f3d67eabc3cb333ca29447b9e96c10f8740c58dd00ce9f357ac2194e6291bd4",
     "shared/browser/searchPreference.ts": "e735f5fd02aa753eaa37018d75d3baeb6fcdb0ba6e84c2535af4e2b5b2c8e4da",
-    "shared/browser/MobileBrowserToolbar.tsx": "57db723ecd16c874c147187eceb97d3b5b790eeb8ce5d38a748cf50b1078036b",
+    "shared/browser/MobileBrowserToolbar.tsx": "cc84dddbb7e5f6528f819cb1f9ee91240f0acc1a2aa027d8c5646f74d5957f1a",
     "shared/browser/BrowserPages.tsx": "6a56ed20cbfa2c67379392dfd748e3e160e17daf54255a83236e7a80cc080c44",
     "shared/browser/BrowserEdgeGestures.tsx": "5e4ff2ed3bf1d025f85f8a38014877fbb87bb70fa33b0bae3932e63de5aa99a6",
-    "shared/browser/mobileBrowser.css": "e0fd679a27108e4b89b439f24f38fddf030003f35916a763e2b7f1ce67892465",
+    "shared/browser/mobileBrowser.css": "4b913e3dd9a548af6ed11019ca62eadd2c904c842c535a7c20a71c1ddfc5442b",
     "shared/browser/BrowserSiteModeSetting.tsx": "83bbe064d816a63907e6c7fb43e36972b0f86d7dd39a3c67252be3420b29ba4e",
     "shared/browser/bookmarks/useCurrentBookmark.ts": "90101c1341d6f690a7ef7a201559a5e18407a30655370300185daf10380ad255",
     "shared/browser/SwipeableBrowserPage.tsx": "bdbe6aa1c0941d0748f7eae4e085e2f9d1b483dfb8ac8efcd72a044430c3210f",

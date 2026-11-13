@@ -110,6 +110,10 @@ export function BrowserContents(props: BrowserWindowProps & {
   const externalUrl = bookmarkUrl(displayTab?.url ?? '');
   const showManager = compact && manager;
   const add = () => { props.onNewTab(); setManager(false); setQuery(''); };
+  const closeTabs = (ids: string[]) => {
+    if (tabs.every(tab => ids.includes(tab.id))) { setManager(false); setQuery(''); }
+    props.onCloseTabs(ids);
+  };
   useEffect(() => { if (!open) { setManager(false); setMappingsOpen(false); } }, [open]);
   useEffect(() => {
     if (!compact || !open) return;
@@ -169,7 +173,7 @@ export function BrowserContents(props: BrowserWindowProps & {
       aria-label={t('market.browserRestore')} onClick={props.toggleFullscreen}>
       <Minimize2 size="1.2em" /><span>{t('market.browserRestore')}</span></button>
       : showManager ? <MobileTabManagerToolbar t={t} count={tabs.length} query={query} setQuery={setQuery}
-      close={() => setManager(false)} add={add} /> : compact
+      close={() => setManager(false)} add={add} closeAll={() => closeTabs(tabs.map(tab => tab.id))} /> : compact
       ? <MobileBrowserToolbar tab={displayTab} t={t} engine={search.engine} count={tabs.length}
         newTab={add} manage={() => { setQuery(''); setManager(true); }} settings={bookmarks.settings}
         navigate={url => { if (tab) home.navigate(tab.id, url); }}
@@ -183,7 +187,8 @@ export function BrowserContents(props: BrowserWindowProps & {
     {!mobileFullscreen && !showManager && !(tab && home.isHome(tab.id)) && bookmarks.bar}{bookmarks.overlays}
     {mappingsOpen && <BrowserPortMappings language={props.language} close={() => setMappingsOpen(false)}
       visit={url => { if (tab) home.navigate(tab.id, url); }} />}
-    <BrowserPages key="pages" browser={{ ...props, onAction: home.action, onNavigate: home.navigate }}
+    <BrowserPages key="pages" browser={{ ...props, onAction: home.action, onNavigate: home.navigate,
+      onCloseTab: id => closeTabs([id]) }}
       home={home.isHome} bookmarks={bookmarks.manage} t={t} manager={showManager} compact={compact} query={query}
       desktopTabs={desktopTabs}
       blocked={menuOpen || bookmarks.overlayOpen || mappingsOpen} loadingChanged={loadingChanged}

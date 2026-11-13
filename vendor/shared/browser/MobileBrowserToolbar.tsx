@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
-import { ArrowLeft, Home, Plus } from 'lucide-react';
+import { ArrowLeft, Home, MoreVertical, Plus, X } from 'lucide-react';
+import { Dropdown } from 'antd';
 import type { BrowserTab } from '../provider-market/browserState';
 import type { MarketText } from '../provider-market/i18n';
 import { browserInput } from './addressInput';
@@ -33,13 +34,23 @@ export function MobileBrowserToolbar({ tab, t, engine, navigate, home, count, ne
   </div>;
 }
 
-export function MobileTabManagerToolbar({ t, count, query, setQuery, close, add }: {
+export function MobileTabManagerToolbar({ t, count, query, setQuery, close, add, closeAll }: {
   t: MarketText; count: number; query: string; setQuery: (value: string) => void; close: () => void; add: () => void;
+  closeAll: () => void;
 }) {
+  const [menuOpen, setMenuOpen] = useState(false);
   return <div className="browser-tab-manager-toolbar">
     <div><button aria-label={t('market.browserReturnToPage')} onClick={close}><ArrowLeft size={22} /></button>
       <strong>{t('market.browserTabs')} ({count})</strong>
-      <button aria-label={t('market.browserNewTab')} onClick={add}><Plus size={24} /></button></div>
+      <button aria-label={t('market.browserNewTab')} onClick={add}><Plus size={24} /></button>
+      <Dropdown trigger={['click']} placement="bottomRight" open={menuOpen} onOpenChange={setMenuOpen} autoFocus
+        overlayClassName="browser-tab-manager-menu" menu={{ 'aria-label': t('market.moreActions'), items: [
+          { key: 'closeAll', icon: <X size="1.1em" />, label: t('market.browserCloseAllTabs'),
+            onClick: () => { setMenuOpen(false); closeAll(); } },
+        ] }}>
+        <button aria-label={t('market.moreActions')} aria-haspopup="menu" aria-expanded={menuOpen}>
+          <MoreVertical size={22} /></button>
+      </Dropdown></div>
     <input aria-label={t('market.browserSearchTabs')} placeholder={t('market.browserSearchTabs')}
       value={query} onChange={event => setQuery(event.target.value)} />
   </div>;

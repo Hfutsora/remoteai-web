@@ -14,6 +14,8 @@
 .browser-tab-manager-toolbar > div { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 .browser-tab-manager-toolbar strong { flex: 1; font-size: 1.1em; }
 .browser-tab-manager-toolbar button { min-width: 44px; min-height: 44px; }
+.browser-tab-manager-menu { max-width: min(400px, calc(100vw - 24px)); }
+.browser-tab-manager-menu .ant-dropdown-menu-title-content { white-space: normal; overflow-wrap: anywhere; }
 .browser-tab-manager-toolbar input { width: 100%; box-sizing: border-box; font: inherit; color: inherit;
   border: 1px solid var(--border, #dce1e8); background: var(--panel-bg, #fff); border-radius: 24px;
   min-height: 46px; padding: 10px 16px; }
