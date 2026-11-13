@@ -28,7 +28,7 @@ export function BrowserPage({ language, active = true, onClose }: {
   return <BrowserResourcesContext.Provider value={browser.resources}>
     <section hidden={!active} className={`pm-browser browser-main-page${expanded ? ' browser-main-expanded' : ''}`}
     aria-label={marketText(language)('market.browserNavigation')}>
-    <BrowserContents {...browser} embedded language={language} open={active} Surface={ResourceBrowserSurface}
+    <BrowserContents {...browser} embedded mainBrowser language={language} open={active} Surface={ResourceBrowserSurface}
       onCloseTab={id => closeTabs([id])} onCloseTabs={closeTabs}
       onClose={() => { setExpanded(false); onClose?.(); }}
       fullscreen={expanded} toggleFullscreen={() => setExpanded(value => !value)} />

@@ -1,0 +1,8 @@
+.browser-port-mappings { display: grid; gap: 8px; max-height: 55vh; overflow: auto; }
+.browser-port-mappings > button { display: flex; align-items: center; gap: 12px; padding: 12px;
+  background: transparent; border: 1px solid; border-radius: 8px; font: inherit; text-align: start; cursor: pointer; }
+.browser-port-mappings > button:hover { background: color-mix(in srgb, currentColor 5%, transparent); }
+.browser-port-mappings > button > span { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.browser-port-mappings strong, .browser-port-mappings small { display: block; font-size: inherit; }
+.browser-port-mappings strong { font-weight: 500; }
+.browser-port-mappings svg { flex-shrink: 0; }

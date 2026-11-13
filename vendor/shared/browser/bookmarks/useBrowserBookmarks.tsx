@@ -18,7 +18,8 @@ import './bookmarks.css';
 export function useBrowserBookmarks(options: {
   tab?: BrowserTab; t: MarketText; navigate: (url: string) => void; newTab: (url: string) => void;
   close?: () => void;
-  settingsContent?: ReactNode;
+  closeOnDesktop?: boolean;
+  settingsContent?: (dismiss: () => void) => ReactNode;
 }) {
   const { tab, t } = options;
   const compact = useCompactBrowser();
@@ -54,15 +55,15 @@ export function useBrowserBookmarks(options: {
     settings: <Popover trigger="click" placement="bottomRight" open={settings} onOpenChange={setSettings}
       overlayClassName="browser-bookmark-settings-popup" zIndex={1700} title={t('market.browserSettings')}
       content={<div className="browser-bookmark-settings">
-        {options.settingsContent}
         <Button block disabled={!current.available || current.saved} aria-pressed={current.saved}
           icon={current.saved ? <Check size={16} /> : <Star size={16} />} onClick={current.add}>
           {t('market.bookmarkAdd')}</Button>
         {current.invalid && <span role="alert">{t('market.bookmarkInvalid')}</span>}
+        {options.settingsContent?.(() => setSettings(false))}
         <label><span>{t('market.bookmarkShowBar')}</span><Switch checked={showBar}
           aria-label={t('market.bookmarkShowBar')} onChange={store.setShowBar} /></label>
         <Button block onClick={manage}>{t(compact ? 'market.bookmarkAll' : 'market.bookmarkManage')}</Button>
-        {compact && options.close && <Button block onClick={() => {
+        {(compact || options.closeOnDesktop) && options.close && <Button block aria-label={t('market.close')} onClick={() => {
           setSettings(false); options.close?.();
         }}>{t('market.close')}</Button>}
         <span role="status" style={{ color: token.colorTextSecondary }}>{t(bookmarkStatusKeys[status])}</span>

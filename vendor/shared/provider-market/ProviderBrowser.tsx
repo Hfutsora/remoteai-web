@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Button } from 'antd';
-import { ArrowLeft, ArrowRight, Globe, Maximize2, Minimize2, Plus, RotateCw, X } from 'lucide-react';
+import { ArrowLeft, ArrowLeftRight, ArrowRight, ExternalLink, Globe, Maximize2, Minimize2, Plus, RotateCw, X } from 'lucide-react';
 import { marketText, type MarketText } from './i18n';
 import type { Language } from '@remoteai/i18n';
 import { browserInput } from '../browser/addressInput';
@@ -20,6 +20,9 @@ import { BrowserPages } from '../browser/BrowserPages';
 import { BrowserSiteModeSetting } from '../browser/BrowserSiteModeSetting';
 import { uiText } from '../localization/uiText';
 import { useMobileBrowserHome } from '../browser/useMobileBrowserHome';
+import { BrowserPortMappings } from '../browser/BrowserPortMappings';
+import { bookmarkUrl } from '../browser/bookmarks/model';
+import { openWebsiteInBrowser } from '../conversation/WebsiteLinkMenu';
 
 export interface BrowserSurfaceProps {
   tab: BrowserTab; active: boolean; command: { sequence: number; action: BrowserAction } | null;
@@ -85,6 +88,7 @@ function BrowserToolbar({ tab, loading, fullscreen, toggleFullscreen, navigate, 
 /** Browser chrome shared by the Provider dialog and the conversation sidebar. */
 export function BrowserContents(props: BrowserWindowProps & {
   fullscreen: boolean; toggleFullscreen: () => void; embedded?: boolean; actions?: ReactNode;
+  mainBrowser?: boolean;
   onPageNavigate?: (id: string, url: string) => void; history?: ReactNode;
 }) {
   const { tabs, activeId, open } = props;
@@ -98,9 +102,11 @@ export function BrowserContents(props: BrowserWindowProps & {
   const [manager, setManager] = useState(false);
   const [query, setQuery] = useState('');
   const [desktopTabs, setDesktopTabs] = useState<Record<string, boolean>>({});
+  const [mappingsOpen, setMappingsOpen] = useState(false);
+  const externalUrl = bookmarkUrl(displayTab?.url ?? '');
   const showManager = compact && manager;
   const add = () => { props.onNewTab(); setManager(false); setQuery(''); };
-  useEffect(() => { if (!open) setManager(false); }, [open]);
+  useEffect(() => { if (!open) { setManager(false); setMappingsOpen(false); } }, [open]);
   useEffect(() => {
     if (!compact || !open) return;
     const previous = document.documentElement.style.overscrollBehaviorX;
@@ -108,15 +114,22 @@ export function BrowserContents(props: BrowserWindowProps & {
     return () => { document.documentElement.style.overscrollBehaviorX = previous; };
   }, [compact, open]);
   const bookmarks = useBrowserBookmarks({ tab: displayTab, t,
-    settingsContent: <>
-      {compact && <BrowserSiteModeSetting desktop={!!desktopTabs[activeId]} t={t}
+    settingsContent: dismiss => <>
+      {(compact || props.mainBrowser) && <BrowserSiteModeSetting desktop={!compact || !!desktopTabs[activeId]} t={t}
+        disabled={!compact}
         change={desktop => setDesktopTabs(current => ({ ...current, [activeId]: desktop }))} />}
-      {compact && <Button block disabled={!tab?.url} onClick={() => {
-        if (tab?.url) window.open(tab.url, '_blank', 'noopener,noreferrer');
+      {(compact || props.mainBrowser) && <Button block disabled={!externalUrl} icon={<ExternalLink size={16} />}
+        onClick={() => {
+        if (externalUrl) void openWebsiteInBrowser(externalUrl);
       }}>{uiText('client.workspaceActions.openInBrowser', {}, props.language)}</Button>}
       <BrowserSearchSetting t={t} search={search} />
+      {props.mainBrowser && <Button block icon={<ArrowLeftRight size={16} />} onClick={() => {
+        dismiss(); setMappingsOpen(true);
+      }}>
+        {uiText('client.portForwarding.portMapping', {}, props.language)}</Button>}
     </>,
     close: props.onClose,
+    closeOnDesktop: props.mainBrowser,
     navigate: url => { if (tab) home.navigate(tab.id, url); },
     newTab: url => { if (tab) props.onPopup(tab.id, url); },
   });
@@ -157,10 +170,12 @@ export function BrowserContents(props: BrowserWindowProps & {
       action={(action) => { if (tab) props.onAction(tab.id, action); }} t={t} actions={props.actions}
       star={bookmarks.star} settings={bookmarks.settings} />}
     {!showManager && !(tab && home.isHome(tab.id)) && bookmarks.bar}{bookmarks.overlays}
+    {mappingsOpen && <BrowserPortMappings language={props.language} close={() => setMappingsOpen(false)}
+      visit={url => { if (tab) home.navigate(tab.id, url); }} />}
     <BrowserPages key="pages" browser={{ ...props, onAction: home.action, onNavigate: home.navigate }}
       home={home.isHome} bookmarks={bookmarks.manage} t={t} manager={showManager} compact={compact} query={query}
       desktopTabs={desktopTabs}
-      blocked={menuOpen || bookmarks.overlayOpen} loadingChanged={loadingChanged}
+      blocked={menuOpen || bookmarks.overlayOpen || mappingsOpen} loadingChanged={loadingChanged}
       select={id => { props.onSelect(id); setManager(false); }} />
   </>;
 }
