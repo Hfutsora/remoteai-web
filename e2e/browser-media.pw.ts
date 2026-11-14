@@ -7,6 +7,7 @@ button{display:block;margin:16px 0;padding:12px}pre{white-space:pre-wrap}</style
 <h2>Media permission check</h2><button data-kind="audio">Microphone</button>
 <button data-kind="video">Camera</button><button data-kind="both">Microphone and camera</button><pre></pre>
 <script>document.querySelectorAll('button').forEach(button => button.onclick = async () => {
+  document.querySelector('pre').textContent = 'Waiting for capture';
   try {
     const kind = button.dataset.kind;
     const stream = await navigator.mediaDevices.getUserMedia({audio: kind !== 'video', video: kind !== 'audio'});
@@ -33,11 +34,17 @@ for (const dark of [false, true]) test(`mobile web capture follows browser conse
     await expect(content.locator('pre')).toHaveText('NotAllowedError');
     await page.screenshot({ path: info.outputPath(`mobile-web-${dark ? 'dark' : 'light'}-denied.png`) });
     await context.grantPermissions(['microphone', 'camera']);
-    for (const [name, tracks] of [
+    const captures = [
       ['Microphone', ['audio']], ['Camera', ['video']], ['Microphone and camera', ['audio', 'video']],
-    ] as const) {
+    ] as const;
+    // Stopping tracks must not add an application prompt to subsequent browser-authorized captures.
+    for (const [name, tracks] of [...captures, ...captures]) {
       await content.getByRole('button', { name, exact: true }).click();
       await expect(content.locator('pre')).toHaveText(JSON.stringify({ live: true, tracks }));
     }
     await page.screenshot({ path: info.outputPath(`mobile-web-${dark ? 'dark' : 'light'}-authorized.png`) });
+    await address.fill(`${site}/reloaded`); await address.press('Enter');
+    await content.getByRole('button', { name: 'Microphone and camera', exact: true }).click();
+    await expect(content.locator('pre')).toHaveText(JSON.stringify({ live: true, tracks: ['audio', 'video'] }));
+    await page.screenshot({ path: info.outputPath(`mobile-web-${dark ? 'dark' : 'light'}-retained.png`) });
   });
