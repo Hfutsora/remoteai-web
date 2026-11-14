@@ -79,9 +79,12 @@ for (const enlarged of [false, true]) {
     } }));
     await page.goto('./', { waitUntil: 'domcontentloaded' });
     const nav = page.locator('.desktop-sidebar nav');
+    await expect(nav.getByRole('button', { name: 'Agent Hub', exact: true })
+      .locator('xpath=following-sibling::button[1]')).toHaveText('浏览器');
     await nav.getByRole('button', { name: '浏览器', exact: true }).click();
     const browser = page.locator('.browser-main-page');
     await expect(browser).toBeVisible();
+    await expect(page.locator('.desktop-topbar')).toBeHidden();
     const box = await browser.boundingBox();
     expect(box?.height).toBeGreaterThan(800);
     expect((box?.y ?? 0) + (box?.height ?? 0)).toBeLessThanOrEqual(901);

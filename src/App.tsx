@@ -37,7 +37,6 @@ import { useWebLounge } from './lounge/useWebLounge';
 import { BookmarkProvider } from '../../../shared/browser/bookmarks/context';
 import { BrowserPage } from '../../../shared/browser/BrowserPage';
 import { BrowserNavigationProvider } from '../../../shared/browser/BrowserNavigationProvider';
-import { marketText } from '../../../shared/provider-market/i18n';
 import { RetainedView } from '../../../shared/RetainedView';
 import { Globe } from 'lucide-react';
 import { LoungeAvatar } from '../../../shared/lounge/LoungeAvatar';
@@ -284,15 +283,12 @@ function DevicesPage() {
 
 const navItems: Array<{ key: AppPage; label: string; icon: typeof LayoutDashboard }> = [
   { key: "chat", get label() { return t("client.agentHub.title"); }, icon: MessageSquare },
+  { key: "browser", get label() { return t('client.configLabels.browser'); }, icon: Globe },
   { key: "accounts", get label() { return t("client.app.accounts"); }, icon: LayoutDashboard },
   { key: "discover", get label() { return t("client.discovery.title"); }, icon: Compass },
   { key: "settings", get label() { return t("client.app.settings"); }, icon: Settings },
 ];
 const MOBILE_NAVIGATION_ICON_SIZE = 23;
-const mobileNavItems = [navItems[0],
-  { key: 'browser' as const, get label() { return t('client.configLabels.browser'); }, icon: Globe },
-  ...navItems.slice(1),
-];
 
 function AppShell() {
   const language = useLanguage();
@@ -415,13 +411,6 @@ function AppShell() {
             : <item.icon size={19} />}<span>{item.label}</span>
         </button>
       </Tooltip>)}
-        <Tooltip placement="right" title={menuVisible ? undefined : marketText(language)('market.browserNavigation')}>
-          <button type="button" aria-label={marketText(language)('market.browserNavigation')}
-            aria-current={page === 'browser' ? 'page' : undefined}
-            className={page === 'browser' ? 'active' : ''} onClick={() => dispatch(pageChanged('browser'))}>
-            <Globe size={19} /><span>{marketText(language)('market.browserNavigation')}</span>
-          </button>
-        </Tooltip>
         <Tooltip placement="right" title={menuVisible ? undefined : t('client.lounge.title')}>
           <button type="button" aria-label={t('client.lounge.title')}
             aria-current={page === 'lounge' ? 'page' : undefined}
@@ -483,7 +472,7 @@ function AppShell() {
     </div>
     <div className="mobile-tabbar">
       <div className="mobile-tabbar-items" role="tablist">
-        {mobileNavItems.map(item => <button key={item.key} type="button" role="tab"
+        {navItems.map(item => <button key={item.key} type="button" role="tab"
           className="mobile-tab" aria-label={item.label} aria-selected={item.key === activeNavigationPage}
           onClick={() => dispatch(pageChanged(item.key))}>
           {item.key === 'discover'
