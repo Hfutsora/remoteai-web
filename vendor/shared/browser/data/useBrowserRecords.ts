@@ -33,8 +33,8 @@ export function useBrowserRecords(options: {
     if (!desktop || !options.active || !active) return;
     const unlisten = listen<Login>(`browser-login-${active.id}`, event => {
       if (validateLogin(event.payload)) setCandidate(event.payload);
-    });
-    return () => { void unlisten.then(stop => stop()).catch(() => {}); };
+    }).catch(() => undefined);
+    return () => { void unlisten.then(stop => stop?.()); };
   }, [desktop, options.active, active?.id]);
   useEffect(() => {
     if (!desktop || !options.active || !active?.url.startsWith('https:') || active.automationThread) return;

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ComponentType, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
-import { ArrowLeft, ArrowLeftRight, ArrowRight, ChevronRight, ExternalLink,
+import { ArrowLeft, ArrowRight, ExternalLink,
   Globe, History, KeyRound, Maximize2, Minimize2, Plus, RotateCw, X } from 'lucide-react';
 import { marketText, type MarketText } from './i18n';
 import type { Language } from '@remoteai/i18n';
@@ -21,7 +21,7 @@ import { BrowserPages } from '../browser/BrowserPages';
 import { BrowserSiteModeSetting } from '../browser/BrowserSiteModeSetting';
 import { uiText } from '../localization/uiText';
 import { useMobileBrowserHome } from '../browser/useMobileBrowserHome';
-import { BrowserPortMappings } from '../browser/BrowserPortMappings';
+import { BrowserPortMappings, BrowserPortMappingsSetting } from '../browser/BrowserPortMappings';
 import { bookmarkUrl } from '../browser/bookmarks/model';
 import { openWebsiteInBrowser } from '../conversation/WebsiteLinkMenu';
 import { BrowserSettingsAction } from '../browser/BrowserSettings';
@@ -148,11 +148,9 @@ export function BrowserContents(props: BrowserWindowProps & {
       <BrowserSettingsAction icon={KeyRound} onClick={() => { dismiss(); setDataPanel('passwords'); }}>
         {t('market.browserPasswords')}</BrowserSettingsAction>
       <BrowserSearchSetting t={t} search={search} />
-      {props.mainBrowser && <BrowserSettingsAction icon={ArrowLeftRight} trailing={<ChevronRight size="1.1em" />}
-        onClick={() => {
-        dismiss(); setMappingsOpen(true);
-      }}>
-        {uiText('client.portForwarding.portMapping', {}, props.language)}</BrowserSettingsAction>}
+      {props.mainBrowser && <BrowserPortMappingsSetting language={props.language} compact={compact}
+        close={dismiss} showDialog={() => setMappingsOpen(true)}
+        visit={url => { if (tab) home.navigate(tab.id, url); }} />}
     </>,
     reload: compact ? () => home.action(activeId, 'reload') : undefined,
     navigate: url => { if (tab) home.navigate(tab.id, url); },

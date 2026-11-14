@@ -6,3 +6,7 @@
 .browser-port-mappings strong, .browser-port-mappings small { display: block; font-size: inherit; }
 .browser-port-mappings strong { font-weight: 500; }
 .browser-port-mappings svg { flex-shrink: 0; }
+.browser-port-mappings-submenu { max-height: none; overflow: visible; gap: 2px; }
+.browser-port-mappings-submenu > button { border: 0; padding: 9px 12px; gap: 10px; }
+.browser-port-mappings-submenu > button:focus-visible {
+  outline: 2px solid var(--browser-settings-accent); outline-offset: -2px; }

@@ -8,8 +8,10 @@
   color: inherit; background: transparent; font: inherit; line-height: inherit; text-align: start; }
 .browser-settings-action { cursor: pointer; transition: background-color .15s ease; }
 .browser-settings-action:hover:not(:disabled) { background: var(--browser-settings-hover); }
+.browser-settings-action[aria-expanded=true] { background: var(--browser-settings-hover); }
 .browser-settings-action:focus-visible { outline: 2px solid var(--browser-settings-accent); outline-offset: -2px; }
 .browser-settings-action > span, .browser-settings-label { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.browser-settings-action > .provider-website-icon { flex: 0 0 auto; }
 .browser-settings-action > svg, .browser-settings-row > svg { flex-shrink: 0; color: var(--browser-settings-muted); }
 .browser-settings-action:disabled { color: var(--browser-settings-disabled); cursor: default; }
 .browser-settings-action:disabled > svg { color: inherit; }
@@ -31,4 +33,11 @@
 .browser-settings-footer > svg { flex-shrink: 0; margin-top: .2em; }
 .browser-settings-footer > div { display: grid; gap: 6px; min-width: 0; overflow-wrap: anywhere; }
 .browser-settings-footer .ant-btn { justify-self: start; }
+/* Reserve the parent menu, popover padding and viewport edges when desktop windows are narrow. */
+.browser-settings-submenu { display: flex; flex-direction: column; width: min(300px, calc(100vw - 360px));
+  max-height: min(560px, calc(100dvh - 40px)); }
+.browser-settings-submenu-list { min-height: 0; overflow-y: auto; overscroll-behavior: contain; }
+.browser-settings-submenu-footer { flex-shrink: 0; border-top: 1px solid var(--browser-settings-border);
+  margin-top: 6px; padding-top: 6px; }
+.browser-settings-submenu-hint { margin: 8px 12px; color: var(--browser-settings-muted); overflow-wrap: anywhere; }
 @media (prefers-reduced-motion: reduce) { .browser-settings-action { transition: none; } }

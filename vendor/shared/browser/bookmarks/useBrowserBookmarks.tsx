@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { Button, Modal, Popover, Switch, theme } from 'antd';
+import { isTauri } from '@tauri-apps/api/core';
 import { BookMarked, Check, ChevronRight, Cloud, PanelTop, RotateCw, Settings, Star } from 'lucide-react';
 import type { BrowserTab } from '../../provider-market/browserState';
 import type { MarketText } from '../../provider-market/i18n';
@@ -8,6 +9,7 @@ import { useBookmarks } from './context';
 import { BookmarkBar } from './BookmarkBar';
 import { BookmarkEditor } from './BookmarkEditor';
 import { BookmarkManager } from './BookmarkManager';
+import { BookmarkSettingsSubmenu } from './BookmarkSettingsSubmenu';
 import { bookmarkStatusKeys } from './status';
 import { BookmarkDrawer } from './BookmarkDrawer';
 import { useCompactBrowser } from './useCompactBrowser';
@@ -22,7 +24,8 @@ export function useBrowserBookmarks(options: {
   settingsContent?: (dismiss: () => void) => ReactNode;
 }) {
   const { tab, t } = options;
-  const compact = useCompactBrowser();
+  const narrow = useCompactBrowser();
+  const compact = narrow && !isTauri();
   const { token } = theme.useToken();
   const { entries, showBar, status, store } = useBookmarks();
   const [settings, setSettings] = useState(false);
@@ -39,7 +42,7 @@ export function useBrowserBookmarks(options: {
       url: current ? address ?? '' : '', parentId: '', position: Math.max(-1, ...entries.map(entry => entry.position)) + 1 });
   };
   const visit = (entry: Bookmark, newTab = false) => {
-    setMenu(false); setManager(false);
+    setMenu(false); setSettings(false); setManager(false);
     if (newTab || !tab) options.newTab(entry.url); else options.navigate(entry.url);
   };
   const manage = () => { setMenu(false); setSettings(false); setManager(true); };
@@ -52,7 +55,7 @@ export function useBrowserBookmarks(options: {
       title={t(saved ? 'market.bookmarkEdit' : 'market.bookmarkAdd')} disabled={!address} aria-pressed={!!saved}
       className="browser-bookmark-star" onClick={() => saved ? edit(saved) : create('link', true)}>
       <Star size={17} fill={saved ? 'currentColor' : 'none'} /></button>,
-    settings: <Popover trigger="click" placement="bottomRight" open={settings} onOpenChange={setSettings}
+    settings: <Popover trigger="click" placement="bottomRight" open={settings} onOpenChange={setSettings} destroyOnHidden
       overlayClassName="browser-bookmark-settings-popup" zIndex={1700} arrow={false}
       styles={{ body: { padding: 6, borderRadius: 12, border: `1px solid ${token.colorBorderSecondary}` } }}
       content={<BrowserSettingsPanel title={t('market.browserSettings')} footer={<>
@@ -75,8 +78,9 @@ export function useBrowserBookmarks(options: {
           <span className="browser-settings-label">{t('market.bookmarkShowBar')}</span>
           <Switch size="small" checked={showBar} aria-label={t('market.bookmarkShowBar')} onChange={store.setShowBar} />
         </div>
-        <BrowserSettingsAction icon={BookMarked} onClick={manage} trailing={<ChevronRight size="1.1em" />}>
-          {t(compact ? 'market.bookmarkAll' : 'market.bookmarkManage')}</BrowserSettingsAction>
+        {compact ? <BrowserSettingsAction icon={BookMarked} onClick={manage}
+          trailing={<ChevronRight size="1.1em" />}>{t('market.bookmarkAll')}</BrowserSettingsAction>
+          : <BookmarkSettingsSubmenu entries={entries} t={t} visit={visit} manage={manage} />}
       </BrowserSettingsPanel>}>
       <button type="button" aria-label={t('market.browserSettings')} title={t('market.browserSettings')}>
         <Settings size={17} /></button>
