@@ -464,6 +464,7 @@ function AppShell() {
           && <DiscoveryBackButton onBack={() => dispatch(pageChanged('discover'))} />}
         <RetainedView active={page === 'browser'}>
           <BrowserPage language={language} active={page === 'browser'}
+            homeBaseUrl={session?.baseUrl}
             onClose={() => dispatch(pageChanged('discover'))} />
         </RetainedView>
         {page !== 'chat' && page !== 'accounts' && page !== 'discover' && page !== 'settings' && otherPages[page]}

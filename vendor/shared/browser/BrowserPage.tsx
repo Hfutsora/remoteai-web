@@ -2,7 +2,9 @@ import { useContext, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import type { Language } from '@remoteai/i18n';
 import { isTauri } from '@tauri-apps/api/core';
 import { BrowserContents } from '../provider-market/ProviderBrowser';
-import { BrowserResourcesContext, ResourceBrowserSurface } from '../file-preview/workspace/browserResources';
+import { BrowserResourcesContext } from '../file-preview/workspace/browserResources';
+import { NavigationBrowserHomeContext, NavigationBrowserSurface } from './NavigationBrowserSurface';
+import { useNavigationBrowserHome, type BrowserHomeTransport } from './useNavigationBrowserHome';
 import { BrowserNavigationContext } from './BrowserNavigationProvider';
 import { useWebsiteTabs } from '../file-preview/workspace/useWebsiteTabs';
 import { marketText } from '../provider-market/i18n';
@@ -10,8 +12,9 @@ import { useCompactBrowser } from './bookmarks/useCompactBrowser';
 import './browserPage.css';
 
 /** Reuse the established engine and tabs without tying the main browser to a conversation. */
-export function BrowserPage({ language, active = true, onClose }: {
-  language: Language; active?: boolean; onClose?: () => void;
+export function BrowserPage({ language, active = true, onClose, homeBaseUrl, homeTransport }: {
+  language: Language; active?: boolean; onClose?: () => void; homeBaseUrl?: string;
+  homeTransport?: BrowserHomeTransport;
 }) {
   const navigation = useContext(BrowserNavigationContext);
   const standalone = useWebsiteTabs();
@@ -19,6 +22,7 @@ export function BrowserPage({ language, active = true, onClose }: {
   const [expanded, setExpanded] = useState(false);
   const host = useRef<HTMLElement>(null);
   const compact = useCompactBrowser() && !isTauri();
+  const homeUrl = useNavigationBrowserHome(homeBaseUrl, active && !compact, homeTransport);
   useEffect(() => { if (!active) setExpanded(false); }, [active]);
   useLayoutEffect(() => {
     const element = host.current;
@@ -45,11 +49,12 @@ export function BrowserPage({ language, active = true, onClose }: {
     if (browser.tabs.every(tab => ids.includes(tab.id))) browser.onNewTab();
   };
   return <BrowserResourcesContext.Provider value={browser.resources}>
+    <NavigationBrowserHomeContext.Provider value={compact ? '' : homeUrl}>
     <section ref={host} hidden={!active} className={`pm-browser browser-main-page${expanded ? ' browser-main-expanded' : ''}`}
     aria-label={marketText(language)('market.browserNavigation')}>
-    <BrowserContents {...browser} embedded mainBrowser language={language} open={active} Surface={ResourceBrowserSurface}
+    <BrowserContents {...browser} embedded mainBrowser language={language} open={active} Surface={NavigationBrowserSurface}
       onCloseTab={id => closeTabs([id])} onCloseTabs={closeTabs}
       onClose={() => { setExpanded(false); onClose?.(); }}
       fullscreen={expanded} toggleFullscreen={() => setExpanded(value => !value)} />
-  </section></BrowserResourcesContext.Provider>;
+  </section></NavigationBrowserHomeContext.Provider></BrowserResourcesContext.Provider>;
 }

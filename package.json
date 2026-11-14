@@ -54,6 +54,7 @@
     "base64-js": "1.5.1",
     "dayjs": "^1.11.21",
     "echarts": "^6.1.0",
+    "es-module-lexer": "^2.3.0",
     "jsqr": "^1.4.0",
     "katex": "^0.16.47",
     "linkify-it": "^5.0.0",

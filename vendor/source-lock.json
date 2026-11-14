@@ -3,7 +3,7 @@
   "revision": "0f8f894d2a7e10a3cd74a838693741bbe911b946",
   "sharedSource": {
     "repository": "https://github.com/piperhex/remoteai-shared",
-    "revision": "5c3f6086ae5f0bc97cde3a55f918a6f837ab1ff5"
+    "revision": "e74823564f2f77cfd9e0cfb8c799a10c728ab54a"
   },
   "retainedTestSources": {
     "repository": "https://github.com/piperhex/remoteai",
@@ -14,7 +14,7 @@
   },
   "nativeSource": {
     "repository": "https://github.com/piperhex/remoteai-native.git",
-    "revision": "223f96d8b0c56bbc734dfa7d0652f758efc4eca7"
+    "revision": "0d01dd6fb2aee6e3bf1c5fe8f6449de2f428b712"
   },
   "i18n": "https://github.com/piperhex/remoteai-i18n/releases/download/i18n-v0.1.27/remoteai-i18n-0.1.27.tgz",
   "files": {
@@ -1871,7 +1871,7 @@
     "apps/native/e2e/pdf-touch.mjs": "bf0adf7508dfa9085fbb65cd89c9a398eeb21b5422e2836809caf44e1bf8e39f",
     "shared/remote-chat/views/ChatRequestError.tsx": "1fb486a68d5fd40b55ac0e6fa0ac67a326de353ab117a78e0959c2c3bddcc259",
     "shared/conversation/turnMessageGroups.ts": "7c2123485a73a46b5611c0e75f8cfce3e323d299c978640df3ed8dafcb94dd37",
-    "shared/browser/BrowserPage.tsx": "5d8fc90d256e348f7d877e2509d3c2d5a7d309708fea988c3fc6b5d90830666e",
+    "shared/browser/BrowserPage.tsx": "dce93a32904d636fba604f3799d413c2e02a202c1610c9ff6f6ecf3bd3d57960",
     "shared/browser/bookmarks/context.tsx": "75591dc8eca0f11624ec134fb8e8aa714d8bafd0b2ffdcf3ea80484b4a5c0570",
     "shared/browser/browserPage.css": "d0804b21664edc4e705b7a55663bad4d9f0c685fe29a3d8171e0a0b2d88f0045",
     "shared/browser/bookmarks/channel.ts": "e0836226c27aee327d609805fc6a19ca7cc84216769b337d82e5b44215d944ad",
@@ -1944,6 +1944,12 @@
     "shared/browser/data/browserData.css": "4b7322db604eff925df4235db0563cca2555c315645b3c2b70c5293e78f56be2",
     "shared/browser/bookmarks/BookmarkSettingsSubmenu.tsx": "d3c150dd0b63fb7231a5e48ee22c9efa0cc4d202fed1741250606b619b9601c8",
     "shared/browser/BrowserSettingsSubmenu.tsx": "63c852a091774fc2a699357f246b2acb954269773fba3b6970e3b3cee98021a5",
-    "shared/browser/useBrowserSubmenuKeyboard.ts": "1035b528068e3fe01238c42a827d8ecdf34a57e7cbc3654b29d9f3be010f74fe"
+    "shared/browser/useBrowserSubmenuKeyboard.ts": "1035b528068e3fe01238c42a827d8ecdf34a57e7cbc3654b29d9f3be010f74fe",
+    "shared/browser/NavigationBrowserSurface.tsx": "606343ab9a7bdceb451a6961d78c8f34c02cd7aee67fc815efada3590e753bda",
+    "shared/browser/useNavigationBrowserHome.ts": "8f90e89dae6f826383deb8b201987552b1912b4153d12243c6c53f93eee3b6bf",
+    "shared/browser/navigationBrowserHome.css": "de768190c2ca6846e6cff527bd573bee68f1892c04415dae20fc403b5d77bc58",
+    "shared/browser/home/cache.ts": "fa3f514742fedf309e291bd668fb9fbc9aeeca7973797344030d751373caf7c3",
+    "shared/browser/home/document.ts": "217394d3bb28ba588a541b59cfe0f7f529bf9c70e71d1545f36804e0dfba0194",
+    "shared/browser/home/package.ts": "90eb625d90399416d27bf65b946180c5d512b0807da2bb9f23d9cf7554727375"
   }
 }

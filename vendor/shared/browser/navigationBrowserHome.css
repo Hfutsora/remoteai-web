@@ -1,0 +1,15 @@
+.browser-home-stack {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.browser-custom-home {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--ant-color-bg-container, #fff);
+}
+
+.browser-custom-home[hidden] { display: none; }
